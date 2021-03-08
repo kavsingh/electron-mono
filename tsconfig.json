@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": true,
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "strict": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "jsx": "preserve",
+    "jsxImportSource": "@emotion/react",
+    "sourceMap": true,
+    "baseUrl": "./",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "plugins": [
+      {
+        "name": "typescript-styled-plugin",
+        "validate": false
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+    },
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

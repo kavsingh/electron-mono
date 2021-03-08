@@ -1,0 +1,9 @@
+/.vscode
+/.webpack
+/node_modules
+/out
+/coverage
+/src/bridge
+/src/main
+/src/preload
+/src/typings

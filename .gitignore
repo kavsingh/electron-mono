@@ -1,0 +1,8 @@
+/.vscode
+/.webpack
+/node_modules
+/out
+/coverage
+*.log.*
+*.log*
+*.tsbuildinfo
