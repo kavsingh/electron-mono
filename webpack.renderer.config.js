@@ -1,12 +1,7 @@
-const rules = require("./webpack.rules");
-const plugins = require("./webpack.plugins");
+const { rules, plugins, extensions } = require("./webpack.common");
 
 module.exports = {
-  module: {
-    rules,
-  },
-  plugins: plugins,
-  resolve: {
-    extensions: [".js", ".ts", ".jsx", ".tsx", ".css"],
-  },
+  plugins,
+  module: { rules },
+  resolve: { extensions: [...extensions, ".tsx", ".jsx"] },
 };

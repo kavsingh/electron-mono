@@ -1,4 +1,6 @@
-module.exports = [
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+
+const rules = [
   // Add support for native node modules
   {
     test: /\.node$/,
@@ -9,9 +11,7 @@ module.exports = [
     parser: { amd: false },
     use: {
       loader: "@marshallofsound/webpack-asset-relocator-loader",
-      options: {
-        outputAssetBase: "native_modules",
-      },
+      options: { outputAssetBase: "native_modules" },
     },
   },
   {
@@ -20,3 +20,9 @@ module.exports = [
     use: { loader: "babel-loader" },
   },
 ];
+
+const plugins = [new ForkTsCheckerWebpackPlugin()];
+
+const extensions = [".ts", ".js"];
+
+module.exports = { rules, plugins, extensions };

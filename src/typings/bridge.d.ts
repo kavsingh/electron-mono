@@ -1,10 +1,10 @@
 import * as _Electron from "electron";
-import type { Messages } from "@bridge/message";
-import type { Requests } from "@bridge/request";
 
-// TODO: Why this no work?
+import type { Messages } from "@app/bridge/message";
+import type { Requests } from "@app/bridge/request";
 
-declare module "electron" {
+// TODO: renamed since does not seem to work. why?
+declare module "IGNORE_electron" {
   export namespace Electron {
     export interface IpcMain {
       handle: <K extends keyof Requests, T = Requests[K]>(

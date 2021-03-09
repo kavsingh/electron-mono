@@ -1,8 +1,8 @@
 import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import { defaultTheme } from "./style/theme";
-import GlobalStyle from "./style/global-style";
+import { defaultTheme } from "./design-system/theme";
+import GlobalStyle from "./design-system/global-style";
 import DeviceList from "./device-list";
 import type { FCWithoutChildren } from "./types/component";
 

@@ -1,3 +1,3 @@
 module.exports = {
-  moduleNameMapper: { "^@/(.*)": "<rootDir>/src/$1" },
+  moduleNameMapper: { "^@app/(.*)": "<rootDir>/src/$1" },
 };

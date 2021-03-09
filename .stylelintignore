@@ -4,6 +4,7 @@
 /out
 /coverage
 /src/bridge
+/src/common
 /src/main
-/src/preload
 /src/typings
+/src/preload.ts
