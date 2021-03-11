@@ -1,18 +1,33 @@
+import { Link, HashRouter, Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
 
 import { defaultTheme } from "./design-system/theme";
 import GlobalStyle from "./design-system/global-style";
-import DeviceList from "./device-list";
+import Home from "./pages/home";
+import Devices from "./pages/devices";
 import type { FCWithoutChildren } from "./types/component";
 
 const App: FCWithoutChildren = () => (
-  <ThemeProvider theme={defaultTheme}>
-    <GlobalStyle />
-    <UIRoot>
-      <DeviceList />
-    </UIRoot>
-  </ThemeProvider>
+  <HashRouter>
+    <ThemeProvider theme={defaultTheme}>
+      <GlobalStyle />
+      <UIRoot>
+        <nav>
+          <Link to="/">Home</Link>
+          <Link to="/devices">Devices</Link>
+        </nav>
+        <Switch>
+          <Route path="/devices">
+            <Devices />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </UIRoot>
+    </ThemeProvider>
+  </HashRouter>
 );
 
 export default App;

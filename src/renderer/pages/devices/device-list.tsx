@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import type { FCWithoutChildren } from "./types/component";
+import type { FCWithoutChildren } from "../../types/component";
 
 /*
 We are disallowed from importing node-hid module by eslint no-restricted-imports, which at time of writing does not allow us to distinguish type-only imports
@@ -28,18 +28,15 @@ const DeviceList: FCWithoutChildren = () => {
 
   return devices ? (
     <div>
-      <h1>HID Devices</h1>
-      <div>
-        {devices.map((device) => (
-          <div key={device.productId}>
-            {device.product || "Unknown"}
-            <br />
-            {device.manufacturer || "Unknown"}
-            <br />
-            {device.vendorId} | {device.productId}
-          </div>
-        ))}
-      </div>
+      {devices.map((device) => (
+        <div key={device.productId}>
+          {device.product || "Unknown"}
+          <br />
+          {device.manufacturer || "Unknown"}
+          <br />
+          {device.vendorId} | {device.productId}
+        </div>
+      ))}
     </div>
   ) : (
     <>Loading...</>
