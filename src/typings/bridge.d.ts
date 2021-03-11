@@ -1,12 +1,10 @@
-import * as _Electron from "electron";
+import "electron";
 
-import type { Messages } from "@app/bridge/message";
-import type { Requests } from "@app/bridge/request";
+import type { Messages, Requests } from "@app/bridge/types";
 
-// TODO: renamed since does not seem to work. why?
-declare module "IGNORE_electron" {
-  export namespace Electron {
-    export interface IpcMain {
+declare module "NOTWORKING_electron" {
+  namespace Electron {
+    interface IpcMain {
       handle: <K extends keyof Requests, T = Requests[K]>(
         channel: K,
         handler: (
@@ -16,7 +14,7 @@ declare module "IGNORE_electron" {
       ) => void;
     }
 
-    export interface IpcRenderer {
+    interface IpcRenderer {
       invoke: <K extends keyof Requests, T = Requests[K]>(
         channel: K,
         args: Parameters<T>[0]

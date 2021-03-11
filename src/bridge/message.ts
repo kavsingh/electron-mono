@@ -1,25 +1,20 @@
 import { ipcRenderer } from "electron";
 import type { IpcRendererEvent, BrowserWindow } from "electron";
 
-export interface Messages {
-  health: { status: "ok" };
-  networkStatus: { status: "idle" | "busy" | "offline" };
-}
+import type { Messages, MessageChannelName } from "./types";
 
-export type MessageChannel = keyof Messages;
-
-type MessageHandler<K extends MessageChannel> = (
+type MessageHandler<K extends MessageChannelName> = (
   message: Immutable<Messages[K]>
 ) => void;
 
-type RendererEventHandler<K extends MessageChannel> = (
+type RendererEventHandler<K extends MessageChannelName> = (
   event: IpcRendererEvent,
   message: Immutable<Messages[K]>
 ) => void;
 
-export const rendererSubscription = <K extends MessageChannel>(channel: K) => (
-  handler: MessageHandler<K>
-): (() => void) => {
+export const rendererSubscription = <K extends MessageChannelName>(
+  channel: K
+) => (handler: MessageHandler<K>): (() => void) => {
   const ipcHandler: RendererEventHandler<K> = (_, message) => handler(message);
 
   ipcRenderer.on(channel, ipcHandler);
@@ -27,7 +22,7 @@ export const rendererSubscription = <K extends MessageChannel>(channel: K) => (
   return () => ipcRenderer.removeListener(channel, ipcHandler);
 };
 
-export const mainSendMessage = <K extends MessageChannel>(
+export const mainSendMessage = <K extends MessageChannelName>(
   win: BrowserWindow,
   channel: K,
   payload: Messages[K]
