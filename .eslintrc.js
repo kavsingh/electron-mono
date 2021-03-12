@@ -32,7 +32,7 @@ module.exports = {
       "error",
       { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
     ],
-    "filenames/match-regex": ["error", "^[a-z-.]+$", true],
+    "filenames/match-regex": ["error", "^[a-z-.0-9]+$", true],
     "filenames/match-exported": ["error", "kebab"],
     // everything outside renderer is assumed to be running in node
     "no-restricted-imports": ["error", webOnlyImports],
@@ -124,6 +124,7 @@ module.exports = {
         "no-console": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
+        "filenames/match-exported": ["error", "kebab", "\\.test$"],
       },
     },
   ],

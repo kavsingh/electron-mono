@@ -36,7 +36,10 @@ const createMainWindow = (): void => {
   });
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-  mainWindow.webContents.openDevTools();
+
+  if (process.env.NODE_ENV !== "production" && !process.env.SPECTRON) {
+    mainWindow.webContents.openDevTools();
+  }
 
   mainHandleRequest("request-hid-devices", async () => HID.devices());
   mainHandleRequest("echo", async (_, ping) => `${ping}... ${ping}... ${ping}`);
@@ -49,7 +52,7 @@ const createMainWindow = (): void => {
 app.on("ready", createMainWindow);
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+  if (process.env.SPECTRON || process.platform !== "darwin") app.quit();
 });
 
 app.on("activate", () => {
