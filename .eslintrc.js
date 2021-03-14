@@ -13,7 +13,6 @@ module.exports = {
   settings: {
     "react": { version: "detect" },
     "import/resolver": "babel-module",
-    "import/internal-regex": "^@app/",
   },
   plugins: ["filenames"],
   extends: [
@@ -49,6 +48,7 @@ module.exports = {
           "internal",
           ["parent", "sibling", "index"],
         ],
+        'pathGroups': [{ pattern: '@app/**', group: 'internal' }],
         "newlines-between": "always",
       },
     ],
