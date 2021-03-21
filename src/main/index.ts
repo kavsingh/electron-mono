@@ -1,8 +1,8 @@
 import { app, BrowserWindow } from "electron";
 import HID from "node-hid";
 
-import { mainHandleRequest } from "@app/bridge/request";
-import { mainSendMessage } from "@app/bridge/message";
+import { mainHandleRequest } from "~/bridge/request";
+import { mainSendMessage } from "~/bridge/message";
 
 /*
 name MAIN_WINDOW_xxx matches renderer entry points in package.json config/forge:

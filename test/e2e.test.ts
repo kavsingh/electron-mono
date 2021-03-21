@@ -5,7 +5,7 @@ import { Application } from "spectron";
 import { productName } from "../package.json";
 
 const projectRoot = resolve(__dirname, "..");
-const appPaths = {
+const appPaths: Partial<Record<NodeJS.Platform, string>> = {
   darwin: resolve(
     projectRoot,
     `out/${productName}-darwin-${process.arch}/${productName}.app/Contents/MacOS/${productName}`
@@ -20,7 +20,7 @@ describe("e2e tests", () => {
 
   beforeAll(async () => {
     app = new Application({
-      path: appPaths[process.platform],
+      path: appPaths[process.platform] ?? "",
       env: { SPECTRON: true },
     });
 

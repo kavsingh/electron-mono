@@ -13,7 +13,7 @@
     "lint:js": "tsc && eslint .",
     "lint:css": "stylelint '**/*.ts' '**/*.tsx' '**/*.js' '**/*.jsx'",
     "lint": "yarn lint:js & yarn lint:css",
-    "r": "NODE_ENV=cli babel-node --extensions '.ts','.js'",
+    "r": "babel-node --extensions '.ts','.js'",
     "test:e2e": "jest ./test/e2e"
   },
   "keywords": [],

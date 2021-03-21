@@ -1,6 +1,6 @@
 import { Global, css } from "@emotion/react";
 
-import type { FCWithoutChildren } from "@app/renderer/types/component";
+import type { FCWithoutChildren } from "~/renderer/types/component";
 
 const GlobalStyle: FCWithoutChildren = () => (
   <Global

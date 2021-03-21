@@ -1,6 +1,6 @@
 const { devDependencies } = require("./package.json");
 
-module.exports = ({ env }) => ({
+module.exports = {
   presets: [
     [
       "@babel/preset-env",
@@ -8,7 +8,6 @@ module.exports = ({ env }) => ({
         useBuiltIns: "usage",
         shippedProposals: true,
         corejs: 3,
-        modules: env(["test", "cli"]) ? "commonjs" : false,
         targets: `electron ${devDependencies.electron}`,
       },
     ],
@@ -22,7 +21,7 @@ module.exports = ({ env }) => ({
     [
       "babel-plugin-module-resolver",
       {
-        alias: { "@app": "./src" },
+        alias: { "~": "./src" },
         extensions: [".ts", ".tsx", ".js", ".jsx"],
       },
     ],
@@ -30,4 +29,4 @@ module.exports = ({ env }) => ({
     "@emotion/babel-plugin",
     ["@babel/plugin-transform-runtime", { regenerator: true }],
   ],
-});
+};

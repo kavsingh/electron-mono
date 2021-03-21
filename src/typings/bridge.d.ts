@@ -1,6 +1,6 @@
 import "electron";
 
-import type { Messages, Requests } from "@app/bridge/types";
+import type { Messages, Requests } from "~/bridge/types";
 
 declare module "NOTWORKING_electron" {
   namespace Electron {

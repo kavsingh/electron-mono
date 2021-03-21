@@ -1,33 +1,41 @@
 {
   "compilerOptions": {
-    "noEmit": true,
-    "allowJs": true,
-    "module": "commonjs",
-    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
     "esModuleInterop": true,
-    "noImplicitAny": true,
-    "strict": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "jsx": "preserve",
     "jsxImportSource": "@emotion/react",
-    "sourceMap": true,
-    "baseUrl": "./",
+    "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    },
     "plugins": [
       {
         "name": "typescript-styled-plugin",
         "validate": false
       }
     ],
-    "paths": {
-      "@app/*": [
-        "src/*"
-      ],
-    },
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext"
   },
+  "exclude": [
+    "**/node_modules"
+  ],
   "include": [
-    "src/**/*"
+    "./src",
+    "./test",
+    "./*.ts",
   ]
 }

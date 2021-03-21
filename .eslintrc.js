@@ -48,7 +48,7 @@ module.exports = {
           "internal",
           ["parent", "sibling", "index"],
         ],
-        'pathGroups': [{ pattern: '@app/**', group: 'internal' }],
+        "pathGroups": [{ pattern: "~/**", group: "internal" }],
         "newlines-between": "always",
       },
     ],
