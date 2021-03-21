@@ -21,7 +21,11 @@ const rules = [
   },
 ];
 
-const plugins = [new ForkTsCheckerWebpackPlugin()];
+const plugins = [
+  new ForkTsCheckerWebpackPlugin({
+    typescript: { configOverwrite: { include: ["./src"] } },
+  }),
+];
 
 const extensions = [".ts", ".js"];
 
