@@ -118,7 +118,6 @@ module.exports = {
     {
       files: ["**/*.test.*"],
       env: { "node": true, "jest/globals": true },
-      plugins: ["jest"],
       extends: ["plugin:jest/recommended", "plugin:jest/style"],
       rules: {
         "no-console": "off",
