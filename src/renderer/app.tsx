@@ -13,6 +13,7 @@ const App: FCWithoutChildren = () => (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyle />
       <UIRoot>
+        <Dragable />
         <nav>
           <Link to="/">Home</Link>
           <Link to="/devices">Devices</Link>
@@ -34,8 +35,18 @@ export default App;
 
 const UIRoot = styled.div`
   min-height: 100%;
-  padding: 1em;
+  padding: 2em 1em 1em;
   color: ${({ theme }) => theme.colors.bodyText};
   font-family: ${({ theme }) => theme.fonts.bodyText};
   background-color: ${({ theme }) => theme.colors.background};
+`;
+
+const Dragable = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  height: 2em;
+  -webkit-app-region: drag;
 `;

@@ -1,7 +1,8 @@
 const { rules, plugins, extensions } = require("./webpack.common");
 
 module.exports = {
-  plugins,
+  target: "electron-renderer",
   module: { rules },
   resolve: { extensions: [...extensions, ".tsx", ".jsx"] },
+  plugins,
 };
