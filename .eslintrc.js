@@ -1,9 +1,11 @@
 const nodeOnlyImports = {
-  patterns: ["electron", "node-hid", ...require("module").builtinModules],
+  paths: ["electron", "node-hid", ...require("module").builtinModules],
+  patterns: [],
 };
 
-const webOnlyImports = {
-  patterns: ["react", "react-*", "@emotion*"],
+const browserOnlyImports = {
+  paths: ["react"],
+  patterns: ["react-*", "@emotion*"],
 };
 
 module.exports = {
@@ -34,7 +36,7 @@ module.exports = {
     "filenames/match-regex": ["error", "^[a-z-.0-9]+$", true],
     "filenames/match-exported": ["error", "kebab"],
     // everything outside renderer is assumed to be running in node
-    "no-restricted-imports": ["error", webOnlyImports],
+    "no-restricted-imports": ["error", browserOnlyImports],
     "import/no-cycle": "error",
     "import/no-self-import": "error",
     "import/no-unused-modules": "error",
@@ -91,7 +93,11 @@ module.exports = {
         "no-restricted-imports": [
           "error",
           {
-            patterns: [...nodeOnlyImports.patterns, ...webOnlyImports.patterns],
+            paths: [...nodeOnlyImports.paths, ...browserOnlyImports.paths],
+            patterns: [
+              ...nodeOnlyImports.patterns,
+              ...browserOnlyImports.patterns,
+            ],
           },
         ],
       },
