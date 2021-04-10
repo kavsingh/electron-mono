@@ -27,6 +27,7 @@ const plugins = [
       mode: "write-references",
       configOverwrite: { include: ["./src"] },
     },
+    eslint: { files: "src/**/*.{ts,tsx,js,jsx}" },
   }),
 ];
 
