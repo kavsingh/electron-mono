@@ -23,7 +23,10 @@ const rules = [
 
 const plugins = [
   new ForkTsCheckerWebpackPlugin({
-    typescript: { configOverwrite: { include: ["./src"] } },
+    typescript: {
+      mode: "write-references",
+      configOverwrite: { include: ["./src"] },
+    },
   }),
 ];
 
