@@ -19,52 +19,6 @@
   "keywords": [],
   "author": "<author>",
   "license": "MIT",
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "asar": true
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "TSElectron"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin",
-            "darwin-arm64"
-          ]
-        }
-      ],
-      "plugins": [
-        [
-          "@electron-forge/plugin-webpack",
-          {
-            "mainConfig": "./webpack.main.config.js",
-            "renderer": {
-              "config": "./webpack.renderer.config.js",
-              "entryPoints": [
-                {
-                  "name": "main_window",
-                  "js": "./src/renderer/index.tsx",
-                  "html": "./src/renderer/index.html",
-                  "preload": {
-                    "js": "./src/preload.ts"
-                  }
-                }
-              ]
-            }
-          }
-        ],
-        [
-          "@electron-forge/plugin-auto-unpack-natives"
-        ]
-      ]
-    }
-  },
   "dependencies": {
     "@babel/runtime": "7.13.10",
     "@emotion/react": "11.1.5",
@@ -85,8 +39,7 @@
     "@babel/preset-react": "7.13.13",
     "@babel/preset-typescript": "7.13.0",
     "@electron-forge/cli": "6.0.0-beta.54",
-    "@electron-forge/maker-deb": "6.0.0-beta.54",
-    "@electron-forge/maker-rpm": "6.0.0-beta.54",
+    "@electron-forge/maker-dmg": "6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "6.0.0-beta.54",
     "@electron-forge/maker-zip": "6.0.0-beta.54",
     "@electron-forge/plugin-auto-unpack-natives": "6.0.0-beta.54",
@@ -101,19 +54,19 @@
     "@types/react": "17.0.3",
     "@types/react-dom": "17.0.3",
     "@types/react-router-dom": "5.1.7",
-    "@typescript-eslint/eslint-plugin": "4.21.0",
-    "@typescript-eslint/parser": "4.21.0",
+    "@typescript-eslint/eslint-plugin": "4.22.0",
+    "@typescript-eslint/parser": "4.22.0",
     "babel-jest": "26.6.3",
     "babel-loader": "8.2.2",
     "babel-plugin-module-resolver": "4.1.0",
-    "electron": "12.0.2",
+    "electron": "12.0.4",
     "electron-rebuild": "2.3.5",
     "eslint": "7.24.0",
-    "eslint-config-prettier": "8.1.0",
+    "eslint-config-prettier": "8.2.0",
     "eslint-import-resolver-babel-module": "5.2.0",
     "eslint-plugin-filenames": "1.3.2",
     "eslint-plugin-import": "2.22.1",
-    "eslint-plugin-jest": "24.3.4",
+    "eslint-plugin-jest": "24.3.5",
     "eslint-plugin-prettier": "3.3.1",
     "eslint-plugin-react": "7.23.2",
     "eslint-plugin-react-hooks": "4.2.0",
