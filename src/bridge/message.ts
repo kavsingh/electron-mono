@@ -12,15 +12,16 @@ type RendererEventHandler<K extends MessageChannelName> = (
   message: Immutable<Messages[K]>
 ) => void;
 
-export const rendererSubscription = <K extends MessageChannelName>(
-  channel: K
-) => (handler: MessageHandler<K>): (() => void) => {
-  const ipcHandler: RendererEventHandler<K> = (_, message) => handler(message);
+export const rendererSubscription =
+  <K extends MessageChannelName>(channel: K) =>
+  (handler: MessageHandler<K>): (() => void) => {
+    const ipcHandler: RendererEventHandler<K> = (_, message) =>
+      handler(message);
 
-  ipcRenderer.on(channel, ipcHandler);
+    ipcRenderer.on(channel, ipcHandler);
 
-  return () => ipcRenderer.removeListener(channel, ipcHandler);
-};
+    return () => ipcRenderer.removeListener(channel, ipcHandler);
+  };
 
 export const mainSendMessage = <K extends MessageChannelName>(
   win: BrowserWindow,

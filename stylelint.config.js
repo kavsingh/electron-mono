@@ -11,5 +11,10 @@ module.exports = {
   rules: {
     "order/properties-order": [],
     "plugin/rational-order": [true, { "border-in-box-model": true }],
+    "property-no-unknown": [true, { ignoreProperties: ["/-styled-mixin/"] }],
+    "selector-type-no-unknown": [
+      true,
+      { ignoreTypes: ["/-styled-mixin/", "$dummyValue"] },
+    ],
   },
 };
