@@ -22,7 +22,5 @@ export const mainHandleRequest = <K extends RequestChannelName>(
 ): (() => void) => {
   ipcMain.handle(channel, handler);
 
-  return () => {
-    ipcMain.removeHandler(channel);
-  };
+  return () => ipcMain.removeHandler(channel);
 };

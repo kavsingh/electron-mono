@@ -1,4 +1,4 @@
-import { Link, HashRouter, Route, Switch } from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
 
@@ -6,6 +6,7 @@ import { defaultTheme } from "./design-system/theme";
 import GlobalStyles from "./design-system/global-styles";
 import Home from "./pages/home";
 import Devices from "./pages/devices";
+import Masthead from "./components/masthead";
 
 import type { FCWithoutChildren } from "./types/component";
 
@@ -15,10 +16,7 @@ const App: FCWithoutChildren = () => (
     <HashRouter>
       <UIRoot>
         <Dragable />
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/devices">Devices</Link>
-        </nav>
+        <Masthead />
         <Switch>
           <Route path="/devices">
             <Devices />
