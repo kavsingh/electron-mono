@@ -35,14 +35,18 @@ const createMainWindow = (): void => {
     webPreferences: { preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY },
   });
 
-  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  void mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   if (process.env.NODE_ENV !== "production" && !process.env.SPECTRON) {
     mainWindow.webContents.openDevTools();
   }
 
-  mainHandleRequest("request-hid-devices", async () => HID.devices());
-  mainHandleRequest("echo", async (_, ping) => `${ping}... ${ping}... ${ping}`);
+  mainHandleRequest("request-hid-devices", () =>
+    Promise.resolve(HID.devices())
+  );
+  mainHandleRequest("echo", (_, ping) =>
+    Promise.resolve(`${ping}... ${ping}... ${ping}`)
+  );
 
   mainWindow.webContents.on("did-frame-finish-load", () => {
     mainSendMessage(mainWindow, "health", { status: "ok" });

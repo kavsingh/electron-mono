@@ -13,7 +13,7 @@ const DeviceList: FCWithoutChildren = () => {
   const [devices, setDevices] = useState<Device[]>([]);
 
   useEffect(() => {
-    window.bridge.getHidDevices().then((response) => {
+    void window.bridge.getHidDevices().then((response) => {
       setDevices(
         response.reduce((acc: Device[], device) => {
           if (!acc.find((item) => item.productId === device.productId)) {

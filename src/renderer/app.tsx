@@ -3,15 +3,16 @@ import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
 
 import { defaultTheme } from "./design-system/theme";
-import GlobalStyle from "./design-system/global-style";
+import GlobalStyles from "./design-system/global-styles";
 import Home from "./pages/home";
 import Devices from "./pages/devices";
+
 import type { FCWithoutChildren } from "./types/component";
 
 const App: FCWithoutChildren = () => (
   <HashRouter>
     <ThemeProvider theme={defaultTheme}>
-      <GlobalStyle />
+      <GlobalStyles />
       <UIRoot>
         <Dragable />
         <nav>

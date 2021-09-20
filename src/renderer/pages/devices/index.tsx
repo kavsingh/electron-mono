@@ -1,4 +1,5 @@
 import DeviceList from "./device-list";
+
 import type { FCWithoutChildren } from "../../types/component";
 
 const Devices: FCWithoutChildren = () => (

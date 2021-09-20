@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron";
-import type { IpcRendererEvent, BrowserWindow } from "electron";
 
+import type { IpcRendererEvent, BrowserWindow } from "electron";
 import type { Messages, MessageChannelName } from "./types";
 
 type MessageHandler<K extends MessageChannelName> = (

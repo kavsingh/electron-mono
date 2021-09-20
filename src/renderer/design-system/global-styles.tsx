@@ -2,7 +2,7 @@ import { Global, css } from "@emotion/react";
 
 import type { FCWithoutChildren } from "~/renderer/types/component";
 
-const GlobalStyle: FCWithoutChildren = () => (
+const GlobalStyles: FCWithoutChildren = () => (
   <Global
     styles={css`
       html {
@@ -31,4 +31,4 @@ const GlobalStyle: FCWithoutChildren = () => (
   />
 );
 
-export default GlobalStyle;
+export default GlobalStyles;

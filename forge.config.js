@@ -12,10 +12,6 @@ module.exports = {
       config: { name: "TSElectron" },
       platforms: ["win32"],
     },
-    {
-      name: "@electron-forge/maker-zip",
-      platforms: ["darwin", "darwin-arm64", "win32"],
-    },
   ],
   plugins: [
     [

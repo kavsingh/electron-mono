@@ -8,39 +8,49 @@ const browserOnlyImports = {
   patterns: ["react-*", "@emotion*"],
 };
 
+const srcDependencies = {
+  // TODO: figure out how to allow electron. providing ["electron"] does not
+  // work
+  devDependencies: true,
+  optionalDependencies: false,
+  peerDependencies: false,
+};
+
+const devDependencies = {
+  devDependencies: true,
+  optionalDependencies: false,
+  peerDependencies: false,
+};
+
+const testFilePatterns = (extensions = "*") =>
+  ["**/*.test", "**/*.mock", "**/__test__/**/*", "**/__mocks__/**/*"].map(
+    (pattern) => `${pattern}.${extensions}`
+  );
+
 module.exports = {
   root: true,
-  parser: "@typescript-eslint/parser",
   env: { es6: true, node: true, browser: false },
-  settings: {
-    "react": { version: "detect" },
-    "import/resolver": "babel-module",
-  },
+  settings: { "import/resolver": "babel-module" },
   plugins: ["filenames"],
   extends: [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
+    "plugin:import/typescript",
     "plugin:prettier/recommended",
   ],
   rules: {
-    "camelcase": "off",
     "curly": ["warn", "multi-line", "consistent"],
     "no-console": "off",
-    "no-unused-vars": "off",
-    "@typescript-eslint/consistent-type-imports": ["error"],
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
-    ],
-    "filenames/match-regex": ["error", "^[a-z-.0-9]+$", true],
-    "filenames/match-exported": ["error", "kebab"],
+    "no-throw-literal": "error",
     // everything outside renderer is assumed to be running in node
     "no-restricted-imports": ["error", browserOnlyImports],
+    "filenames/match-regex": ["error", "^[a-z-.0-9]+$", true],
+    "filenames/match-exported": ["error", "kebab"],
     "import/no-cycle": "error",
     "import/no-self-import": "error",
     "import/no-unused-modules": "error",
     "import/no-useless-path-segments": "error",
+    "import/no-extraneous-dependencies": ["error", devDependencies],
     "import/order": [
       "warn",
       {
@@ -49,8 +59,10 @@ module.exports = {
           "external",
           "internal",
           ["parent", "sibling", "index"],
+          "type",
         ],
         "pathGroups": [{ pattern: "~/**", group: "internal" }],
+        "pathGroupsExcludedImportTypes": ["type"],
         "newlines-between": "always",
       },
     ],
@@ -80,10 +92,49 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["*.config.*", "webpack.*", ".eslintrc*"],
+      files: ["*.js"],
+      parser: "@babel/eslint-parser",
+    },
+    {
+      files: ["*.ts?(x)"],
+      parser: "@typescript-eslint/parser",
+      parserOptions: { project: "./tsconfig.json" },
+      extends: [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+      ],
       rules: {
-        "@typescript-eslint/no-var-requires": "off",
+        "camelcase": "off",
+        "no-shadow": "off",
+        "no-throw-literal": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/consistent-type-imports": ["error"],
+        "@typescript-eslint/member-ordering": ["warn"],
+        "@typescript-eslint/no-shadow": [
+          "error",
+          {
+            ignoreTypeValueShadow: false,
+            ignoreFunctionTypeParameterNameValueShadow: true,
+          },
+        ],
+        "@typescript-eslint/no-throw-literal": "error",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+        ],
+      },
+    },
+    {
+      files: ["./*"],
+      rules: {
         "filenames/match-exported": "off",
+      },
+    },
+    {
+      files: ["src/**/*"],
+      rules: {
+        "no-console": "error",
+        "import/no-extraneous-dependencies": ["error", srcDependencies],
       },
     },
     {
@@ -104,12 +155,14 @@ module.exports = {
     },
     {
       files: ["src/renderer/**/*"],
+      env: { node: false, browser: true },
+      settings: { react: { version: "detect" } },
       plugins: ["@emotion"],
       extends: ["plugin:react/recommended", "plugin:react-hooks/recommended"],
-      env: { node: false, browser: true },
       rules: {
         // disallow node packages in renderer, rely on contextBridge instead
         "no-restricted-imports": ["error", nodeOnlyImports],
+        "import/no-extraneous-dependencies": ["error", srcDependencies],
         "react/jsx-filename-extension": [
           "error",
           { extensions: [".tsx", ".jsx"] },
@@ -122,14 +175,29 @@ module.exports = {
       },
     },
     {
-      files: ["**/*.test.*"],
+      files: testFilePatterns(),
       env: { "node": true, "jest/globals": true },
-      extends: ["plugin:jest/recommended", "plugin:jest/style"],
+      extends: [
+        "plugin:jest/recommended",
+        "plugin:jest/style",
+        "plugin:jest-dom/recommended",
+      ],
       rules: {
         "no-console": "off",
+        "filenames/match-exported": ["error", "kebab", "\\.test$"],
+        "import/no-extraneous-dependencies": ["error", devDependencies],
+      },
+    },
+    {
+      files: testFilePatterns("[jt]s?(x)"),
+      extends: ["plugin:testing-library/react"],
+    },
+    {
+      files: testFilePatterns("ts?(x)"),
+      rules: {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
-        "filenames/match-exported": ["error", "kebab", "\\.test$"],
+        "@typescript-eslint/unbound-method": "off",
       },
     },
   ],

@@ -1,7 +1,7 @@
-import type { Application } from "spectron";
-
 import { startApplication, stopApplication } from "./util/application";
 import { getText } from "./util/query";
+
+import type { Application } from "spectron";
 
 describe("e2e tests", () => {
   let app: Application;
