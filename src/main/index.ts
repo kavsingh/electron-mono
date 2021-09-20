@@ -41,26 +41,54 @@ const createMainWindow = (): void => {
     mainWindow.webContents.openDevTools();
   }
 
-  mainHandleRequest("request-hid-devices", () =>
-    Promise.resolve(HID.devices())
-  );
-  mainHandleRequest("echo", (_, ping) =>
-    Promise.resolve(`${ping}... ${ping}... ${ping}`)
-  );
+  let cleanupMessaging: ReturnType<typeof setupMessaging> | null = null;
 
-  mainWindow.webContents.on("did-frame-finish-load", () => {
-    mainSendMessage(mainWindow, "health", { status: "ok" });
+  mainWindow.webContents.on("dom-ready", () => {
+    cleanupMessaging = setupMessaging(mainWindow);
+  });
+
+  mainWindow.on("close", () => {
+    cleanupMessaging?.();
   });
 };
 
-app.on("ready", createMainWindow);
+const setupIpcHandlers = () => {
+  const removeHidHandler = mainHandleRequest("request-hid-devices", () =>
+    Promise.resolve(HID.devices())
+  );
+  const removeEchoHandler = mainHandleRequest("echo", (_, ping) =>
+    Promise.resolve(`${ping}... ${ping}... ${ping}`)
+  );
 
-app.on("window-all-closed", () => {
-  if (process.env.SPECTRON || process.platform !== "darwin") app.quit();
-});
+  return () => {
+    removeEchoHandler();
+    removeHidHandler();
+  };
+};
+
+const setupMessaging = (win: BrowserWindow) => {
+  const healthInterval = setInterval(() => {
+    mainSendMessage(win, "health", { status: "ok" });
+  }, 2000);
+
+  return () => {
+    clearInterval(healthInterval);
+  };
+};
+
+const cleanupIpcHandlers = setupIpcHandlers();
+
+app.on("ready", createMainWindow);
 
 app.on("activate", () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
+});
+
+app.on("window-all-closed", () => {
+  if (process.env.SPECTRON || process.platform !== "darwin") {
+    cleanupIpcHandlers();
+    app.quit();
+  }
 });

@@ -71,6 +71,7 @@ module.exports = {
       "error",
       {
         zones: [
+          // [target] cannot import [from]
           { target: "./src/main", from: "./src/renderer" },
           { target: "./src/main", from: "./src/preload.ts" },
           { target: "./src/renderer", from: "./src/main" },

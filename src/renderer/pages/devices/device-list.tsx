@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
-import type { FCWithoutChildren } from "../../types/component";
+import { uniqueBy } from "~/common/util/array";
+
+import type { FCWithoutChildren } from "~/renderer/types/component";
 
 /*
 We are disallowed from importing node-hid module by eslint no-restricted-imports, which at time of writing does not allow us to distinguish type-only imports
@@ -14,15 +16,7 @@ const DeviceList: FCWithoutChildren = () => {
 
   useEffect(() => {
     void window.bridge.getHidDevices().then((response) => {
-      setDevices(
-        response.reduce((acc: Device[], device) => {
-          if (!acc.find((item) => item.productId === device.productId)) {
-            acc.push(device);
-          }
-
-          return acc;
-        }, [])
-      );
+      setDevices(uniqueBy((a, b) => a.productId === b.productId, response));
     });
   }, []);
 

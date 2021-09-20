@@ -10,9 +10,9 @@ import Devices from "./pages/devices";
 import type { FCWithoutChildren } from "./types/component";
 
 const App: FCWithoutChildren = () => (
-  <HashRouter>
-    <ThemeProvider theme={defaultTheme}>
-      <GlobalStyles />
+  <ThemeProvider theme={defaultTheme}>
+    <GlobalStyles />
+    <HashRouter>
       <UIRoot>
         <Dragable />
         <nav>
@@ -28,8 +28,8 @@ const App: FCWithoutChildren = () => (
           </Route>
         </Switch>
       </UIRoot>
-    </ThemeProvider>
-  </HashRouter>
+    </HashRouter>
+  </ThemeProvider>
 );
 
 export default App;

@@ -1,34 +1,40 @@
-import { Global, css } from "@emotion/react";
+import { Global, css, useTheme } from "@emotion/react";
 
 import type { FCWithoutChildren } from "~/renderer/types/component";
 
-const GlobalStyles: FCWithoutChildren = () => (
-  <Global
-    styles={css`
-      html {
-        box-sizing: border-box;
-        font-size: 16px;
-      }
+const GlobalStyles: FCWithoutChildren = () => {
+  const theme = useTheme();
 
-      *,
-      *::before,
-      *::after {
-        box-sizing: inherit;
-      }
+  return (
+    <Global
+      styles={css`
+        html {
+          box-sizing: border-box;
+          font-size: 16px;
+        }
 
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-      }
+        *,
+        *::before,
+        *::after {
+          box-sizing: inherit;
+        }
 
-      #app-root {
-        width: 100vw;
-        height: 100vh;
-        -webkit-overflow-scrolling: touch;
-      }
-    `}
-  />
-);
+        html,
+        body {
+          margin: 0;
+          padding: 0;
+          color: ${theme.colors.bodyText};
+          background-color: ${theme.colors.background};
+        }
+
+        #app-root {
+          width: 100vw;
+          height: 100vh;
+          -webkit-overflow-scrolling: touch;
+        }
+      `}
+    />
+  );
+};
 
 export default GlobalStyles;

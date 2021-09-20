@@ -19,4 +19,10 @@ export const mainHandleRequest = <K extends RequestChannelName>(
     event: IpcMainInvokeEvent,
     args: Immutable<Parameters<Requests[K]>[0]>
   ) => Promise<ReturnType<Requests[K]>>
-): void => ipcMain.handle(channel, handler);
+): (() => void) => {
+  ipcMain.handle(channel, handler);
+
+  return () => {
+    ipcMain.removeHandler(channel);
+  };
+};
