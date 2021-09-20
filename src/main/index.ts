@@ -43,7 +43,7 @@ const createMainWindow = (): void => {
 
   let cleanupHeartbeat: ReturnType<typeof setupHearbeat> | null = null;
 
-  mainWindow.webContents.on("dom-ready", () => {
+  mainWindow.on("show", () => {
     cleanupHeartbeat = setupHearbeat(mainWindow);
   });
 
