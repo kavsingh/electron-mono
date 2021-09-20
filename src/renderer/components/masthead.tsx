@@ -32,11 +32,15 @@ const Masthead: FCWithoutChildren = () => {
 export default Masthead;
 
 const pulse = keyframes`
-  from {
+  0% {
+    opacity: 0;
+  }
+
+  10% {
     opacity: 1;
   }
 
-  to {
+  100% {
     opacity: 0;
   }
 `;
@@ -52,5 +56,5 @@ const Status = styled.div`
   color: ${({ theme }) => theme.colors.background};
   background-color: ${({ theme }) => theme.colors.bodyText};
   opacity: 0;
-  animation: ${pulse} 0.6s ease-out;
+  animation: ${pulse} 1.2s ease-out;
 `;

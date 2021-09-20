@@ -41,14 +41,14 @@ const createMainWindow = (): void => {
     mainWindow.webContents.openDevTools();
   }
 
-  let cleanupMessaging: ReturnType<typeof setupMessaging> | null = null;
+  let cleanupHeartbeat: ReturnType<typeof setupHearbeat> | null = null;
 
   mainWindow.webContents.on("dom-ready", () => {
-    cleanupMessaging = setupMessaging(mainWindow);
+    cleanupHeartbeat = setupHearbeat(mainWindow);
   });
 
   mainWindow.on("close", () => {
-    cleanupMessaging?.();
+    cleanupHeartbeat?.();
   });
 };
 
@@ -66,13 +66,26 @@ const setupIpcHandlers = () => {
   };
 };
 
-const setupMessaging = (win: BrowserWindow) => {
-  const healthInterval = setInterval(() => {
+const setupHearbeat = (win: BrowserWindow) => {
+  let timeout: NodeJS.Timeout | null = null;
+
+  const sendMessages = () => {
+    if (win.isDestroyed()) return;
+
     mainSendMessage(win, "health", { status: "ok" });
-  }, 2000);
+  };
+
+  const tick = () => {
+    if (timeout) clearTimeout(timeout);
+    if (win.isDestroyed()) return;
+    timeout = setInterval(sendMessages, 2000);
+  };
+
+  sendMessages();
+  tick();
 
   return () => {
-    clearInterval(healthInterval);
+    if (timeout) clearTimeout(timeout);
   };
 };
 
