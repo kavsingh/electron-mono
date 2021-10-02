@@ -8,9 +8,9 @@ import Home from "./pages/home";
 import Devices from "./pages/devices";
 import Masthead from "./components/masthead";
 
-import type { FCWithoutChildren } from "./types/component";
+import type { VoidFunctionComponent } from "react";
 
-const App: FCWithoutChildren = () => (
+const App: VoidFunctionComponent = () => (
   <ThemeProvider theme={defaultTheme}>
     <GlobalStyles />
     <HashRouter>

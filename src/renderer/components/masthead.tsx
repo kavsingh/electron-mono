@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import type { FCWithoutChildren } from "../types/component";
+import type { VoidFunctionComponent } from "react";
 
-const Masthead: FCWithoutChildren = () => {
+const Masthead: VoidFunctionComponent = () => {
   const [status, setStatus] = useState<string>("");
   const [statusKey, setStatusKey] = useState<number>(Math.random());
 

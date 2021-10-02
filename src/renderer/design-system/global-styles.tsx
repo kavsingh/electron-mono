@@ -1,8 +1,8 @@
 import { Global, css, useTheme } from "@emotion/react";
 
-import type { FCWithoutChildren } from "~/renderer/types/component";
+import type { VoidFunctionComponent } from "react";
 
-const GlobalStyles: FCWithoutChildren = () => {
+const GlobalStyles: VoidFunctionComponent = () => {
   const theme = useTheme();
 
   return (

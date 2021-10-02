@@ -1,8 +1,8 @@
 import DeviceList from "./device-list";
 
-import type { FCWithoutChildren } from "../../types/component";
+import type { VoidFunctionComponent } from "react";
 
-const Devices: FCWithoutChildren = () => (
+const Devices: VoidFunctionComponent = () => (
   <div>
     <h2>Devices</h2>
     <DeviceList />

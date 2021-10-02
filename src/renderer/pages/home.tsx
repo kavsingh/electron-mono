@@ -1,6 +1,6 @@
-import type { FCWithoutChildren } from "../types/component";
+import type { VoidFunctionComponent } from "react";
 
-const Home: FCWithoutChildren = () => (
+const Home: VoidFunctionComponent = () => (
   <div>
     <h2>Home</h2>
   </div>
