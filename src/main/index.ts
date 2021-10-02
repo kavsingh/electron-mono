@@ -53,7 +53,7 @@ const createMainWindow = (): void => {
 };
 
 const setupIpcHandlers = () => {
-  const removeHidHandler = mainHandleRequest("request-hid-devices", () =>
+  const removeHidHandler = mainHandleRequest("hid-devices", () =>
     Promise.resolve(HID.devices())
   );
   const removeEchoHandler = mainHandleRequest("echo", (_, ping) =>

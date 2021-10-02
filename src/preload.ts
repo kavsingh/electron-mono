@@ -4,7 +4,7 @@ import { rendererRequest } from "./bridge/request";
 import { rendererSubscription } from "./bridge/message";
 
 const bridge = {
-  getHidDevices: rendererRequest("request-hid-devices"),
+  getHidDevices: rendererRequest("hid-devices"),
   getEcho: rendererRequest("echo"),
   subscribeHealth: rendererSubscription("health"),
 };

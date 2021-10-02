@@ -9,7 +9,7 @@ export type MessageChannelName = keyof Messages;
 
 // Note: return types will be wrapped in a promise
 export interface Requests {
-  "request-hid-devices": () => Device[];
+  "hid-devices": () => Device[];
   "echo": (msg: string) => string;
 }
 
