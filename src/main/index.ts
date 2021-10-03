@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { app, BrowserWindow } from "electron";
 import HID from "node-hid";
 
@@ -41,14 +42,18 @@ const createMainWindow = (): void => {
     mainWindow.webContents.openDevTools();
   }
 
-  let cleanupHeartbeat: ReturnType<typeof setupHearbeat> | null = null;
+  let clearHeartbeat: ReturnType<typeof setupHearbeat> | null = null;
 
   mainWindow.on("show", () => {
-    cleanupHeartbeat = setupHearbeat(mainWindow);
+    clearHeartbeat = setupHearbeat(mainWindow);
+  });
+
+  mainWindow.on("hide", () => {
+    clearHeartbeat?.();
   });
 
   mainWindow.on("close", () => {
-    cleanupHeartbeat?.();
+    clearHeartbeat?.();
   });
 };
 
@@ -69,19 +74,16 @@ const setupIpcHandlers = () => {
 const setupHearbeat = (win: BrowserWindow) => {
   let timeout: NodeJS.Timeout | null = null;
 
-  const sendMessages = () => {
-    if (win.isDestroyed()) return;
-
-    mainSendMessage(win, "health", { status: "ok" });
-  };
-
   const tick = () => {
     if (timeout) clearTimeout(timeout);
-    if (win.isDestroyed()) return;
-    timeout = setInterval(sendMessages, 2000);
+
+    if (win.isDestroyed() || !win.isVisible()) return;
+
+    mainSendMessage(win, "health", { status: "ok" });
+
+    timeout = setTimeout(tick, 2000);
   };
 
-  sendMessages();
   tick();
 
   return () => {
