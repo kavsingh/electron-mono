@@ -1,13 +1,17 @@
+import { waitFor } from "@testing-library/react";
+import { setupBrowser } from "@testing-library/webdriverio";
+
 import { startApplication, stopApplication } from "./util/application";
-import { getText } from "./util/query";
 
 import type { Application } from "spectron";
 
 describe("e2e tests", () => {
   let app: Application;
+  let clientQueries: ReturnType<typeof setupBrowser>;
 
   beforeAll(async () => {
     app = await startApplication();
+    clientQueries = setupBrowser(app.client);
   });
 
   afterAll(async () => {
@@ -15,8 +19,10 @@ describe("e2e tests", () => {
   });
 
   it("should open at home page", async () => {
-    const pageText = await getText(app.client.$("#app-root"));
+    const { getByText } = clientQueries;
 
-    expect(pageText).toContain("Home");
+    await waitFor(() => {
+      expect(getByText("Home")).toBeInTheDocument();
+    });
   });
 });

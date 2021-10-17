@@ -201,5 +201,11 @@ module.exports = {
         "@typescript-eslint/unbound-method": "off",
       },
     },
+    {
+      files: ["./test/**/*"],
+      rules: {
+        "testing-library/prefer-screen-queries": "off",
+      },
+    },
   ],
 };
