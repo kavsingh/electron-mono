@@ -22,10 +22,12 @@ const devDependencies = {
   peerDependencies: false,
 };
 
-const testFilePatterns = (extensions = "*") =>
-  ["**/*.test", "**/*.mock", "**/__test__/**/*", "**/__mocks__/**/*"].map(
-    (pattern) => `${pattern}.${extensions}`
-  );
+const testFilePatterns = ({ root = "", extensions = "*" } = {}) =>
+  [
+    "*.{test,mock}",
+    "{test,mock}-helpers*",
+    "__{mock,mocks,test,tests,fixtures}__/**/*",
+  ].map((pattern) => `${root ? `${root}/` : ""}**/${pattern}.${extensions}`);
 
 module.exports = {
   root: true,
@@ -177,12 +179,7 @@ module.exports = {
     },
     {
       files: testFilePatterns(),
-      env: { "node": true, "jest/globals": true },
-      extends: [
-        "plugin:jest/recommended",
-        "plugin:jest/style",
-        "plugin:jest-dom/recommended",
-      ],
+      env: { node: true },
       rules: {
         "no-console": "off",
         "filenames/match-exported": ["error", "kebab", "\\.test$"],
@@ -190,11 +187,7 @@ module.exports = {
       },
     },
     {
-      files: testFilePatterns("[jt]s?(x)"),
-      extends: ["plugin:testing-library/react"],
-    },
-    {
-      files: testFilePatterns("ts?(x)"),
+      files: testFilePatterns({ extensions: "ts?(x)" }),
       rules: {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
@@ -202,10 +195,17 @@ module.exports = {
       },
     },
     {
-      files: ["./test/**/*"],
-      rules: {
-        "testing-library/prefer-screen-queries": "off",
-      },
+      files: testFilePatterns({ root: "./src" }),
+      env: { "jest/globals": true },
+      extends: ["plugin:jest/recommended", "plugin:jest/style"],
+    },
+    {
+      files: testFilePatterns({ root: "./src", extensions: "[jt]s?(x)" }),
+      extends: ["plugin:jest-dom/recommended", "plugin:testing-library/react"],
+    },
+    {
+      files: testFilePatterns({ root: "./test" }),
+      extends: ["plugin:playwright/playwright-test"],
     },
   ],
 };

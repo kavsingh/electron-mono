@@ -1,28 +1,23 @@
-import { waitFor } from "@testing-library/react";
-import { setupBrowser } from "@testing-library/webdriverio";
+import { test } from "@playwright/test";
 
-import { startApplication, stopApplication } from "./util/application";
+import { setupApplication, teardownApplication } from "./lib/application";
 
-import type { Application } from "spectron";
+import type { ElectronApplication } from "@playwright/test";
 
-describe("e2e tests", () => {
-  let app: Application;
-  let clientQueries: ReturnType<typeof setupBrowser>;
+test.describe("e2e tests", () => {
+  let app: ElectronApplication;
 
-  beforeAll(async () => {
-    app = await startApplication();
-    clientQueries = setupBrowser(app.client);
+  test.beforeAll(async () => {
+    app = await setupApplication();
   });
 
-  afterAll(async () => {
-    await stopApplication(app);
+  test.afterAll(async () => {
+    await teardownApplication(app);
   });
 
-  it("should open at home page", async () => {
-    const { getByText } = clientQueries;
+  test("should open at home page", async () => {
+    const page = await app.firstWindow();
 
-    await waitFor(() => {
-      expect(getByText("Home")).toBeInTheDocument();
-    });
+    await test.expect(page.locator("_react=h2 >> text=Home")).toBeVisible();
   });
 });

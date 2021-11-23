@@ -2,6 +2,7 @@
 /node_modules
 /out
 /coverage
+/test/results
 *.log.*
 *.log*
 *.tsbuildinfo
