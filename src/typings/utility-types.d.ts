@@ -7,9 +7,6 @@ declare type Immutable<T> =
   T extends Set<infer S> ? ReadonlySet<Immutable<S>> :
   {readonly [P in keyof T]: Immutable<T[P]>}
 
-// https://stackoverflow.com/a/49889856
-type UnwrapPromiseLike<T> = T extends PromiseLike<infer U> ? U : T;
-
 type UnwrapArrayLike<T> = T extends ArrayLike<infer U> ? U : T;
 
-type AsyncResult<T> = Immutable<UnwrapPromiseLike<ReturnType<T>>>;
+type AsyncResult<T> = Immutable<Awaited<ReturnType<T>>>;

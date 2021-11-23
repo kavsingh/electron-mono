@@ -1,4 +1,4 @@
-import { HashRouter, Route, Switch } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
 
@@ -17,14 +17,10 @@ const App: VoidFunctionComponent = () => (
       <UIRoot>
         <Dragable />
         <Masthead />
-        <Switch>
-          <Route path="/devices">
-            <Devices />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/devices" element={<Devices />} />
+        </Routes>
       </UIRoot>
     </HashRouter>
   </ThemeProvider>
