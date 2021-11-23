@@ -1,9 +1,7 @@
 {
   "editor.formatOnSave": true,
-  "stylelint.enable": true,
   "editor.codeActionsOnSave": {
-    // stylelint throws errors when autofix is on, KIV extension fix
-    "source.fixAll.eslint": true
+    "source.fixAll": true
   },
   "files.watcherExclude": {
     "**/node_modules": true,
