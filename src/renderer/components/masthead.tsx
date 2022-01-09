@@ -23,6 +23,7 @@ const Masthead: VoidFunctionComponent = () => {
       <nav>
         <Link to="/">Home</Link>
         <Link to="/devices">Devices</Link>
+        <Link to="/files">Files</Link>
       </nav>
       <Status key={statusKey}>{status}</Status>
     </Container>

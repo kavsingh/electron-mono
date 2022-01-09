@@ -6,6 +6,7 @@ import { defaultTheme } from "./design-system/theme";
 import GlobalStyles from "./design-system/global-styles";
 import Home from "./pages/home";
 import Devices from "./pages/devices";
+import Files from "./pages/files";
 import Masthead from "./components/masthead";
 
 import type { VoidFunctionComponent } from "react";
@@ -20,6 +21,7 @@ const App: VoidFunctionComponent = () => (
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/devices" element={<Devices />} />
+          <Route path="/files" element={<Files />} />
         </Routes>
       </UIRoot>
     </HashRouter>
