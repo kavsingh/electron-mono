@@ -15,9 +15,14 @@ const Files: VoidFunctionComponent = () => {
     []
   );
 
-  const handleDragEnter = useCallback(() => {
-    setIsActive(true);
-  }, []);
+  const handleDragEnter = useCallback<DragEventHandler<HTMLDivElement>>(
+    (event) => {
+      // needed for drop handler
+      event.preventDefault();
+      setIsActive(true);
+    },
+    []
+  );
 
   const handleDragLeave = useCallback(() => {
     setIsActive(false);
@@ -45,9 +50,7 @@ const Files: VoidFunctionComponent = () => {
       />
       <ul>
         {files.map((file) => (
-          <li key={file.path}>
-            <span>{file.path}</span>
-          </li>
+          <FileItem key={file.path} file={file} />
         ))}
       </ul>
     </div>
@@ -55,6 +58,16 @@ const Files: VoidFunctionComponent = () => {
 };
 
 export default Files;
+
+const FileItem: VoidFunctionComponent<{ file: File }> = ({ file }) => {
+  const isDirectory = false;
+
+  return (
+    <li key={file.path}>
+      <span>{file.path}</span> ({isDirectory ? "directory" : "file"})
+    </li>
+  );
+};
 
 const DropRegion = styled.div<{ isActive: boolean }>`
   height: 200px;
