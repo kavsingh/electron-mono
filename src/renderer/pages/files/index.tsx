@@ -1,56 +1,30 @@
 import { useCallback, useState } from "react";
 import styled from "@emotion/styled";
 
-import type { DragEventHandler, VoidFunctionComponent } from "react";
+import { useFileDrop } from "~/renderer/hooks/file";
+
+import type { VoidFunctionComponent } from "react";
+import type { DroppedFile, DroppedFileHandler } from "~/renderer/hooks/file";
 
 const Files: VoidFunctionComponent = () => {
-  const [files, setFiles] = useState<File[]>([]);
-  const [isActive, setIsActive] = useState(false);
-
-  const handleDragOver = useCallback<DragEventHandler<HTMLDivElement>>(
-    (event) => {
-      // needed for drop handler
-      event.preventDefault();
-    },
-    []
-  );
-
-  const handleDragEnter = useCallback<DragEventHandler<HTMLDivElement>>(
-    (event) => {
-      // needed for drop handler
-      event.preventDefault();
-      setIsActive(true);
-    },
-    []
-  );
-
-  const handleDragLeave = useCallback(() => {
-    setIsActive(false);
-  }, []);
-
-  const handleDrop = useCallback<DragEventHandler<HTMLDivElement>>((event) => {
-    setFiles((current) => [
+  const [droppedFiles, setDroppedFiles] = useState<DroppedFile[]>([]);
+  const handleFiles = useCallback<DroppedFileHandler>((dropped) => {
+    setDroppedFiles((current) => [
       ...current,
-      ...Array.from(event.dataTransfer.files).filter(
-        (file) => !current.find((c) => c.path === file.path)
+      ...dropped.filter(
+        ({ file }) => !current.find((c) => c.file.path === file.path)
       ),
     ]);
-    setIsActive(false);
   }, []);
+  const { isActive, elementHandles } = useFileDrop(handleFiles);
 
   return (
     <div>
       <h2>Files</h2>
-      <DropRegion
-        isActive={isActive}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-      />
+      <DropRegion isActive={isActive} {...elementHandles} />
       <ul>
-        {files.map((file) => (
-          <FileItem key={file.path} file={file} />
+        {droppedFiles.map((droppedFile) => (
+          <FileItem key={droppedFile.file.path} {...droppedFile} />
         ))}
       </ul>
     </div>
@@ -59,15 +33,14 @@ const Files: VoidFunctionComponent = () => {
 
 export default Files;
 
-const FileItem: VoidFunctionComponent<{ file: File }> = ({ file }) => {
-  const isDirectory = false;
-
-  return (
-    <li key={file.path}>
-      <span>{file.path}</span> ({isDirectory ? "directory" : "file"})
-    </li>
-  );
-};
+const FileItem: VoidFunctionComponent<DroppedFile> = ({
+  file,
+  isDirectory,
+}) => (
+  <li>
+    <span>{file.path}</span> ({isDirectory ? "directory" : "file"})
+  </li>
+);
 
 const DropRegion = styled.div<{ isActive: boolean }>`
   height: 200px;
