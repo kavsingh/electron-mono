@@ -6,8 +6,8 @@ import styled from "@emotion/styled";
 import type { VoidFunctionComponent } from "react";
 
 const Masthead: VoidFunctionComponent = () => {
-  const [status, setStatus] = useState<string>("");
-  const [statusKey, setStatusKey] = useState<number>(Math.random());
+  const [status, setStatus] = useState("");
+  const [statusKey, setStatusKey] = useState(Math.random());
 
   useEffect(() => {
     const unsubscribe = window.bridge.subscribeHealth((event) => {
