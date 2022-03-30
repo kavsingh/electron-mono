@@ -1,3 +1,4 @@
+import { StrictMode } from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
@@ -12,20 +13,22 @@ import Masthead from "./components/masthead";
 import type { VoidFunctionComponent } from "react";
 
 const App: VoidFunctionComponent = () => (
-  <ThemeProvider theme={defaultTheme}>
-    <GlobalStyles />
-    <HashRouter>
-      <UIRoot>
-        <Dragable />
-        <Masthead />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/devices" element={<Devices />} />
-          <Route path="/files" element={<Files />} />
-        </Routes>
-      </UIRoot>
-    </HashRouter>
-  </ThemeProvider>
+  <StrictMode>
+    <ThemeProvider theme={defaultTheme}>
+      <GlobalStyles />
+      <HashRouter>
+        <UIRoot>
+          <Dragable />
+          <Masthead />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/devices" element={<Devices />} />
+            <Route path="/files" element={<Files />} />
+          </Routes>
+        </UIRoot>
+      </HashRouter>
+    </ThemeProvider>
+  </StrictMode>
 );
 
 export default App;
