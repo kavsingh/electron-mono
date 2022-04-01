@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "typecheck": "tsc",
     "test:unit": "jest ./src",
-    "test:e2e": "yarn package && playwright test",
+    "test:e2e": "pnpm package && playwright test",
     "r": "babel-node --extensions '.ts','.js'"
   },
   "keywords": [],
