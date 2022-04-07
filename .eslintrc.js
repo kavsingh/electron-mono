@@ -43,9 +43,9 @@ module.exports = {
   rules: {
     "curly": ["warn", "multi-line", "consistent"],
     "no-console": "off",
-    "no-throw-literal": "error",
     // everything outside renderer is assumed to be running in node
     "no-restricted-imports": ["error", browserOnlyImports],
+    "no-throw-literal": "error",
     "filenames/match-regex": ["error", "^[a-z-.0-9]+$", true],
     "filenames/match-exported": ["error", "kebab"],
     "import/no-cycle": "error",
@@ -108,6 +108,7 @@ module.exports = {
       ],
       rules: {
         "camelcase": "off",
+        "no-restricted-imports": ["error", browserOnlyImports],
         "no-shadow": "off",
         "no-throw-literal": "off",
         "no-unused-vars": "off",

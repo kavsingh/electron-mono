@@ -3,10 +3,10 @@ import styled from "@emotion/styled";
 
 import { useFileDrop } from "~/renderer/hooks/file";
 
-import type { VoidFunctionComponent } from "react";
+import type { FC } from "react";
 import type { DroppedFile, DroppedFileHandler } from "~/renderer/hooks/file";
 
-const Files: VoidFunctionComponent = () => {
+const Files: FC = () => {
   const [droppedFiles, setDroppedFiles] = useState<DroppedFile[]>([]);
   const handleFiles = useCallback<DroppedFileHandler>((dropped) => {
     setDroppedFiles((current) => [
@@ -33,10 +33,7 @@ const Files: VoidFunctionComponent = () => {
 
 export default Files;
 
-const FileItem: VoidFunctionComponent<DroppedFile> = ({
-  file,
-  isDirectory,
-}) => (
+const FileItem: FC<DroppedFile> = ({ file, isDirectory }) => (
   <li>
     <span>{file.path}</span> ({isDirectory ? "directory" : "file"})
   </li>

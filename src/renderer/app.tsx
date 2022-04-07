@@ -10,9 +10,9 @@ import Devices from "./pages/devices";
 import Files from "./pages/files";
 import Masthead from "./components/masthead";
 
-import type { VoidFunctionComponent } from "react";
+import type { FC } from "react";
 
-const App: VoidFunctionComponent = () => (
+const App: FC = () => (
   <StrictMode>
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />

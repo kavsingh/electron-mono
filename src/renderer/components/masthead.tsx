@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import type { VoidFunctionComponent } from "react";
+import type { FC } from "react";
 
-const Masthead: VoidFunctionComponent = () => {
+const Masthead: FC = () => {
   const [status, setStatus] = useState("");
   const [statusKey, setStatusKey] = useState(Math.random());
 
