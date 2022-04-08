@@ -12,16 +12,15 @@ const allowTypes = (restrictedImportsOptions) => {
   }
 
   if (Array.isArray(nextOptions.patterns)) {
-    if (nextOptions.patterns.every((item) => typeof item === "string")) {
-      nextOptions.patterns = [
-        { groups: nextOptions.patterns, allowTypeImports: true },
-      ];
-    } else if (nextOptions.patterns.every((item) => typeof item === "object")) {
-      nextOptions.patterns = nextOptions.patterns.map((pattern) => ({
-        ...pattern,
-        allowTypeImports: true,
-      }));
-    }
+    nextOptions.patterns = nextOptions.patterns.every(
+      (item) => typeof item === "string"
+    )
+      ? [{ groups: nextOptions.patterns, allowTypeImports: true }]
+      : nextOptions.patterns.map((pattern) =>
+          typeof pattern === "string"
+            ? { groups: [pattern], allowTypeImports: true }
+            : { ...pattern, allowTypeImports: true }
+        );
   }
 
   return nextOptions;
