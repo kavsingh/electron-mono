@@ -1,3 +1,32 @@
+// Restricted imports helpers
+
+const allowTypes = (restrictedImportsOptions) => {
+  const nextOptions = { ...restrictedImportsOptions };
+
+  if (Array.isArray(nextOptions.paths)) {
+    nextOptions.paths = nextOptions.paths.map((pathRule) =>
+      typeof pathRule === "string"
+        ? { name: pathRule, allowTypeImports: true }
+        : { ...pathRule, allowTypeImports: true }
+    );
+  }
+
+  if (Array.isArray(nextOptions.patterns)) {
+    if (nextOptions.patterns.every((item) => typeof item === "string")) {
+      nextOptions.patterns = [
+        { groups: nextOptions.patterns, allowTypeImports: true },
+      ];
+    } else if (nextOptions.patterns.every((item) => typeof item === "object")) {
+      nextOptions.patterns = nextOptions.patterns.map((pattern) => ({
+        ...pattern,
+        allowTypeImports: true,
+      }));
+    }
+  }
+
+  return nextOptions;
+};
+
 const nodeOnlyImports = {
   paths: ["electron", "node-hid", ...require("module").builtinModules],
   patterns: [],
@@ -6,6 +35,13 @@ const nodeOnlyImports = {
 const browserOnlyImports = {
   paths: ["react"],
   patterns: ["react-*", "@emotion*"],
+};
+
+// files in common should import from neither node nor browser specific libs
+// to be usable by both main and renderer
+const commonRestrictedImports = {
+  paths: [...nodeOnlyImports.paths, ...browserOnlyImports.paths],
+  patterns: [...nodeOnlyImports.patterns, ...browserOnlyImports.patterns],
 };
 
 const srcDependencies = {
@@ -97,6 +133,9 @@ module.exports = {
     {
       files: ["*.js"],
       parser: "@babel/eslint-parser",
+      rules: {
+        "no-restricted-imports": ["error", browserOnlyImports],
+      },
     },
     {
       files: ["*.ts?(x)"],
@@ -108,7 +147,7 @@ module.exports = {
       ],
       rules: {
         "camelcase": "off",
-        "no-restricted-imports": ["error", browserOnlyImports],
+        "no-restricted-imports": "off",
         "no-shadow": "off",
         "no-throw-literal": "off",
         "no-unused-vars": "off",
@@ -120,6 +159,10 @@ module.exports = {
             ignoreTypeValueShadow: false,
             ignoreFunctionTypeParameterNameValueShadow: true,
           },
+        ],
+        "@typescript-eslint/no-restricted-imports": [
+          "error",
+          allowTypes(browserOnlyImports),
         ],
         "@typescript-eslint/no-throw-literal": "error",
         "@typescript-eslint/no-unused-vars": [
@@ -144,16 +187,16 @@ module.exports = {
     {
       files: ["src/common/**/*"],
       rules: {
-        // all files in common must be usable by both main and renderer
-        "no-restricted-imports": [
+        "no-restricted-imports": ["error", commonRestrictedImports],
+      },
+    },
+    {
+      files: ["src/common/**/*.ts?(x)"],
+      rules: {
+        "no-restricted-imports": "off",
+        "@typescript-eslint/no-restricted-imports": [
           "error",
-          {
-            paths: [...nodeOnlyImports.paths, ...browserOnlyImports.paths],
-            patterns: [
-              ...nodeOnlyImports.patterns,
-              ...browserOnlyImports.patterns,
-            ],
-          },
+          allowTypes(commonRestrictedImports),
         ],
       },
     },
@@ -176,6 +219,16 @@ module.exports = {
         "react/react-in-jsx-scope": "off",
         "@emotion/no-vanilla": "error",
         "@emotion/syntax-preference": ["error", "string"],
+      },
+    },
+    {
+      files: ["src/renderer/**/*.ts?(x)"],
+      rules: {
+        "no-restricted-imports": "off",
+        "@typescript-eslint/no-restricted-imports": [
+          "error",
+          allowTypes(nodeOnlyImports),
+        ],
       },
     },
     {
