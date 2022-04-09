@@ -1,10 +1,10 @@
 import type { PlaywrightTestConfig } from "@playwright/test";
 
 const config: PlaywrightTestConfig = {
-  testDir: "./test",
+  testDir: "./e2e",
   testMatch: /\.test\.ts$/,
   workers: 1,
-  outputDir: "./test/results",
+  outputDir: "./e2e/results",
   use: { screenshot: "only-on-failure" },
 };
 

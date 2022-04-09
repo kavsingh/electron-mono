@@ -3,7 +3,7 @@
 /node_modules
 /out
 /coverage
-/test/results
+/e2e/results
 *.log.*
 *.log*
 *.tsbuildinfo
