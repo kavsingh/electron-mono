@@ -25,6 +25,10 @@ module.exports = {
               name: "main_window",
               js: "./src/renderer/index.tsx",
               html: "./src/renderer/index.html",
+              contentSecurityPolicy:
+                "default-src 'none'; script-src 'self'; img-src 'self'; style-src 'self'",
+              devContentSecurityPolicy:
+                "default-src 'self' 'unsafe-inline' data:; script-src 'self' 'unsafe-eval' 'unsafe-inline' data:",
               preload: {
                 js: "./src/preload.ts",
               },
