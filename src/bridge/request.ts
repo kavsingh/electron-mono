@@ -3,17 +3,15 @@ import { ipcMain, ipcRenderer } from "electron";
 import type { IpcMainInvokeEvent } from "electron";
 import type { Requests, RequestChannelName } from "./types";
 
-export const rendererRequest =
+export const rendererRequester =
   <K extends RequestChannelName>(channel: K) =>
   (
     ...args: Parameters<Requests[K]>
   ): Promise<Immutable<ReturnType<Requests[K]>>> =>
-    // No ability to pass generic to invoke to override any, hence
-    // the wrapper fn
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     ipcRenderer.invoke(channel, ...args);
 
-export const mainHandleRequest = <K extends RequestChannelName>(
+export const mainResponder = <K extends RequestChannelName>(
   channel: K,
   handler: (
     event: IpcMainInvokeEvent,

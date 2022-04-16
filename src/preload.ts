@@ -1,12 +1,12 @@
 import { contextBridge } from "electron";
 
-import { rendererRequest } from "./bridge/request";
-import { rendererSubscription } from "./bridge/message";
+import { rendererRequester } from "./bridge/request";
+import { rendererSubscribe } from "./bridge/pubsub";
 
 const bridge = {
-  getHidDevices: rendererRequest("hid-devices"),
-  getEcho: rendererRequest("echo"),
-  subscribeHealth: rendererSubscription("health"),
+  getHidDevices: rendererRequester("hid-devices"),
+  getEcho: rendererRequester("echo"),
+  subscribeHealth: rendererSubscribe("health"),
 };
 
 contextBridge.exposeInMainWorld("bridge", bridge);

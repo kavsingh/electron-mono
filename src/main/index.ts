@@ -2,8 +2,8 @@
 import { app, BrowserWindow } from "electron";
 import HID from "node-hid";
 
-import { mainHandleRequest } from "~/bridge/request";
-import { mainSendMessage } from "~/bridge/message";
+import { mainResponder } from "~/bridge/request";
+import { mainPublish } from "~/bridge/pubsub";
 
 /*
 name MAIN_WINDOW_xxx matches renderer entry points in package.json config/forge:
@@ -58,16 +58,16 @@ const createMainWindow = (): void => {
 };
 
 const setupIpcHandlers = () => {
-  const removeHidHandler = mainHandleRequest("hid-devices", () =>
+  const removeHidResponder = mainResponder("hid-devices", () =>
     Promise.resolve(HID.devices())
   );
-  const removeEchoHandler = mainHandleRequest("echo", (_, ping) =>
+  const removeEchoResponder = mainResponder("echo", (_, ping) =>
     Promise.resolve(`${ping}... ${ping}... ${ping}`)
   );
 
   return () => {
-    removeEchoHandler();
-    removeHidHandler();
+    removeEchoResponder();
+    removeHidResponder();
   };
 };
 
@@ -79,7 +79,7 @@ const setupHearbeat = (win: BrowserWindow) => {
 
     if (win.isDestroyed() || !win.isVisible()) return;
 
-    mainSendMessage(win, "health", { status: "ok" });
+    mainPublish(win, "health", { status: "ok" });
 
     timeout = setTimeout(tick, 2000);
   };
