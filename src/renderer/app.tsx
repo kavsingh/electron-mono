@@ -34,8 +34,9 @@ const App: FC = () => (
 export default App;
 
 const UIRoot = styled.div`
-  min-height: 100%;
-  padding: 2em 1em 1em;
+  min-block-size: 100%;
+  padding-block: 2em;
+  padding-inline: 1em;
   color: ${({ theme }) => theme.colors.bodyText};
   font-family: ${({ theme }) => theme.fonts.bodyText};
   background-color: ${({ theme }) => theme.colors.background};
@@ -43,10 +44,9 @@ const UIRoot = styled.div`
 
 const Dragable = styled.div`
   position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
+  block-size: 2em;
+  inset-inline: 0;
+  inset-block-start: 0;
   z-index: 1;
-  height: 2em;
   -webkit-app-region: drag;
 `;

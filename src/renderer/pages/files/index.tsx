@@ -40,7 +40,7 @@ const FileItem: FC<DroppedFile> = ({ file, isDirectory }) => (
 );
 
 const DropRegion = styled.div<{ isActive: boolean }>`
-  height: 200px;
+  block-size: 200px;
   border: 1px solid ${({ theme }) => theme.colors.keyline};
   background-color: ${({ theme, isActive }) =>
     isActive ? `${theme.colors.keyline}88` : "transparent"};

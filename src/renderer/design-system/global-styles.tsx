@@ -28,8 +28,8 @@ const GlobalStyles: FC = () => {
         }
 
         #app-root {
-          width: 100vw;
-          height: 100vh;
+          inline-size: 100vw;
+          block-size: 100vh;
           -webkit-overflow-scrolling: touch;
         }
       `}
