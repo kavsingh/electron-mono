@@ -1,108 +1,33 @@
-/* eslint-disable no-console */
 import { app, BrowserWindow } from "electron";
-import HID from "node-hid";
 
-import { mainResponder } from "~/bridge/request";
-import { mainPublish } from "~/bridge/pubsub";
-
-/*
-name MAIN_WINDOW_xxx matches renderer entry points in package.json config/forge:
-{
-  plugins: [
-    [@electron-forge/plugin-webpack, {
-      renderer: {
-        entryPoints: [
-          {
-            name: "main_window", <-- Here
-            ...
-          }
-        ]
-      }
-    }]
-  ]
-}
-*/
-declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
-declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+import { setupIpcHandlers } from "./ipc";
+import { attachHeartbeat } from "./pubsub";
+import { createMainWindow } from "./windows";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) app.quit();
 
-const createMainWindow = (): void => {
-  const mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
-    titleBarStyle: "hiddenInset",
-    webPreferences: { preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY },
-  });
-
-  void mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
-  if (process.env.NODE_ENV !== "production" && !process.env.SPECTRON) {
-    mainWindow.webContents.openDevTools();
-  }
-
-  let clearHeartbeat: ReturnType<typeof setupHearbeat> | null = null;
-
-  mainWindow.on("show", () => {
-    clearHeartbeat = setupHearbeat(mainWindow);
-  });
-
-  mainWindow.on("hide", () => {
-    clearHeartbeat?.();
-  });
-
-  mainWindow.on("close", () => {
-    clearHeartbeat?.();
-  });
-};
-
-const setupIpcHandlers = () => {
-  const removeHidResponder = mainResponder("hid-devices", () =>
-    Promise.resolve(HID.devices())
-  );
-  const removeEchoResponder = mainResponder("echo", (_, ping) =>
-    Promise.resolve(`${ping}... ${ping}... ${ping}`)
-  );
-
-  return () => {
-    removeEchoResponder();
-    removeHidResponder();
-  };
-};
-
-const setupHearbeat = (win: BrowserWindow) => {
-  let timeout: NodeJS.Timeout | null = null;
-
-  const tick = () => {
-    if (timeout) clearTimeout(timeout);
-
-    if (win.isDestroyed() || !win.isVisible()) return;
-
-    mainPublish(win, "health", { status: "ok" });
-
-    timeout = setTimeout(tick, 2000);
-  };
-
-  tick();
-
-  return () => {
-    if (timeout) clearTimeout(timeout);
-  };
-};
-
 const cleanupIpcHandlers = setupIpcHandlers();
+let mainWindow: BrowserWindow;
+let detachHeartbeat: ReturnType<typeof attachHeartbeat>;
 
-app.on("ready", createMainWindow);
+const showMainWindow = () => {
+  detachHeartbeat?.();
+  mainWindow = createMainWindow();
+  detachHeartbeat = attachHeartbeat(mainWindow);
+};
+
+app.on("ready", showMainWindow);
 
 app.on("activate", () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
+  if (BrowserWindow.getAllWindows().length === 0) showMainWindow();
 });
 
 app.on("window-all-closed", () => {
-  if (process.env.SPECTRON || process.platform !== "darwin") {
+  if (process.platform !== "darwin") {
+    detachHeartbeat?.();
     cleanupIpcHandlers();
     app.quit();
   }
