@@ -9,7 +9,7 @@ export const mainPublish = <K extends MessageChannelName>(
   payload: Messages[K]
 ): void => win.webContents.send(channel, payload);
 
-export const rendererSubscribe =
+export const rendererSubscriber =
   <K extends MessageChannelName>(channel: K) =>
   (handler: RendererMessageHandler<K>): (() => void) => {
     const ipcHandler: RendererEventHandler<K> = (_, message) =>

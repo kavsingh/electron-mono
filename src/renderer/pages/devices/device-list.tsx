@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { uniqueBy } from "~/common/util/array";
+import bridge from "~/renderer/bridge";
 
 import type { FC } from "react";
 import type { Device } from "node-hid";
@@ -9,7 +10,7 @@ const DeviceList: FC = () => {
   const [devices, setDevices] = useState<Device[]>([]);
 
   useEffect(() => {
-    void window.bridge.getHidDevices().then((response) => {
+    void bridge.getHidDevices().then((response) => {
       setDevices(uniqueBy((a, b) => a.productId === b.productId, response));
     });
   }, []);

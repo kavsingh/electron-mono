@@ -3,20 +3,22 @@ import { Link } from "react-router-dom";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 
+import bridge from "~/renderer/bridge";
+
 import type { FC } from "react";
 
 const Masthead: FC = () => {
   const [status, setStatus] = useState("");
-  const [statusKey, setStatusKey] = useState(Math.random());
+  const [statusKey, setStatusKey] = useState(Date.now());
 
-  useEffect(() => {
-    const unsubscribe = window.bridge.subscribeHealth((event) => {
-      setStatus(event.status);
-      setStatusKey(Math.random());
-    });
-
-    return unsubscribe;
-  }, []);
+  useEffect(
+    () =>
+      bridge.subscribeHealth((event) => {
+        setStatus(event.status);
+        setStatusKey(Date.now());
+      }),
+    []
+  );
 
   return (
     <Container>
