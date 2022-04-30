@@ -8,7 +8,9 @@ module.exports = {
         useBuiltIns: "usage",
         shippedProposals: true,
         corejs: 3,
-        targets: `electron ${devDependencies.electron}`,
+        // kiv updates to preset env
+        // targets: `electron ${devDependencies.electron}`,
+        targets: "electron 18.0.4",
       },
     ],
     [
