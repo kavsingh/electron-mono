@@ -3,9 +3,7 @@ export const uniqueBy = <T>(
   xs: readonly T[]
 ): T[] =>
   xs.reduce((acc: T[], x) => {
-    if (acc.some((item) => predicate(x, item))) return acc;
-
-    acc.push(x);
+    if (!acc.some((item) => predicate(x, item))) acc.push(x);
 
     return acc;
   }, []);
