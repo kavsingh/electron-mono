@@ -7,7 +7,11 @@ export const mainPublish = <K extends MessageChannelName>(
   win: BrowserWindow,
   channel: K,
   payload: Messages[K]
-): void => win.webContents.send(channel, payload);
+): void => {
+  if (win.isDestroyed()) return;
+
+  win.webContents.send(channel, payload);
+};
 
 export const rendererSubscriber =
   <K extends MessageChannelName>(channel: K) =>

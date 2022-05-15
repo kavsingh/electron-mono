@@ -1,17 +1,17 @@
-import HID from "node-hid";
+import usbDetection from "usb-detection";
 
 import { mainResponder } from "~/bridge/request";
 
-export const setupIpcHandlers = () => {
-  const removeHidResponder = mainResponder("hid-devices", () =>
-    Promise.resolve(HID.devices())
-  );
+export const setupResponders = () => {
   const removeEchoResponder = mainResponder("echo", (_, ping) =>
     Promise.resolve(`${ping}... ${ping}... ${ping}`)
+  );
+  const removeUsbResponder = mainResponder("usbDevices", () =>
+    usbDetection.find()
   );
 
   return () => {
     removeEchoResponder();
-    removeHidResponder();
+    removeUsbResponder();
   };
 };

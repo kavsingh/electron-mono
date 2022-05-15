@@ -34,7 +34,7 @@ const startHeartbeat = (win: BrowserWindow) => {
   const tick = () => {
     if (timeout) clearTimeout(timeout);
 
-    if (win.isDestroyed() || !win.isVisible()) return;
+    if (!win.isVisible()) return;
 
     mainPublish(win, "health", { status: "ok" });
 

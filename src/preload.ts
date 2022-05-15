@@ -4,9 +4,10 @@ import { rendererRequester } from "./bridge/request";
 import { rendererSubscriber } from "./bridge/pubsub";
 
 const bridge = {
-  getHidDevices: rendererRequester("hid-devices"),
+  getUsbDevices: rendererRequester("usbDevices"),
   getEcho: rendererRequester("echo"),
   subscribeHealth: rendererSubscriber("health"),
+  subscribeUsbDevices: rendererSubscriber("usbDevice"),
 };
 
 contextBridge.exposeInMainWorld("bridge", bridge);
