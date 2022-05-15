@@ -27,7 +27,6 @@ module.exports = {
         extensions: [".ts", ".tsx", ".js", ".jsx"],
       },
     ],
-    "@babel/plugin-proposal-class-properties",
     "@emotion/babel-plugin",
     ["@babel/plugin-transform-runtime", { regenerator: true }],
   ],
