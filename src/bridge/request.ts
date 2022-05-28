@@ -15,7 +15,7 @@ import type {
 export const rendererRequester =
   <K extends RequestChannelName>(channel: K) =>
   async (
-    args: keyof Parameters<Requests[K]>[0] extends never
+    args: keyof Parameters<Requests[K]> extends never
       ? void
       : Parameters<Requests[K]>[0]
   ) => {
@@ -31,7 +31,7 @@ export const mainResponder = <K extends RequestChannelName>(
   handler: (
     event: IpcMainInvokeEvent,
     args: DeserializedBridgePayload<
-      keyof Parameters<Requests[K]>[0] extends never
+      keyof Parameters<Requests[K]> extends never
         ? void
         : Parameters<Requests[K]>[0]
     >
@@ -42,7 +42,7 @@ export const mainResponder = <K extends RequestChannelName>(
     (
       event: IpcMainInvokeEvent,
       args: SerializedBridgePayload<
-        keyof Parameters<Requests[K]>[0] extends never
+        keyof Parameters<Requests[K]> extends never
           ? void
           : Parameters<Requests[K]>[0]
       >
