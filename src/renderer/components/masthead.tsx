@@ -26,6 +26,7 @@ const Masthead: FC = () => {
 		<Container>
 			<Nav>
 				<Link to="/">System Info</Link>
+				<Link to="/daemon">NTK Daemon</Link>
 				<Link to="/files">Files</Link>
 			</Nav>
 			<Pulse key={timestamp}>

@@ -6,6 +6,7 @@ import Masthead from "./components/masthead";
 import AppThemeProvider from "./design-system/app-theme-provider";
 import GlobalStyles from "./design-system/global-styles";
 import Files from "./pages/files";
+import NTKDaemon from "./pages/ntk-daemon";
 import SystemInfo from "./pages/system-info";
 
 import type { FC } from "react";
@@ -20,6 +21,7 @@ const App: FC = () => (
 					<Masthead />
 					<Routes>
 						<Route path="/" element={<SystemInfo />} />
+						<Route path="/daemon" element={<NTKDaemon />} />
 						<Route path="/files" element={<Files />} />
 					</Routes>
 				</UIRoot>

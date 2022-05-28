@@ -1,6 +1,9 @@
+import type { DaemonVersionResponse } from "@nativeinstruments/ntk-daemon-node-lib";
+
 // Note: return types will be wrapped in a promise
 export interface Requests {
 	getSystemInfo: () => SystemInfo;
+	getNtkDaemonVersion: () => DaemonVersionResponse;
 }
 
 export type RequestChannelName = keyof Requests;

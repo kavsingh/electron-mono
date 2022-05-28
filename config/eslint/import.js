@@ -1,7 +1,12 @@
 const { restrictFrom } = require("./lib");
 
 const nodeOnlyImports = {
-	paths: ["electron", "usb-detection", ...require("module").builtinModules],
+	paths: [
+		"electron",
+		"usb-detection",
+		"zeromq",
+		...require("module").builtinModules,
+	],
 	patterns: [],
 };
 

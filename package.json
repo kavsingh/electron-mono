@@ -27,12 +27,16 @@
 	"dependencies": {
 		"@emotion/react": "11.10.5",
 		"@emotion/styled": "11.10.5",
+		"@nativeinstruments/ntk-daemon-node-lib": "0.3.6",
 		"core-js": "3.26.1",
+		"long": "4.0.0",
+		"protobufjs": "6.11.3",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-router-dom": "6.4.4",
 		"serialize-error": "11.0.0",
-		"systeminformation": "5.15.1"
+		"systeminformation": "5.15.1",
+		"zeromq": "6.0.0-beta.6"
 	},
 	"devDependencies": {
 		"@babel/core": "7.20.5",
@@ -44,6 +48,7 @@
 		"@testing-library/react": "13.4.0",
 		"@testing-library/user-event": "14.4.3",
 		"@tsconfig/node18-strictest": "1.0.0",
+		"@types/long": "4.0.2",
 		"@types/node": "18.11.10",
 		"@types/react": "18.0.25",
 		"@types/react-dom": "18.0.9",
