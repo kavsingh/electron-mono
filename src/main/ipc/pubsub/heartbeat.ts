@@ -36,7 +36,10 @@ const startHeartbeat = (win: BrowserWindow) => {
 
     if (!win.isVisible()) return;
 
-    mainPublish(win, "health", { status: "ok" });
+    mainPublish(win, "health", {
+      status: "ok",
+      timestamp: BigInt(Date.now()),
+    });
 
     timeout = setTimeout(tick, 2000);
   };
