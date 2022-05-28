@@ -9,13 +9,13 @@ import type { FC } from "react";
 
 const Masthead: FC = () => {
   const [status, setStatus] = useState("");
-  const [statusKey, setStatusKey] = useState(Date.now());
+  const [statusKey, setStatusKey] = useState("");
 
   useEffect(
     () =>
       bridge.subscribeHealth((event) => {
         setStatus(event.status);
-        setStatusKey(Date.now());
+        setStatusKey(event.timestamp.toString());
       }),
     []
   );

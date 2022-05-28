@@ -1,5 +1,14 @@
 import { ipcRenderer } from "electron";
 
+import {
+  deserializeBridgePayload,
+  serializeBridgePayload,
+} from "../common/bridge/serialization";
+
+import type {
+  DeserializedBridgePayload,
+  SerializedBridgePayload,
+} from "../common/bridge/serialization";
 import type { Messages, MessageChannelName } from "./types";
 import type { IpcRendererEvent, BrowserWindow } from "electron";
 
@@ -10,14 +19,14 @@ export const mainPublish = <K extends MessageChannelName>(
 ): void => {
   if (win.isDestroyed()) return;
 
-  win.webContents.send(channel, payload);
+  win.webContents.send(channel, serializeBridgePayload(payload));
 };
 
 export const rendererSubscriber =
   <K extends MessageChannelName>(channel: K) =>
   (handler: RendererMessageHandler<K>): (() => void) => {
     const ipcHandler: RendererEventHandler<K> = (_, message) =>
-      handler(message);
+      handler(deserializeBridgePayload(message));
 
     ipcRenderer.on(channel, ipcHandler);
 
@@ -25,10 +34,10 @@ export const rendererSubscriber =
   };
 
 type RendererMessageHandler<K extends MessageChannelName> = (
-  message: Immutable<Messages[K]>
+  message: DeserializedBridgePayload<Messages[K]>
 ) => void;
 
 type RendererEventHandler<K extends MessageChannelName> = (
   event: IpcRendererEvent,
-  message: Immutable<Messages[K]>
+  message: SerializedBridgePayload<Messages[K]>
 ) => void;

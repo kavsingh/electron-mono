@@ -8,8 +8,12 @@ export interface Requests {
 export type RequestChannelName = keyof Requests;
 
 export interface Messages {
-  health: { status: "ok" };
+  health: HealthMessage;
   usbDevice: { device: Device; status: "added" | "removed" };
 }
 
 export type MessageChannelName = keyof Messages;
+
+type HealthMessage =
+  | { status: "ok"; timestamp: bigint }
+  | { status: "error"; timestamp: bigint; error: Error };
