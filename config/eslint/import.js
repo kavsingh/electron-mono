@@ -27,7 +27,7 @@ const allowTypes = (restrictedImportsOptions) => {
 };
 
 const nodeOnlyImports = {
-  paths: ["electron", "node-hid", ...require("module").builtinModules],
+  paths: ["electron", "usb-detection", ...require("module").builtinModules],
   patterns: [],
 };
 

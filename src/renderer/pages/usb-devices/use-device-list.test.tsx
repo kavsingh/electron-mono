@@ -1,6 +1,6 @@
 import { render, waitFor, screen } from "@testing-library/react";
 
-import { createMockUsbDevice } from "~/renderer/__test__/mock-data-creators/usb-devices";
+import { createMockUsbDevice } from "~/common/__test__/mock-data-creators/usb-devices";
 import bridge from "~/renderer/bridge";
 
 import UsbDeviceList from "./usb-device-list";
