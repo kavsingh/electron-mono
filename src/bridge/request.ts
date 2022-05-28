@@ -15,13 +15,15 @@ import type {
 export const rendererRequester =
   <K extends RequestChannelName>(channel: K) =>
   async (
-    args: keyof Parameters<Requests[K]> extends never
-      ? void
-      : Parameters<Requests[K]>[0]
+    ...args: keyof Parameters<Requests[K]>[0] extends never
+      ? []
+      : [Parameters<Requests[K]>[0]]
   ) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const response: SerializedBridgePayload<ReturnType<Requests[K]>> =
-      await ipcRenderer.invoke(channel, serializeBridgePayload(args ?? {}));
+      await (args[0]
+        ? ipcRenderer.invoke(channel, serializeBridgePayload(args[0]))
+        : ipcRenderer.invoke(channel, {}));
 
     return deserializeBridgePayload(response);
   };
@@ -30,10 +32,8 @@ export const mainResponder = <K extends RequestChannelName>(
   channel: K,
   handler: (
     event: IpcMainInvokeEvent,
-    args: DeserializedBridgePayload<
-      keyof Parameters<Requests[K]> extends never
-        ? void
-        : Parameters<Requests[K]>[0]
+    payload: DeserializedBridgePayload<
+      Parameters<Requests[K]> extends [] ? void : Parameters<Requests[K]>[0]
     >
   ) => Promise<ReturnType<Requests[K]>>
 ): (() => void) => {
@@ -41,13 +41,11 @@ export const mainResponder = <K extends RequestChannelName>(
     channel,
     (
       event: IpcMainInvokeEvent,
-      args: SerializedBridgePayload<
-        keyof Parameters<Requests[K]> extends never
-          ? void
-          : Parameters<Requests[K]>[0]
+      payload: SerializedBridgePayload<
+        Parameters<Requests[K]> extends [] ? void : Parameters<Requests[K]>[0]
       >
     ) =>
-      handler(event, deserializeBridgePayload(args))
+      handler(event, deserializeBridgePayload(payload))
         .then(serializeBridgePayload)
         .catch((reason) => {
           throw serializeBridgePayload(reason);
