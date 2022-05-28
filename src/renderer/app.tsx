@@ -1,11 +1,10 @@
-import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
 import { StrictMode } from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
 
 import Masthead from "./components/masthead";
+import AppThemeProvider from "./design-system/app-theme-provider";
 import GlobalStyles from "./design-system/global-styles";
-import { defaultTheme } from "./design-system/theme";
 import Files from "./pages/files";
 import UsbDevices from "./pages/usb-devices";
 
@@ -13,7 +12,7 @@ import type { FC } from "react";
 
 const App: FC = () => (
   <StrictMode>
-    <ThemeProvider theme={defaultTheme}>
+    <AppThemeProvider>
       <GlobalStyles />
       <HashRouter>
         <UIRoot>
@@ -25,7 +24,7 @@ const App: FC = () => (
           </Routes>
         </UIRoot>
       </HashRouter>
-    </ThemeProvider>
+    </AppThemeProvider>
   </StrictMode>
 );
 

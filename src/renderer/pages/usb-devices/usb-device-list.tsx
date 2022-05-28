@@ -8,7 +8,7 @@ import type { FC } from "react";
 import type { Device } from "usb-detection";
 
 const UsbDeviceList: FC = () => {
-  const [devices, setDevices] = useState<Device[]>([]);
+  const [devices, setDevices] = useState<Device[]>();
 
   useEffect(() => {
     void bridge.getUsbDevices().then((response) => {
@@ -17,14 +17,15 @@ const UsbDeviceList: FC = () => {
 
     return bridge.subscribeUsbDevices(({ device, status }) => {
       setDevices((current) => {
-        const deviceIndex = current.findIndex(
-          (d) => d.productId === device.productId
-        );
+        const deviceIndex =
+          current?.findIndex((d) => d.productId === device.productId) ?? -1;
 
-        if (status === "added" && deviceIndex < 0) return [...current, device];
+        if (status === "added" && deviceIndex < 0) {
+          return [...(current ?? []), device];
+        }
 
         if (status === "removed" && deviceIndex > -1) {
-          const next = [...current];
+          const next = [...(current ?? [])];
 
           next.splice(deviceIndex, 1);
 
