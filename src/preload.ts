@@ -4,7 +4,7 @@ import { rendererSubscriber } from "./bridge/pubsub";
 import { rendererRequester } from "./bridge/request";
 
 const bridge = {
-  getUsbDevices: rendererRequester("usbDevices"),
+  getUsbDevices: rendererRequester("getUsbDevices"),
   subscribeHealth: rendererSubscriber("health"),
   subscribeUsbDevices: rendererSubscriber("usbDevice"),
 };

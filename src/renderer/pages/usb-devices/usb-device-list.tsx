@@ -5,10 +5,10 @@ import { uniqueBy } from "~/common/util/array";
 import bridge from "~/renderer/bridge";
 
 import type { FC } from "react";
-import type { Device } from "usb-detection";
 
 const UsbDeviceList: FC = () => {
-  const [devices, setDevices] = useState<Device[]>();
+  const [devices, setDevices] =
+    useState<AsyncResult<typeof bridge.getUsbDevices>>();
 
   useEffect(() => {
     void bridge.getUsbDevices().then((response) => {

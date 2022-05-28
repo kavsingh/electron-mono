@@ -2,7 +2,7 @@ import type { Device } from "usb-detection";
 
 // Note: return types will be wrapped in a promise
 export interface Requests {
-  usbDevices: () => Device[];
+  getUsbDevices: () => Device[];
 }
 
 export type RequestChannelName = keyof Requests;
