@@ -1,12 +1,13 @@
+import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 
 import { uniqueBy } from "~/common/util/array";
 import bridge from "~/renderer/bridge";
 
-import type { Device } from "usb-detection";
 import type { FC } from "react";
+import type { Device } from "usb-detection";
 
-const DeviceList: FC = () => {
+const UsbDeviceList: FC = () => {
   const [devices, setDevices] = useState<Device[]>([]);
 
   useEffect(() => {
@@ -36,20 +37,40 @@ const DeviceList: FC = () => {
   }, []);
 
   return devices ? (
-    <div>
+    <Container>
       {devices.map((device) => (
-        <div key={device.productId}>
-          {device.deviceName || "Unknown"}
-          <br />
-          {device.manufacturer || "Unknown"}
-          <br />
-          {device.vendorId} | {device.productId}
-        </div>
+        <UsbDevice key={device.productId}>
+          <span>{device.deviceName || "Unknown"}</span>
+          <span>{device.manufacturer || "Unknown"}</span>
+          <span>
+            {device.vendorId} | {device.productId}
+          </span>
+        </UsbDevice>
       ))}
-    </div>
+    </Container>
   ) : (
     <>Loading...</>
   );
 };
 
-export default DeviceList;
+export default UsbDeviceList;
+
+const Container = styled.ul`
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  gap: ${({ theme }) => theme.spacing.fixed[1]};
+  list-style-type: none;
+`;
+
+const UsbDevice = styled.li`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.fixed[0]};
+
+  &:not(:last-of-type) {
+    padding-block-end: ${({ theme }) => theme.spacing.fixed[1]};
+    border-block-end: 1px solid ${({ theme }) => theme.color.text[100]};
+  }
+`;

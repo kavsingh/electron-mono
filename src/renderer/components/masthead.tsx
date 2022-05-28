@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import bridge from "~/renderer/bridge";
 
@@ -22,11 +22,10 @@ const Masthead: FC = () => {
 
   return (
     <Container>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/devices">Devices</Link>
+      <Nav>
+        <Link to="/">USB Devices</Link>
         <Link to="/files">Files</Link>
-      </nav>
+      </Nav>
       <Status key={statusKey}>{status}</Status>
     </Container>
   );
@@ -54,10 +53,16 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
+const Nav = styled.nav`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.fixed[0]};
+`;
+
 const Status = styled.div`
   padding: 0.2em;
-  color: ${({ theme }) => theme.colors.background};
-  background-color: ${({ theme }) => theme.colors.bodyText};
+  color: ${({ theme }) => theme.color.surface[0]};
+  background-color: ${({ theme }) => theme.color.text[400]};
   opacity: 0;
   animation: ${pulse} 1.2s ease-out;
 `;

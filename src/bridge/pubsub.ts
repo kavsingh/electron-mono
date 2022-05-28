@@ -1,7 +1,7 @@
 import { ipcRenderer } from "electron";
 
-import type { IpcRendererEvent, BrowserWindow } from "electron";
 import type { Messages, MessageChannelName } from "./types";
+import type { IpcRendererEvent, BrowserWindow } from "electron";
 
 export const mainPublish = <K extends MessageChannelName>(
   win: BrowserWindow,

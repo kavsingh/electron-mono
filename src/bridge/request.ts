@@ -1,7 +1,7 @@
 import { ipcMain, ipcRenderer } from "electron";
 
-import type { IpcMainInvokeEvent } from "electron";
 import type { Requests, RequestChannelName } from "./types";
+import type { IpcMainInvokeEvent } from "electron";
 
 export const rendererRequester =
   <K extends RequestChannelName>(channel: K) =>

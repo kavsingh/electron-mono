@@ -80,6 +80,7 @@ module.exports = {
         ],
         "pathGroups": [{ pattern: "~/**", group: "internal" }],
         "pathGroupsExcludedImportTypes": ["type"],
+        "alphabetize": { order: "asc" },
         "newlines-between": "always",
       },
     ],

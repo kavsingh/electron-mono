@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
 import styled from "@emotion/styled";
+import { useCallback, useState } from "react";
 
 import { useFileDrop } from "~/renderer/hooks/file";
 
@@ -41,7 +41,7 @@ const FileItem: FC<DroppedFile> = ({ file, isDirectory }) => (
 
 const DropRegion = styled.div<{ isActive: boolean }>`
   block-size: 200px;
-  border: 1px solid ${({ theme }) => theme.colors.keyline};
+  border: 1px solid ${({ theme }) => theme.color.text[100]};
   background-color: ${({ theme, isActive }) =>
-    isActive ? `${theme.colors.keyline}88` : "transparent"};
+    isActive ? `${theme.color.text[100]}88` : "transparent"};
 `;

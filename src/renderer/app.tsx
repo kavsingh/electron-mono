@@ -1,14 +1,13 @@
-import { StrictMode } from "react";
-import { HashRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import styled from "@emotion/styled";
+import { StrictMode } from "react";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
-import { defaultTheme } from "./design-system/theme";
-import GlobalStyles from "./design-system/global-styles";
-import Home from "./pages/home";
-import Devices from "./pages/devices";
-import Files from "./pages/files";
 import Masthead from "./components/masthead";
+import GlobalStyles from "./design-system/global-styles";
+import { defaultTheme } from "./design-system/theme";
+import Files from "./pages/files";
+import UsbDevices from "./pages/usb-devices";
 
 import type { FC } from "react";
 
@@ -21,8 +20,7 @@ const App: FC = () => (
           <Dragable />
           <Masthead />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/devices" element={<Devices />} />
+            <Route path="/" element={<UsbDevices />} />
             <Route path="/files" element={<Files />} />
           </Routes>
         </UIRoot>
@@ -37,9 +35,9 @@ const UIRoot = styled.div`
   min-block-size: 100%;
   padding-block: 2em;
   padding-inline: 1em;
-  color: ${({ theme }) => theme.colors.bodyText};
-  font-family: ${({ theme }) => theme.fonts.bodyText};
-  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.color.text[400]};
+  font-family: ${({ theme }) => theme.font.body};
+  background-color: ${({ theme }) => theme.color.surface[0]};
 `;
 
 const Dragable = styled.div`

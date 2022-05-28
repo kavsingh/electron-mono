@@ -1,8 +1,8 @@
 import { app, BrowserWindow } from "electron";
 import usbDetection from "usb-detection";
 
-import { setupResponders } from "./ipc/responders";
 import { attachHeartbeat, attachUsbDetection } from "./ipc/pubsub";
+import { setupResponders } from "./ipc/responders";
 import { createMainWindow } from "./windows";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
