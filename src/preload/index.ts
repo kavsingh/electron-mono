@@ -8,6 +8,7 @@ const bridge = {
 	getNtkDaemonVersion: rendererRequester("getNtkDaemonVersion"),
 	subscribeHealth: rendererSubscriber("health"),
 	subscribeSystemInfo: rendererSubscriber("systemInfo"),
+	subscribeNtkDaemonStatus: rendererSubscriber("ntkDaemonStatus"),
 };
 
 contextBridge.exposeInMainWorld("bridge", bridge);
