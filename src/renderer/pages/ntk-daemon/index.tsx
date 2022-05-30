@@ -1,5 +1,6 @@
+import styled from "@emotion/styled";
 import { DaemonStatusEvent_Type } from "@nativeinstruments/ntk-daemon-node-lib";
-import { useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 
 import bridge from "~/renderer/bridge";
 import Pulse from "~/renderer/components/pulse";
@@ -30,6 +31,8 @@ const NTKDaemon: FC = () => {
 		const handleStatusEvent = ({ type }: DaemonStatusEvent) => {
 			setStatus(type);
 			setPulseKey(Date.now());
+
+			if (type === DaemonStatusEvent_Type.startup_ended) void fetchVersion();
 		};
 
 		return bridge.subscribeNtkDaemonStatus(handleStatusEvent);
@@ -37,17 +40,25 @@ const NTKDaemon: FC = () => {
 
 	return (
 		<div>
-			<h2>NTK Daemon</h2>
-			<Pulse key={pulseKey}>
-				<StatusBadge>{status ? formatStatusType(status) : ""}</StatusBadge>
-			</Pulse>
+			<Header>
+				<h2>NTK Daemon</h2>
+				<Pulse key={pulseKey}>
+					<StatusBadge>{status ? formatStatusType(status) : ""}</StatusBadge>
+				</Pulse>
+			</Header>
 			{version ? `Running NTK Daemon ${formatVersion(version)}` : null}
 			{error ? `Error getting NTK Daemon version ${String(error)}` : null}
 		</div>
 	);
 };
 
-export default NTKDaemon;
+export default memo(NTKDaemon);
+
+const Header = styled.header`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+`;
 
 const formatStatusType = (type: DaemonStatusEvent_Type) => {
 	switch (type) {
