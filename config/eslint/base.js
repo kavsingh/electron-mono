@@ -12,6 +12,7 @@ module.exports = {
     "filenames/match-exported": ["error", "kebab"],
     "prettier/prettier": "warn",
   },
+  reportUnusedDisableDirectives: true,
   overrides: [
     {
       files: ["*.js"],
