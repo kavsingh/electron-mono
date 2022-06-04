@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useFileDrop } from "~/renderer/hooks/file";
 
