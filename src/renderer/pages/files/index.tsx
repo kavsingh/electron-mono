@@ -1,22 +1,25 @@
 import styled from "@emotion/styled";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useFileDrop } from "~/renderer/hooks/file";
 
 import type { FC } from "react";
-import type { DroppedFile, DroppedFileHandler } from "~/renderer/hooks/file";
+import type { DroppedFile } from "~/renderer/hooks/file";
 
 const Files: FC = () => {
-  const [droppedFiles, setDroppedFiles] = useState<DroppedFile[]>([]);
-  const handleFiles = useCallback<DroppedFileHandler>((dropped) => {
+  const { files, isActive, elementHandles } = useFileDrop();
+  const [droppedFiles, setDroppedFiles] = useState<DroppedFile[]>(files ?? []);
+
+  useEffect(() => {
+    if (!files?.length) return;
+
     setDroppedFiles((current) => [
       ...current,
-      ...dropped.filter(
+      ...files.filter(
         ({ file }) => !current.find((c) => c.file.path === file.path)
       ),
     ]);
-  }, []);
-  const { isActive, elementHandles } = useFileDrop(handleFiles);
+  }, [files]);
 
   return (
     <div>

@@ -2,7 +2,8 @@ import { useCallback, useMemo, useState } from "react";
 
 import type { DragEventHandler } from "react";
 
-export const useFileDrop = (onFiles: (files: DroppedFile[]) => unknown) => {
+export const useFileDrop = () => {
+  const [dropped, setDropped] = useState<DroppedFile[]>();
   const [isActive, setIsActive] = useState(false);
 
   const onDragOver = useCallback<DragEventHandler>((event) => {
@@ -20,34 +21,29 @@ export const useFileDrop = (onFiles: (files: DroppedFile[]) => unknown) => {
     setIsActive(false);
   }, []);
 
-  const onDrop = useCallback<DragEventHandler>(
-    (event) => {
-      const { items, files } = event.dataTransfer;
-      const entries = Array.from(items).map((item) => item.webkitGetAsEntry());
-      const droppedFiles = Array.from(files).map((file) => {
-        const { isDirectory, isFile } =
-          entries.find((e) => e?.name === file.name) ?? {};
+  const onDrop = useCallback<DragEventHandler>((event) => {
+    const { items, files } = event.dataTransfer;
+    const entries = Array.from(items).map((item) => item.webkitGetAsEntry());
+    const droppedFiles = Array.from(files).map((file) => {
+      const { isDirectory, isFile } =
+        entries.find((e) => e?.name === file.name) ?? {};
 
-        return { file, isDirectory, isFile };
-      });
+      return { file, isDirectory, isFile };
+    });
 
-      setIsActive(false);
-      onFiles(droppedFiles);
-    },
-    [onFiles]
-  );
+    setIsActive(false);
+    setDropped(droppedFiles);
+  }, []);
 
   const elementHandles = useMemo(
     () => ({ onDragOver, onDragEnter, onDragLeave, onDrop }),
     [onDragEnter, onDragLeave, onDragOver, onDrop]
   );
 
-  return { isActive, elementHandles } as const;
+  return { files: dropped, isActive, elementHandles } as const;
 };
 
 export interface DroppedFile
   extends Partial<Pick<FileSystemEntry, "isDirectory" | "isFile">> {
   file: File;
 }
-
-export type DroppedFileHandler = (files: DroppedFile[]) => unknown;
