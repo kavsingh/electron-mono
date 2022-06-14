@@ -40,7 +40,7 @@ specifiers:
   babel-jest: 28.1.1
   babel-loader: 8.2.5
   babel-plugin-module-resolver: 4.1.0
-  core-js: 3.23.0
+  core-js: 3.23.1
   electron: 19.0.4
   electron-rebuild: 3.2.7
   electron-squirrel-startup: 1.0.0
@@ -60,7 +60,7 @@ specifiers:
   jest: 28.1.1
   jest-environment-jsdom: 28.1.1
   node-loader: 2.0.0
-  prettier: 2.6.2
+  prettier: 2.7.0
   react: 18.1.0
   react-dom: 18.1.0
   react-router-dom: 6.3.0
@@ -74,7 +74,7 @@ dependencies:
   '@babel/runtime': 7.18.3
   '@emotion/react': 11.9.3_uqh4put5zilvi5j3uf7ajxfvfi
   '@emotion/styled': 11.9.3_yejvnz6oce5mfvlmkf3cr636ra
-  core-js: 3.23.0
+  core-js: 3.23.1
   electron-squirrel-startup: 1.0.0
   react: 18.1.0
   react-dom: 18.1.0_react@18.1.0
@@ -125,7 +125,7 @@ devDependencies:
   eslint-plugin-jest: 26.5.3_oz4ycpzrmxmlq5y7rhoguz2kgu
   eslint-plugin-jest-dom: 4.0.2_eslint@8.17.0
   eslint-plugin-playwright: 0.9.0_kukcyjvaetwzymhgijpe4zqdna
-  eslint-plugin-prettier: 4.0.0_ucegkljdju7q4zmvwxzqoprf3y
+  eslint-plugin-prettier: 4.0.0_nguwan5pqsajixjz57ffz7bkde
   eslint-plugin-react: 7.30.0_eslint@8.17.0
   eslint-plugin-react-hooks: 4.5.0_eslint@8.17.0
   eslint-plugin-testing-library: 5.5.1_ud6rd4xtew5bv4yhvkvu24pzm4
@@ -133,7 +133,7 @@ devDependencies:
   jest: 28.1.1_ulrz5zuh5kppsvny26pjrk2deu
   jest-environment-jsdom: 28.1.1
   node-loader: 2.0.0_webpack@5.73.0
-  prettier: 2.6.2
+  prettier: 2.7.0
   ts-node: 10.8.1_wpmar7q2se7jlmxe5wggegnl2m
   typescript: 4.7.3
   typescript-styled-plugin: 0.18.2
@@ -448,7 +448,7 @@ packages:
       '@babel/core': 7.18.5
       '@babel/register': 7.17.7_@babel+core@7.18.5
       commander: 4.1.1
-      core-js: 3.23.0
+      core-js: 3.23.1
       node-environment-flags: 1.0.6
       regenerator-runtime: 0.13.9
       v8flags: 3.2.0
@@ -4287,8 +4287,8 @@ packages:
       semver: 7.0.0
     dev: true
 
-  /core-js/3.23.0:
-    resolution: {integrity: sha512-v2/hZoRcRrvQiBoGsHwmRdr+S4oICKcjA6xb2qjVurin6TpcDC1X2CIDa8rdu/d5n8RT/Sdoos2IlnpQ1rXs5A==}
+  /core-js/3.23.1:
+    resolution: {integrity: sha512-wfMYHWi1WQjpgZNC9kAlN4ut04TM9fUTdi7CqIoTVM7yaiOUQTklOzfb+oWH3r9edQcT3F887swuVmxrV+CC8w==}
     requiresBuild: true
 
   /core-util-is/1.0.2:
@@ -5144,7 +5144,7 @@ packages:
       eslint-plugin-jest: 26.5.3_oz4ycpzrmxmlq5y7rhoguz2kgu
     dev: true
 
-  /eslint-plugin-prettier/4.0.0_ucegkljdju7q4zmvwxzqoprf3y:
+  /eslint-plugin-prettier/4.0.0_nguwan5pqsajixjz57ffz7bkde:
     resolution: {integrity: sha512-98MqmCJ7vJodoQK359bqQWaxOE0CS8paAz/GgjaZLyex4TTk3g9HugoO89EqWCrFiOqn9EVvcoo7gZzONCWVwQ==}
     engines: {node: '>=6.0.0'}
     peerDependencies:
@@ -5157,7 +5157,7 @@ packages:
     dependencies:
       eslint: 8.17.0
       eslint-config-prettier: 8.5.0_eslint@8.17.0
-      prettier: 2.6.2
+      prettier: 2.7.0
       prettier-linter-helpers: 1.0.0
     dev: true
 
@@ -8647,8 +8647,8 @@ packages:
       fast-diff: 1.2.0
     dev: true
 
-  /prettier/2.6.2:
-    resolution: {integrity: sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==}
+  /prettier/2.7.0:
+    resolution: {integrity: sha512-nwoX4GMFgxoPC6diHvSwmK/4yU8FFH3V8XWtLQrbj4IBsK2pkYhG4kf/ljF/haaZ/aii+wNJqISrCDPgxGWDVQ==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
