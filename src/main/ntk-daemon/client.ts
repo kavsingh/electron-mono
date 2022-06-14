@@ -1,4 +1,4 @@
-import { DaemonClient } from "@nativeinstruments/ntk-daemon-node-lib";
+import DaemonClient from "@nativeinstruments/ntk-daemon-node-lib/DaemonClient";
 
 export const getDaemonClient = () => {
 	client ??= new DaemonClient({

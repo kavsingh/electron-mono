@@ -1,40 +1,17 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-import bridge from "~/renderer/bridge";
-
-import Pulse from "./pulse";
-import StatusBadge from "./status-badge";
 
 import type { FC } from "react";
 
-const Masthead: FC = () => {
-	const [status, setStatus] = useState("");
-	const [timestamp, setTimestamp] = useState("");
-
-	useEffect(
-		() =>
-			bridge.subscribeHealth((event) => {
-				setStatus(event.status);
-				setTimestamp(event.timestamp.toString());
-			}),
-		[],
-	);
-
-	return (
-		<Container>
-			<Nav>
-				<Link to="/">System Info</Link>
-				<Link to="/daemon">NTK Daemon</Link>
-				<Link to="/files">Files</Link>
-			</Nav>
-			<Pulse key={timestamp}>
-				<StatusBadge>{status}</StatusBadge>
-			</Pulse>
-		</Container>
-	);
-};
+const Masthead: FC = () => (
+	<Container>
+		<Nav>
+			<Link to="/">System Info</Link>
+			<Link to="/daemon">NTK Daemon</Link>
+			<Link to="/files">Files</Link>
+		</Nav>
+	</Container>
+);
 
 export default Masthead;
 

@@ -27,7 +27,7 @@
 	"dependencies": {
 		"@emotion/react": "11.10.5",
 		"@emotion/styled": "11.10.5",
-		"@nativeinstruments/ntk-daemon-node-lib": "0.3.6",
+		"@nativeinstruments/ntk-daemon-node-lib": "link:~/dev/ni/ntk-daemon-node-lib",
 		"core-js": "3.26.1",
 		"long": "4.0.0",
 		"protobufjs": "6.11.3",

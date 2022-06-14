@@ -16,7 +16,6 @@ const bridge: AppBridge = {
 			build: "",
 		}),
 	),
-	subscribeHealth: vi.fn(() => () => undefined),
 	subscribeSystemInfo: vi.fn(() => () => undefined),
 	subscribeNtkDaemonStatus: vi.fn(() => () => undefined),
 };

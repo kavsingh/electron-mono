@@ -6,7 +6,7 @@ specifiers:
   '@emotion/eslint-plugin': 11.10.0
   '@emotion/react': 11.10.5
   '@emotion/styled': 11.10.5
-  '@nativeinstruments/ntk-daemon-node-lib': 0.3.6
+  '@nativeinstruments/ntk-daemon-node-lib': link:~/dev/ni/ntk-daemon-node-lib
   '@playwright/test': 1.28.1
   '@testing-library/dom': 8.19.0
   '@testing-library/jest-dom': 5.16.5
@@ -57,7 +57,7 @@ specifiers:
 dependencies:
   '@emotion/react': 11.10.5_hebjedjhazelsvuzebr6t7ng24
   '@emotion/styled': 11.10.5_5tjec44ezuvlpkchcqgxkxryqi
-  '@nativeinstruments/ntk-daemon-node-lib': 0.3.6_jtff2k2dws3tl5sxsxjekwja24
+  '@nativeinstruments/ntk-daemon-node-lib': link:../ni/ntk-daemon-node-lib
   core-js: 3.26.1
   long: 4.0.0
   protobufjs: 6.11.3
@@ -736,19 +736,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /@nativeinstruments/ntk-daemon-node-lib/0.3.6_jtff2k2dws3tl5sxsxjekwja24:
-    resolution: {integrity: sha512-FOUieAYCFQR0GwGIKWuHgg6RPfcEgzeorzowda9nTca/T9i74KbBlWGsdmzFRZgcKFwD78DYsFFhR6HMSruJTA==, tarball: download/@NativeInstruments/ntk-daemon-node-lib/0.3.6/c78ba9d283b1829e260a39057e817d263fff44dd}
-    peerDependencies:
-      long: ^4.0.0
-      protobufjs: ^6.11.2
-      zeromq: ^6.0.0-beta.6
-    dependencies:
-      core-js: 3.26.1
-      long: 4.0.0
-      protobufjs: 6.11.3
-      zeromq: 6.0.0-beta.6
-    dev: false
 
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}

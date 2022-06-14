@@ -1,20 +1,19 @@
 import { app, BrowserWindow } from "electron";
 
-import { attachSystemInfo, attachHeartbeat } from "./ipc/pubsub";
+import { attachSystemInfo, attachNtkDaemonStatus } from "./ipc/pubsub";
 import { setupResponders } from "./ipc/responders";
 import restrictNavigation from "./lib/restrict-navigation";
 import { createMainWindow } from "./windows";
 
 const removeResponders = setupResponders();
 let mainWindow: BrowserWindow;
-let detachHeartbeat: ReturnType<typeof attachHeartbeat> | undefined;
 let detachSystemInfo: ReturnType<typeof attachSystemInfo> | undefined;
+let detachNtkDaemonStatus: ReturnType<typeof attachNtkDaemonStatus> | undefined;
 
 const showMainWindow = () => {
-	detachHeartbeat?.();
 	mainWindow = createMainWindow();
-	detachHeartbeat = attachHeartbeat(mainWindow);
 	detachSystemInfo = attachSystemInfo(mainWindow);
+	detachNtkDaemonStatus = attachNtkDaemonStatus(mainWindow);
 	mainWindow.on("ready-to-show", () => {
 		mainWindow.show();
 	});
@@ -35,8 +34,8 @@ app.on("window-all-closed", () => {
 });
 
 app.on("will-quit", () => {
-	detachHeartbeat?.();
 	detachSystemInfo?.();
+	detachNtkDaemonStatus?.();
 	removeResponders();
 });
 
