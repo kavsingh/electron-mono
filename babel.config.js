@@ -1,4 +1,4 @@
-// const { devDependencies } = require("./package.json");
+const { devDependencies } = require("./package.json");
 
 module.exports = {
   presets: [
@@ -8,9 +8,7 @@ module.exports = {
         useBuiltIns: "usage",
         shippedProposals: true,
         corejs: 3,
-        // kiv updates to preset env
-        // targets: `electron ${devDependencies.electron}`,
-        targets: "electron 18.0.4",
+        targets: `electron ${devDependencies.electron}`,
       },
     ],
     [
