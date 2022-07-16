@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@emotion/react";
 import { useEffect, useState } from "react";
 
-import { defaultTheme, darkTheme, lightTheme } from "./theme";
+import { darkTheme, lightTheme } from "./theme";
 
 import type { Theme } from "./theme";
 import type { FC, ReactNode } from "react";
@@ -9,11 +9,7 @@ import type { FC, ReactNode } from "react";
 const AppThemeProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const prefersDarkQuery = getPrefersDarkSchemeQuery();
   const [theme, setTheme] = useState<Theme>(
-    prefersDarkQuery
-      ? prefersDarkQuery.matches
-        ? darkTheme
-        : lightTheme
-      : defaultTheme
+    prefersDarkQuery?.matches ? darkTheme : lightTheme
   );
 
   useEffect(() => {

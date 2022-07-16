@@ -34,8 +34,6 @@ export const darkTheme: Theme = {
   },
 };
 
-export const defaultTheme = darkTheme;
-
 export type Theme = Immutable<{
   name: "light" | "dark";
   font: {

@@ -40,7 +40,7 @@ export const useFileDrop = () => {
     [onDragEnter, onDragLeave, onDragOver, onDrop]
   );
 
-  return { files: dropped, isActive, elementHandles } as const;
+  return [{ files: dropped, isActive }, elementHandles] as const;
 };
 
 export interface DroppedFile
