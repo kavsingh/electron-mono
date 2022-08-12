@@ -16,9 +16,9 @@ const pulse = keyframes`
 `;
 
 const Pulse = styled.div<{ durationMs?: number }>`
-  opacity: 0;
-  animation: ${pulse} ${({ durationMs = 1200 }) => durationMs}ms ease-out
-    forwards;
+	opacity: 0;
+	animation: ${pulse} ${({ durationMs = 1200 }) => durationMs}ms ease-out
+		forwards;
 `;
 
 export default Pulse;

@@ -5,19 +5,19 @@ import { setupApplication, teardownApplication } from "./lib/application";
 import type { ElectronApplication } from "@playwright/test";
 
 test.describe("e2e tests", () => {
-  let app: ElectronApplication;
+	let app: ElectronApplication;
 
-  test.beforeAll(async () => {
-    app = await setupApplication();
-  });
+	test.beforeAll(async () => {
+		app = await setupApplication();
+	});
 
-  test.afterAll(async () => {
-    await teardownApplication(app);
-  });
+	test.afterAll(async () => {
+		await teardownApplication(app);
+	});
 
-  test("should open at home page", async () => {
-    const page = await app.firstWindow();
+	test("should open at home page", async () => {
+		const page = await app.firstWindow();
 
-    await test.expect(page.locator("h2 >> text=System Info")).toBeVisible();
-  });
+		await test.expect(page.locator("h2 >> text=System Info")).toBeVisible();
+	});
 });

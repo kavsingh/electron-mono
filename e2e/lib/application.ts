@@ -8,18 +8,18 @@ import { PROJECT_ROOT } from "./constants";
 import type { ElectronApplication } from "@playwright/test";
 
 export const setupApplication = async (): Promise<ElectronApplication> =>
-  electron.launch({
-    args: [path.join(PROJECT_ROOT, ".webpack/main/index.js")],
-    env: {
-      ...(os.platform() === "win32"
-        ? {
-            CommonProgramFiles: "C:\\Program Files\\Common Files",
-            Public: "C:\\Users\\Public",
-          }
-        : {}),
-    },
-  });
+	electron.launch({
+		args: [path.join(PROJECT_ROOT, ".webpack/main/index.js")],
+		env: {
+			...(os.platform() === "win32"
+				? {
+						CommonProgramFiles: "C:\\Program Files\\Common Files",
+						Public: "C:\\Users\\Public",
+				  }
+				: {}),
+		},
+	});
 
 export const teardownApplication = async (
-  app: ElectronApplication
+	app: ElectronApplication,
 ): Promise<void> => app.close();

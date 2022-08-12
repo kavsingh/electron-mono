@@ -10,41 +10,41 @@ import StatusBadge from "./status-badge";
 import type { FC } from "react";
 
 const Masthead: FC = () => {
-  const [status, setStatus] = useState("");
-  const [timestamp, setTimestamp] = useState("");
+	const [status, setStatus] = useState("");
+	const [timestamp, setTimestamp] = useState("");
 
-  useEffect(
-    () =>
-      bridge.subscribeHealth((event) => {
-        setStatus(event.status);
-        setTimestamp(event.timestamp.toString());
-      }),
-    []
-  );
+	useEffect(
+		() =>
+			bridge.subscribeHealth((event) => {
+				setStatus(event.status);
+				setTimestamp(event.timestamp.toString());
+			}),
+		[],
+	);
 
-  return (
-    <Container>
-      <Nav>
-        <Link to="/">System Info</Link>
-        <Link to="/files">Files</Link>
-      </Nav>
-      <Pulse key={timestamp}>
-        <StatusBadge>{status}</StatusBadge>
-      </Pulse>
-    </Container>
-  );
+	return (
+		<Container>
+			<Nav>
+				<Link to="/">System Info</Link>
+				<Link to="/files">Files</Link>
+			</Nav>
+			<Pulse key={timestamp}>
+				<StatusBadge>{status}</StatusBadge>
+			</Pulse>
+		</Container>
+	);
 };
 
 export default Masthead;
 
 const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 `;
 
 const Nav = styled.nav`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.fixed[0]};
+	display: flex;
+	align-items: center;
+	gap: ${({ theme }) => theme.spacing.fixed[0]};
 `;

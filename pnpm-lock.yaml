@@ -28,6 +28,7 @@ specifiers:
   '@testing-library/jest-dom': 5.16.5
   '@testing-library/react': 13.3.0
   '@testing-library/user-event': 14.4.3
+  '@tsconfig/node18-strictest': 1.0.0
   '@types/jest': 28.1.6
   '@types/node': 18.7.2
   '@types/react': 18.0.17
@@ -103,6 +104,7 @@ devDependencies:
   '@testing-library/jest-dom': 5.16.5
   '@testing-library/react': 13.3.0_biqbaboplfbrettd7655fr4n2y
   '@testing-library/user-event': 14.4.3_wl4iynrlixafokvgqnhzlvigei
+  '@tsconfig/node18-strictest': 1.0.0
   '@types/jest': 28.1.6
   '@types/node': 18.7.2
   '@types/react': 18.0.17
@@ -2483,6 +2485,10 @@ packages:
 
   /@tsconfig/node16/1.0.3:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
+    dev: true
+
+  /@tsconfig/node18-strictest/1.0.0:
+    resolution: {integrity: sha512-bOuNKwO4Fzbt+Su5wqI9zNHwx5C25gLnutwVQA1sBZk0cW8UjVPVcwzIUhJIIJDUx7zDEbAwdCD2HfvIsV8dYg==}
     dev: true
 
   /@types/aria-query/4.2.2:
