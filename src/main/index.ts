@@ -17,6 +17,9 @@ const showMainWindow = () => {
 	mainWindow = createMainWindow();
 	detachHeartbeat = attachHeartbeat(mainWindow);
 	detachSystemInfo = attachSystemInfo(mainWindow);
+	mainWindow.on("ready-to-show", () => {
+		mainWindow.show();
+	});
 };
 
 app.on("ready", () => {

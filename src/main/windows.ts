@@ -5,6 +5,7 @@ export const createMainWindow = () => {
 		height: 600,
 		width: 800,
 		titleBarStyle: "hiddenInset",
+		show: false,
 		webPreferences: { preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY },
 	});
 
