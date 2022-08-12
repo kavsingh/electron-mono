@@ -1,18 +1,15 @@
-import systemInformation from "systeminformation";
+import { osInfo, mem } from "systeminformation";
 
 import type { Requests } from "~/common/bridge/types";
 
 export const getSystemInfo = async (): Promise<
 	ReturnType<Requests["getSystemInfo"]>
 > => {
-	const [osInfo, mem] = await Promise.all([
-		systemInformation.osInfo(),
-		systemInformation.mem(),
-	]);
+	const [sysOsInfo, sysMem] = await Promise.all([osInfo(), mem()]);
 
 	return {
-		os: osInfo.codename,
-		totalMemory: BigInt(mem.total),
-		freeMemory: BigInt(mem.free),
+		os: sysOsInfo.codename,
+		totalMemory: BigInt(sysMem.total),
+		freeMemory: BigInt(sysMem.free),
 	};
 };

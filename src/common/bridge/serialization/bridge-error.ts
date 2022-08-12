@@ -10,8 +10,8 @@ export class BridgeError extends Error {
 	}: SerializedBridgeError) {
 		super(message);
 
-		this.name = name || this.name;
-		this.stack = stack || this.stack;
+		if (name) this.name = name;
+		if (stack) this.stack = stack;
 
 		Object.assign(this, customProps);
 	}
@@ -29,9 +29,12 @@ export const isSerializedBridgeError = (
 ): value is SerializedBridgeError =>
 	!!value && (value as SerializedBridgeError).__type === "BridgeError";
 
-export interface SerializedBridgeError
-	extends Pick<Error, "message" | "stack" | "name"> {
+export interface SerializedBridgeError {
 	__type: "BridgeError";
+	message: Error["message"] | undefined;
+	stack: Error["stack"] | undefined;
+	name: Error["name"] | undefined;
+
 	// eslint-disable-next-line @typescript-eslint/member-ordering
 	[key: string]: unknown;
 }

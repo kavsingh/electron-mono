@@ -11,7 +11,6 @@ const browserOnlyImports = {
 };
 
 module.exports = {
-	settings: { "import/resolver": "babel-module" },
 	extends: ["plugin:import/recommended", "plugin:import/typescript"],
 	rules: {
 		// everything outside renderer should not be loading browser packages
@@ -71,6 +70,20 @@ module.exports = {
 		],
 	},
 	overrides: [
+		{
+			files: ["*.ts?(x)"],
+			settings: {
+				"import/parsers": {
+					"@typescript-eslint/parser": [".ts", ".tsx"],
+				},
+				"import/resolver": {
+					"eslint-import-resolver-typescript": {
+						project: "./tsconfig.json",
+					},
+				},
+			},
+		},
+
 		...restrictFrom("", browserOnlyImports),
 
 		...restrictFrom("src/common", {

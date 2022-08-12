@@ -43,7 +43,8 @@ export const useFileDrop = () => {
 	return [{ files: dropped, isActive }, elementHandles] as const;
 };
 
-export interface DroppedFile
-	extends Partial<Pick<FileSystemEntry, "isDirectory" | "isFile">> {
+export interface DroppedFile {
+	isDirectory: FileSystemEntry["isDirectory"] | undefined;
+	isFile: FileSystemEntry["isFile"] | undefined;
 	file: File;
 }
