@@ -4,7 +4,7 @@ const rules = [
 	{
 		test: /\.tsx?$/,
 		exclude: /(node_modules|\.webpack)/,
-		use: { loader: "babel-loader" },
+		use: { loader: "swc-loader" },
 	},
 ];
 

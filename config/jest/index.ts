@@ -4,6 +4,21 @@ import type { Config } from "@jest/types";
 
 const baseConfig: Config.InitialProjectOptions = {
 	moduleNameMapper: { "^~/(.*)": "<rootDir>/src/$1" },
+	transform: {
+		"^.+\\.(t|j)sx?$": [
+			"@swc/jest",
+			{
+				jsc: {
+					transform: {
+						react: {
+							runtime: "automatic",
+							importSource: "@emotion/react",
+						},
+					},
+				},
+			},
+		],
+	},
 };
 
 export const config: Config.InitialOptions = {

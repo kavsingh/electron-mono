@@ -1,0 +1,15 @@
+{
+	"module": { "type": "commonjs" },
+	"jsc": {
+		"paths": { "~/*": ["./src/*"] },
+		"parser": { "syntax": "typescript", "jsx": true },
+		"transform": {
+			"react": { "runtime": "automatic", "importSource": "@emotion/react" }
+		}
+	},
+	"env": {
+		"targets": { "node": "16.15", "chrome": "104" },
+		"mode": "entry",
+		"coreJs": "3"
+	}
+}
