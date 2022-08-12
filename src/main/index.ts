@@ -1,7 +1,6 @@
 import { app, BrowserWindow } from "electron";
-import usbDetection from "usb-detection";
 
-import { attachHeartbeat, attachUsbDetection } from "./ipc/pubsub";
+import { attachSystemInfo, attachHeartbeat } from "./ipc/pubsub";
 import { setupResponders } from "./ipc/responders";
 import { createMainWindow } from "./windows";
 
@@ -11,17 +10,16 @@ if (require("electron-squirrel-startup")) app.quit();
 const removeResponders = setupResponders();
 let mainWindow: BrowserWindow;
 let detachHeartbeat: ReturnType<typeof attachHeartbeat>;
-let detachUsbDetection: ReturnType<typeof attachUsbDetection>;
+let detachSystemInfo: ReturnType<typeof attachSystemInfo>;
 
 const showMainWindow = () => {
   detachHeartbeat?.();
   mainWindow = createMainWindow();
   detachHeartbeat = attachHeartbeat(mainWindow);
-  detachUsbDetection = attachUsbDetection(mainWindow);
+  detachSystemInfo = attachSystemInfo(mainWindow);
 };
 
 app.on("ready", () => {
-  usbDetection.startMonitoring();
   showMainWindow();
 });
 
@@ -36,8 +34,7 @@ app.on("window-all-closed", () => {
 });
 
 app.on("will-quit", () => {
-  usbDetection.stopMonitoring();
   detachHeartbeat?.();
-  detachUsbDetection?.();
+  detachSystemInfo?.();
   removeResponders();
 });

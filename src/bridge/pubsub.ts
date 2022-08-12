@@ -3,14 +3,14 @@ import { ipcRenderer } from "electron";
 import {
   deserializeBridgePayload,
   serializeBridgePayload,
-} from "../common/bridge/serialization";
+} from "~/common/bridge/serialization";
 
+import type { IpcRendererEvent, BrowserWindow } from "electron";
 import type {
   DeserializedBridgePayload,
   SerializedBridgePayload,
-} from "../common/bridge/serialization";
-import type { Messages, MessageChannelName } from "./types";
-import type { IpcRendererEvent, BrowserWindow } from "electron";
+} from "~/common/bridge/serialization";
+import type { Messages, MessageChannelName } from "~/common/bridge/types";
 
 export const mainPublish = <K extends MessageChannelName>(
   win: BrowserWindow,

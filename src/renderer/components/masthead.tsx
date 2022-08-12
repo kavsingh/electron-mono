@@ -25,7 +25,7 @@ const Masthead: FC = () => {
   return (
     <Container>
       <Nav>
-        <Link to="/">USB Devices</Link>
+        <Link to="/">System Info</Link>
         <Link to="/files">Files</Link>
       </Nav>
       <Pulse key={timestamp}>

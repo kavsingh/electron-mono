@@ -5,12 +5,12 @@ import {
   deserializeBridgePayload,
 } from "~/common/bridge/serialization";
 
-import type { Requests, RequestChannelName } from "./types";
 import type { IpcMainInvokeEvent } from "electron";
 import type {
   SerializedBridgePayload,
   DeserializedBridgePayload,
 } from "~/common/bridge/serialization";
+import type { Requests, RequestChannelName } from "~/common/bridge/types";
 
 export const rendererRequester =
   <K extends RequestChannelName>(channel: K) =>

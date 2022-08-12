@@ -1,2 +1,2 @@
 export * from "./heartbeat";
-export * from "./usb";
+export * from "./system-info";

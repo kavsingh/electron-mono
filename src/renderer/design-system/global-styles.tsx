@@ -25,8 +25,11 @@ const GlobalStyles: FC = () => {
         body {
           margin: 0;
           padding: 0;
-          inline-size: 100%;
-          block-size: 100%;
+        }
+
+        body {
+          inline-size: 100vw;
+          block-size: 100vh;
         }
 
         #app-root {

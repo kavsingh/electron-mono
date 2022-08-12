@@ -1,19 +1,23 @@
-import type { Device } from "usb-detection";
-
 // Note: return types will be wrapped in a promise
 export interface Requests {
-  getUsbDevices: (params?: { vendorId?: Device["vendorId"] }) => Device[];
+  getSystemInfo: () => SystemInfo;
 }
 
 export type RequestChannelName = keyof Requests;
 
 export interface Messages {
   health: HealthMessage;
-  usbDevice: { device: Device; status: "added" | "removed" };
+  systemInfo: SystemInfo;
 }
 
 export type MessageChannelName = keyof Messages;
 
-type HealthMessage =
+export type HealthMessage =
   | { status: "ok"; timestamp: bigint }
   | { status: "error"; timestamp: bigint; error: Error };
+
+export interface SystemInfo {
+  os: string;
+  totalMemory: bigint;
+  freeMemory: bigint;
+}
