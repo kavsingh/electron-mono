@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import { DaemonStatusEvent_Type } from "@nativeinstruments/ntk-daemon-node-lib";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
+import { normalizeNtkDaemonResponse } from "~/common/ntk-daemon/response";
 import bridge from "~/renderer/bridge";
 import Pulse from "~/renderer/components/pulse";
 import StatusBadge from "~/renderer/components/status-badge";
@@ -10,23 +11,25 @@ import type { DaemonStatusEvent } from "@nativeinstruments/ntk-daemon-node-lib";
 import type { FC } from "react";
 
 const NTKDaemon: FC = () => {
-	const [version, setVersion] = useState<Version>();
+	const [version, setVersion] = useState<string>();
 	const [error, setError] = useState<Error | null>(null);
 	const [status, setStatus] = useState<DaemonStatusEvent_Type>();
 	const [pulseKey, setPulseKey] = useState(Date.now());
 
-	const fetchVersion = useCallback(async () => {
-		setError(null);
-
-		try {
-			setVersion(await bridge.getNtkDaemonVersion());
-		} catch (reason) {
-			setError(reason instanceof Error ? reason : new Error(String(reason)));
-		}
-	}, []);
-
 	useEffect(() => {
-		void fetchVersion();
+		const fetchVersion = async () => {
+			setError(null);
+
+			try {
+				const response = await normalizeNtkDaemonResponse(
+					bridge.getNtkDaemonVersion(),
+				);
+
+				setVersion(formatVersion(response));
+			} catch (reason) {
+				setError(reason instanceof Error ? reason : new Error(String(reason)));
+			}
+		};
 
 		const handleStatusEvent = ({ type }: DaemonStatusEvent) => {
 			setStatus(type);
@@ -35,8 +38,10 @@ const NTKDaemon: FC = () => {
 			if (type === DaemonStatusEvent_Type.startup_ended) void fetchVersion();
 		};
 
+		void fetchVersion();
+
 		return bridge.subscribeNtkDaemonStatus(handleStatusEvent);
-	}, [fetchVersion]);
+	}, []);
 
 	return (
 		<div>
@@ -46,7 +51,7 @@ const NTKDaemon: FC = () => {
 					<StatusBadge>{status ? formatStatusType(status) : ""}</StatusBadge>
 				</Pulse>
 			</Header>
-			{version ? `Running NTK Daemon ${formatVersion(version)}` : null}
+			{version ? `Running NTK Daemon ${version}` : null}
 			{error ? `Error getting NTK Daemon version ${String(error)}` : null}
 		</div>
 	);
@@ -73,9 +78,14 @@ const formatStatusType = (type: DaemonStatusEvent_Type) => {
 	}
 };
 
-const formatVersion = (version: Version) =>
-	`${version.major.toString()}.${version.minor.toString()}.${version.micro.toString()} ${
-		version.build
-	}`;
-
-type Version = AsyncResult<typeof bridge.getNtkDaemonVersion>;
+const formatVersion = ({
+	major,
+	minor,
+	micro,
+	build,
+}: {
+	major: bigint;
+	minor: bigint;
+	micro: bigint;
+	build: string;
+}) => `${major.toString()}.${minor.toString()}.${micro.toString()} ${build}`;

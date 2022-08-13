@@ -1,3 +1,4 @@
+import type { NtkDaemonBridgeResponse } from "../ntk-daemon/types";
 import type {
 	DaemonStatusEvent,
 	DaemonVersionResponse,
@@ -6,7 +7,7 @@ import type {
 // Note: return types will be wrapped in a promise
 export interface Requests {
 	getSystemInfo: () => SystemInfo;
-	getNtkDaemonVersion: () => DaemonVersionResponse;
+	getNtkDaemonVersion: () => NtkDaemonBridgeResponse<DaemonVersionResponse>;
 }
 
 export type RequestChannelName = keyof Requests;

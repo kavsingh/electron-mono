@@ -1,5 +1,3 @@
-// eslint-disable-next-line import/no-named-as-default
-import Long from "long";
 import { vi } from "vitest";
 
 import { createMockSystemInfo } from "~/common/__test__/mock-data-creators/system-info";
@@ -10,10 +8,13 @@ const bridge: AppBridge = {
 	getSystemInfo: vi.fn(() => Promise.resolve(createMockSystemInfo())),
 	getNtkDaemonVersion: vi.fn(() =>
 		Promise.resolve({
-			major: new Long(0),
-			minor: new Long(0),
-			micro: new Long(0),
-			build: "",
+			result: "success",
+			message: {
+				major: BigInt(0),
+				minor: BigInt(0),
+				micro: BigInt(0),
+				build: "",
+			},
 		}),
 	),
 	subscribeSystemInfo: vi.fn(() => () => undefined),
