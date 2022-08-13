@@ -1,15 +1,6 @@
 import { ipcMain, ipcRenderer } from "electron";
 
-import {
-	serializeBridgePayload,
-	deserializeBridgePayload,
-} from "~/common/bridge/serialization";
-
 import type { IpcMainInvokeEvent } from "electron";
-import type {
-	SerializedBridgePayload,
-	DeserializedBridgePayload,
-} from "~/common/bridge/serialization";
 import type { Requests, RequestChannelName } from "~/common/bridge/types";
 
 export const rendererRequester =
@@ -20,34 +11,30 @@ export const rendererRequester =
 			: [Parameters<Requests[K]>[0]]
 	) => {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-		const response: SerializedBridgePayload<ReturnType<Requests[K]>> =
-			await (args[0]
-				? ipcRenderer.invoke(channel, serializeBridgePayload(args[0]))
-				: ipcRenderer.invoke(channel, {}));
+		const response: ReturnType<Requests[K]> = await (args[0]
+			? ipcRenderer.invoke(channel, args[0])
+			: ipcRenderer.invoke(channel, {}));
 
-		return deserializeBridgePayload(response);
+		return response;
 	};
 
 export const mainResponder = <K extends RequestChannelName>(
 	channel: K,
 	handler: (
 		event: IpcMainInvokeEvent,
-		payload: DeserializedBridgePayload<
-			Parameters<Requests[K]> extends [] ? void : Parameters<Requests[K]>[0]
-		>,
+		payload: Parameters<Requests[K]> extends []
+			? void
+			: Parameters<Requests[K]>[0],
 	) => Promise<ReturnType<Requests[K]>>,
 ): (() => void) => {
 	ipcMain.handle(
 		channel,
-		(
+		async (
 			event: IpcMainInvokeEvent,
-			payload: SerializedBridgePayload<
-				Parameters<Requests[K]> extends [] ? void : Parameters<Requests[K]>[0]
-			>,
-		) =>
-			handler(event, deserializeBridgePayload(payload))
-				.then(serializeBridgePayload)
-				.catch(serializeBridgePayload),
+			payload: Parameters<Requests[K]> extends []
+				? void
+				: Parameters<Requests[K]>[0],
+		) => handler(event, payload),
 	);
 
 	return () => ipcMain.removeHandler(channel);

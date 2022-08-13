@@ -7,9 +7,15 @@ import type { FC } from "react";
 
 const SystemInfoList: FC = () => {
 	const [info, setInfo] = useState<AsyncResult<typeof bridge.getSystemInfo>>();
+	const [error, setError] = useState<Error | undefined>(undefined);
 
 	useEffect(() => {
-		void bridge.getSystemInfo().then(setInfo);
+		void bridge
+			.getSystemInfo()
+			.then(setInfo)
+			.catch((reason) => {
+				setError(reason instanceof Error ? reason : new Error(String(reason)));
+			});
 
 		return bridge.subscribeSystemInfo((message) => {
 			setInfo(message);
@@ -18,6 +24,7 @@ const SystemInfoList: FC = () => {
 
 	return info ? (
 		<Container>
+			{error ? error.message : null}
 			{Object.entries(info).map(([key, val]) => (
 				<InfoItem key={key}>
 					<span>{key}</span>
