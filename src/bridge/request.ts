@@ -47,9 +47,7 @@ export const mainResponder = <K extends RequestChannelName>(
 		) =>
 			handler(event, deserializeBridgePayload(payload))
 				.then(serializeBridgePayload)
-				.catch((reason) => {
-					throw serializeBridgePayload(reason);
-				}),
+				.catch(serializeBridgePayload),
 	);
 
 	return () => ipcMain.removeHandler(channel);
