@@ -15,8 +15,7 @@
 		"test": "pnpm test:unit --silent",
 		"test:unit": "jest ./src",
 		"test:e2e": "pnpm package && playwright test",
-		"r": "ts-node --log-error -P './tsconfig.ts-node.json'",
-		"rebuild:debug": "DEBUG=true electron-rebuild"
+		"r": "ts-node --log-error -P './tsconfig.ts-node.json'"
 	},
 	"keywords": [],
 	"author": "<author>",
@@ -63,7 +62,7 @@
 		"electron-rebuild": "3.2.9",
 		"eslint": "8.21.0",
 		"eslint-config-prettier": "8.5.0",
-		"eslint-import-resolver-typescript": "3.4.0",
+		"eslint-import-resolver-typescript": "3.4.1",
 		"eslint-plugin-filenames": "1.3.2",
 		"eslint-plugin-import": "2.26.0",
 		"eslint-plugin-jest": "26.8.2",
