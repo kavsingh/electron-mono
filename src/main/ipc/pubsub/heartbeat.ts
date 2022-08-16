@@ -3,7 +3,7 @@ import { mainPublish } from "~/bridge/pubsub";
 import type { BrowserWindow } from "electron";
 
 export const attachHeartbeat = (win: BrowserWindow) => {
-	let stopHeartbeat: ReturnType<typeof startHeartbeat> | null = null;
+	let stopHeartbeat: ReturnType<typeof startHeartbeat> | undefined;
 
 	const start = () => {
 		stopHeartbeat?.();
@@ -21,10 +21,10 @@ export const attachHeartbeat = (win: BrowserWindow) => {
 
 	return () => {
 		stopHeartbeat?.();
-		win?.off("show", start);
-		win?.off("restore", start);
-		win?.off("hide", stop);
-		win?.off("close", stop);
+		win.off("show", start);
+		win.off("restore", start);
+		win.off("hide", stop);
+		win.off("close", stop);
 	};
 };
 

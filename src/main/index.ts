@@ -9,8 +9,8 @@ if (require("electron-squirrel-startup")) app.quit();
 
 const removeResponders = setupResponders();
 let mainWindow: BrowserWindow;
-let detachHeartbeat: ReturnType<typeof attachHeartbeat>;
-let detachSystemInfo: ReturnType<typeof attachSystemInfo>;
+let detachHeartbeat: ReturnType<typeof attachHeartbeat> | undefined;
+let detachSystemInfo: ReturnType<typeof attachSystemInfo> | undefined;
 
 const showMainWindow = () => {
 	detachHeartbeat?.();

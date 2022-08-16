@@ -11,9 +11,10 @@ export const rendererRequester =
 			: [Parameters<Requests[K]>[0]]
 	) => {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-		const response: ReturnType<Requests[K]> = await (args[0]
-			? ipcRenderer.invoke(channel, args[0])
-			: ipcRenderer.invoke(channel, {}));
+		const response: ReturnType<Requests[K]> = await ipcRenderer.invoke(
+			channel,
+			args[0],
+		);
 
 		return response;
 	};
@@ -23,7 +24,7 @@ export const mainResponder = <K extends RequestChannelName>(
 	handler: (
 		event: IpcMainInvokeEvent,
 		payload: Parameters<Requests[K]> extends []
-			? void
+			? never
 			: Parameters<Requests[K]>[0],
 	) => Promise<ReturnType<Requests[K]>>,
 ): (() => void) => {
@@ -32,7 +33,7 @@ export const mainResponder = <K extends RequestChannelName>(
 		async (
 			event: IpcMainInvokeEvent,
 			payload: Parameters<Requests[K]> extends []
-				? void
+				? never
 				: Parameters<Requests[K]>[0],
 		) => handler(event, payload),
 	);

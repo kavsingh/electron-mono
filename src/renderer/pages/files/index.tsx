@@ -7,8 +7,8 @@ import type { FC } from "react";
 import type { DroppedFile } from "~/renderer/hooks/file";
 
 const Files: FC = () => {
-	const [{ files = [], isActive }, elementHandles] = useFileDrop();
-	const [droppedFiles, setDroppedFiles] = useState<DroppedFile[]>(files);
+	const [{ files, isActive }, elementHandles] = useFileDrop();
+	const [droppedFiles, setDroppedFiles] = useState<DroppedFile[]>(files ?? []);
 
 	useEffect(() => {
 		if (!files?.length) return;

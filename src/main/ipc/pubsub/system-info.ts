@@ -4,7 +4,7 @@ import { getSystemInfo } from "~/main/lib/system-info";
 import type { BrowserWindow } from "electron";
 
 export const attachSystemInfo = (win: BrowserWindow) => {
-	let stopSystemInfo: ReturnType<typeof startSystemInfo> | null = null;
+	let stopSystemInfo: ReturnType<typeof startSystemInfo> | undefined;
 
 	const start = () => {
 		stopSystemInfo?.();
@@ -22,10 +22,10 @@ export const attachSystemInfo = (win: BrowserWindow) => {
 
 	return () => {
 		stopSystemInfo?.();
-		win?.off("show", start);
-		win?.off("restore", start);
-		win?.off("hide", stop);
-		win?.off("close", stop);
+		win.off("show", start);
+		win.off("restore", start);
+		win.off("hide", stop);
+		win.off("close", stop);
 	};
 };
 
