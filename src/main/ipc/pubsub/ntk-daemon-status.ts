@@ -17,7 +17,7 @@ export const attachNtkDaemonStatus = (win: BrowserWindow) => {
 	};
 
 	const unsubscribe = () => {
-		daemonUnsubscribe?.();
+		daemonUnsubscribe();
 	};
 
 	win.on("show", subscribe);
@@ -26,9 +26,9 @@ export const attachNtkDaemonStatus = (win: BrowserWindow) => {
 	win.on("close", unsubscribe);
 
 	return () => {
-		win?.off("show", subscribe);
-		win?.off("restore", subscribe);
-		win?.off("hide", unsubscribe);
-		win?.off("close", unsubscribe);
+		win.off("show", subscribe);
+		win.off("restore", subscribe);
+		win.off("hide", unsubscribe);
+		win.off("close", unsubscribe);
 	};
 };
