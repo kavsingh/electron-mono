@@ -1,0 +1,3460 @@
+openapi: 3.0.0
+info:
+  version: "1.85.0"
+  title: "Native API"
+  description: "API powering Native Access, the daemon and native-instruments.com"
+servers:
+  - description: Dev
+    url: https://api-dev.cloud.native-instruments.de/v1
+  - description: Staging
+    url: https://api-stg.cloud.native-instruments.de/v1
+  - description: Production
+    url: https://api.native-instruments.com/v1
+paths:
+  /supporters/serial_number_exports:
+    get:
+      security:
+        - basicAuth: [ ]
+      operationId: exportSerialNumbers
+      tags:
+        - serial_numbers
+        - supporters
+      description: "Export serial numbers for provided licensed product ID."
+      parameters:
+        - in: query
+          name: licensedproduct_id
+          description: |-
+            Licensed product ID.
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: quantity
+          description: |-
+            Amount of serial numbers to export.
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: notes
+          description: |-
+            Reason of serial numbers export.
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: license
+          description: |-
+            License which has to be attached to the generated serial numbers. See SDBS Supporter UI for possible values.
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SerialNumberExportsResponse"
+        400:
+          $ref: "#/components/responses/ValidationErrors"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        404:
+          $ref: "#/components/responses/NotFound"
+        422:
+          $ref: "#/components/responses/NoItemsLeftOrLicensingSerialsExportError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /supporters/users/{id}:
+    get:
+      operationId: getUser
+      tags:
+        - users
+      description: Retrieve enduser data
+      parameters:
+        - name: id
+          in: path
+          description: NativeID – unique enduser identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Enduser found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Enduser"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+      security:
+        - basicAuth: [ ]
+
+  /supporters/users/{id}/licensedproducts:
+    get:
+      operationId: getUserLicensedProducts
+      tags:
+        - users
+        - supporters
+      description: Retrieve list of enduser licensedproducts
+      parameters:
+        - name: id
+          in: path
+          description: NativeID – unique enduser identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Enduser found, licensedproducts provided as list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LicensedProductsResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+      security:
+        - basicAuth: [ ]
+
+  /supporters/licensedproducts:
+    get:
+      operationId: getAllLicensedProducts
+      tags:
+        - supporters
+        - products
+      description: Retrieve list of all licensedproducts
+      responses:
+        200:
+          description: licensedproducts provided as list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AllLicensedProductsResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+      security:
+        - basicAuth: [ ]
+
+  /supporters/users/{id}/registrations:
+    get:
+      operationId: getUserRegistrations
+      tags:
+        - users
+        - supporters
+      description: Retrieve list of enduser registrations
+      parameters:
+        - name: id
+          in: path
+          description: NativeID – unique enduser identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Enduser found, registrations provided as list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegistrationsResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+      security:
+        - basicAuth: [ ]
+
+  /supporters/native_id:
+    get:
+      security:
+        - basicAuth: [ ]
+      tags:
+        - supporters
+      description: Retrieve enduser NativeID by email or SDBS-internal user ID
+      parameters:
+        - in: query
+          name: email
+          description: Enduser email – mutually exclusive with user_id
+          required: false
+          schema:
+            type: string
+            format: email
+        - in: query
+          name: user_id
+          description: SDBS-internal enduser ID – mutually exclusive with email
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: NativeID found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NativeIDResponse"
+        400:
+          $ref: "#/components/responses/ValidationErrors"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /configurations/:
+    get:
+      security:
+        - applicationToken: [ ]
+      operationId: getConfiguration
+      tags:
+        - "configurations"
+      description: "Return all public settings for Native-API."
+      parameters:
+        - in: query
+          name: pk_format
+          description: |-
+            Request Public Keys in provided format, supported values: SubjectPublicKeyInfo, PKCS1. Default is SubjectPublicKeyInfo.
+            Check SDBS documentation about `get_public_keys` or `get_public_keys_in_format` for more details.
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfigurationResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        422:
+          $ref: "#/components/responses/ValidationErrors"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /configurations/{group}:
+    get:
+      security:
+        - applicationToken: [ ]
+      operationId: getConfigurationGroup
+      tags:
+        - "configurations"
+      description: "Return all public settings for Native-API for requested group."
+      parameters:
+        - in: path
+          name: group
+          description: "Result will only contain entries for of the specified group."
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: pk_format
+          description: |-
+            Request Public Keys in provided format, supported values: SubjectPublicKeyInfo, PKCS1. Default is SubjectPublicKeyInfo.
+            Check SDBS documentation about `get_public_keys` or `get_public_keys_in_format` for more details.
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfigurationResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        422:
+          $ref: "#/components/responses/ValidationErrors"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /base/ping:
+    get:
+      operationId: ping
+      tags:
+        - "base"
+      description: >-
+        A simple Ping method to check if the API is up and
+        responding. It does not require any message or parameters and
+        always returns a “pong” message as defined above.
+      parameters: [ ]
+      responses:
+        200:
+          description: "Returns the Pong!"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response_head:
+                    $ref: "#/components/schemas/ResponseHead"
+                  response_body:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        enum:
+                          - pong
+                    required:
+                      - message
+                required:
+                  - response_head
+                  - response_body
+
+  /base/crash:
+    get:
+      operationId: crash
+      tags:
+        - base
+      description: >-
+        Always throws an exception. No message required.
+        Don’t expect any output other than a response_head with an error.
+      responses:
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /base/ping_sdbs:
+    get:
+      operationId: ping_sdbs
+      tags:
+        - base
+      description:
+        Requests to the SDBS_URI (HAProxy server of SDBS) to verify if it is
+        reachable, if not will return a connection-error response. This endpoint is intended for monitoring
+        purposes, e.g GCP Monitoring (Uptime checks).
+      responses:
+        200:
+          description: "Connected to SDBS."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response_head:
+                    $ref: "#/components/schemas/ResponseHead"
+                  response_body:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        enum:
+                          - Connected to SDBS at {SDBS_URI}
+                    required:
+                      - message
+                required:
+                  - response_head
+                  - response_body
+        503:
+          description: "Connection error. Failed to connect to SDBS."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /base/ping_rabbitmq:
+    get:
+      operationId: ping_rabbitmq
+      tags:
+        - base
+      description:
+        Verifies that the connection to rabbitmq is open at AMQP_IMPORTER_URI, if not then it will return a
+        connection-error response. This endpoint is intended for monitoring purposes,
+        e.g GCP Monitoring (Uptime checks).
+      responses:
+        200:
+          description: "Connection to RabbitMQ is open."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response_head:
+                    $ref: "#/components/schemas/ResponseHead"
+                  response_body:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        enum:
+                          - RabbitMQ server is alive at {AMQP_IMPORTER_URI}
+                    required:
+                      - message
+                required:
+                  - response_head
+                  - response_body
+        503:
+          description: "Failed to verify connection to RabbitMQ"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/token:
+    post:
+      security:
+        - applicationToken: [ ]
+      operationId: authenticate
+      tags:
+        - "auth"
+      description: >-
+        Returns a new pair of Access and Refresh Tokens if the given credentials
+        are correct and the Application Token in the Request Header has been registered.
+      requestBody:
+        description: "username and password used to authenticate"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Credentials"
+      responses:
+        200:
+          description: >-
+            Returns a new pair of Access and Refresh Tokens if the given
+            credentials are correct and the Application Token in the Request Header
+            is valid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTokenResponse"
+        401:
+          description: "Invalid application token or wrong credentials"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/refresh_token:
+    post:
+      operationId: refreshToken
+      tags:
+        - auth
+      description: >-
+        Requests a new Access and Refresh Tokens
+        with an existing Refresh Token. This method does
+        not expect an input message, it is sufficient to
+        specify the Refresh Token as Bearer in the Request Header.
+      security:
+        - refreshToken: [ ]
+      responses:
+        200:
+          description: >-
+            Returns a new pair of Access and Refresh Tokens if the given
+            credentials are correct and the Application Token in the Request Header
+            has been registered.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTokenResponse"
+        401:
+          description: "Refresh token could not be verified."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /auth/recover_password:
+    post:
+      operationId: recoverPassword
+      tags:
+        - auth
+      description: "Recovers password for a native instruments user based on username."
+      security:
+        - applicationToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  minLength: 1
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response_head:
+                    $ref: "#/components/schemas/ResponseHead"
+                  response_body:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        422:
+          $ref: "#/components/responses/ValidationErrors"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /activations/:
+    post:
+      security:
+        - accessToken: [ ]
+      operationId: activate
+      description: >-
+        Activates a list of product serials and system IDs.
+        Returns a list of responses, each containing a `serial` field containing
+        the serial that was to be activated and either a `result` field in case
+        of success, or an `error` field, which is structured exactly like
+        `field_errors` described in Response structure & fields.
+
+
+        Accepts an optional `method` parameter to determine the activation method
+        that’s to be used.
+
+
+        When a RAS3 bundled product is to be activated
+        you must include both serial numbers for the bundle master and bundle
+        members.
+
+
+        When activating a bundle master an empty string as
+        a system ID is allowed.
+      tags:
+        - activations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivationRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivationResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        422:
+          description: "RAS3 activation currently supports only one serial at a time."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivationResponse"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /changelogs/{upid}:
+    get:
+      description: "Returns the complete Changelog for a given UPID."
+      operationId: getCompleteChangelog
+      tags:
+        - changelogs
+      security:
+        - applicationToken: [ ]
+      parameters:
+        - in: path
+          name: upid
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteChangelogResult"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /changelogs/{upid}/{from_version}/{to_version}:
+    get:
+      operationId: getPartialChangelog
+      tags:
+        - changelogs
+      security:
+        - applicationToken: [ ]
+      parameters:
+        - in: path
+          name: upid
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: from_version
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: to_version
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteChangelogResult"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /download/full-products/{upid}:
+    get:
+      operationId: downloadProduct
+      tags:
+        - download
+      deprecated: true
+      description: "Returns the list of full products (i.e. not updates or players) associated with the given UPID.
+      Deprecated in favour of `GET /download/me/full-products` and `GET /download/me/updates`."
+      parameters:
+        - in: path
+          name: upid
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: show_nativeos
+          schema:
+            type: boolean
+          required: false
+          description: "If false, the response contains all artifacts with `platform != nativeos`. If true, the response contains all artifacts."
+        - in: query
+          name: hardware_platform
+          schema:
+            type: string
+          required: false
+          description: "If not provided, the response contains all artifacts regardless of their hardware_platform.
+          If provided, the response contains artifacts with matching hardware_platform. Artifacts with `hardware_platform == any` are always returned."
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DownloadProductsResponseLegacy"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /download/me/full-products:
+    get:
+      operationId: getMyFullProductsDownloads
+      tags:
+        - download
+      security:
+        - accessToken: [ ]
+      parameters:
+        - in: query
+          name: platform
+          schema:
+            type: string
+            enum: [ pc,  mac, linux-x86_64, nativeos ]
+          required: false
+          description: >
+            If not provided, the response contains all artifacts regardless of `platform`.
+            If provided, the response contains artifacts with matching platform. If mac or pc is provided, the response
+            also contains artifacts with platform=all.
+        - in: query
+          name: hardware_platform
+          schema:
+            type: string
+            enum: [ mas-x86_64 ]
+          required: false
+          description: >
+            If not provided, the response contains all artifacts regardless of their `hardware_platform`.
+            If provided, the response contains artifacts with matching hardware_platform.
+            Artifacts with `hardware_platform == any` are always returned.
+        - in: query
+          name: platform_version
+          schema:
+            type: string
+            pattern: '^(\d+)?(\.\d+)*$'
+          required: false
+          description: >
+            If not provided, the response contains all artifacts regardless of their `os_min`/`os_max`.
+            If provided, and if platform is provided, the response contains all artifacts where `os_min <= platform_version <= os_max`.
+            If `os_min` is `null`, that is equivalent to `0`, and if `os_max` is `null`, that is equivalent to `+Inf`.
+        - in: query
+          name: latest_only
+          schema:
+            type: boolean
+            default: false
+          required: false
+          description: If set to `true`, single artifact with latest version available will be returned
+        - in: query
+          name: include_subscriptions
+          schema:
+            type: boolean
+            default: false
+          required: false
+          description: If set to `true`, response will also contains subscription products
+      responses:
+        200:
+          description: Returns the list of artifacts for full-products of products you own.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DownloadProductsResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /download/updates/{upid}:
+    get:
+      operationId: downloadProductUpdates
+      tags:
+        - download
+      deprecated: true
+      description: "Returns the list of updates associated with the given UPID.
+      Deprecated in favour of `GET /download/me/full-products` and `GET /download/me/updates`."
+      parameters:
+        - in: path
+          name: upid
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: show_nativeos
+          schema:
+            type: boolean
+          required: false
+          description: "If false, the response contains all artifacts with `platform != nativeos`. If true, the response contains all artifacts."
+        - in: query
+          name: hardware_platform
+          schema:
+            type: string
+          required: false
+          description: "If not provided, the response contains all artifacts regardless of their hardware_platform.
+          If provided, the response contains artifacts with matching hardware_platform. Artifacts with `hardware_platform == any` are always returned."
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DownloadProductsResponseLegacy"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /download/me/updates:
+    get:
+      operationId: getMyProductUpdatesDownloads
+      tags:
+        - download
+      security:
+        - accessToken: [ ]
+      parameters:
+        - in: query
+          name: platform
+          schema:
+            type: string
+            enum: [ pc,  mac, linux-x86_64, nativeos ]
+          required: false
+          description: >
+            If not provided, the response contains all artifacts regardless of `platform`.
+            If provided, the response contains artifacts with matching platform. If mac or pc is provided,
+            the response also contains artifacts with platform=all.
+        - in: query
+          name: hardware_platform
+          schema:
+            type: string
+            enum: [ mas-x86_64 ]
+          required: false
+          description: >
+            If not provided, the response contains all artifacts regardless of their `hardware_platform`.
+            If provided, the response contains artifacts with matching hardware_platform.
+            Artifacts with `hardware_platform == any` are always returned.
+        - in: query
+          name: platform_version
+          schema:
+            type: string
+            pattern: '^(\d+)?(\.\d+)*$'
+          required: false
+          description: >
+            If not provided, the response contains all artifacts regardless of their `os_min`/`os_max`.
+            If provided, and if platform is provided, the response contains all artifacts where `os_min <= platform_version <= os_max`.
+            If `os_min` is `null`, that is equivalent to `0`, and if `os_max` is `null`, that is equivalent to `+Inf`.
+        - in: query
+          name: latest_only
+          schema:
+            type: boolean
+            default: false
+          required: false
+          description: If set to `true`, single artifact with latest version available will be returned
+        - in: query
+          name: include_subscriptions
+          schema:
+            type: boolean
+            default: false
+          required: false
+          description: If set to `true` response will contains also subscription products
+      responses:
+        200:
+          description: "Returns the list of artifacts for updates of products you own."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DownloadProductsResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /download/me/content:
+    get:
+      operationId: getMyProductContentDownloads
+      tags:
+        - download
+      security:
+        - accessToken: [ ]
+      parameters:
+        - in: query
+          name: platform
+          schema:
+            type: string
+            enum: [ pc,  mac, linux-x86_64, nativeos ]
+          required: false
+          description: >
+            If not provided, the response contains all artifacts regardless of `platform`.
+            If provided, the response contains artifacts with matching platform. If mac or pc is provided,
+            the response also contains artifacts with platform=all.
+        - in: query
+          name: hardware_platform
+          schema:
+            type: string
+            enum: [ mas-x86_64 ]
+          required: false
+          description: >
+            If not provided, the response contains all artifacts regardless of their `hardware_platform`.
+            If provided, the response contains artifacts with matching hardware_platform.
+            Artifacts with `hardware_platform == any` are always returned.
+        - in: query
+          name: platform_version
+          schema:
+            type: string
+            pattern: '^(\d+)?(\.\d+)*$'
+          required: false
+          description: >
+            If not provided, the response contains all artifacts regardless of their `os_min`/`os_max`.
+            If provided, and if platform is provided, the response contains all artifacts where `os_min <= platform_version <= os_max`.
+            If `os_min` is `null`, that is equivalent to `0`, and if `os_max` is `null`, that is equivalent to `+Inf`.
+        - in: query
+          name: latest_only
+          schema:
+            type: boolean
+            default: false
+          required: false
+          description: If set to `true`, single artifact with latest version available will be returned
+        - in: query
+          name: include_subscriptions
+          schema:
+            type: boolean
+            default: false
+          required: false
+          description: If set to `true` response will contains also subscription products
+      responses:
+        200:
+          description: "Returns the list of artifacts for content releases of products you own."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DownloadProductsResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /download/players/{upid}:
+    get:
+      operationId: downloadPlayer
+      tags:
+        - download
+      deprecated: true
+      description: "Returns the list of players associated with the given UPID. No longer used by current versions of
+      NA and the daemon."
+      parameters:
+        - in: path
+          name: upid
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DownloadProductsResponseLegacy"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /download/links/{upid}/{file_id}:
+    get:
+      operationId: downloadLinks
+      tags:
+        - download
+      description: >-
+        Retrieves the list of links for the given UPID
+        and file ID. If the ‘authentication required’ box is
+        ticked in UDM2 for the given file, you’ll need to provide a
+        valid access token in the Authorization header.
+
+
+        This returns a metalink file.
+      security:
+        - accessToken: [ ]
+      parameters:
+        - in: path
+          name: upid
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: ok
+          content:
+            application/metalink4+xml:
+              schema:
+                type: string
+                format: binary
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /license-transfer/:
+    post:
+      operationId: licenseTransfer
+      tags:
+        - license_transfer
+      description: "Queues license transfer request."
+      security:
+        - accessToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LicenseTransferRequest"
+      responses:
+        200:
+          description: "Transfer request is successfully added to queue. `job_id` is returned."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LicenseTransferResponse"
+        400:
+          description: "Registrations are invalid."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /products/:
+    get:
+      operationId: getProducts
+      tags:
+        - "products"
+      description: "Returns the list of all known Product IDs (UPIDs)."
+      security:
+        - applicationToken: [ ]
+      responses:
+        200:
+          description: "Returns the list of all known Product IDs (UPIDs)."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /products/{upid}:
+    get:
+      operationId: getSingleProduct
+      tags:
+        - "products"
+      description: >-
+        Returns all the resources and categories associated with a UPID.
+        Note: this endpoint returns a full, detailed list of all resources attached the given UPID.
+        However, for categories, only the IDs are  returned.
+
+        The `upid` has to be a valid UUID (see
+        [`uuid.UUID`](https://docs.python.org/3/library/uuid.html#uuid.UUID)).
+      security:
+        - applicationToken: [ ]
+      parameters:
+        - name: "upid"
+          in: "path"
+          description: "UPID of product"
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "Returns list of resources for UPID"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductByUpidResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /products/categories:
+    get:
+      operationId: getProductCategories
+      description: "Returns a list of categories, their sort order and relationships."
+      tags:
+        - "products"
+      security:
+        - applicationToken: [ ]
+      responses:
+        200:
+          description: "Returns a list of all categories"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /subscriptions/{subscription_id}:
+    get:
+      operationId: getSubscriptionDetails
+      tags:
+        - "subscriptions"
+      description: "Returns all details about subscription specified by ID."
+      security:
+        - accessToken: [ ]
+      parameters:
+        - name: "subscription_id"
+          in: "path"
+          description: "Subscription ID."
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: "Subscription details"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /subscriptions:
+    post:
+      operationId: createSubscription
+      tags:
+        - "subscriptions"
+      description: "Create subscription."
+      security:
+        - accessToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionCreation"
+      responses:
+        201:
+          description: "Subscription details"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        400:
+          $ref: "#/components/responses/ValidationErrors"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /subscriptions/bundles:
+    get:
+      operationId: getSubscriptionBundles
+      tags:
+        - "subscriptions"
+      description: "Get all subscription Bundles. If a product_id is given it will return all the bundles that have the product."
+      parameters:
+        - name: licensedproduct_id
+          in: query
+          description: SDBS licensed product Id
+          required: false
+          schema:
+            type: number
+            format: uint64
+      security:
+        - accessToken: [ ]
+      responses:
+        200:
+          description: "Subscription Bundles"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionBundleResponse"
+        400:
+          $ref: "#/components/responses/ValidationErrors"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /subscription/{subscription_id}/:
+    patch:
+      operationId: updateSubscriptionStatus
+      tags:
+        - "subscriptions"
+      description: "Updates the status of the subscription"
+      security:
+        - accessToken: [ ]
+      parameters:
+        - name: "subscription_id"
+          in: "path"
+          description: "Subscription ID."
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/SubscriptionStatus"
+                - $ref: "#/components/schemas/SubscriptionCancellationStatus"
+      responses:
+        200:
+          description: "Subscription information"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /subscriptions/users/{native_id}:
+    get:
+      operationId: getUsersSubscriptionInformation
+      tags:
+        - subscriptions
+      parameters:
+        - name: "native_id"
+          in: "path"
+          description: "Native ID."
+          required: true
+          schema:
+            type: string
+      security:
+        - accessToken: [ ]
+      responses:
+        200:
+          description: "Customer information from subscription service with billing address."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionUserInfo"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /subscriptions/{subscription_id}/invoices:
+    get:
+      operationId: getSubscriptionInvoices
+      tags:
+        - subscriptions
+      security:
+        - accessToken: [ ]
+      parameters:
+        - name: "subscription_id"
+          in: "path"
+          description: "Subscription ID."
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: "Invoices"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionInvoice'
+
+  /subscriptions/cancellation_reasons:
+    get:
+      operationId: getSubscriptionCancellationReasons
+      tags:
+        - subscriptions
+      security:
+        - accessToken: [ ]
+      responses:
+        200:
+          description: "List of cancellation reasons"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionCancellationReasons'
+
+  /subscription-pages:
+    post:
+      operationId: createSubscriptionPageURL
+      tags:
+        - "subscriptions"
+      description: "Create subscription page URL."
+      security:
+        - accessToken: [ ]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionPageCreation"
+      responses:
+        201:
+          description: "Subscription page details"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionPage"
+        400:
+          $ref: "#/components/responses/ValidationErrors"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /subscription-plans:
+    get:
+      operationId: findSubscriptionPlans
+      tags:
+        - "subscriptions"
+      description: "Returns all available subscription plans for provided product and a country."
+      security:
+        - accessToken: [ ]
+      parameters:
+        - name: product_id
+          in: query
+          description: SDBS licensed product Id
+          required: true
+          schema:
+            type: number
+            format: uint64
+        - name: country
+          in: query
+          description: Country code. If not provided detected from client IP
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: "List of available plans"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionPricePoints"
+        400:
+          $ref: "#/components/responses/ValidationErrors"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /subscription-products:
+    get:
+      operationId: findSubscriptionProducts
+      tags:
+        - "subscriptions"
+      description: "Returns all licensed products which are working under subscription license."
+      security:
+        - accessToken: [ ]
+      responses:
+        200:
+          description: "List of available products with subscription license"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionProducts"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /resources/:
+    get:
+      tags:
+        - resources
+      operationId: getAllResources
+      security:
+        - applicationToken: [ ]
+      description: "Returns all known resources and category memberships, grouped by UPID."
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AllResourcesResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /resources/{rid}:
+    get:
+      tags:
+        - resources
+      operationId: getSingleResource
+      security:
+        - applicationToken: [ ]
+      description: >-
+        Returns the Resource with the given `rid`.
+        The `rid` has to be a valid UUID (see [`uuid.UUID`](https://docs.python.org/3/library/uuid.html#uuid.UUID)).
+      parameters:
+        - in: path
+          name: rid
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleResourceResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /users/:
+    post:
+      description: >-
+        Creates a new user with the given credentials
+        and profile information. Note that this endpoint
+        only requires a valid Application Token for authorization.
+        You don’t have to be authenticated to create a new user,
+        which enables user self-signup from trusted Applications.
+      operationId: signUp
+      tags:
+        - users
+      security:
+        - applicationToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSignup"
+      responses:
+        200:
+          description: "Returns a new pair of Access and Refresh Tokens if the signup was successful."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignUpResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedApplication"
+        422:
+          $ref: "#/components/responses/ValidationErrors"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /users/{id}/licenses:
+    get:
+      operationId: getUserLicenses
+      tags:
+        - users
+      description: Retrieve list of enduser licenses
+      parameters:
+        - name: id
+          in: path
+          description: NativeID – unique enduser identifier
+          required: true
+          schema:
+            type: string
+        - name: include_subscriptions
+          in: query
+          description: if true then list contains also subscribed products
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        200:
+          description: Enduser found with list of licenses
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LicensesResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+      security:
+        - accessToken: [ ]
+
+  /users/me:
+    get:
+      description: >-
+        Returns the profile information associated with the authenticated user.
+        The user is derived from the Access Token specified in the Request Header.
+      operationId: getMyUserInfo
+      tags:
+        - users
+      security:
+        - accessToken: [ ]
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetUsersMeResponse"
+        400:
+          description: "Profile is invalid"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    put:
+      description: >-
+        Updates the users profile with a given new username or password.
+        The view will not permit both to be updated in one request.
+        Perform same password validation as on account creation.
+      operationId: updateMyCredentials
+      tags:
+        - users
+      security:
+        - accessToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsersMeInputMessage"
+      responses:
+        200:
+          description: "Server success message"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersMeResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        422:
+          $ref: "#/components/responses/ValidationErrors"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /users/me/products:
+    get:
+      operationId: getMyProducts
+      tags:
+        - users
+      security:
+        - accessToken: [ ]
+      parameters:
+        - name: include_subscriptions
+          in: query
+          description: if true then list contains also subscribed products
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        200:
+          description: "A list of products you own."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MyProductsResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      description: "Registers a new serial into the user’s account."
+      operationId: addMyProduct
+      tags:
+        - users
+      security:
+        - accessToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterProductRequest"
+      responses:
+        200:
+          description: "Request was successfully registered."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterProductResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /users/me/product_differences:
+    get:
+      operationId: getProductDifferences
+      tags:
+        - users
+      security:
+        - accessToken: [ ]
+      parameters:
+        - name: licensed_product_id
+          in: query
+          description: licensed product to compare
+          required: true
+          schema:
+            type: integer
+            example: 2173
+      responses:
+        200:
+          description: "A list of products available in the provided licensed product but not registered as user's products"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDifferencesResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /users/me/subscriptions:
+    get:
+      operationId: getMySubscriptions
+      tags:
+        - users
+      security:
+        - accessToken: [ ]
+      responses:
+        200:
+          description: "A list of subscriptions you own."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MySubscriptionsResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+
+  /users/me/upgrade_paths:
+    get:
+      operationId: getMyProductUpgradePaths
+      tags:
+        - users
+      security:
+        - accessToken: [ ]
+      responses:
+        200:
+          description: "Returns the list of own products with corresponding upgrade paths."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductUpgradePathsResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedAccess"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+components:
+  securitySchemes:
+    applicationToken:
+      type: http
+      scheme: bearer
+    accessToken:
+      type: http
+      scheme: bearer
+    refreshToken:
+      type: http
+      scheme: bearer
+    basicAuth:
+      type: http
+      scheme: basic
+
+  responses:
+    NotFound:
+      description: "Not found"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    ValidationErrors:
+      description: "Validation errors"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    UnauthorizedAccess:
+      description: "Invalid basic auth credentials or access/application token"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    UnauthorizedApplication:
+      description: "Invalid application token"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    InternalError:
+      description: "Internal Server Error"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    NoItemsLeftOrLicensingSerialsExportError:
+      description: "No serial numbers left for serials export or licensing error"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+  schemas:
+    ResponseHead:
+      type: object
+      properties:
+        api_version:
+          type: string
+        id:
+          type: string
+        status:
+          type: string
+      required:
+        - api_version
+        - id
+        - status
+
+    ResponseHeadWithErrors:
+      allOf:
+        - $ref: "#/components/schemas/ResponseHead"
+        - type: object
+          properties:
+            error_message:
+              type: object
+              properties:
+                error:
+                  $ref: "#/components/schemas/Error"
+                field_errors:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      error:
+                        $ref: "#/components/schemas/Error"
+                      field:
+                        type: string
+
+    UserSignup:
+      type: object
+      properties:
+        email:
+          type: string
+        email_repeat:
+          type: string
+        password:
+          type: string
+        password_repeat:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        country:
+          type: string
+        language:
+          type: string
+      required:
+        - email
+        - email_repeat
+        - password
+        - password_repeat
+        - country
+        - language
+
+    Credentials:
+      type: object
+      properties:
+        username:
+          type: string
+          description: "Username"
+        password:
+          type: string
+          format: password
+          description: "password of the user"
+      required:
+        - username
+        - password
+
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+          description: "Contents of the token"
+        valid_until:
+          type: integer
+          format: long
+
+    SubscriptionInToken:
+      type: object
+      description: Subscription details if activation token was created for subscribable product.
+      properties:
+        subscription_id:
+          type: integer
+          description: "Subscription ID"
+        external_subscription_id:
+          type: string
+          description: "Subscription ID of external subscription provider"
+        status:
+          type: string
+          description: "Subscription status"
+          example: active
+          enum: [ "trial", "active", "cancelled", "paused" ]
+        created_at:
+          type: string
+          description: "Date of subscription creation"
+          format: date-time
+        updated_at:
+          type: string
+          description: "Date of last subscription update"
+          format: date-time
+        started_at:
+          type: string
+          description: "Date of subscription cycle start"
+          format: date-time
+        end_at:
+          type: string
+          description: "Date of subscription cycle end"
+          format: date-time
+        expires_in:
+          type: integer
+          description: "Seconds to subscription expiration"
+        cancellation_scheduled_at:
+          type: string
+          description: "Date when subscription will be cancelled, optional."
+          format: date-time
+        grace_period:
+          type: integer
+          description: "Seconds added in subscription end_at and used in expiration calculations, optional."
+      required:
+        - subscription_id
+        - external_subscription_id
+        - status
+        - created_at
+        - updated_at
+        - started_at
+        - end_at
+        - expires_in
+
+    Subscription:
+      type: object
+      properties:
+        subscription_id:
+          type: integer
+          description: "Subscription ID"
+        external_subscription_id:
+          type: string
+          description: "Subscription ID of external subscription provider"
+        status:
+          type: string
+          description: "Subscription status"
+          example: active
+          enum: [ "trial", "active", "cancelled", "paused" ]
+        created_at:
+          type: string
+          description: "Date of subscription creation"
+          format: date-time
+        updated_at:
+          type: string
+          description: "Date of last subscription update"
+          format: date-time
+        started_at:
+          type: string
+          description: "Date of subscription cycle start"
+          format: date-time
+        end_at:
+          type: string
+          description: "Date of subscription cycle end"
+          format: date-time
+        expires_in:
+          type: integer
+          description: "Seconds to subscription expiration"
+        cancellation_scheduled_at:
+          type: string
+          description: "Date when subscription will be cancelled, optional."
+          format: date-time
+        product:
+          $ref: "#/components/schemas/SubscribedProduct"
+        licensed_product:
+          $ref: "#/components/schemas/SubscribedLicensedProduct"
+      required:
+        - subscription_id
+        - external_subscription_id
+        - status
+        - created_at
+        - updated_at
+        - started_at
+        - end_at
+        - expires_in
+        - product
+
+    SubscriptionCreation:
+      type: object
+      properties:
+        external_subscription_id:
+          type: string
+          description: "Subscription ID of external subscription provider"
+
+    SubscriptionUserInfo:
+      type: object
+      properties:
+        billing_address:
+          type: object
+          properties:
+            first_name:
+              type: string
+              description: "First Name of subscription's billing address"
+            last_name:
+              type: string
+              description: "Last name of subscription's billing address"
+            address:
+              type: string
+              description: "Billing address"
+            city:
+              type: string
+              description: "Billing address city"
+            state:
+              type: string
+              description: "Billing address state"
+            zip_code:
+              type: string
+              description: "Zip Code of billing address"
+
+
+    SubscriptionInvoice:
+      type: array
+      items:
+        type: object
+        properties:
+          link:
+            type: string
+            description: "Link to download Invoice"
+          date:
+            type: integer
+            description: "Date of invoice"
+          due_date:
+            type: integer
+            description: "Due date of invoice"
+          ammount_paid:
+            type: string
+            description: "Ammount paid"
+
+    SubscriptionCancellationReasons:
+      type: array
+      items:
+        type: object
+        properties:
+          reason_code:
+            type: string
+            description: "Cancellation reason code"
+          display_name:
+            type: string
+            description: "Complete display name of the cancellation reason code"
+          order_id:
+            type: integer
+            description: "Order in which these will be displayed"
+
+    SubscriptionPricePoints:
+      description: response of /subscription-plans
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            price_points:
+              type: array
+              items:
+                $ref: "#/components/schemas/SubscriptionPricePoint"
+
+    SubscriptionPricePoint:
+      type: object
+      properties:
+        item_price_id:
+          type: string
+          description: Price point ID.
+        system_title:
+          type: string
+          description: "Title of the price point in external subscription service."
+        currency:
+          type: string
+          description: "Price point currency."
+        period:
+          type: integer
+          description: "Cycle of the subscription price point."
+        period_unit:
+          type: string
+          description: "Cycle unit, for example: month, year, day."
+        price:
+          type: string
+          description: "Price for subscription cycle."
+
+    SubscriptionProducts:
+      description: response of /subscription-products
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubscriptionProduct"
+
+    SubscriptionProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "Licensed Product ID."
+        title:
+          type: string
+          description: "Licensed product title."
+        product:
+          type: object
+          description: "Product which was licensed with subscription."
+          $ref: "#/components/schemas/ProductBasicData"
+        price_points:
+          type: array
+          description: "List of price points for this licensed product."
+          items:
+            $ref: "#/components/schemas/SubscriptionPricePoint"
+        extension_to:
+          type: array
+          description: "List of licensed products required to be own by enduser to be enabled for this subscription."
+          items:
+            $ref: "#/components/schemas/SubscriptionExtensionItem"
+
+    SubscriptionExtensionItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "Licensed Product ID."
+        title:
+          type: string
+          description: "Licensed product title."
+
+    SubscriptionStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the subscription
+          enum: ["active", "paused"]
+          required: True
+
+    SubscriptionCancellationStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the subscription
+          enum: ["cancelled"]
+          required: True
+        cancellation_reason:
+          type: string
+          description: Reason why the subscription is cancelled. This is defined by the reason codes in Chargebee Admin UI
+          required: True
+        extra_comment:
+          type: string
+          description: Extra comment of the user about change of status
+          required: False
+
+    SubscriptionPageCreation:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of the subscription page to be requested.
+          enum: [ "checkout", "management", "payment_methods"]
+        product_id:
+          type: string
+          description: "Only for the checkout type. SDBS licensed product ID. Required if type='checkout'."
+        redirect_url:
+          type: string
+          description: "Only for the checkout type. Redirect URL to which external subscription service will do redirection after purchase."
+        currency_code:
+          type: string
+          description: "Only for the checkout type. Payment currency, if not provided detected from customer country stored in account profile."
+        period_unit:
+          type: string
+          description: "Only for the checkout type. Subscription cycle, default: month"
+        billing_first_name:
+          type: string
+          description: "Only for the checkout type. Billing address first name, default: first name from enduser account profile."
+        billing_last_name:
+          type: string
+          description: "Only for the checkout type. Billing address last name, default: surname from enduser account profile."
+        billing_line1:
+          type: string
+          description: "Only for the checkout type. Billing address street."
+        billing_city:
+          type: string
+          description: "Only for the checkout type. Billing address city."
+        billing_state:
+          type: string
+          description: "Only for the checkout type. Billing address state."
+        billing_zip:
+          type: string
+          description: "Only for the checkout type. Billing address zip."
+        billing_country:
+          type: string
+          description: "Only for the checkout type. Billing address country iso code, default: country from enduser account profile."
+        item_price_id:
+          type: string
+          description: "Only for the checkout type. Price point for product subscription (taken from external subscription service), by default determined from currency_code and period_unit."
+        language:
+          type: string
+          description: "Only for the checkout type. Preferable language of checkout form, expect iso code. Default: SDBS enduser language."
+      required:
+        - type
+
+    SubscriptionPage:
+      type: object
+      properties:
+        subscription_page_url:
+          type: string
+          description: "URL for subscription purchase."
+
+    SubscribedProduct:
+      type: object
+      description: "Subscribed product basic data."
+      properties:
+        upid:
+          type: string
+          description: "Unique identifier representing a specific product"
+        serial_number:
+          type: string
+          description: "serial number of product."
+        title:
+          type: string
+          description: "product title."
+
+    ProductBasicData:
+      type: object
+      description: "Basic information about product."
+      properties:
+        id:
+          type: integer
+          description: "SDBS Product ID"
+        upid:
+          type: string
+          description: "Unique identifier representing a specific product"
+        title:
+          type: string
+          description: "product title."
+
+    SubscribedLicensedProduct:
+      type: object
+      description: "Subscribed licensed product basic data."
+      properties:
+        id:
+          type: integer
+          description: "Unique identifier representing a specific licensed product (SDBS ID)"
+        title:
+          type: string
+          description: "Licensed product title."
+
+    Product:
+      type: object
+      properties:
+        upid:
+          type: string
+          description: "Unique identifier representing a specific product"
+        serial_number:
+          type: string
+          description: "serial number of product."
+        registration_date:
+          type: integer
+          format: long
+          description: "registration date name of product."
+        title:
+          type: string
+          description: "product title."
+        subscribed:
+          type: boolean
+          description: "Product on a subscription"
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Category id"
+        name:
+          type: string
+          description: "Category Name"
+        parent_id:
+          type: string
+          description: "Id of category's parent (used for only subcategories)"
+        sort_order:
+          type: integer
+          description: "Category sorting priority"
+
+    CategoryResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            categories:
+              type: array
+              items:
+                $ref: "#/components/schemas/Category"
+
+    ProductResponseObject:
+      type: object
+      properties:
+        upid:
+          type: string
+          description: "Identifier of the product"
+
+    LicensedProductObject:
+      type: object
+      description: "Licensed product information"
+      properties:
+        title:
+          type: string
+          description: "Name of the licensed product"
+        id:
+          type: integer
+          description: "Licensed product ID"
+
+    SubscriptionBundle:
+      type: object
+      properties:
+        licensed_product:
+          $ref: "#/components/schemas/LicensedProductObject"
+
+    SubscriptionBundleResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            bundles:
+              type: array
+              items:
+                $ref: "#/components/schemas/SubscriptionBundle"
+
+    ProductResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            products:
+              type: array
+              items:
+                $ref: "#/components/schemas/ProductResponseObject"
+          required:
+            - products
+      required:
+        - response_head
+        - response_body
+
+    Resource:
+      type: object
+      properties:
+        resource_id:
+          type: string
+          description: "Id of Resource"
+        key:
+          type: string
+          description: "Key of resource"
+        md5:
+          type: string
+          description: "MD5 checksum of resource"
+        type:
+          type: string
+          description: "type of resource"
+        value:
+          type: string
+          description: "value of resource"
+      required:
+        - resource_id
+        - key
+        - md5
+        - type
+        - value
+
+    ProductWithResource:
+      type: object
+      properties:
+        upid:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+        resources:
+          type: array
+          items:
+            $ref: "#/components/schemas/Resource"
+      required:
+        - upid
+
+    ProductByUpidResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          $ref: "#/components/schemas/ProductWithResource"
+      required:
+        - response_head
+        - response_body
+
+    AuthTokenResponse:
+      description: response of /auth/token
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            access:
+              $ref: "#/components/schemas/Token"
+            refresh:
+              $ref: "#/components/schemas/Token"
+            user_id:
+              type: string
+              description: "user id from the authentication service"
+          required:
+            - access
+            - refresh
+            - user_id
+      required:
+        - response_head
+        - response_body
+
+    MyProductsResponse:
+      description: response of /users/me/products
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            products:
+              type: array
+              items:
+                $ref: "#/components/schemas/Product"
+          required:
+            - products
+      required:
+        - response_head
+        - response_body
+
+    MySubscriptionsResponse:
+      description: response of /users/me/subscription
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            subscriptions:
+              type: array
+              items:
+                $ref: "#/components/schemas/Subscription"
+
+
+    License:
+      type: object
+      properties:
+        licensedproduct_id:
+          type: integer
+          description: "Unique identifier representing a licensed product"
+        serial_number:
+          type: string
+          description: "Serial number of product."
+        licensedproduct_title:
+          type: string
+          description: "Licensed product title."
+        serialprefix:
+          type: string
+          description: "Serial prefix of product."
+        registration_date:
+          type: string
+          format: date-time
+          description: "Registration date of product."
+        licenseclass:
+          type: string
+          description: "License class."
+        transfer_type:
+          type: string
+          description: "License transfer type."
+        transfer_token:
+          type: string
+          description: "License transfer token."
+        product_upid:
+          type: string
+          description: "Unique identifier representing a specific product"
+        registration_id:
+          type: integer
+          description: "Registration id used for license transfer."
+
+    LicensesResponse:
+      description: response of /users/{id}/licenses
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            licenses:
+              type: array
+              items:
+                $ref: "#/components/schemas/License"
+          required:
+            - licenses
+      required:
+        - response_head
+        - response_body
+
+    SignUpResponse:
+      description: response of /users/
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            user_id:
+              type: string
+            tokens:
+              type: object
+              properties:
+                access:
+                  $ref: "#/components/schemas/Token"
+                refresh:
+                  $ref: "#/components/schemas/Token"
+              required:
+                - access
+                - refresh
+          required:
+            - user_id
+            - tokens
+      required:
+        - response_head
+        - response_body
+
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+          enum:
+            - DEV
+            - USER
+      required:
+        - id
+        - message
+        - target
+
+    ErrorResponse:
+      description: what errors look like
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHeadWithErrors"
+      required:
+        - response_head
+
+    UsersMeInputMessage:
+      description: "User object with all optional fields"
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        country:
+          type: string
+        language:
+          type: string
+
+    UsersMeResponse:
+      description: "Response containing server message"
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            message:
+              type: string
+      required:
+        - response_head
+        - response_body
+
+    RegisterProductRequest:
+      type: object
+      properties:
+        serial:
+          type: string
+      required:
+        - serial
+
+    RegisterProductResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+      required:
+        - response_head
+        - response_body
+
+    CompleteChangelogResult:
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            changelog:
+              type: object
+              properties:
+                upid:
+                  type: string
+                html:
+                  type: string
+      required:
+        - response_head
+        - response_body
+
+    ConfigurationResponse:
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            config:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  value:
+                    type: string
+                  group:
+                    type: string
+          required:
+            - config
+      required:
+        - response_head
+        - response_body
+
+    SerialNumberExportsResponse:
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            product_id:
+              type: integer
+            product_title:
+              type: string
+            product_upid:
+              type: string
+            serial_numbers:
+              type: array
+              items:
+                type: object
+                properties:
+                  normal_serial:
+                    type: string
+                  serial_number:
+                    type: string
+                  serial_reference:
+                    type: string
+          required:
+            - product_id
+            - product_title
+            - product_upid
+            - serial_numbers
+      required:
+        - response_head
+        - response_body
+
+    ActivationMethod:
+      type: integer
+      minimum: 0
+      maximum: 1
+      description: |-
+        | enum key        | int |
+        | ---------------:|:---:|
+        | RAS2            |  0  |
+        | RAS3            |  1  |
+
+    ActivationError:
+      type: object
+      properties:
+        id:
+          type: string
+        target:
+          type: string
+          enum:
+            - DEV
+            - USER
+        message:
+          type: string
+        args:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              value:
+                type: string
+            required:
+              - key
+              - value
+      required:
+        - id
+
+    ActivationRequest:
+      type: object
+      properties:
+        request_list:
+          type: array
+          items:
+            type: object
+            properties:
+              serial:
+                type: string
+              system_id:
+                type: string
+            required:
+              - serial
+              - system_id
+        method:
+          $ref: "#/components/schemas/ActivationMethod"
+
+    ActivationResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            response_list:
+              type: array
+              items:
+                type: object
+                properties:
+                  serial:
+                    type: string
+                  result:
+                    type: string
+                  error:
+                    $ref: "#/components/schemas/ActivationError"
+                required:
+                  - serial
+            method:
+              $ref: "#/components/schemas/ActivationMethod"
+      required:
+        - response_head
+        - response_body
+
+    AllResourcesResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            mappings:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProductWithResource'
+      required:
+        - response_head
+        - response_body
+
+    SingleResourceResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            resource:
+              $ref: "#/components/schemas/Resource"
+          required:
+            - resource
+      required:
+        - response_head
+        - response_body
+
+    DownloadFileType:
+      type: integer
+      minimum: 0
+      maximum: 7
+      description: |-
+        | enum key        | int |
+        | ---------------:|:---:|
+        | unknown_type    |  0  |
+        | installer_type  |  2  |
+        | iso_type        |  4  |
+        | downloader_type |  7  |
+
+    DownloadTargetDir:
+      type: integer
+      minimum: 0
+      maximum: 3
+      description: |-
+        | enum key             | int |
+        | --------------------:|:---:|
+        | download_dir         |  0  |
+
+    DownloadPlatform:
+      type: integer
+      minimum: 0
+      maximum: 4
+      description: |-
+        | enum key              | int |
+        | ---------------------:|:---:|
+        | unknown_platform      |  0  |
+        | pc_platform           |  1  |
+        | mac_platform          |  2  |
+        | all_platform          |  3  |
+        | linux_x86_64_platform |  4  |
+        | nativeos_platform     |  5  |
+
+    DownloadHardwarePlatform:
+      type: integer
+      minimum: 0
+      maximum: 4
+      description: |-
+        | enum key            | int |
+        | -------------------:|:---:|
+        | any_platform        |  0  |
+        | mas_x86_64_platform |  1  |
+
+    DownloadArtifactType:
+      type: integer
+      minimum: 0
+      maximum: 7
+      description: |-
+        | enum key              | int |
+        | ---------------------:|:---:|
+        | unknown_type          |  0  |
+        | update_type           |  1  |
+        | new_product_type      |  3  |
+        | player_type           |  7  |
+
+    DownloadFile:
+      type: object
+      properties:
+        target_file:
+          type: string
+        target_dir:
+          $ref: "#/components/schemas/DownloadTargetDir"
+        filesize:
+          type: integer
+          format: uint64
+        type:
+          $ref: "#/components/schemas/DownloadFileType"
+        url:
+          type: string
+      required:
+        - target_file
+        - target_dir
+        - filesize
+        - type
+        - url
+
+    DownloadArtifact:
+      type: object
+      properties:
+        info:
+          type: string
+        os_min:
+          type: string
+        os_max:
+          type: string
+        title:
+          type: string
+        release_date:
+          type: string
+        upid:
+          type: string
+        platform:
+          $ref: "#/components/schemas/DownloadPlatform"
+        hardware_platform:
+          $ref: "#/components/schemas/DownloadHardwarePlatform"
+        version:
+          type: string
+        update_id:
+          type: string
+        type:
+          $ref: "#/components/schemas/DownloadArtifactType"
+        files:
+          type: array
+          items:
+            $ref: "#/components/schemas/DownloadFile"
+      required:
+        - title
+        - release_date
+        - upid
+        - platform
+        - version
+        - update_id
+        - type
+
+    DownloadUnavailableProduct:
+      type: object
+      properties:
+        upid:
+          type: string
+        message:
+          type: string
+        reason:
+          type: string
+          enum:
+            - none
+            - os_incompatible
+
+    DownloadProductsResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            artifacts:
+              type: array
+              items:
+                $ref: "#/components/schemas/DownloadArtifact"
+            unavailable:
+              type: array
+              items:
+                $ref: "#/components/schemas/DownloadUnavailableProduct"
+      required:
+        - response_head
+        - response_body
+
+    DownloadProductsResponseLegacy:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            artifacts:
+              type: array
+              items:
+                $ref: "#/components/schemas/DownloadArtifact"
+      required:
+        - response_head
+        - response_body
+
+    ProductUpgradePathItem:
+      type: object
+      properties:
+        licensedproduct_id:
+          type: integer
+          description: SDBS primary key of licensed product.
+          example: 232
+        title:
+          type: string
+          description: Title of licensed product.
+          example: ABSYNTH 2
+        license_type:
+          type: string
+          description: License type attached to licensed product.
+          example: full
+
+    ProductUpgradePath:
+      type: object
+      properties:
+        licensedproduct_id:
+          type: integer
+          description: SDBS primary key of licensed product.
+          example: 181
+        title:
+          type: string
+          description: Title of licensed product.
+          example: ABSYNTH
+        registered:
+          type: boolean
+          description: Flag indicating if product is registered (true) or ready for download (false).
+          example: true
+        bundle:
+          type: boolean
+          description: Flag indicating if licensed product is bundle or not.
+          example: false
+        license_type:
+          type: string
+          description: License type attached to licensed product.
+          example: full
+        license_class:
+          type: string
+          description: License class attached to licensed product.
+          example: COM
+        upgrade_path:
+          type: array
+          description: List of products which can be purchased to upgrade to higher or other related products.
+          items:
+            $ref: "#/components/schemas/ProductUpgradePathItem"
+      required:
+        - licensedproduct_id
+        - title
+        - registered
+        - bundle
+        - license_type
+        - license_class
+        - upgrade_path
+
+    ProductUpgradePathsResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductUpgradePath"
+      required:
+        - response_head
+        - response_body
+
+    ProductDifferencesItem:
+      type: object
+      properties:
+        licensedproduct_id:
+          type: integer
+          description: SDBS primary key of licensed product.
+          example: 232
+        title:
+          type: string
+          description: Title of licensed product.
+          example: ABSYNTH 2
+        license:
+          type: string
+          description: License type attached to licensed product.
+          example: full
+        upid:
+          type: string
+          description: Product unique identifier
+
+    ProductDifferencesResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductDifferencesItem"
+      required:
+        - response_head
+        - response_body
+
+    LicenseTransferRequest:
+      type: object
+      properties:
+        licenses:
+          type: array
+          items:
+            type: object
+            properties:
+              license_id:
+                type: string
+
+    LicenseTransferResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            job:
+              type: object
+              properties:
+                job_id:
+                  type: string
+      required:
+        - response_head
+        - response_body
+
+    GetUsersMeResponse:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            user_id:
+              type: string
+            first_name:
+              type: string
+            last_name:
+              type: string
+            country:
+              type: string
+            language:
+              type: string
+            username:
+              type: string
+            email_verified:
+              type: boolean
+            ecommerce_status:
+              type: string
+              enum:
+                - new
+                - returning
+                - unknown
+      required:
+        - response_head
+        - response_body
+
+    Enduser:
+      type: object
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            native_id:
+              type: string
+              example: 5fa940fd802e6600681f1c18
+            email:
+              type: string
+            first_name:
+              type: string
+            last_name:
+              type: string
+            sdbs_id:
+              description: SDBS-specific id, not to be used in new systems
+              type: integer
+              deprecated: true
+              example: 283
+            language:
+              $ref: "#/components/schemas/Language"
+            country:
+              $ref: "#/components/schemas/Country"
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+            locked:
+              type: boolean
+            creation_source:
+              description: Source for user registration. Formerly "Origin"
+              type: string
+              example: sounds.com
+            addresses:
+              type: array
+              items:
+                $ref: '#/components/schemas/Address'
+          required:
+            - native_id
+            - email
+            - first_name
+            - last_name
+            - language
+            - country
+      required:
+        - response_head
+        - response_body
+
+    ApplicationToken:
+      description: Used for identification of clients. Can be created in the API (manually).
+      type: object
+      properties:
+        sub:
+          type: string
+          example: application
+        iat:
+          type: number
+          format: uint64
+        exp:
+          type: number
+          format: uint64
+        data:
+          type: object
+          properties:
+            version:
+              type: string
+              example: "2.3.0"
+            name:
+              type: string
+              example: "My App"
+
+    OAuth2TokenSDBS:
+      description: |
+        Corresponds to a session, can be valid for 60 min or 24 hours. Is issued by
+        the API on authentication.
+
+        Retrieving the native-id (user-id) from the token can be
+        done without signature verification. It is however recommended that the user information
+        and native-id are read using the Get Userdata. This can information on whether
+        an account is active by passing the access token.
+      type: object
+      properties:
+        sub:
+          type: string
+          example: access
+        iss:
+          type: string
+          example: sdbs-stage11.ext.native-instruments.de-1563274387
+        iat:
+          type: integer
+          format: uint64
+        exp:
+          type: integer
+          format: uint64
+        data:
+          type: object
+          properties:
+            native-id:
+              type: string
+              format: UUID
+        nbf:
+          type: number
+
+    OAuth2TokenAuth0:
+      description: |
+        Corresponds to a session, can be valid for 60 min or 24 hours. Is issued by
+        the API on authentication.
+
+        Retrieving the native-id (user-id) from the token can be
+        done without signature verification. It is however recommended that the user information
+        and native-id are read using the Get Userdata. This can information on whether
+        an account is active by passing the access token.
+      type: object
+      properties:
+        iss:
+          type: string
+          example: sdbs-stage11.ext.native-instruments.de-1563274387
+        sub:
+          type: string
+          example: auth0|1289e6c4-a1a2-4487-9632-553cf725748b
+        aud:
+          type: string
+          example: https://native-test.eu.auth0.com/api/v2/
+        iat:
+          type: integer
+          format: uint64
+        exp:
+          type: integer
+          format: uint64
+        azp:
+          type: string
+        scope:
+          type: string
+          example: read:current_user update:current_user_metadata delete:current_user_metadata create:current_user_metadata create:current_user_device_credentials delete:current_user_device_credentials update:current_user_identities offline_access
+        data:
+          type: object
+          properties:
+            native-id:
+              type: string
+              format: UUID
+        nbf:
+          type: number
+
+    RAS3Header:
+      description: JWT Header
+      type: object
+      properties:
+        alg:
+          type: string
+          example: RS256
+        kid:
+          type: string
+          example: myKeyId
+        typ:
+          type: string
+          example: "ni-ras3"
+
+    RAS3TokenPayload:
+      description: JWT Payload
+      type: object
+      properties:
+        iat:
+          description: Time the token was issued.
+          type: integer
+          format: uint64
+        serial:
+          description: A RAS3 serial number.
+          type: string
+          example: ABCDDE-serial
+        native-id:
+          description: The user-id in UUID4 format.
+          type: string
+          format: uuid
+        hardware_profile:
+          description: >
+            A Base64 encoded JSON object describing the hardware the token
+            is tied to (Note: this uses the normal Base64 encoding,
+            not the JWT dialect of Base64).
+          type: string
+          format: byte
+        sub:
+          description: Subject, always "activation".
+          type: string
+          example: activation
+        exp:
+          description: The expiration time after which the token becomes invalid.
+          type: integer
+          format: uint64
+        subscription:
+          $ref: "#/components/schemas/SubscriptionInToken"
+
+    RAS3HardwareProfile:
+      description: The hardware profile is a JSON object with the following fields.
+      type: object
+      properties:
+        cores_log:
+          description: Number of logical cores.
+          type: integer
+          format: uint32
+        cores_pys:
+          description: Number of physical cores.
+          type: integer
+          format: uint32
+        cpu_clock:
+          description: Clock speed in MHz.
+          type: integer
+          format: uint32
+        cpu_id:
+          description: Unique identifier of the CPU, e.g. CPU serial number.
+          type: string
+          example: F5KM6014F9VNF9VN
+        cpu_name:
+          description: Name of CPU.
+          type: string
+          example: Intel(R) Xeon(R) CPU E5-1650 v2 @ 3.50GHz
+        cpu_packs:
+          description: Number of processor packs
+          type: integer
+          format: uint32
+        hd_pri:
+          description: Serial number of the primary HD.
+          type: string
+          example: S1FWNYADA05819
+        mem:
+          description: Memory size in bytes.
+          type: integer
+          format: uint64
+        net_pri:
+          description: MAC address of the primary network interface.
+          type: string
+          example: 70:CD:60:F4:14:61
+        os_type:
+          description: Operating system described by defined strings.
+          type: string
+          enum:
+            - os_win_ia32
+            - os_mac_ia32
+            - os_linux_ia32
+            - os_win_x64
+            - os_mac_x64
+            - os_linux_x64
+            - os_linux_aarch64
+            - os_linux_armv7
+            - os_mac_arm64
+            - os_unknown
+        os_uuid:
+          description: Unique system id as reported by the operating system.
+          type: string
+          format: uuid
+        os_ver_maj:
+          description: Major version of the OS
+          type: integer
+          format: uint32
+        os_ver_min:
+          description: Minor version of the OS
+          type: integer
+          format: uint32
+
+    NativeIDResponse:
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: object
+          properties:
+            native_id:
+              type: string
+          required:
+            - native_id
+      required:
+        - response_head
+        - response_body
+
+    LicensedProductsResponse:
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: array
+          items:
+            type: object
+            properties:
+              licensedproduct_id:
+                type: integer
+                description: SDBS primary key of licensed product
+                example: 232
+              order_id:
+                type: string
+                nullable: true
+                example: INV221799
+              sku:
+                type: string
+                nullable: true
+                example: NI-16919
+            required:
+              - licensedproduct_id
+              - order_id
+              - sku
+      required:
+        - response_head
+        - response_body
+
+    AllLicensedProductsResponse:
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: SDBS primary key of licensed product
+                example: 2888
+              title:
+                type: string
+                nullable: false
+                example: Abbey Road Modern Drummer
+              description:
+                type: string
+                nullable: false
+                example: Abbey Road Modern Drummer
+              license:
+                type: string
+                description: License type
+                nullable: false
+                example: full
+              public_from:
+                type: string
+                description: Date from which licensed product is public
+                nullable: false
+                example: 2018-10-15T12:11:11+02:00
+            required:
+              - id
+              - title
+              - description
+              - license
+              - public_from
+      required:
+        - response_head
+        - response_body
+
+    RegistrationsResponse:
+      properties:
+        response_head:
+          $ref: "#/components/schemas/ResponseHead"
+        response_body:
+          type: array
+          items:
+            type: object
+            properties:
+              licensedproduct_id:
+                type: integer
+                description: SDBS primary key of licensed product
+                example: 232
+              licensedproduct_title:
+                type: string
+                example: ABSYNTH 2
+              first_registered:
+                type: string
+                format: date-time
+            required:
+              - licensedproduct_id
+              - licensedproduct_title
+              - first_registered
+      required:
+        - response_head
+        - response_body
+
+    Language:
+      type: object
+      properties:
+        id:
+          type: string
+          example: fr
+        title:
+          type: string
+          example: French
+        iso_code:
+          type: string
+          example: fr_FR
+
+    Country:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 785
+        title:
+          type: string
+          example: Bouvet Island
+        iso_code:
+          type: string
+          example: BV
+
+    Address:
+      type: object
+      properties:
+        country:
+          $ref: '#/components/schemas/Country'
+        phone:
+          type: string
+          example: +491873189310
+        city:
+          type: string
+          example: Berlin
+        zip:
+          type: string
+          example: 11283
+        street:
+          type: string
+          example: Berliner Straße 42
+        type:
+          type: string
+          example: sdbs_legacy

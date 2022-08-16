@@ -3,6 +3,9 @@
 	"compilerOptions": {
 		"checkJs": false,
 		"isolatedModules": true,
+		// conflicts with generated code
+		// caught by linter otherwise
+		"importsNotUsedAsValues": "preserve",
 		"jsx": "preserve",
 		"jsxImportSource": "@emotion/react",
 		"lib": ["esnext", "dom"],

@@ -8,6 +8,7 @@ const Masthead: FC = () => (
 		<Nav>
 			<Link to="/">System Info</Link>
 			<Link to="/daemon">NTK Daemon</Link>
+			<Link to="/native-api">Native Api</Link>
 			<Link to="/files">Files</Link>
 		</Nav>
 	</Container>
