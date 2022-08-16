@@ -1,4 +1,9 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, session } from "electron";
+
+import {
+	NATIVE_API_BASE_URL,
+	NATIVE_API_USER_AGENT,
+} from "~/common/napi/constants";
 
 import { attachSystemInfo, attachNtkDaemonStatus } from "./ipc/pubsub";
 import { setupResponders } from "./ipc/responders";
@@ -41,5 +46,39 @@ app.on("will-quit", () => {
 
 app.enableSandbox();
 void app.whenReady().then(() => {
+	session.defaultSession.webRequest.onBeforeSendHeaders(
+		{ urls: [`${NATIVE_API_BASE_URL}/*`] },
+		(details, callback) => {
+			details.requestHeaders["User-Agent"] = NATIVE_API_USER_AGENT;
+			callback({ requestHeaders: details.requestHeaders });
+		},
+	);
+	session.defaultSession.webRequest.onHeadersReceived(
+		{ urls: [`${NATIVE_API_BASE_URL}/*`] },
+		(details, callback) => {
+			callback({
+				responseHeaders: Object.assign(details.responseHeaders ?? {}, {
+					"Access-Control-Allow-Origin": ["*"],
+					"Access-Control-Allow-Credentials": ["true"],
+					"Access-Control-Allow-Headers": [
+						"Origin",
+						"X-Requested-With",
+						"Content-Type",
+						"Accept",
+						"Authorization",
+					],
+					"Access-Control-Allow-Methods": [
+						"GET",
+						"POST",
+						"PUT",
+						"PATCH",
+						"DELETE",
+						"OPTIONS",
+					],
+				}),
+			});
+		},
+	);
+
 	showMainWindow();
 });
