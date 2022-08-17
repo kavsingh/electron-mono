@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { StrictMode } from "react";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 
 import Masthead from "./components/masthead";
 import AppThemeProvider from "./design-system/app-theme-provider";
@@ -14,7 +14,7 @@ const App: FC = () => (
 	<StrictMode>
 		<AppThemeProvider>
 			<GlobalStyles />
-			<HashRouter>
+			<MemoryRouter>
 				<UIRoot>
 					<Dragable />
 					<Masthead />
@@ -23,7 +23,7 @@ const App: FC = () => (
 						<Route path="/files" element={<Files />} />
 					</Routes>
 				</UIRoot>
-			</HashRouter>
+			</MemoryRouter>
 		</AppThemeProvider>
 	</StrictMode>
 );
