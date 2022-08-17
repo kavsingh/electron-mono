@@ -22,10 +22,6 @@ const showMainWindow = () => {
 	});
 };
 
-app.on("ready", () => {
-	showMainWindow();
-});
-
 app.on("activate", () => {
 	// On OS X it's common to re-create a window in the app when the
 	// dock icon is clicked and there are no other windows open.
@@ -40,4 +36,9 @@ app.on("will-quit", () => {
 	detachHeartbeat?.();
 	detachSystemInfo?.();
 	removeResponders();
+});
+
+app.enableSandbox();
+void app.whenReady().then(() => {
+	showMainWindow();
 });
