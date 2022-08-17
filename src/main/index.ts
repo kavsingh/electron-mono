@@ -56,27 +56,13 @@ void app.whenReady().then(() => {
 	session.defaultSession.webRequest.onHeadersReceived(
 		{ urls: [`${NATIVE_API_BASE_URL}/*`] },
 		(details, callback) => {
-			callback({
-				responseHeaders: Object.assign(details.responseHeaders ?? {}, {
-					"Access-Control-Allow-Origin": ["*"],
-					"Access-Control-Allow-Credentials": ["true"],
-					"Access-Control-Allow-Headers": [
-						"Origin",
-						"X-Requested-With",
-						"Content-Type",
-						"Accept",
-						"Authorization",
-					],
-					"Access-Control-Allow-Methods": [
-						"GET",
-						"POST",
-						"PUT",
-						"PATCH",
-						"DELETE",
-						"OPTIONS",
-					],
-				}),
+			details.responseHeaders = Object.assign(details.responseHeaders ?? {}, {
+				"Access-Control-Allow-Origin": ["*"],
+				"Access-Control-Allow-Headers": ["*"],
+				"Access-Control-Allow-Methods": ["*"],
+				"Access-Control-Allow-Credentials": ["true"],
 			});
+			callback({ responseHeaders: details.responseHeaders });
 		},
 	);
 
