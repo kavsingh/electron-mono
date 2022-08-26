@@ -55,7 +55,7 @@ const serializeDaemonResponse = <T>(
 		return response.map((part) => serializeDaemonResponse(part));
 	}
 
-	if (typeof response === "object") {
+	if (response && typeof response === "object") {
 		// @ts-expect-error darkness
 		return Object.fromEntries(
 			Object.entries(response).map(([key, val]) => [
