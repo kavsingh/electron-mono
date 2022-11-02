@@ -4,21 +4,23 @@ import type { Config } from "@jest/types";
 
 const baseConfig: Config.InitialProjectOptions = {
 	moduleNameMapper: { "^~/(.*)": "<rootDir>/src/$1" },
-	transform: {
-		"^.+\\.(t|j)sx?$": [
-			"@swc/jest",
-			{
-				jsc: {
-					transform: {
-						react: {
-							runtime: "automatic",
-							importSource: "@emotion/react",
-						},
+	transform: { "^.+\\.(t|j)s$": ["@swc/jest", {}] },
+};
+
+const transformRenderer: Config.InitialProjectOptions["transform"] = {
+	"^.+\\.(t|j)sx?$": [
+		"@swc/jest",
+		{
+			jsc: {
+				transform: {
+					react: {
+						runtime: "automatic",
+						importSource: "@emotion/react",
 					},
 				},
 			},
-		],
-	},
+		},
+	],
 };
 
 export const config: Config.InitialOptions = {
@@ -41,6 +43,7 @@ export const config: Config.InitialOptions = {
 		},
 		{
 			...baseConfig,
+			transform: transformRenderer,
 			displayName: "renderer",
 			testMatch: ["<rootDir>/src/renderer/**/*.test.[jt]s?(x)"],
 			testEnvironment: "jsdom",
