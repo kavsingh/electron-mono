@@ -14,9 +14,9 @@ module.exports = {
 		},
 	],
 	plugins: [
-		[
-			"@electron-forge/plugin-webpack",
-			{
+		{
+			name: "@electron-forge/plugin-webpack",
+			config: {
 				mainConfig: "./webpack.main.config.js",
 				renderer: {
 					config: "./webpack.renderer.config.js",
@@ -32,7 +32,7 @@ module.exports = {
 				devContentSecurityPolicy:
 					"default-src 'self' 'unsafe-inline' data:; script-src 'self' 'unsafe-eval' 'unsafe-inline' data:",
 			},
-		],
-		["@electron-forge/plugin-auto-unpack-natives"],
+		},
+		{ name: "@electron-forge/plugin-auto-unpack-natives", config: {} },
 	],
 };
