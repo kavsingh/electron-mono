@@ -15,5 +15,14 @@
 		"target": "esnext"
 	},
 	"exclude": ["**/node_modules"],
-	"include": ["./src", "./e2e", "./config", "./*.ts"]
+	"include": ["./src", "./e2e", "./config", "./*.ts"],
+	"ts-node": {
+		"transpileOnly": true,
+		"compilerOptions": {
+			"isolatedModules": false,
+			"lib": ["esnext"],
+			"module": "commonjs",
+			"target": "es2022"
+		}
+	}
 }

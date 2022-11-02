@@ -14,8 +14,7 @@
 		"codecheck": "pnpm test && pnpm typecheck && pnpm lint",
 		"test": "pnpm test:unit --silent",
 		"test:unit": "jest ./src",
-		"test:e2e": "pnpm package && playwright test",
-		"r": "ts-node --log-error -P './tsconfig.node.json'"
+		"test:e2e": "pnpm package && playwright test"
 	},
 	"keywords": [],
 	"author": "<author>",
