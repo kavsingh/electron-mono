@@ -1,8 +1,9 @@
 {
+	"$schema": "https://json.schemastore.org/swcrc",
 	"module": { "type": "commonjs" },
 	"jsc": {
 		"paths": { "~/*": ["./src/*"] },
-		"parser": { "syntax": "typescript", "jsx": true },
+		"parser": { "syntax": "typescript", "tsx": true },
 		"transform": {
 			"react": { "runtime": "automatic", "importSource": "@emotion/react" }
 		}
