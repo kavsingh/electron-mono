@@ -33,6 +33,13 @@ module.exports = {
 					"default-src 'self' 'unsafe-inline' data:; script-src 'self' 'unsafe-eval' 'unsafe-inline' data:",
 			},
 		},
-		{ name: "@electron-forge/plugin-auto-unpack-natives", config: {} },
+		{
+			name: "@electron-forge/plugin-auto-unpack-natives",
+			config: {},
+		},
+		{
+			name: "@electron-forge/plugin-electronegativity",
+			config: { isSarif: true },
+		},
 	],
 };
