@@ -1,5 +1,8 @@
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
+/** @typedef {import("webpack").Configuration} Configuration */
+
+/** @type {NonNullable<Configuration["module"]>["rules"]} */
 const rules = [
 	{
 		test: /\.tsx?$/,
@@ -8,6 +11,7 @@ const rules = [
 	},
 ];
 
+/** @type {Configuration["plugins"]} */
 const plugins = [
 	new ForkTsCheckerWebpackPlugin({
 		typescript: {
@@ -17,6 +21,7 @@ const plugins = [
 	}),
 ];
 
+/** @type {NonNullable<Configuration["resolve"]>["extensions"]} */
 const extensions = [".ts", ".js"];
 
 module.exports = { rules, plugins, extensions };

@@ -1,4 +1,5 @@
-module.exports = {
+/** @type {import('@electron-forge/shared-types').ForgeConfig} */
+const forgeConfig = {
 	packagerConfig: {
 		asar: true,
 	},
@@ -43,3 +44,5 @@ module.exports = {
 		},
 	],
 };
+
+module.exports = forgeConfig;

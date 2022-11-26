@@ -1,6 +1,7 @@
 const { rules, extensions, plugins } = require("./webpack.common");
 
-module.exports = {
+/** @type {import("webpack").Configuration} */
+const mainConfig = {
 	target: "electron-main",
 	node: { __dirname: false },
 	entry: "./src/main/index.ts",
@@ -27,3 +28,5 @@ module.exports = {
 	resolve: { extensions: [...extensions, ".json"] },
 	plugins,
 };
+
+module.exports = mainConfig;
