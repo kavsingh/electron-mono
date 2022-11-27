@@ -1,7 +1,7 @@
 const { testFilePatterns } = require("./lib");
 
 module.exports = {
-	env: { es6: true, node: true, browser: false },
+	env: { es2022: true, node: true, browser: false },
 	plugins: ["filenames"],
 	extends: ["eslint:recommended", "plugin:prettier/recommended"],
 	rules: {
