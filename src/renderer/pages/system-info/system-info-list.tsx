@@ -1,17 +1,17 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 
+import { measuredAsyncFn } from "~/common/measure";
 import bridge from "~/renderer/bridge";
 
 import type { FC } from "react";
 
 const SystemInfoList: FC = () => {
-	const [info, setInfo] = useState<AsyncResult<typeof bridge.getSystemInfo>>();
+	const [info, setInfo] = useState<AsyncResult<typeof getSystemInfo>>();
 	const [error, setError] = useState<Error | undefined>(undefined);
 
 	useEffect(() => {
-		void bridge
-			.getSystemInfo()
+		void getSystemInfo()
 			.then(setInfo)
 			.catch((reason) => {
 				setError(reason instanceof Error ? reason : new Error(String(reason)));
@@ -38,6 +38,8 @@ const SystemInfoList: FC = () => {
 };
 
 export default SystemInfoList;
+
+const getSystemInfo = measuredAsyncFn("getSystemInfo", bridge.getSystemInfo);
 
 const Container = styled.ul`
 	display: flex;
