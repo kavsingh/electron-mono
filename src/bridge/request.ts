@@ -35,8 +35,20 @@ export const mainResponder = <K extends RequestChannelName>(
 			payload: Parameters<Requests[K]> extends []
 				? never
 				: Parameters<Requests[K]>[0],
-		) => handler(event, payload),
+		) => {
+			assertValidSender(event);
+
+			return handler(event, payload);
+		},
 	);
 
 	return () => ipcMain.removeHandler(channel);
+};
+
+const assertValidSender = (event: IpcMainInvokeEvent) => {
+	const host = new URL(event.senderFrame.url).host;
+	const isValidHost =
+		MODE === "development" ? host === "localhost:3000" : host === "";
+
+	if (!isValidHost) throw new Error("Invalid sender");
 };
