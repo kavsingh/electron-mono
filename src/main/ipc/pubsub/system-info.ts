@@ -1,5 +1,5 @@
 import { mainPublish } from "~/bridge/pubsub";
-import { getSystemInfo } from "~/main/lib/system-info";
+import { getSystemInfo } from "~/main/services/system-info";
 
 import type { BrowserWindow } from "electron";
 
