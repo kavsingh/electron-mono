@@ -4,6 +4,7 @@
 /out
 /coverage
 /e2e/results
+.env
 *.log.*
 *.log*
 *.tsbuildinfo
