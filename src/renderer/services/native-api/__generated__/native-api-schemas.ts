@@ -31,11 +31,11 @@ export type UserSignup = {
 };
 
 export type Credentials = {
-	/*
+	/**
 	 * Username
 	 */
 	username: string;
-	/*
+	/**
 	 * password of the user
 	 *
 	 * @format password
@@ -44,11 +44,11 @@ export type Credentials = {
 };
 
 export type Token = {
-	/*
+	/**
 	 * Contents of the token
 	 */
 	token?: string;
-	/*
+	/**
 	 * @format long
 	 */
 	valid_until?: number;
@@ -58,104 +58,104 @@ export type Token = {
  * Subscription details if activation token was created for subscribable product.
  */
 export type SubscriptionInToken = {
-	/*
+	/**
 	 * Subscription ID
 	 */
 	subscription_id: number;
-	/*
+	/**
 	 * Subscription ID of external subscription provider
 	 */
 	external_subscription_id: string;
-	/*
+	/**
 	 * Subscription status
 	 *
 	 * @example active
 	 */
 	status: "trial" | "active" | "cancelled" | "paused";
-	/*
+	/**
 	 * Date of subscription creation
 	 *
 	 * @format date-time
 	 */
 	created_at: string;
-	/*
+	/**
 	 * Date of last subscription update
 	 *
 	 * @format date-time
 	 */
 	updated_at: string;
-	/*
+	/**
 	 * Date of subscription cycle start
 	 *
 	 * @format date-time
 	 */
 	started_at: string;
-	/*
+	/**
 	 * Date of subscription cycle end
 	 *
 	 * @format date-time
 	 */
 	end_at: string;
-	/*
+	/**
 	 * Seconds to subscription expiration
 	 */
 	expires_in: number;
-	/*
+	/**
 	 * Date when subscription will be cancelled, optional.
 	 *
 	 * @format date-time
 	 */
 	cancellation_scheduled_at?: string;
-	/*
+	/**
 	 * Seconds added in subscription end_at and used in expiration calculations, optional.
 	 */
 	grace_period?: number;
 };
 
 export type Subscription = {
-	/*
+	/**
 	 * Subscription ID
 	 */
 	subscription_id: number;
-	/*
+	/**
 	 * Subscription ID of external subscription provider
 	 */
 	external_subscription_id: string;
-	/*
+	/**
 	 * Subscription status
 	 *
 	 * @example active
 	 */
 	status: "trial" | "active" | "cancelled" | "paused";
-	/*
+	/**
 	 * Date of subscription creation
 	 *
 	 * @format date-time
 	 */
 	created_at: string;
-	/*
+	/**
 	 * Date of last subscription update
 	 *
 	 * @format date-time
 	 */
 	updated_at: string;
-	/*
+	/**
 	 * Date of subscription cycle start
 	 *
 	 * @format date-time
 	 */
 	started_at: string;
-	/*
+	/**
 	 * Date of subscription cycle end
 	 *
 	 * @format date-time
 	 */
 	end_at: string;
-	/*
+	/**
 	 * Seconds to subscription expiration
 	 */
 	expires_in: number;
-	/*
+	/**
 	 * Date when subscription will be cancelled, optional.
 	 *
 	 * @format date-time
@@ -166,7 +166,7 @@ export type Subscription = {
 };
 
 export type SubscriptionCreation = {
-	/*
+	/**
 	 * Subscription ID of external subscription provider
 	 */
 	external_subscription_id?: string;
@@ -174,27 +174,27 @@ export type SubscriptionCreation = {
 
 export type SubscriptionUserInfo = {
 	billing_address?: {
-		/*
+		/**
 		 * First Name of subscription's billing address
 		 */
 		first_name?: string;
-		/*
+		/**
 		 * Last name of subscription's billing address
 		 */
 		last_name?: string;
-		/*
+		/**
 		 * Billing address
 		 */
 		address?: string;
-		/*
+		/**
 		 * Billing address city
 		 */
 		city?: string;
-		/*
+		/**
 		 * Billing address state
 		 */
 		state?: string;
-		/*
+		/**
 		 * Zip Code of billing address
 		 */
 		zip_code?: string;
@@ -202,34 +202,34 @@ export type SubscriptionUserInfo = {
 };
 
 export type SubscriptionInvoice = {
-	/*
+	/**
 	 * Link to download Invoice
 	 */
 	link?: string;
-	/*
+	/**
 	 * Date of invoice
 	 */
 	date?: number;
-	/*
+	/**
 	 * Due date of invoice
 	 */
 	due_date?: number;
-	/*
+	/**
 	 * Ammount paid
 	 */
 	ammount_paid?: string;
 }[];
 
 export type SubscriptionCancellationReasons = {
-	/*
+	/**
 	 * Cancellation reason code
 	 */
 	reason_code?: string;
-	/*
+	/**
 	 * Complete display name of the cancellation reason code
 	 */
 	display_name?: string;
-	/*
+	/**
 	 * Order in which these will be displayed
 	 */
 	order_id?: number;
@@ -246,27 +246,27 @@ export type SubscriptionPricePoints = {
 };
 
 export type SubscriptionPricePoint = {
-	/*
+	/**
 	 * Price point ID.
 	 */
 	item_price_id?: string;
-	/*
+	/**
 	 * Title of the price point in external subscription service.
 	 */
 	system_title?: string;
-	/*
+	/**
 	 * Price point currency.
 	 */
 	currency?: string;
-	/*
+	/**
 	 * Cycle of the subscription price point.
 	 */
 	period?: number;
-	/*
+	/**
 	 * Cycle unit, for example: month, year, day.
 	 */
 	period_unit?: string;
-	/*
+	/**
 	 * Price for subscription cycle.
 	 */
 	price?: string;
@@ -281,122 +281,122 @@ export type SubscriptionProducts = {
 };
 
 export type SubscriptionProduct = {
-	/*
+	/**
 	 * Licensed Product ID.
 	 */
 	id?: number;
-	/*
+	/**
 	 * Licensed product title.
 	 */
 	title?: string;
-	/*
+	/**
 	 * Product which was licensed with subscription.
 	 */
 	product?: ProductBasicData;
-	/*
+	/**
 	 * List of price points for this licensed product.
 	 */
 	price_points?: SubscriptionPricePoint[];
-	/*
+	/**
 	 * List of licensed products required to be own by enduser to be enabled for this subscription.
 	 */
 	extension_to?: SubscriptionExtensionItem[];
 };
 
 export type SubscriptionExtensionItem = {
-	/*
+	/**
 	 * Licensed Product ID.
 	 */
 	id?: number;
-	/*
+	/**
 	 * Licensed product title.
 	 */
 	title?: string;
 };
 
 export type SubscriptionStatus = {
-	/*
+	/**
 	 * Status of the subscription
 	 */
 	status?: "active" | "paused";
 };
 
 export type SubscriptionCancellationStatus = {
-	/*
+	/**
 	 * Status of the subscription
 	 */
 	status?: "cancelled";
-	/*
+	/**
 	 * Reason why the subscription is cancelled. This is defined by the reason codes in Chargebee Admin UI
 	 */
 	cancellation_reason?: string;
-	/*
+	/**
 	 * Extra comment of the user about change of status
 	 */
 	extra_comment?: string;
 };
 
 export type SubscriptionPageCreation = {
-	/*
+	/**
 	 * Type of the subscription page to be requested.
 	 */
 	type: "checkout" | "management" | "payment_methods";
-	/*
+	/**
 	 * Only for the checkout type. SDBS licensed product ID. Required if type='checkout'.
 	 */
 	product_id?: string;
-	/*
+	/**
 	 * Only for the checkout type. Redirect URL to which external subscription service will do redirection after purchase.
 	 */
 	redirect_url?: string;
-	/*
+	/**
 	 * Only for the checkout type. Payment currency, if not provided detected from customer country stored in account profile.
 	 */
 	currency_code?: string;
-	/*
+	/**
 	 * Only for the checkout type. Subscription cycle, default: month
 	 */
 	period_unit?: string;
-	/*
+	/**
 	 * Only for the checkout type. Billing address first name, default: first name from enduser account profile.
 	 */
 	billing_first_name?: string;
-	/*
+	/**
 	 * Only for the checkout type. Billing address last name, default: surname from enduser account profile.
 	 */
 	billing_last_name?: string;
-	/*
+	/**
 	 * Only for the checkout type. Billing address street.
 	 */
 	billing_line1?: string;
-	/*
+	/**
 	 * Only for the checkout type. Billing address city.
 	 */
 	billing_city?: string;
-	/*
+	/**
 	 * Only for the checkout type. Billing address state.
 	 */
 	billing_state?: string;
-	/*
+	/**
 	 * Only for the checkout type. Billing address zip.
 	 */
 	billing_zip?: string;
-	/*
+	/**
 	 * Only for the checkout type. Billing address country iso code, default: country from enduser account profile.
 	 */
 	billing_country?: string;
-	/*
+	/**
 	 * Only for the checkout type. Price point for product subscription (taken from external subscription service), by default determined from currency_code and period_unit.
 	 */
 	item_price_id?: string;
-	/*
+	/**
 	 * Only for the checkout type. Preferable language of checkout form, expect iso code. Default: SDBS enduser language.
 	 */
 	language?: string;
 };
 
 export type SubscriptionPage = {
-	/*
+	/**
 	 * URL for subscription purchase.
 	 */
 	subscription_page_url?: string;
@@ -406,15 +406,15 @@ export type SubscriptionPage = {
  * Subscribed product basic data.
  */
 export type SubscribedProduct = {
-	/*
+	/**
 	 * Unique identifier representing a specific product
 	 */
 	upid?: string;
-	/*
+	/**
 	 * serial number of product.
 	 */
 	serial_number?: string;
-	/*
+	/**
 	 * product title.
 	 */
 	title?: string;
@@ -424,15 +424,15 @@ export type SubscribedProduct = {
  * Basic information about product.
  */
 export type ProductBasicData = {
-	/*
+	/**
 	 * SDBS Product ID
 	 */
 	id?: number;
-	/*
+	/**
 	 * Unique identifier representing a specific product
 	 */
 	upid?: string;
-	/*
+	/**
 	 * product title.
 	 */
 	title?: string;
@@ -442,55 +442,55 @@ export type ProductBasicData = {
  * Subscribed licensed product basic data.
  */
 export type SubscribedLicensedProduct = {
-	/*
+	/**
 	 * Unique identifier representing a specific licensed product (SDBS ID)
 	 */
 	id?: number;
-	/*
+	/**
 	 * Licensed product title.
 	 */
 	title?: string;
 };
 
 export type Product = {
-	/*
+	/**
 	 * Unique identifier representing a specific product
 	 */
 	upid?: string;
-	/*
+	/**
 	 * serial number of product.
 	 */
 	serial_number?: string;
-	/*
+	/**
 	 * registration date name of product.
 	 *
 	 * @format long
 	 */
 	registration_date?: number;
-	/*
+	/**
 	 * product title.
 	 */
 	title?: string;
-	/*
+	/**
 	 * Product on a subscription
 	 */
 	subscribed?: boolean;
 };
 
 export type Category = {
-	/*
+	/**
 	 * Category id
 	 */
 	id?: string;
-	/*
+	/**
 	 * Category Name
 	 */
 	name?: string;
-	/*
+	/**
 	 * Id of category's parent (used for only subcategories)
 	 */
 	parent_id?: string;
-	/*
+	/**
 	 * Category sorting priority
 	 */
 	sort_order?: number;
@@ -504,7 +504,7 @@ export type CategoryResponse = {
 };
 
 export type ProductResponseObject = {
-	/*
+	/**
 	 * Identifier of the product
 	 */
 	upid?: string;
@@ -514,11 +514,11 @@ export type ProductResponseObject = {
  * Licensed product information
  */
 export type LicensedProductObject = {
-	/*
+	/**
 	 * Name of the licensed product
 	 */
 	title?: string;
-	/*
+	/**
 	 * Licensed product ID
 	 */
 	id?: number;
@@ -543,23 +543,23 @@ export type ProductResponse = {
 };
 
 export type Resource = {
-	/*
+	/**
 	 * Id of Resource
 	 */
 	resource_id: string;
-	/*
+	/**
 	 * Key of resource
 	 */
 	key: string;
-	/*
+	/**
 	 * MD5 checksum of resource
 	 */
 	md5: string;
-	/*
+	/**
 	 * type of resource
 	 */
 	type: string;
-	/*
+	/**
 	 * value of resource
 	 */
 	value: string;
@@ -584,7 +584,7 @@ export type AuthTokenResponse = {
 	response_body: {
 		access: Token;
 		refresh: Token;
-		/*
+		/**
 		 * user id from the authentication service
 		 */
 		user_id: string;
@@ -612,45 +612,45 @@ export type MySubscriptionsResponse = {
 };
 
 export type License = {
-	/*
+	/**
 	 * Unique identifier representing a licensed product
 	 */
 	licensedproduct_id?: number;
-	/*
+	/**
 	 * Serial number of product.
 	 */
 	serial_number?: string;
-	/*
+	/**
 	 * Licensed product title.
 	 */
 	licensedproduct_title?: string;
-	/*
+	/**
 	 * Serial prefix of product.
 	 */
 	serialprefix?: string;
-	/*
+	/**
 	 * Registration date of product.
 	 *
 	 * @format date-time
 	 */
 	registration_date?: string;
-	/*
+	/**
 	 * License class.
 	 */
 	licenseclass?: string;
-	/*
+	/**
 	 * License transfer type.
 	 */
 	transfer_type?: string;
-	/*
+	/**
 	 * License transfer token.
 	 */
 	transfer_token?: string;
-	/*
+	/**
 	 * Unique identifier representing a specific product
 	 */
 	product_upid?: string;
-	/*
+	/**
 	 * Registration id used for license transfer.
 	 */
 	registration_id?: number;
@@ -879,7 +879,7 @@ export type DownloadArtifactType = number;
 export type DownloadFile = {
 	target_file: string;
 	target_dir: DownloadTargetDir;
-	/*
+	/**
 	 * @format uint64
 	 */
 	filesize: number;
@@ -924,19 +924,19 @@ export type DownloadProductsResponseLegacy = {
 };
 
 export type ProductUpgradePathItem = {
-	/*
+	/**
 	 * SDBS primary key of licensed product.
 	 *
 	 * @example 232
 	 */
 	licensedproduct_id?: number;
-	/*
+	/**
 	 * Title of licensed product.
 	 *
 	 * @example ABSYNTH 2
 	 */
 	title?: string;
-	/*
+	/**
 	 * License type attached to licensed product.
 	 *
 	 * @example full
@@ -945,43 +945,43 @@ export type ProductUpgradePathItem = {
 };
 
 export type ProductUpgradePath = {
-	/*
+	/**
 	 * SDBS primary key of licensed product.
 	 *
 	 * @example 181
 	 */
 	licensedproduct_id: number;
-	/*
+	/**
 	 * Title of licensed product.
 	 *
 	 * @example ABSYNTH
 	 */
 	title: string;
-	/*
+	/**
 	 * Flag indicating if product is registered (true) or ready for download (false).
 	 *
 	 * @example true
 	 */
 	registered: boolean;
-	/*
+	/**
 	 * Flag indicating if licensed product is bundle or not.
 	 *
 	 * @example false
 	 */
 	bundle: boolean;
-	/*
+	/**
 	 * License type attached to licensed product.
 	 *
 	 * @example full
 	 */
 	license_type: string;
-	/*
+	/**
 	 * License class attached to licensed product.
 	 *
 	 * @example COM
 	 */
 	license_class: string;
-	/*
+	/**
 	 * List of products which can be purchased to upgrade to higher or other related products.
 	 */
 	upgrade_path: ProductUpgradePathItem[];
@@ -993,25 +993,25 @@ export type ProductUpgradePathsResponse = {
 };
 
 export type ProductDifferencesItem = {
-	/*
+	/**
 	 * SDBS primary key of licensed product.
 	 *
 	 * @example 232
 	 */
 	licensedproduct_id?: number;
-	/*
+	/**
 	 * Title of licensed product.
 	 *
 	 * @example ABSYNTH 2
 	 */
 	title?: string;
-	/*
+	/**
 	 * License type attached to licensed product.
 	 *
 	 * @example full
 	 */
 	license?: string;
-	/*
+	/**
 	 * Product unique identifier
 	 */
 	upid?: string;
@@ -1054,14 +1054,14 @@ export type GetUsersMeResponse = {
 export type Enduser = {
 	response_head: ResponseHead;
 	response_body: {
-		/*
+		/**
 		 * @example 5fa940fd802e6600681f1c18
 		 */
 		native_id: string;
 		email: string;
 		first_name: string;
 		last_name: string;
-		/*
+		/**
 		 * SDBS-specific id, not to be used in new systems
 		 *
 		 * @deprecated true
@@ -1070,16 +1070,16 @@ export type Enduser = {
 		sdbs_id?: number;
 		language: Language;
 		country: Country;
-		/*
+		/**
 		 * @format date-time
 		 */
 		created_at?: string;
-		/*
+		/**
 		 * @format date-time
 		 */
 		updated_at?: string;
 		locked?: boolean;
-		/*
+		/**
 		 * Source for user registration. Formerly "Origin"
 		 *
 		 * @example sounds.com
@@ -1093,24 +1093,24 @@ export type Enduser = {
  * Used for identification of clients. Can be created in the API (manually).
  */
 export type ApplicationToken = {
-	/*
+	/**
 	 * @example application
 	 */
 	sub?: string;
-	/*
+	/**
 	 * @format uint64
 	 */
 	iat?: number;
-	/*
+	/**
 	 * @format uint64
 	 */
 	exp?: number;
 	data?: {
-		/*
+		/**
 		 * @example 2.3.0
 		 */
 		version?: string;
-		/*
+		/**
 		 * @example My App
 		 */
 		name?: string;
@@ -1127,24 +1127,24 @@ export type ApplicationToken = {
  * an account is active by passing the access token.
  */
 export type OAuth2TokenSDBS = {
-	/*
+	/**
 	 * @example access
 	 */
 	sub?: string;
-	/*
+	/**
 	 * @example sdbs-stage11.ext.native-instruments.de-1563274387
 	 */
 	iss?: string;
-	/*
+	/**
 	 * @format uint64
 	 */
 	iat?: number;
-	/*
+	/**
 	 * @format uint64
 	 */
 	exp?: number;
 	data?: {
-		/*
+		/**
 		 * @format UUID
 		 */
 		["native-id"]?: string;
@@ -1162,33 +1162,33 @@ export type OAuth2TokenSDBS = {
  * an account is active by passing the access token.
  */
 export type OAuth2TokenAuth0 = {
-	/*
+	/**
 	 * @example sdbs-stage11.ext.native-instruments.de-1563274387
 	 */
 	iss?: string;
-	/*
+	/**
 	 * @example auth0|1289e6c4-a1a2-4487-9632-553cf725748b
 	 */
 	sub?: string;
-	/*
+	/**
 	 * @example https://native-test.eu.auth0.com/api/v2/
 	 */
 	aud?: string;
-	/*
+	/**
 	 * @format uint64
 	 */
 	iat?: number;
-	/*
+	/**
 	 * @format uint64
 	 */
 	exp?: number;
 	azp?: string;
-	/*
+	/**
 	 * @example read:current_user update:current_user_metadata delete:current_user_metadata create:current_user_metadata create:current_user_device_credentials delete:current_user_device_credentials update:current_user_identities offline_access
 	 */
 	scope?: string;
 	data?: {
-		/*
+		/**
 		 * @format UUID
 		 */
 		["native-id"]?: string;
@@ -1200,15 +1200,15 @@ export type OAuth2TokenAuth0 = {
  * JWT Header
  */
 export type RAS3Header = {
-	/*
+	/**
 	 * @example RS256
 	 */
 	alg?: string;
-	/*
+	/**
 	 * @example myKeyId
 	 */
 	kid?: string;
-	/*
+	/**
 	 * @example ni-ras3
 	 */
 	typ?: string;
@@ -1218,37 +1218,37 @@ export type RAS3Header = {
  * JWT Payload
  */
 export type RAS3TokenPayload = {
-	/*
+	/**
 	 * Time the token was issued.
 	 *
 	 * @format uint64
 	 */
 	iat?: number;
-	/*
+	/**
 	 * A RAS3 serial number.
 	 *
 	 * @example ABCDDE-serial
 	 */
 	serial?: string;
-	/*
+	/**
 	 * The user-id in UUID4 format.
 	 *
 	 * @format uuid
 	 */
 	["native-id"]?: string;
-	/*
+	/**
 	 * A Base64 encoded JSON object describing the hardware the token is tied to (Note: this uses the normal Base64 encoding, not the JWT dialect of Base64).
 	 *
 	 * @format byte
 	 */
 	hardware_profile?: string;
-	/*
+	/**
 	 * Subject, always "activation".
 	 *
 	 * @example activation
 	 */
 	sub?: string;
-	/*
+	/**
 	 * The expiration time after which the token becomes invalid.
 	 *
 	 * @format uint64
@@ -1261,61 +1261,61 @@ export type RAS3TokenPayload = {
  * The hardware profile is a JSON object with the following fields.
  */
 export type RAS3HardwareProfile = {
-	/*
+	/**
 	 * Number of logical cores.
 	 *
 	 * @format uint32
 	 */
 	cores_log?: number;
-	/*
+	/**
 	 * Number of physical cores.
 	 *
 	 * @format uint32
 	 */
 	cores_pys?: number;
-	/*
+	/**
 	 * Clock speed in MHz.
 	 *
 	 * @format uint32
 	 */
 	cpu_clock?: number;
-	/*
+	/**
 	 * Unique identifier of the CPU, e.g. CPU serial number.
 	 *
 	 * @example F5KM6014F9VNF9VN
 	 */
 	cpu_id?: string;
-	/*
+	/**
 	 * Name of CPU.
 	 *
 	 * @example Intel(R) Xeon(R) CPU E5-1650 v2 @ 3.50GHz
 	 */
 	cpu_name?: string;
-	/*
+	/**
 	 * Number of processor packs
 	 *
 	 * @format uint32
 	 */
 	cpu_packs?: number;
-	/*
+	/**
 	 * Serial number of the primary HD.
 	 *
 	 * @example S1FWNYADA05819
 	 */
 	hd_pri?: string;
-	/*
+	/**
 	 * Memory size in bytes.
 	 *
 	 * @format uint64
 	 */
 	mem?: number;
-	/*
+	/**
 	 * MAC address of the primary network interface.
 	 *
 	 * @example 70:CD:60:F4:14:61
 	 */
 	net_pri?: string;
-	/*
+	/**
 	 * Operating system described by defined strings.
 	 */
 	os_type?:
@@ -1329,19 +1329,19 @@ export type RAS3HardwareProfile = {
 		| "os_linux_armv7"
 		| "os_mac_arm64"
 		| "os_unknown";
-	/*
+	/**
 	 * Unique system id as reported by the operating system.
 	 *
 	 * @format uuid
 	 */
 	os_uuid?: string;
-	/*
+	/**
 	 * Major version of the OS
 	 *
 	 * @format uint32
 	 */
 	os_ver_maj?: number;
-	/*
+	/**
 	 * Minor version of the OS
 	 *
 	 * @format uint32
@@ -1359,17 +1359,17 @@ export type NativeIDResponse = {
 export type LicensedProductsResponse = {
 	response_head: ResponseHead;
 	response_body: {
-		/*
+		/**
 		 * SDBS primary key of licensed product
 		 *
 		 * @example 232
 		 */
 		licensedproduct_id: number;
-		/*
+		/**
 		 * @example INV221799
 		 */
 		order_id: string | null;
-		/*
+		/**
 		 * @example NI-16919
 		 */
 		sku: string | null;
@@ -1379,27 +1379,27 @@ export type LicensedProductsResponse = {
 export type AllLicensedProductsResponse = {
 	response_head: ResponseHead;
 	response_body: {
-		/*
+		/**
 		 * SDBS primary key of licensed product
 		 *
 		 * @example 2888
 		 */
 		id: number;
-		/*
+		/**
 		 * @example Abbey Road Modern Drummer
 		 */
 		title: string;
-		/*
+		/**
 		 * @example Abbey Road Modern Drummer
 		 */
 		description: string;
-		/*
+		/**
 		 * License type
 		 *
 		 * @example full
 		 */
 		license: string;
-		/*
+		/**
 		 * Date from which licensed product is public
 		 *
 		 * @example "2018-10-15T10:11:11.000Z"
@@ -1411,17 +1411,17 @@ export type AllLicensedProductsResponse = {
 export type RegistrationsResponse = {
 	response_head: ResponseHead;
 	response_body: {
-		/*
+		/**
 		 * SDBS primary key of licensed product
 		 *
 		 * @example 232
 		 */
 		licensedproduct_id: number;
-		/*
+		/**
 		 * @example ABSYNTH 2
 		 */
 		licensedproduct_title: string;
-		/*
+		/**
 		 * @format date-time
 		 */
 		first_registered: string;
@@ -1429,30 +1429,30 @@ export type RegistrationsResponse = {
 };
 
 export type Language = {
-	/*
+	/**
 	 * @example fr
 	 */
 	id?: string;
-	/*
+	/**
 	 * @example French
 	 */
 	title?: string;
-	/*
+	/**
 	 * @example fr_FR
 	 */
 	iso_code?: string;
 };
 
 export type Country = {
-	/*
+	/**
 	 * @example 785
 	 */
 	id?: number;
-	/*
+	/**
 	 * @example Bouvet Island
 	 */
 	title?: string;
-	/*
+	/**
 	 * @example BV
 	 */
 	iso_code?: string;
@@ -1460,23 +1460,23 @@ export type Country = {
 
 export type Address = {
 	country?: Country;
-	/*
+	/**
 	 * @example 491873189310
 	 */
 	phone?: string;
-	/*
+	/**
 	 * @example Berlin
 	 */
 	city?: string;
-	/*
+	/**
 	 * @example 11283
 	 */
 	zip?: string;
-	/*
+	/**
 	 * @example Berliner Straße 42
 	 */
 	street?: string;
-	/*
+	/**
 	 * @example sdbs_legacy
 	 */
 	type?: string;

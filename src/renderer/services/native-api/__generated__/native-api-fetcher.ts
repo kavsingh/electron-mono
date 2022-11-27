@@ -1,5 +1,4 @@
-import { NATIVE_API_APP_TOKEN } from "~/common/napi/constants";
-import { NapiContext } from "./napi-context";
+import { NativeApiContext } from "./native-api-context";
 
 const baseUrl = "https://api.native-instruments.com/v1";
 
@@ -7,16 +6,22 @@ export type ErrorWrapper<TError> =
 	| TError
 	| { status: "unknown"; payload: string };
 
-export type NapiFetcherOptions<TBody, THeaders, TQueryParams, TPathParams> = {
+export type NativeApiFetcherOptions<
+	TBody,
+	THeaders,
+	TQueryParams,
+	TPathParams,
+> = {
 	url: string;
 	method: string;
-	body?: TBody;
-	headers?: THeaders;
-	queryParams?: TQueryParams;
-	pathParams?: TPathParams;
-} & NapiContext["fetcherOptions"];
+	body?: TBody | undefined;
+	headers?: THeaders | undefined;
+	queryParams?: TQueryParams | undefined;
+	pathParams?: TPathParams | undefined;
+	signal?: AbortSignal | undefined;
+} & NativeApiContext["fetcherOptions"];
 
-export async function napiFetch<
+export async function nativeApiFetch<
 	TData,
 	TError,
 	TBody extends {} | undefined | null,
@@ -30,7 +35,8 @@ export async function napiFetch<
 	headers,
 	pathParams,
 	queryParams,
-}: NapiFetcherOptions<
+	signal,
+}: NativeApiFetcherOptions<
 	TBody,
 	THeaders,
 	TQueryParams,
@@ -40,6 +46,7 @@ export async function napiFetch<
 		const response = await window.fetch(
 			`${baseUrl}${resolveUrl(url, queryParams, pathParams)}`,
 			{
+				signal: signal ?? null,
 				method: method.toUpperCase(),
 				body: body ? JSON.stringify(body) : null,
 				headers: {
@@ -66,7 +73,12 @@ export async function napiFetch<
 			throw error;
 		}
 
-		return await response.json();
+		if (response.headers.get("content-type")?.includes("json")) {
+			return await response.json();
+		} else {
+			// if it is not a json response, assume it is a blob and cast it to TData
+			return (await response.blob()) as unknown as TData;
+		}
 	} catch (e) {
 		throw {
 			status: "unknown" as const,

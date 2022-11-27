@@ -5,14 +5,14 @@ import {
 } from "@openapi-codegen/typescript";
 
 export default defineConfig({
-	napi: {
+	"native-api": {
 		from: {
-			relativePath: ".napi/openapi.yml",
+			relativePath: ".native-api/openapi.yml",
 			source: "file",
 		},
-		outputDir: "src/renderer/api/napi/__generated__",
+		outputDir: "src/renderer/services/native-api/__generated__",
 		to: async (context) => {
-			const filenamePrefix = "napi";
+			const filenamePrefix = "native-api";
 			const filenameCase = "kebab";
 
 			context.openAPIDocument.servers =

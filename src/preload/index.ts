@@ -6,6 +6,7 @@ import { rendererRequester } from "~/bridge/request";
 const bridge = {
 	getSystemInfo: rendererRequester("getSystemInfo"),
 	getNtkDaemonVersion: rendererRequester("getNtkDaemonVersion"),
+	getNtkDaemonKnownProducts: rendererRequester("getNtkDaemonKnownProducts"),
 	subscribeSystemInfo: rendererSubscriber("systemInfo"),
 	subscribeNtkDaemonStatus: rendererSubscriber("ntkDaemonStatus"),
 };

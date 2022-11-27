@@ -1,15 +1,9 @@
-// import { useEffect } from "react";
-
-import { useGetProductCategories } from "~/renderer/api/napi";
+import { useGetProductCategories } from "~/renderer/services/native-api";
 
 import type { FC } from "react";
 
 const NativeApi: FC = () => {
 	const { data, isLoading } = useGetProductCategories({});
-
-	// useEffect(() => {
-	// 	napiClient.get("v1/products/categories").then(console.log);
-	// }, []);
 
 	if (isLoading) return <>Loading...</>;
 

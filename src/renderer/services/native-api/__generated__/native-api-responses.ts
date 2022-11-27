@@ -3,7 +3,7 @@
  *
  * @version 1.85.0
  */
-import type * as Schemas from "./napi-schemas";
+import type * as Schemas from "./native-api-schemas";
 
 export type NotFound = Schemas.ErrorResponse;
 

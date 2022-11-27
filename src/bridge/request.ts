@@ -23,9 +23,10 @@ export const mainResponder = <K extends RequestChannelName>(
 	channel: K,
 	handler: (
 		event: IpcMainInvokeEvent,
-		payload: Parameters<Requests[K]> extends []
-			? never
-			: Parameters<Requests[K]>[0],
+		...[payload]: Parameters<Requests[K]> extends []
+			? // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+			  [void]
+			: [Parameters<Requests[K]>[0]]
 	) => Promise<ReturnType<Requests[K]>>,
 ): (() => void) => {
 	ipcMain.handle(

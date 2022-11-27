@@ -18,7 +18,8 @@
 		"test:e2e": "E2E=true pnpm build && playwright test",
 		"build:win": "pnpm run build && electron-builder --win --config",
 		"build:mac": "pnpm run build && electron-builder --mac --config",
-		"build:linux": "pnpm run build && electron-builder --linux --config"
+		"build:linux": "pnpm run build && electron-builder --linux --config",
+		"codegen:native-api": "pnpm openapi-codegen gen native-api"
 	},
 	"keywords": [],
 	"author": "<author>",
@@ -29,7 +30,6 @@
 		"@emotion/styled": "11.10.5",
 		"@nativeinstruments/ntk-daemon-node-lib": "link:~/dev/ni/ntk-daemon-node-lib",
 		"@tanstack/react-query": "4.18.0",
-		"axios": "1.2.0",
 		"core-js": "3.26.1",
 		"long": "4.0.0",
 		"protobufjs": "6.11.3",
@@ -62,6 +62,7 @@
 		"@typescript-eslint/parser": "5.45.0",
 		"@vitejs/plugin-react": "2.2.0",
 		"@vitest/coverage-c8": "0.25.3",
+		"dotenv": "16.0.3",
 		"electron": "22.0.0",
 		"electron-builder": "23.6.0",
 		"electron-vite": "1.0.14",

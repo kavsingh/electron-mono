@@ -12,19 +12,6 @@ import type {
 	SerializedDaemonError,
 } from "./types";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const matchNtkDaemonResult = <T extends NtkDaemonBridgeResponse<any>>(
-	response: T,
-	matchers: {
-		error: (message: ExtractErrorMessage<T>) => void;
-		success?: (message: ExtractSuccessMessage<T>) => void;
-	},
-) => {
-	if (response.result === "error") matchers.error(response.message);
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-	if (response.result === "success") matchers.success?.(response.message);
-};
-
 export const normalizeNtkDaemonResponse = async <T>(
 	promise: Promise<NtkDaemonBridgeResponse<T>>,
 ): Promise<ExtractSuccessMessage<NtkDaemonBridgeResponse<T>>> => {
@@ -34,18 +21,21 @@ export const normalizeNtkDaemonResponse = async <T>(
 
 	const { message } = response;
 
-	if (message.name === "DaemonError" && "type" in message) {
-		throw new DaemonError(message as SerializedDaemonError);
-	}
+	if (isSerializedDaemonError(message)) throw new DaemonError(message);
 
-	if (message.name === "DaemonClientError") {
-		const error = message as SerializedDaemonClientError;
-		const clientError = new DaemonClientError(error.message);
-
-		if (message.stack) clientError.stack = message.stack;
-
-		throw clientError;
+	if (isSerializedDaemonClientError(message)) {
+		throw new DaemonClientError(message);
 	}
 
 	throw deserializeError(message);
 };
+
+const isSerializedDaemonError = (
+	message: ExtractErrorMessage<NtkDaemonBridgeResponse<unknown>>,
+): message is SerializedDaemonError =>
+	message.name === "DaemonError" && "type" in message;
+
+const isSerializedDaemonClientError = (
+	message: ExtractErrorMessage<NtkDaemonBridgeResponse<unknown>>,
+): message is SerializedDaemonClientError =>
+	message.name === "DaemonClientError";

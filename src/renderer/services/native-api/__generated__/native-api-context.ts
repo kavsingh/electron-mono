@@ -1,7 +1,7 @@
 import type { QueryKey, UseQueryOptions } from "@tanstack/react-query";
-import { QueryOperation } from "./napi-components";
+import { QueryOperation } from "./native-api-components";
 
-export type NapiContext = {
+export type NativeApiContext = {
 	fetcherOptions: {
 		/**
 		 * Headers to inject in the fetcher
@@ -30,7 +30,7 @@ export type NapiContext = {
  *
  * @param queryOptions options from the useQuery wrapper
  */
-export function useNapiContext<
+export function useNativeApiContext<
 	TQueryFnData = unknown,
 	TError = unknown,
 	TData = TQueryFnData,
@@ -40,7 +40,7 @@ export function useNapiContext<
 		UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
 		"queryKey" | "queryFn"
 	>,
-): NapiContext {
+): NativeApiContext {
 	return {
 		fetcherOptions: {},
 		queryOptions: {},

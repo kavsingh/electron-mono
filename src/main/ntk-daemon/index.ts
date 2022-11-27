@@ -10,6 +10,11 @@ export const getNtkDaemonVersion = client.createRequest(
 	{ requestOptions: { receiveTimeout: 1000 } },
 );
 
+export const getNtkDaemonKnownProducts = client.createRequest(
+	"knownProductsRequest",
+	"knownProductsResponse",
+);
+
 export const subscribeNtkDaemonStatus = client.subscribe.bind(
 	client,
 	DaemonSubscriberChannel.Status,

@@ -1,10 +1,5 @@
 import { app, BrowserWindow, session } from "electron";
 
-import {
-	NATIVE_API_BASE_URL,
-	NATIVE_API_USER_AGENT,
-} from "~/common/napi/constants";
-
 import { attachSystemInfo, attachNtkDaemonStatus } from "./ipc/pubsub";
 import { setupResponders } from "./ipc/responders";
 import restrictNavigation from "./lib/restrict-navigation";

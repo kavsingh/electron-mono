@@ -17,6 +17,9 @@ const bridge: AppBridge = {
 			},
 		}),
 	),
+	getNtkDaemonKnownProducts: vi.fn(() =>
+		Promise.resolve({ result: "success", message: { knownProducts: [] } }),
+	),
 	subscribeSystemInfo: vi.fn(() => () => undefined),
 	subscribeNtkDaemonStatus: vi.fn(() => () => undefined),
 };

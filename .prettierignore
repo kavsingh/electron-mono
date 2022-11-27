@@ -4,3 +4,4 @@
 /dist
 /coverage
 /e2e/results
+**/__generated__

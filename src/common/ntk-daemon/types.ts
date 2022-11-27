@@ -18,7 +18,7 @@ export interface NtkDaemonBridgeErrorResponse {
 export type SerializedDaemonResponse<T> = T extends Long
 	? bigint
 	: T extends (infer U)[]
-	? SerializedDaemonResponse<U>
+	? SerializedDaemonResponse<U>[]
 	: // eslint-disable-next-line @typescript-eslint/no-explicit-any
 	T extends Record<any, any>
 	? { [K in keyof T]: SerializedDaemonResponse<T[K]> }

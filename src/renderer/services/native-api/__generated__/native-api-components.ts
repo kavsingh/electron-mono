@@ -4,26 +4,26 @@
  * @version 1.85.0
  */
 import * as reactQuery from "@tanstack/react-query";
-import { useNapiContext, NapiContext } from "./napi-context";
-import type * as Fetcher from "./napi-fetcher";
-import { napiFetch } from "./napi-fetcher";
-import type * as Schemas from "./napi-schemas";
-import type * as Responses from "./napi-responses";
+import { useNativeApiContext, NativeApiContext } from "./native-api-context";
+import type * as Fetcher from "./native-api-fetcher";
+import { nativeApiFetch } from "./native-api-fetcher";
+import type * as Schemas from "./native-api-schemas";
+import type * as Responses from "./native-api-responses";
 
 export type ExportSerialNumbersQueryParams = {
-	/*
+	/**
 	 * Licensed product ID.
 	 */
 	licensedproduct_id: number;
-	/*
+	/**
 	 * Amount of serial numbers to export.
 	 */
 	quantity: number;
-	/*
+	/**
 	 * Reason of serial numbers export.
 	 */
 	notes: string;
-	/*
+	/**
 	 * License which has to be attached to the generated serial numbers. See SDBS Supporter UI for possible values.
 	 */
 	license?: string;
@@ -54,49 +54,59 @@ export type ExportSerialNumbersError = Fetcher.ErrorWrapper<
 
 export type ExportSerialNumbersVariables = {
 	queryParams: ExportSerialNumbersQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Export serial numbers for provided licensed product ID.
  */
 export const fetchExportSerialNumbers = (
 	variables: ExportSerialNumbersVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.SerialNumberExportsResponse,
 		ExportSerialNumbersError,
 		undefined,
 		{},
 		ExportSerialNumbersQueryParams,
 		{}
-	>({ url: "/supporters/serial_number_exports", method: "get", ...variables });
+	>({
+		url: "/supporters/serial_number_exports",
+		method: "get",
+		...variables,
+		signal,
+	});
 
 /**
  * Export serial numbers for provided licensed product ID.
  */
-export const useExportSerialNumbers = (
+export const useExportSerialNumbers = <
+	TData = Schemas.SerialNumberExportsResponse,
+>(
 	variables: ExportSerialNumbersVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.SerialNumberExportsResponse,
 			ExportSerialNumbersError,
-			Schemas.SerialNumberExportsResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.SerialNumberExportsResponse,
 		ExportSerialNumbersError,
-		Schemas.SerialNumberExportsResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/supporters/serial_number_exports",
 			operationId: "exportSerialNumbers",
 			variables,
 		}),
-		() => fetchExportSerialNumbers({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchExportSerialNumbers({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -105,7 +115,7 @@ export const useExportSerialNumbers = (
 };
 
 export type GetUserPathParams = {
-	/*
+	/**
 	 * NativeID – unique enduser identifier
 	 */
 	id: string;
@@ -128,39 +138,43 @@ export type GetUserError = Fetcher.ErrorWrapper<
 
 export type GetUserVariables = {
 	pathParams: GetUserPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Retrieve enduser data
  */
-export const fetchGetUser = (variables: GetUserVariables) =>
-	napiFetch<
+export const fetchGetUser = (
+	variables: GetUserVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.Enduser,
 		GetUserError,
 		undefined,
 		{},
 		{},
 		GetUserPathParams
-	>({ url: "/supporters/users/{id}", method: "get", ...variables });
+	>({ url: "/supporters/users/{id}", method: "get", ...variables, signal });
 
 /**
  * Retrieve enduser data
  */
-export const useGetUser = (
+export const useGetUser = <TData = Schemas.Enduser>(
 	variables: GetUserVariables,
 	options?: Omit<
-		reactQuery.UseQueryOptions<Schemas.Enduser, GetUserError, Schemas.Enduser>,
+		reactQuery.UseQueryOptions<Schemas.Enduser, GetUserError, TData>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
-	return reactQuery.useQuery<Schemas.Enduser, GetUserError, Schemas.Enduser>(
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
+	return reactQuery.useQuery<Schemas.Enduser, GetUserError, TData>(
 		queryKeyFn({
 			path: "/supporters/users/{id}",
 			operationId: "getUser",
 			variables,
 		}),
-		() => fetchGetUser({ ...fetcherOptions, ...variables }),
+		({ signal }) => fetchGetUser({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -169,7 +183,7 @@ export const useGetUser = (
 };
 
 export type GetUserLicensedProductsPathParams = {
-	/*
+	/**
 	 * NativeID – unique enduser identifier
 	 */
 	id: string;
@@ -192,15 +206,16 @@ export type GetUserLicensedProductsError = Fetcher.ErrorWrapper<
 
 export type GetUserLicensedProductsVariables = {
 	pathParams: GetUserLicensedProductsPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Retrieve list of enduser licensedproducts
  */
 export const fetchGetUserLicensedProducts = (
 	variables: GetUserLicensedProductsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.LicensedProductsResponse,
 		GetUserLicensedProductsError,
 		undefined,
@@ -211,34 +226,39 @@ export const fetchGetUserLicensedProducts = (
 		url: "/supporters/users/{id}/licensedproducts",
 		method: "get",
 		...variables,
+		signal,
 	});
 
 /**
  * Retrieve list of enduser licensedproducts
  */
-export const useGetUserLicensedProducts = (
+export const useGetUserLicensedProducts = <
+	TData = Schemas.LicensedProductsResponse,
+>(
 	variables: GetUserLicensedProductsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.LicensedProductsResponse,
 			GetUserLicensedProductsError,
-			Schemas.LicensedProductsResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.LicensedProductsResponse,
 		GetUserLicensedProductsError,
-		Schemas.LicensedProductsResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/supporters/users/{id}/licensedproducts",
 			operationId: "getUserLicensedProducts",
 			variables,
 		}),
-		() => fetchGetUserLicensedProducts({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetUserLicensedProducts({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -257,49 +277,60 @@ export type GetAllLicensedProductsError = Fetcher.ErrorWrapper<
 	  }
 >;
 
-export type GetAllLicensedProductsVariables = NapiContext["fetcherOptions"];
+export type GetAllLicensedProductsVariables =
+	NativeApiContext["fetcherOptions"];
 
 /**
  * Retrieve list of all licensedproducts
  */
 export const fetchGetAllLicensedProducts = (
 	variables: GetAllLicensedProductsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.AllLicensedProductsResponse,
 		GetAllLicensedProductsError,
 		undefined,
 		{},
 		{},
 		{}
-	>({ url: "/supporters/licensedproducts", method: "get", ...variables });
+	>({
+		url: "/supporters/licensedproducts",
+		method: "get",
+		...variables,
+		signal,
+	});
 
 /**
  * Retrieve list of all licensedproducts
  */
-export const useGetAllLicensedProducts = (
+export const useGetAllLicensedProducts = <
+	TData = Schemas.AllLicensedProductsResponse,
+>(
 	variables: GetAllLicensedProductsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.AllLicensedProductsResponse,
 			GetAllLicensedProductsError,
-			Schemas.AllLicensedProductsResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.AllLicensedProductsResponse,
 		GetAllLicensedProductsError,
-		Schemas.AllLicensedProductsResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/supporters/licensedproducts",
 			operationId: "getAllLicensedProducts",
 			variables,
 		}),
-		() => fetchGetAllLicensedProducts({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetAllLicensedProducts({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -308,7 +339,7 @@ export const useGetAllLicensedProducts = (
 };
 
 export type GetUserRegistrationsPathParams = {
-	/*
+	/**
 	 * NativeID – unique enduser identifier
 	 */
 	id: string;
@@ -331,15 +362,16 @@ export type GetUserRegistrationsError = Fetcher.ErrorWrapper<
 
 export type GetUserRegistrationsVariables = {
 	pathParams: GetUserRegistrationsPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Retrieve list of enduser registrations
  */
 export const fetchGetUserRegistrations = (
 	variables: GetUserRegistrationsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.RegistrationsResponse,
 		GetUserRegistrationsError,
 		undefined,
@@ -350,34 +382,37 @@ export const fetchGetUserRegistrations = (
 		url: "/supporters/users/{id}/registrations",
 		method: "get",
 		...variables,
+		signal,
 	});
 
 /**
  * Retrieve list of enduser registrations
  */
-export const useGetUserRegistrations = (
+export const useGetUserRegistrations = <TData = Schemas.RegistrationsResponse>(
 	variables: GetUserRegistrationsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.RegistrationsResponse,
 			GetUserRegistrationsError,
-			Schemas.RegistrationsResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.RegistrationsResponse,
 		GetUserRegistrationsError,
-		Schemas.RegistrationsResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/supporters/users/{id}/registrations",
 			operationId: "getUserRegistrations",
 			variables,
 		}),
-		() => fetchGetUserRegistrations({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetUserRegistrations({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -386,7 +421,7 @@ export const useGetUserRegistrations = (
 };
 
 export type GetConfigurationQueryParams = {
-	/*
+	/**
 	 * Request Public Keys in provided format, supported values: SubjectPublicKeyInfo, PKCS1. Default is SubjectPublicKeyInfo.
 	 * Check SDBS documentation about `get_public_keys` or `get_public_keys_in_format` for more details.
 	 */
@@ -410,47 +445,52 @@ export type GetConfigurationError = Fetcher.ErrorWrapper<
 
 export type GetConfigurationVariables = {
 	queryParams?: GetConfigurationQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Return all public settings for Native-API.
  */
-export const fetchGetConfiguration = (variables: GetConfigurationVariables) =>
-	napiFetch<
+export const fetchGetConfiguration = (
+	variables: GetConfigurationVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.ConfigurationResponse,
 		GetConfigurationError,
 		undefined,
 		{},
 		GetConfigurationQueryParams,
 		{}
-	>({ url: "/configurations/", method: "get", ...variables });
+	>({ url: "/configurations/", method: "get", ...variables, signal });
 
 /**
  * Return all public settings for Native-API.
  */
-export const useGetConfiguration = (
+export const useGetConfiguration = <TData = Schemas.ConfigurationResponse>(
 	variables: GetConfigurationVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.ConfigurationResponse,
 			GetConfigurationError,
-			Schemas.ConfigurationResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.ConfigurationResponse,
 		GetConfigurationError,
-		Schemas.ConfigurationResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/configurations/",
 			operationId: "getConfiguration",
 			variables,
 		}),
-		() => fetchGetConfiguration({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetConfiguration({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -459,14 +499,14 @@ export const useGetConfiguration = (
 };
 
 export type GetConfigurationGroupPathParams = {
-	/*
+	/**
 	 * Result will only contain entries for of the specified group.
 	 */
 	group: string;
 };
 
 export type GetConfigurationGroupQueryParams = {
-	/*
+	/**
 	 * Request Public Keys in provided format, supported values: SubjectPublicKeyInfo, PKCS1. Default is SubjectPublicKeyInfo.
 	 * Check SDBS documentation about `get_public_keys` or `get_public_keys_in_format` for more details.
 	 */
@@ -491,49 +531,52 @@ export type GetConfigurationGroupError = Fetcher.ErrorWrapper<
 export type GetConfigurationGroupVariables = {
 	pathParams: GetConfigurationGroupPathParams;
 	queryParams?: GetConfigurationGroupQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Return all public settings for Native-API for requested group.
  */
 export const fetchGetConfigurationGroup = (
 	variables: GetConfigurationGroupVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.ConfigurationResponse,
 		GetConfigurationGroupError,
 		undefined,
 		{},
 		GetConfigurationGroupQueryParams,
 		GetConfigurationGroupPathParams
-	>({ url: "/configurations/{group}", method: "get", ...variables });
+	>({ url: "/configurations/{group}", method: "get", ...variables, signal });
 
 /**
  * Return all public settings for Native-API for requested group.
  */
-export const useGetConfigurationGroup = (
+export const useGetConfigurationGroup = <TData = Schemas.ConfigurationResponse>(
 	variables: GetConfigurationGroupVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.ConfigurationResponse,
 			GetConfigurationGroupError,
-			Schemas.ConfigurationResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.ConfigurationResponse,
 		GetConfigurationGroupError,
-		Schemas.ConfigurationResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/configurations/{group}",
 			operationId: "getConfigurationGroup",
 			variables,
 		}),
-		() => fetchGetConfigurationGroup({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetConfigurationGroup({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -550,32 +593,34 @@ export type PingResponse = {
 	};
 };
 
-export type PingVariables = NapiContext["fetcherOptions"];
+export type PingVariables = NativeApiContext["fetcherOptions"];
 
 /**
  * A simple Ping method to check if the API is up and responding. It does not require any message or parameters and always returns a “pong” message as defined above.
  */
-export const fetchPing = (variables: PingVariables) =>
-	napiFetch<PingResponse, PingError, undefined, {}, {}, {}>({
+export const fetchPing = (variables: PingVariables, signal?: AbortSignal) =>
+	nativeApiFetch<PingResponse, PingError, undefined, {}, {}, {}>({
 		url: "/base/ping",
 		method: "get",
 		...variables,
+		signal,
 	});
 
 /**
  * A simple Ping method to check if the API is up and responding. It does not require any message or parameters and always returns a “pong” message as defined above.
  */
-export const usePing = (
+export const usePing = <TData = PingResponse>(
 	variables: PingVariables,
 	options?: Omit<
-		reactQuery.UseQueryOptions<PingResponse, PingError, PingResponse>,
+		reactQuery.UseQueryOptions<PingResponse, PingError, TData>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
-	return reactQuery.useQuery<PingResponse, PingError, PingResponse>(
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
+	return reactQuery.useQuery<PingResponse, PingError, TData>(
 		queryKeyFn({ path: "/base/ping", operationId: "ping", variables }),
-		() => fetchPing({ ...fetcherOptions, ...variables }),
+		({ signal }) => fetchPing({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -588,32 +633,34 @@ export type CrashError = Fetcher.ErrorWrapper<{
 	payload: Responses.InternalError;
 }>;
 
-export type CrashVariables = NapiContext["fetcherOptions"];
+export type CrashVariables = NativeApiContext["fetcherOptions"];
 
 /**
  * Always throws an exception. No message required. Don’t expect any output other than a response_head with an error.
  */
-export const fetchCrash = (variables: CrashVariables) =>
-	napiFetch<undefined, CrashError, undefined, {}, {}, {}>({
+export const fetchCrash = (variables: CrashVariables, signal?: AbortSignal) =>
+	nativeApiFetch<undefined, CrashError, undefined, {}, {}, {}>({
 		url: "/base/crash",
 		method: "get",
 		...variables,
+		signal,
 	});
 
 /**
  * Always throws an exception. No message required. Don’t expect any output other than a response_head with an error.
  */
-export const useCrash = (
+export const useCrash = <TData = undefined>(
 	variables: CrashVariables,
 	options?: Omit<
-		reactQuery.UseQueryOptions<undefined, CrashError, undefined>,
+		reactQuery.UseQueryOptions<undefined, CrashError, TData>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
-	return reactQuery.useQuery<undefined, CrashError, undefined>(
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
+	return reactQuery.useQuery<undefined, CrashError, TData>(
 		queryKeyFn({ path: "/base/crash", operationId: "crash", variables }),
-		() => fetchCrash({ ...fetcherOptions, ...variables }),
+		({ signal }) => fetchCrash({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -633,36 +680,37 @@ export type PingSdbsResponse = {
 	};
 };
 
-export type PingSdbsVariables = NapiContext["fetcherOptions"];
+export type PingSdbsVariables = NativeApiContext["fetcherOptions"];
 
 /**
  * Requests to the SDBS_URI (HAProxy server of SDBS) to verify if it is reachable, if not will return a connection-error response. This endpoint is intended for monitoring purposes, e.g GCP Monitoring (Uptime checks).
  */
-export const fetchPingSdbs = (variables: PingSdbsVariables) =>
-	napiFetch<PingSdbsResponse, PingSdbsError, undefined, {}, {}, {}>({
+export const fetchPingSdbs = (
+	variables: PingSdbsVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<PingSdbsResponse, PingSdbsError, undefined, {}, {}, {}>({
 		url: "/base/ping_sdbs",
 		method: "get",
 		...variables,
+		signal,
 	});
 
 /**
  * Requests to the SDBS_URI (HAProxy server of SDBS) to verify if it is reachable, if not will return a connection-error response. This endpoint is intended for monitoring purposes, e.g GCP Monitoring (Uptime checks).
  */
-export const usePingSdbs = (
+export const usePingSdbs = <TData = PingSdbsResponse>(
 	variables: PingSdbsVariables,
 	options?: Omit<
-		reactQuery.UseQueryOptions<
-			PingSdbsResponse,
-			PingSdbsError,
-			PingSdbsResponse
-		>,
+		reactQuery.UseQueryOptions<PingSdbsResponse, PingSdbsError, TData>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
-	return reactQuery.useQuery<PingSdbsResponse, PingSdbsError, PingSdbsResponse>(
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
+	return reactQuery.useQuery<PingSdbsResponse, PingSdbsError, TData>(
 		queryKeyFn({ path: "/base/ping_sdbs", operationId: "pingSdbs", variables }),
-		() => fetchPingSdbs({ ...fetcherOptions, ...variables }),
+		({ signal }) => fetchPingSdbs({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -682,44 +730,44 @@ export type PingRabbitmqResponse = {
 	};
 };
 
-export type PingRabbitmqVariables = NapiContext["fetcherOptions"];
+export type PingRabbitmqVariables = NativeApiContext["fetcherOptions"];
 
 /**
  * Verifies that the connection to rabbitmq is open at AMQP_IMPORTER_URI, if not then it will return a connection-error response. This endpoint is intended for monitoring purposes, e.g GCP Monitoring (Uptime checks).
  */
-export const fetchPingRabbitmq = (variables: PingRabbitmqVariables) =>
-	napiFetch<PingRabbitmqResponse, PingRabbitmqError, undefined, {}, {}, {}>({
-		url: "/base/ping_rabbitmq",
-		method: "get",
-		...variables,
-	});
+export const fetchPingRabbitmq = (
+	variables: PingRabbitmqVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
+		PingRabbitmqResponse,
+		PingRabbitmqError,
+		undefined,
+		{},
+		{},
+		{}
+	>({ url: "/base/ping_rabbitmq", method: "get", ...variables, signal });
 
 /**
  * Verifies that the connection to rabbitmq is open at AMQP_IMPORTER_URI, if not then it will return a connection-error response. This endpoint is intended for monitoring purposes, e.g GCP Monitoring (Uptime checks).
  */
-export const usePingRabbitmq = (
+export const usePingRabbitmq = <TData = PingRabbitmqResponse>(
 	variables: PingRabbitmqVariables,
 	options?: Omit<
-		reactQuery.UseQueryOptions<
-			PingRabbitmqResponse,
-			PingRabbitmqError,
-			PingRabbitmqResponse
-		>,
+		reactQuery.UseQueryOptions<PingRabbitmqResponse, PingRabbitmqError, TData>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
-	return reactQuery.useQuery<
-		PingRabbitmqResponse,
-		PingRabbitmqError,
-		PingRabbitmqResponse
-	>(
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
+	return reactQuery.useQuery<PingRabbitmqResponse, PingRabbitmqError, TData>(
 		queryKeyFn({
 			path: "/base/ping_rabbitmq",
 			operationId: "pingRabbitmq",
 			variables,
 		}),
-		() => fetchPingRabbitmq({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchPingRabbitmq({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -734,20 +782,23 @@ export type AuthenticateError = Fetcher.ErrorWrapper<{
 
 export type AuthenticateVariables = {
 	body: Schemas.Credentials;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Returns a new pair of Access and Refresh Tokens if the given credentials are correct and the Application Token in the Request Header has been registered.
  */
-export const fetchAuthenticate = (variables: AuthenticateVariables) =>
-	napiFetch<
+export const fetchAuthenticate = (
+	variables: AuthenticateVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.AuthTokenResponse,
 		AuthenticateError,
 		Schemas.Credentials,
 		{},
 		{},
 		{}
-	>({ url: "/auth/token", method: "post", ...variables });
+	>({ url: "/auth/token", method: "post", ...variables, signal });
 
 /**
  * Returns a new pair of Access and Refresh Tokens if the given credentials are correct and the Application Token in the Request Header has been registered.
@@ -762,7 +813,7 @@ export const useAuthenticate = (
 		"mutationFn"
 	>,
 ) => {
-	const { fetcherOptions } = useNapiContext();
+	const { fetcherOptions } = useNativeApiContext();
 	return reactQuery.useMutation<
 		Schemas.AuthTokenResponse,
 		AuthenticateError,
@@ -785,20 +836,23 @@ export type RefreshTokenError = Fetcher.ErrorWrapper<
 	  }
 >;
 
-export type RefreshTokenVariables = NapiContext["fetcherOptions"];
+export type RefreshTokenVariables = NativeApiContext["fetcherOptions"];
 
 /**
  * Requests a new Access and Refresh Tokens with an existing Refresh Token. This method does not expect an input message, it is sufficient to specify the Refresh Token as Bearer in the Request Header.
  */
-export const fetchRefreshToken = (variables: RefreshTokenVariables) =>
-	napiFetch<
+export const fetchRefreshToken = (
+	variables: RefreshTokenVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.AuthTokenResponse,
 		RefreshTokenError,
 		undefined,
 		{},
 		{},
 		{}
-	>({ url: "/auth/refresh_token", method: "post", ...variables });
+	>({ url: "/auth/refresh_token", method: "post", ...variables, signal });
 
 /**
  * Requests a new Access and Refresh Tokens with an existing Refresh Token. This method does not expect an input message, it is sufficient to specify the Refresh Token as Bearer in the Request Header.
@@ -813,7 +867,7 @@ export const useRefreshToken = (
 		"mutationFn"
 	>,
 ) => {
-	const { fetcherOptions } = useNapiContext();
+	const { fetcherOptions } = useNativeApiContext();
 	return reactQuery.useMutation<
 		Schemas.AuthTokenResponse,
 		RefreshTokenError,
@@ -848,7 +902,7 @@ export type RecoverPasswordResponse = {
 };
 
 export type RecoverPasswordRequestBody = {
-	/*
+	/**
 	 * @minLength 1
 	 */
 	username?: string;
@@ -856,20 +910,23 @@ export type RecoverPasswordRequestBody = {
 
 export type RecoverPasswordVariables = {
 	body?: RecoverPasswordRequestBody;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Recovers password for a native instruments user based on username.
  */
-export const fetchRecoverPassword = (variables: RecoverPasswordVariables) =>
-	napiFetch<
+export const fetchRecoverPassword = (
+	variables: RecoverPasswordVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		RecoverPasswordResponse,
 		RecoverPasswordError,
 		RecoverPasswordRequestBody,
 		{},
 		{},
 		{}
-	>({ url: "/auth/recover_password", method: "post", ...variables });
+	>({ url: "/auth/recover_password", method: "post", ...variables, signal });
 
 /**
  * Recovers password for a native instruments user based on username.
@@ -884,7 +941,7 @@ export const useRecoverPassword = (
 		"mutationFn"
 	>,
 ) => {
-	const { fetcherOptions } = useNapiContext();
+	const { fetcherOptions } = useNativeApiContext();
 	return reactQuery.useMutation<
 		RecoverPasswordResponse,
 		RecoverPasswordError,
@@ -913,7 +970,7 @@ export type ActivateError = Fetcher.ErrorWrapper<
 
 export type ActivateVariables = {
 	body?: Schemas.ActivationRequest;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Activates a list of product serials and system IDs. Returns a list of responses, each containing a `serial` field containing the serial that was to be activated and either a `result` field in case of success, or an `error` field, which is structured exactly like `field_errors` described in Response structure & fields.
@@ -924,15 +981,18 @@ export type ActivateVariables = {
  *
  * When activating a bundle master an empty string as a system ID is allowed.
  */
-export const fetchActivate = (variables: ActivateVariables) =>
-	napiFetch<
+export const fetchActivate = (
+	variables: ActivateVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.ActivationResponse,
 		ActivateError,
 		Schemas.ActivationRequest,
 		{},
 		{},
 		{}
-	>({ url: "/activations/", method: "post", ...variables });
+	>({ url: "/activations/", method: "post", ...variables, signal });
 
 /**
  * Activates a list of product serials and system IDs. Returns a list of responses, each containing a `serial` field containing the serial that was to be activated and either a `result` field in case of success, or an `error` field, which is structured exactly like `field_errors` described in Response structure & fields.
@@ -953,7 +1013,7 @@ export const useActivate = (
 		"mutationFn"
 	>,
 ) => {
-	const { fetcherOptions } = useNapiContext();
+	const { fetcherOptions } = useNativeApiContext();
 	return reactQuery.useMutation<
 		Schemas.ActivationResponse,
 		ActivateError,
@@ -986,49 +1046,54 @@ export type GetCompleteChangelogError = Fetcher.ErrorWrapper<
 
 export type GetCompleteChangelogVariables = {
 	pathParams: GetCompleteChangelogPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Returns the complete Changelog for a given UPID.
  */
 export const fetchGetCompleteChangelog = (
 	variables: GetCompleteChangelogVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.CompleteChangelogResult,
 		GetCompleteChangelogError,
 		undefined,
 		{},
 		{},
 		GetCompleteChangelogPathParams
-	>({ url: "/changelogs/{upid}", method: "get", ...variables });
+	>({ url: "/changelogs/{upid}", method: "get", ...variables, signal });
 
 /**
  * Returns the complete Changelog for a given UPID.
  */
-export const useGetCompleteChangelog = (
+export const useGetCompleteChangelog = <
+	TData = Schemas.CompleteChangelogResult,
+>(
 	variables: GetCompleteChangelogVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.CompleteChangelogResult,
 			GetCompleteChangelogError,
-			Schemas.CompleteChangelogResult
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.CompleteChangelogResult,
 		GetCompleteChangelogError,
-		Schemas.CompleteChangelogResult
+		TData
 	>(
 		queryKeyFn({
 			path: "/changelogs/{upid}",
 			operationId: "getCompleteChangelog",
 			variables,
 		}),
-		() => fetchGetCompleteChangelog({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetCompleteChangelog({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -1059,12 +1124,13 @@ export type GetPartialChangelogError = Fetcher.ErrorWrapper<
 
 export type GetPartialChangelogVariables = {
 	pathParams: GetPartialChangelogPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 export const fetchGetPartialChangelog = (
 	variables: GetPartialChangelogVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.CompleteChangelogResult,
 		GetPartialChangelogError,
 		undefined,
@@ -1075,31 +1141,34 @@ export const fetchGetPartialChangelog = (
 		url: "/changelogs/{upid}/{fromVersion}/{toVersion}",
 		method: "get",
 		...variables,
+		signal,
 	});
 
-export const useGetPartialChangelog = (
+export const useGetPartialChangelog = <TData = Schemas.CompleteChangelogResult>(
 	variables: GetPartialChangelogVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.CompleteChangelogResult,
 			GetPartialChangelogError,
-			Schemas.CompleteChangelogResult
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.CompleteChangelogResult,
 		GetPartialChangelogError,
-		Schemas.CompleteChangelogResult
+		TData
 	>(
 		queryKeyFn({
 			path: "/changelogs/{upid}/{from_version}/{to_version}",
 			operationId: "getPartialChangelog",
 			variables,
 		}),
-		() => fetchGetPartialChangelog({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetPartialChangelog({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -1112,11 +1181,11 @@ export type DownloadProductPathParams = {
 };
 
 export type DownloadProductQueryParams = {
-	/*
+	/**
 	 * If false, the response contains all artifacts with `platform != nativeos`. If true, the response contains all artifacts.
 	 */
 	show_nativeos?: boolean;
-	/*
+	/**
 	 * If not provided, the response contains all artifacts regardless of their hardware_platform. If provided, the response contains artifacts with matching hardware_platform. Artifacts with `hardware_platform == any` are always returned.
 	 */
 	hardware_platform?: string;
@@ -1140,47 +1209,59 @@ export type DownloadProductError = Fetcher.ErrorWrapper<
 export type DownloadProductVariables = {
 	pathParams: DownloadProductPathParams;
 	queryParams?: DownloadProductQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Returns the list of full products (i.e. not updates or players) associated with the given UPID. Deprecated in favour of `GET /download/me/full-products` and `GET /download/me/updates`.
  */
-export const fetchDownloadProduct = (variables: DownloadProductVariables) =>
-	napiFetch<
+export const fetchDownloadProduct = (
+	variables: DownloadProductVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.DownloadProductsResponseLegacy,
 		DownloadProductError,
 		undefined,
 		{},
 		DownloadProductQueryParams,
 		DownloadProductPathParams
-	>({ url: "/download/full-products/{upid}", method: "get", ...variables });
+	>({
+		url: "/download/full-products/{upid}",
+		method: "get",
+		...variables,
+		signal,
+	});
 
 /**
  * Returns the list of full products (i.e. not updates or players) associated with the given UPID. Deprecated in favour of `GET /download/me/full-products` and `GET /download/me/updates`.
  */
-export const useDownloadProduct = (
+export const useDownloadProduct = <
+	TData = Schemas.DownloadProductsResponseLegacy,
+>(
 	variables: DownloadProductVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.DownloadProductsResponseLegacy,
 			DownloadProductError,
-			Schemas.DownloadProductsResponseLegacy
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.DownloadProductsResponseLegacy,
 		DownloadProductError,
-		Schemas.DownloadProductsResponseLegacy
+		TData
 	>(
 		queryKeyFn({
 			path: "/download/full-products/{upid}",
 			operationId: "downloadProduct",
 			variables,
 		}),
-		() => fetchDownloadProduct({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchDownloadProduct({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -1189,27 +1270,27 @@ export const useDownloadProduct = (
 };
 
 export type GetMyFullProductsDownloadsQueryParams = {
-	/*
+	/**
 	 * If not provided, the response contains all artifacts regardless of `platform`. If provided, the response contains artifacts with matching platform. If mac or pc is provided, the response also contains artifacts with platform=all.
 	 */
 	platform?: "pc" | "mac" | "linux-x86_64" | "nativeos";
-	/*
+	/**
 	 * If not provided, the response contains all artifacts regardless of their `hardware_platform`. If provided, the response contains artifacts with matching hardware_platform. Artifacts with `hardware_platform == any` are always returned.
 	 */
 	hardware_platform?: "mas-x86_64";
-	/*
+	/**
 	 * If not provided, the response contains all artifacts regardless of their `os_min`/`os_max`. If provided, and if platform is provided, the response contains all artifacts where `os_min <= platform_version <= os_max`. If `os_min` is `null`, that is equivalent to `0`, and if `os_max` is `null`, that is equivalent to `+Inf`.
 	 *
 	 * @pattern ^(\d+)?(\.\d+)*$
 	 */
 	platform_version?: string;
-	/*
+	/**
 	 * If set to `true`, single artifact with latest version available will be returned
 	 *
 	 * @default false
 	 */
 	latest_only?: boolean;
-	/*
+	/**
 	 * If set to `true`, response will also contains subscription products
 	 *
 	 * @default false
@@ -1230,43 +1311,51 @@ export type GetMyFullProductsDownloadsError = Fetcher.ErrorWrapper<
 
 export type GetMyFullProductsDownloadsVariables = {
 	queryParams?: GetMyFullProductsDownloadsQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 export const fetchGetMyFullProductsDownloads = (
 	variables: GetMyFullProductsDownloadsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.DownloadProductsResponse,
 		GetMyFullProductsDownloadsError,
 		undefined,
 		{},
 		GetMyFullProductsDownloadsQueryParams,
 		{}
-	>({ url: "/download/me/full-products", method: "get", ...variables });
+	>({ url: "/download/me/full-products", method: "get", ...variables, signal });
 
-export const useGetMyFullProductsDownloads = (
+export const useGetMyFullProductsDownloads = <
+	TData = Schemas.DownloadProductsResponse,
+>(
 	variables: GetMyFullProductsDownloadsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.DownloadProductsResponse,
 			GetMyFullProductsDownloadsError,
-			Schemas.DownloadProductsResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.DownloadProductsResponse,
 		GetMyFullProductsDownloadsError,
-		Schemas.DownloadProductsResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/download/me/full-products",
 			operationId: "getMyFullProductsDownloads",
 			variables,
 		}),
-		() => fetchGetMyFullProductsDownloads({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetMyFullProductsDownloads(
+				{ ...fetcherOptions, ...variables },
+				signal,
+			),
 		{
 			...options,
 			...queryOptions,
@@ -1279,11 +1368,11 @@ export type DownloadProductUpdatesPathParams = {
 };
 
 export type DownloadProductUpdatesQueryParams = {
-	/*
+	/**
 	 * If false, the response contains all artifacts with `platform != nativeos`. If true, the response contains all artifacts.
 	 */
 	show_nativeos?: boolean;
-	/*
+	/**
 	 * If not provided, the response contains all artifacts regardless of their hardware_platform. If provided, the response contains artifacts with matching hardware_platform. Artifacts with `hardware_platform == any` are always returned.
 	 */
 	hardware_platform?: string;
@@ -1307,49 +1396,54 @@ export type DownloadProductUpdatesError = Fetcher.ErrorWrapper<
 export type DownloadProductUpdatesVariables = {
 	pathParams: DownloadProductUpdatesPathParams;
 	queryParams?: DownloadProductUpdatesQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Returns the list of updates associated with the given UPID. Deprecated in favour of `GET /download/me/full-products` and `GET /download/me/updates`.
  */
 export const fetchDownloadProductUpdates = (
 	variables: DownloadProductUpdatesVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.DownloadProductsResponseLegacy,
 		DownloadProductUpdatesError,
 		undefined,
 		{},
 		DownloadProductUpdatesQueryParams,
 		DownloadProductUpdatesPathParams
-	>({ url: "/download/updates/{upid}", method: "get", ...variables });
+	>({ url: "/download/updates/{upid}", method: "get", ...variables, signal });
 
 /**
  * Returns the list of updates associated with the given UPID. Deprecated in favour of `GET /download/me/full-products` and `GET /download/me/updates`.
  */
-export const useDownloadProductUpdates = (
+export const useDownloadProductUpdates = <
+	TData = Schemas.DownloadProductsResponseLegacy,
+>(
 	variables: DownloadProductUpdatesVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.DownloadProductsResponseLegacy,
 			DownloadProductUpdatesError,
-			Schemas.DownloadProductsResponseLegacy
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.DownloadProductsResponseLegacy,
 		DownloadProductUpdatesError,
-		Schemas.DownloadProductsResponseLegacy
+		TData
 	>(
 		queryKeyFn({
 			path: "/download/updates/{upid}",
 			operationId: "downloadProductUpdates",
 			variables,
 		}),
-		() => fetchDownloadProductUpdates({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchDownloadProductUpdates({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -1358,27 +1452,27 @@ export const useDownloadProductUpdates = (
 };
 
 export type GetMyProductUpdatesDownloadsQueryParams = {
-	/*
+	/**
 	 * If not provided, the response contains all artifacts regardless of `platform`. If provided, the response contains artifacts with matching platform. If mac or pc is provided, the response also contains artifacts with platform=all.
 	 */
 	platform?: "pc" | "mac" | "linux-x86_64" | "nativeos";
-	/*
+	/**
 	 * If not provided, the response contains all artifacts regardless of their `hardware_platform`. If provided, the response contains artifacts with matching hardware_platform. Artifacts with `hardware_platform == any` are always returned.
 	 */
 	hardware_platform?: "mas-x86_64";
-	/*
+	/**
 	 * If not provided, the response contains all artifacts regardless of their `os_min`/`os_max`. If provided, and if platform is provided, the response contains all artifacts where `os_min <= platform_version <= os_max`. If `os_min` is `null`, that is equivalent to `0`, and if `os_max` is `null`, that is equivalent to `+Inf`.
 	 *
 	 * @pattern ^(\d+)?(\.\d+)*$
 	 */
 	platform_version?: string;
-	/*
+	/**
 	 * If set to `true`, single artifact with latest version available will be returned
 	 *
 	 * @default false
 	 */
 	latest_only?: boolean;
-	/*
+	/**
 	 * If set to `true` response will contains also subscription products
 	 *
 	 * @default false
@@ -1399,44 +1493,51 @@ export type GetMyProductUpdatesDownloadsError = Fetcher.ErrorWrapper<
 
 export type GetMyProductUpdatesDownloadsVariables = {
 	queryParams?: GetMyProductUpdatesDownloadsQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 export const fetchGetMyProductUpdatesDownloads = (
 	variables: GetMyProductUpdatesDownloadsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.DownloadProductsResponse,
 		GetMyProductUpdatesDownloadsError,
 		undefined,
 		{},
 		GetMyProductUpdatesDownloadsQueryParams,
 		{}
-	>({ url: "/download/me/updates", method: "get", ...variables });
+	>({ url: "/download/me/updates", method: "get", ...variables, signal });
 
-export const useGetMyProductUpdatesDownloads = (
+export const useGetMyProductUpdatesDownloads = <
+	TData = Schemas.DownloadProductsResponse,
+>(
 	variables: GetMyProductUpdatesDownloadsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.DownloadProductsResponse,
 			GetMyProductUpdatesDownloadsError,
-			Schemas.DownloadProductsResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.DownloadProductsResponse,
 		GetMyProductUpdatesDownloadsError,
-		Schemas.DownloadProductsResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/download/me/updates",
 			operationId: "getMyProductUpdatesDownloads",
 			variables,
 		}),
-		() =>
-			fetchGetMyProductUpdatesDownloads({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetMyProductUpdatesDownloads(
+				{ ...fetcherOptions, ...variables },
+				signal,
+			),
 		{
 			...options,
 			...queryOptions,
@@ -1445,27 +1546,27 @@ export const useGetMyProductUpdatesDownloads = (
 };
 
 export type GetMyProductContentDownloadsQueryParams = {
-	/*
+	/**
 	 * If not provided, the response contains all artifacts regardless of `platform`. If provided, the response contains artifacts with matching platform. If mac or pc is provided, the response also contains artifacts with platform=all.
 	 */
 	platform?: "pc" | "mac" | "linux-x86_64" | "nativeos";
-	/*
+	/**
 	 * If not provided, the response contains all artifacts regardless of their `hardware_platform`. If provided, the response contains artifacts with matching hardware_platform. Artifacts with `hardware_platform == any` are always returned.
 	 */
 	hardware_platform?: "mas-x86_64";
-	/*
+	/**
 	 * If not provided, the response contains all artifacts regardless of their `os_min`/`os_max`. If provided, and if platform is provided, the response contains all artifacts where `os_min <= platform_version <= os_max`. If `os_min` is `null`, that is equivalent to `0`, and if `os_max` is `null`, that is equivalent to `+Inf`.
 	 *
 	 * @pattern ^(\d+)?(\.\d+)*$
 	 */
 	platform_version?: string;
-	/*
+	/**
 	 * If set to `true`, single artifact with latest version available will be returned
 	 *
 	 * @default false
 	 */
 	latest_only?: boolean;
-	/*
+	/**
 	 * If set to `true` response will contains also subscription products
 	 *
 	 * @default false
@@ -1486,44 +1587,51 @@ export type GetMyProductContentDownloadsError = Fetcher.ErrorWrapper<
 
 export type GetMyProductContentDownloadsVariables = {
 	queryParams?: GetMyProductContentDownloadsQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 export const fetchGetMyProductContentDownloads = (
 	variables: GetMyProductContentDownloadsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.DownloadProductsResponse,
 		GetMyProductContentDownloadsError,
 		undefined,
 		{},
 		GetMyProductContentDownloadsQueryParams,
 		{}
-	>({ url: "/download/me/content", method: "get", ...variables });
+	>({ url: "/download/me/content", method: "get", ...variables, signal });
 
-export const useGetMyProductContentDownloads = (
+export const useGetMyProductContentDownloads = <
+	TData = Schemas.DownloadProductsResponse,
+>(
 	variables: GetMyProductContentDownloadsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.DownloadProductsResponse,
 			GetMyProductContentDownloadsError,
-			Schemas.DownloadProductsResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.DownloadProductsResponse,
 		GetMyProductContentDownloadsError,
-		Schemas.DownloadProductsResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/download/me/content",
 			operationId: "getMyProductContentDownloads",
 			variables,
 		}),
-		() =>
-			fetchGetMyProductContentDownloads({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetMyProductContentDownloads(
+				{ ...fetcherOptions, ...variables },
+				signal,
+			),
 		{
 			...options,
 			...queryOptions,
@@ -1552,47 +1660,54 @@ export type DownloadPlayerError = Fetcher.ErrorWrapper<
 
 export type DownloadPlayerVariables = {
 	pathParams: DownloadPlayerPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Returns the list of players associated with the given UPID. No longer used by current versions of NA and the daemon.
  */
-export const fetchDownloadPlayer = (variables: DownloadPlayerVariables) =>
-	napiFetch<
+export const fetchDownloadPlayer = (
+	variables: DownloadPlayerVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.DownloadProductsResponseLegacy,
 		DownloadPlayerError,
 		undefined,
 		{},
 		{},
 		DownloadPlayerPathParams
-	>({ url: "/download/players/{upid}", method: "get", ...variables });
+	>({ url: "/download/players/{upid}", method: "get", ...variables, signal });
 
 /**
  * Returns the list of players associated with the given UPID. No longer used by current versions of NA and the daemon.
  */
-export const useDownloadPlayer = (
+export const useDownloadPlayer = <
+	TData = Schemas.DownloadProductsResponseLegacy,
+>(
 	variables: DownloadPlayerVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.DownloadProductsResponseLegacy,
 			DownloadPlayerError,
-			Schemas.DownloadProductsResponseLegacy
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.DownloadProductsResponseLegacy,
 		DownloadPlayerError,
-		Schemas.DownloadProductsResponseLegacy
+		TData
 	>(
 		queryKeyFn({
 			path: "/download/players/{upid}",
 			operationId: "downloadPlayer",
 			variables,
 		}),
-		() => fetchDownloadPlayer({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchDownloadPlayer({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -1622,43 +1737,53 @@ export type DownloadLinksError = Fetcher.ErrorWrapper<
 
 export type DownloadLinksVariables = {
 	pathParams: DownloadLinksPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Retrieves the list of links for the given UPID and file ID. If the ‘authentication required’ box is ticked in UDM2 for the given file, you’ll need to provide a valid access token in the Authorization header.
  *
  * This returns a metalink file.
  */
-export const fetchDownloadLinks = (variables: DownloadLinksVariables) =>
-	napiFetch<
+export const fetchDownloadLinks = (
+	variables: DownloadLinksVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		undefined,
 		DownloadLinksError,
 		undefined,
 		{},
 		{},
 		DownloadLinksPathParams
-	>({ url: "/download/links/{upid}/{fileId}", method: "get", ...variables });
+	>({
+		url: "/download/links/{upid}/{fileId}",
+		method: "get",
+		...variables,
+		signal,
+	});
 
 /**
  * Retrieves the list of links for the given UPID and file ID. If the ‘authentication required’ box is ticked in UDM2 for the given file, you’ll need to provide a valid access token in the Authorization header.
  *
  * This returns a metalink file.
  */
-export const useDownloadLinks = (
+export const useDownloadLinks = <TData = undefined>(
 	variables: DownloadLinksVariables,
 	options?: Omit<
-		reactQuery.UseQueryOptions<undefined, DownloadLinksError, undefined>,
+		reactQuery.UseQueryOptions<undefined, DownloadLinksError, TData>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
-	return reactQuery.useQuery<undefined, DownloadLinksError, undefined>(
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
+	return reactQuery.useQuery<undefined, DownloadLinksError, TData>(
 		queryKeyFn({
 			path: "/download/links/{upid}/{file_id}",
 			operationId: "downloadLinks",
 			variables,
 		}),
-		() => fetchDownloadLinks({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchDownloadLinks({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -1683,20 +1808,23 @@ export type LicenseTransferError = Fetcher.ErrorWrapper<
 
 export type LicenseTransferVariables = {
 	body?: Schemas.LicenseTransferRequest;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Queues license transfer request.
  */
-export const fetchLicenseTransfer = (variables: LicenseTransferVariables) =>
-	napiFetch<
+export const fetchLicenseTransfer = (
+	variables: LicenseTransferVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.LicenseTransferResponse,
 		LicenseTransferError,
 		Schemas.LicenseTransferRequest,
 		{},
 		{},
 		{}
-	>({ url: "/license-transfer/", method: "post", ...variables });
+	>({ url: "/license-transfer/", method: "post", ...variables, signal });
 
 /**
  * Queues license transfer request.
@@ -1711,7 +1839,7 @@ export const useLicenseTransfer = (
 		"mutationFn"
 	>,
 ) => {
-	const { fetcherOptions } = useNapiContext();
+	const { fetcherOptions } = useNativeApiContext();
 	return reactQuery.useMutation<
 		Schemas.LicenseTransferResponse,
 		LicenseTransferError,
@@ -1734,40 +1862,44 @@ export type GetProductsError = Fetcher.ErrorWrapper<
 	  }
 >;
 
-export type GetProductsVariables = NapiContext["fetcherOptions"];
+export type GetProductsVariables = NativeApiContext["fetcherOptions"];
 
 /**
  * Returns the list of all known Product IDs (UPIDs).
  */
-export const fetchGetProducts = (variables: GetProductsVariables) =>
-	napiFetch<Schemas.ProductResponse, GetProductsError, undefined, {}, {}, {}>({
-		url: "/products/",
-		method: "get",
-		...variables,
-	});
+export const fetchGetProducts = (
+	variables: GetProductsVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
+		Schemas.ProductResponse,
+		GetProductsError,
+		undefined,
+		{},
+		{},
+		{}
+	>({ url: "/products/", method: "get", ...variables, signal });
 
 /**
  * Returns the list of all known Product IDs (UPIDs).
  */
-export const useGetProducts = (
+export const useGetProducts = <TData = Schemas.ProductResponse>(
 	variables: GetProductsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.ProductResponse,
 			GetProductsError,
-			Schemas.ProductResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
-	return reactQuery.useQuery<
-		Schemas.ProductResponse,
-		GetProductsError,
-		Schemas.ProductResponse
-	>(
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
+	return reactQuery.useQuery<Schemas.ProductResponse, GetProductsError, TData>(
 		queryKeyFn({ path: "/products/", operationId: "getProducts", variables }),
-		() => fetchGetProducts({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetProducts({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -1776,7 +1908,7 @@ export const useGetProducts = (
 };
 
 export type GetSingleProductPathParams = {
-	/*
+	/**
 	 * UPID of product
 	 *
 	 * @format uuid
@@ -1801,49 +1933,54 @@ export type GetSingleProductError = Fetcher.ErrorWrapper<
 
 export type GetSingleProductVariables = {
 	pathParams: GetSingleProductPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Returns all the resources and categories associated with a UPID. Note: this endpoint returns a full, detailed list of all resources attached the given UPID. However, for categories, only the IDs are  returned.
  * The `upid` has to be a valid UUID (see [`uuid.UUID`](https://docs.python.org/3/library/uuid.html#uuid.UUID)).
  */
-export const fetchGetSingleProduct = (variables: GetSingleProductVariables) =>
-	napiFetch<
+export const fetchGetSingleProduct = (
+	variables: GetSingleProductVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.ProductByUpidResponse,
 		GetSingleProductError,
 		undefined,
 		{},
 		{},
 		GetSingleProductPathParams
-	>({ url: "/products/{upid}", method: "get", ...variables });
+	>({ url: "/products/{upid}", method: "get", ...variables, signal });
 
 /**
  * Returns all the resources and categories associated with a UPID. Note: this endpoint returns a full, detailed list of all resources attached the given UPID. However, for categories, only the IDs are  returned.
  * The `upid` has to be a valid UUID (see [`uuid.UUID`](https://docs.python.org/3/library/uuid.html#uuid.UUID)).
  */
-export const useGetSingleProduct = (
+export const useGetSingleProduct = <TData = Schemas.ProductByUpidResponse>(
 	variables: GetSingleProductVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.ProductByUpidResponse,
 			GetSingleProductError,
-			Schemas.ProductByUpidResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.ProductByUpidResponse,
 		GetSingleProductError,
-		Schemas.ProductByUpidResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/products/{upid}",
 			operationId: "getSingleProduct",
 			variables,
 		}),
-		() => fetchGetSingleProduct({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetSingleProduct({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -1862,49 +1999,52 @@ export type GetProductCategoriesError = Fetcher.ErrorWrapper<
 	  }
 >;
 
-export type GetProductCategoriesVariables = NapiContext["fetcherOptions"];
+export type GetProductCategoriesVariables = NativeApiContext["fetcherOptions"];
 
 /**
  * Returns a list of categories, their sort order and relationships.
  */
 export const fetchGetProductCategories = (
 	variables: GetProductCategoriesVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.CategoryResponse,
 		GetProductCategoriesError,
 		undefined,
 		{},
 		{},
 		{}
-	>({ url: "/products/categories", method: "get", ...variables });
+	>({ url: "/products/categories", method: "get", ...variables, signal });
 
 /**
  * Returns a list of categories, their sort order and relationships.
  */
-export const useGetProductCategories = (
+export const useGetProductCategories = <TData = Schemas.CategoryResponse>(
 	variables: GetProductCategoriesVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.CategoryResponse,
 			GetProductCategoriesError,
-			Schemas.CategoryResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.CategoryResponse,
 		GetProductCategoriesError,
-		Schemas.CategoryResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/products/categories",
 			operationId: "getProductCategories",
 			variables,
 		}),
-		() => fetchGetProductCategories({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetProductCategories({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -1913,7 +2053,7 @@ export const useGetProductCategories = (
 };
 
 export type GetSubscriptionDetailsPathParams = {
-	/*
+	/**
 	 * Subscription ID.
 	 */
 	subscriptionId: number;
@@ -1936,49 +2076,57 @@ export type GetSubscriptionDetailsError = Fetcher.ErrorWrapper<
 
 export type GetSubscriptionDetailsVariables = {
 	pathParams: GetSubscriptionDetailsPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Returns all details about subscription specified by ID.
  */
 export const fetchGetSubscriptionDetails = (
 	variables: GetSubscriptionDetailsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.Subscription,
 		GetSubscriptionDetailsError,
 		undefined,
 		{},
 		{},
 		GetSubscriptionDetailsPathParams
-	>({ url: "/subscriptions/{subscriptionId}", method: "get", ...variables });
+	>({
+		url: "/subscriptions/{subscriptionId}",
+		method: "get",
+		...variables,
+		signal,
+	});
 
 /**
  * Returns all details about subscription specified by ID.
  */
-export const useGetSubscriptionDetails = (
+export const useGetSubscriptionDetails = <TData = Schemas.Subscription>(
 	variables: GetSubscriptionDetailsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.Subscription,
 			GetSubscriptionDetailsError,
-			Schemas.Subscription
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.Subscription,
 		GetSubscriptionDetailsError,
-		Schemas.Subscription
+		TData
 	>(
 		queryKeyFn({
 			path: "/subscriptions/{subscription_id}",
 			operationId: "getSubscriptionDetails",
 			variables,
 		}),
-		() => fetchGetSubscriptionDetails({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetSubscriptionDetails({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -2003,22 +2151,23 @@ export type CreateSubscriptionError = Fetcher.ErrorWrapper<
 
 export type CreateSubscriptionVariables = {
 	body?: Schemas.SubscriptionCreation;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Create subscription.
  */
 export const fetchCreateSubscription = (
 	variables: CreateSubscriptionVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.Subscription,
 		CreateSubscriptionError,
 		Schemas.SubscriptionCreation,
 		{},
 		{},
 		{}
-	>({ url: "/subscriptions", method: "post", ...variables });
+	>({ url: "/subscriptions", method: "post", ...variables, signal });
 
 /**
  * Create subscription.
@@ -2033,7 +2182,7 @@ export const useCreateSubscription = (
 		"mutationFn"
 	>,
 ) => {
-	const { fetcherOptions } = useNapiContext();
+	const { fetcherOptions } = useNativeApiContext();
 	return reactQuery.useMutation<
 		Schemas.Subscription,
 		CreateSubscriptionError,
@@ -2046,7 +2195,7 @@ export const useCreateSubscription = (
 };
 
 export type GetSubscriptionBundlesQueryParams = {
-	/*
+	/**
 	 * SDBS licensed product Id
 	 *
 	 * @format uint64
@@ -2071,49 +2220,54 @@ export type GetSubscriptionBundlesError = Fetcher.ErrorWrapper<
 
 export type GetSubscriptionBundlesVariables = {
 	queryParams?: GetSubscriptionBundlesQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Get all subscription Bundles. If a product_id is given it will return all the bundles that have the product.
  */
 export const fetchGetSubscriptionBundles = (
 	variables: GetSubscriptionBundlesVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.SubscriptionBundleResponse,
 		GetSubscriptionBundlesError,
 		undefined,
 		{},
 		GetSubscriptionBundlesQueryParams,
 		{}
-	>({ url: "/subscriptions/bundles", method: "get", ...variables });
+	>({ url: "/subscriptions/bundles", method: "get", ...variables, signal });
 
 /**
  * Get all subscription Bundles. If a product_id is given it will return all the bundles that have the product.
  */
-export const useGetSubscriptionBundles = (
+export const useGetSubscriptionBundles = <
+	TData = Schemas.SubscriptionBundleResponse,
+>(
 	variables: GetSubscriptionBundlesVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.SubscriptionBundleResponse,
 			GetSubscriptionBundlesError,
-			Schemas.SubscriptionBundleResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.SubscriptionBundleResponse,
 		GetSubscriptionBundlesError,
-		Schemas.SubscriptionBundleResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/subscriptions/bundles",
 			operationId: "getSubscriptionBundles",
 			variables,
 		}),
-		() => fetchGetSubscriptionBundles({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetSubscriptionBundles({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -2122,7 +2276,7 @@ export const useGetSubscriptionBundles = (
 };
 
 export type UpdateSubscriptionStatusPathParams = {
-	/*
+	/**
 	 * Subscription ID.
 	 */
 	subscriptionId: number;
@@ -2142,22 +2296,28 @@ export type UpdateSubscriptionStatusError = Fetcher.ErrorWrapper<
 export type UpdateSubscriptionStatusVariables = {
 	body?: Schemas.SubscriptionStatus | Schemas.SubscriptionCancellationStatus;
 	pathParams: UpdateSubscriptionStatusPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Updates the status of the subscription
  */
 export const fetchUpdateSubscriptionStatus = (
 	variables: UpdateSubscriptionStatusVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.Subscription,
 		UpdateSubscriptionStatusError,
 		Schemas.SubscriptionStatus | Schemas.SubscriptionCancellationStatus,
 		{},
 		{},
 		UpdateSubscriptionStatusPathParams
-	>({ url: "/subscription/{subscriptionId}/", method: "patch", ...variables });
+	>({
+		url: "/subscription/{subscriptionId}/",
+		method: "patch",
+		...variables,
+		signal,
+	});
 
 /**
  * Updates the status of the subscription
@@ -2172,7 +2332,7 @@ export const useUpdateSubscriptionStatus = (
 		"mutationFn"
 	>,
 ) => {
-	const { fetcherOptions } = useNapiContext();
+	const { fetcherOptions } = useNativeApiContext();
 	return reactQuery.useMutation<
 		Schemas.Subscription,
 		UpdateSubscriptionStatusError,
@@ -2185,7 +2345,7 @@ export const useUpdateSubscriptionStatus = (
 };
 
 export type GetUsersSubscriptionInformationPathParams = {
-	/*
+	/**
 	 * Native ID.
 	 */
 	nativeId: string;
@@ -2204,44 +2364,56 @@ export type GetUsersSubscriptionInformationError = Fetcher.ErrorWrapper<
 
 export type GetUsersSubscriptionInformationVariables = {
 	pathParams: GetUsersSubscriptionInformationPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 export const fetchGetUsersSubscriptionInformation = (
 	variables: GetUsersSubscriptionInformationVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.SubscriptionUserInfo,
 		GetUsersSubscriptionInformationError,
 		undefined,
 		{},
 		{},
 		GetUsersSubscriptionInformationPathParams
-	>({ url: "/subscriptions/users/{nativeId}", method: "get", ...variables });
+	>({
+		url: "/subscriptions/users/{nativeId}",
+		method: "get",
+		...variables,
+		signal,
+	});
 
-export const useGetUsersSubscriptionInformation = (
+export const useGetUsersSubscriptionInformation = <
+	TData = Schemas.SubscriptionUserInfo,
+>(
 	variables: GetUsersSubscriptionInformationVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.SubscriptionUserInfo,
 			GetUsersSubscriptionInformationError,
-			Schemas.SubscriptionUserInfo
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.SubscriptionUserInfo,
 		GetUsersSubscriptionInformationError,
-		Schemas.SubscriptionUserInfo
+		TData
 	>(
 		queryKeyFn({
 			path: "/subscriptions/users/{native_id}",
 			operationId: "getUsersSubscriptionInformation",
 			variables,
 		}),
-		() =>
-			fetchGetUsersSubscriptionInformation({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetUsersSubscriptionInformation(
+				{ ...fetcherOptions, ...variables },
+				signal,
+			),
 		{
 			...options,
 			...queryOptions,
@@ -2250,7 +2422,7 @@ export const useGetUsersSubscriptionInformation = (
 };
 
 export type GetSubscriptionInvoicesPathParams = {
-	/*
+	/**
 	 * Subscription ID.
 	 */
 	subscriptionId: number;
@@ -2260,12 +2432,13 @@ export type GetSubscriptionInvoicesError = Fetcher.ErrorWrapper<undefined>;
 
 export type GetSubscriptionInvoicesVariables = {
 	pathParams: GetSubscriptionInvoicesPathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 export const fetchGetSubscriptionInvoices = (
 	variables: GetSubscriptionInvoicesVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.SubscriptionInvoice,
 		GetSubscriptionInvoicesError,
 		undefined,
@@ -2276,31 +2449,34 @@ export const fetchGetSubscriptionInvoices = (
 		url: "/subscriptions/{subscriptionId}/invoices",
 		method: "get",
 		...variables,
+		signal,
 	});
 
-export const useGetSubscriptionInvoices = (
+export const useGetSubscriptionInvoices = <TData = Schemas.SubscriptionInvoice>(
 	variables: GetSubscriptionInvoicesVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.SubscriptionInvoice,
 			GetSubscriptionInvoicesError,
-			Schemas.SubscriptionInvoice
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.SubscriptionInvoice,
 		GetSubscriptionInvoicesError,
-		Schemas.SubscriptionInvoice
+		TData
 	>(
 		queryKeyFn({
 			path: "/subscriptions/{subscription_id}/invoices",
 			operationId: "getSubscriptionInvoices",
 			variables,
 		}),
-		() => fetchGetSubscriptionInvoices({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetSubscriptionInvoices({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -2312,12 +2488,13 @@ export type GetSubscriptionCancellationReasonsError =
 	Fetcher.ErrorWrapper<undefined>;
 
 export type GetSubscriptionCancellationReasonsVariables =
-	NapiContext["fetcherOptions"];
+	NativeApiContext["fetcherOptions"];
 
 export const fetchGetSubscriptionCancellationReasons = (
 	variables: GetSubscriptionCancellationReasonsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.SubscriptionCancellationReasons,
 		GetSubscriptionCancellationReasonsError,
 		undefined,
@@ -2328,35 +2505,39 @@ export const fetchGetSubscriptionCancellationReasons = (
 		url: "/subscriptions/cancellation_reasons",
 		method: "get",
 		...variables,
+		signal,
 	});
 
-export const useGetSubscriptionCancellationReasons = (
+export const useGetSubscriptionCancellationReasons = <
+	TData = Schemas.SubscriptionCancellationReasons,
+>(
 	variables: GetSubscriptionCancellationReasonsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.SubscriptionCancellationReasons,
 			GetSubscriptionCancellationReasonsError,
-			Schemas.SubscriptionCancellationReasons
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.SubscriptionCancellationReasons,
 		GetSubscriptionCancellationReasonsError,
-		Schemas.SubscriptionCancellationReasons
+		TData
 	>(
 		queryKeyFn({
 			path: "/subscriptions/cancellation_reasons",
 			operationId: "getSubscriptionCancellationReasons",
 			variables,
 		}),
-		() =>
-			fetchGetSubscriptionCancellationReasons({
-				...fetcherOptions,
-				...variables,
-			}),
+		({ signal }) =>
+			fetchGetSubscriptionCancellationReasons(
+				{ ...fetcherOptions, ...variables },
+				signal,
+			),
 		{
 			...options,
 			...queryOptions,
@@ -2381,22 +2562,23 @@ export type CreateSubscriptionPageURLError = Fetcher.ErrorWrapper<
 
 export type CreateSubscriptionPageURLVariables = {
 	body: Schemas.SubscriptionPageCreation;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Create subscription page URL.
  */
 export const fetchCreateSubscriptionPageURL = (
 	variables: CreateSubscriptionPageURLVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.SubscriptionPage,
 		CreateSubscriptionPageURLError,
 		Schemas.SubscriptionPageCreation,
 		{},
 		{},
 		{}
-	>({ url: "/subscription-pages", method: "post", ...variables });
+	>({ url: "/subscription-pages", method: "post", ...variables, signal });
 
 /**
  * Create subscription page URL.
@@ -2411,7 +2593,7 @@ export const useCreateSubscriptionPageURL = (
 		"mutationFn"
 	>,
 ) => {
-	const { fetcherOptions } = useNapiContext();
+	const { fetcherOptions } = useNativeApiContext();
 	return reactQuery.useMutation<
 		Schemas.SubscriptionPage,
 		CreateSubscriptionPageURLError,
@@ -2424,13 +2606,13 @@ export const useCreateSubscriptionPageURL = (
 };
 
 export type FindSubscriptionPlansQueryParams = {
-	/*
+	/**
 	 * SDBS licensed product Id
 	 *
 	 * @format uint64
 	 */
 	product_id: number;
-	/*
+	/**
 	 * Country code. If not provided detected from client IP
 	 */
 	country?: string;
@@ -2453,49 +2635,54 @@ export type FindSubscriptionPlansError = Fetcher.ErrorWrapper<
 
 export type FindSubscriptionPlansVariables = {
 	queryParams: FindSubscriptionPlansQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Returns all available subscription plans for provided product and a country.
  */
 export const fetchFindSubscriptionPlans = (
 	variables: FindSubscriptionPlansVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.SubscriptionPricePoints,
 		FindSubscriptionPlansError,
 		undefined,
 		{},
 		FindSubscriptionPlansQueryParams,
 		{}
-	>({ url: "/subscription-plans", method: "get", ...variables });
+	>({ url: "/subscription-plans", method: "get", ...variables, signal });
 
 /**
  * Returns all available subscription plans for provided product and a country.
  */
-export const useFindSubscriptionPlans = (
+export const useFindSubscriptionPlans = <
+	TData = Schemas.SubscriptionPricePoints,
+>(
 	variables: FindSubscriptionPlansVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.SubscriptionPricePoints,
 			FindSubscriptionPlansError,
-			Schemas.SubscriptionPricePoints
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.SubscriptionPricePoints,
 		FindSubscriptionPlansError,
-		Schemas.SubscriptionPricePoints
+		TData
 	>(
 		queryKeyFn({
 			path: "/subscription-plans",
 			operationId: "findSubscriptionPlans",
 			variables,
 		}),
-		() => fetchFindSubscriptionPlans({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchFindSubscriptionPlans({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -2514,49 +2701,58 @@ export type FindSubscriptionProductsError = Fetcher.ErrorWrapper<
 	  }
 >;
 
-export type FindSubscriptionProductsVariables = NapiContext["fetcherOptions"];
+export type FindSubscriptionProductsVariables =
+	NativeApiContext["fetcherOptions"];
 
 /**
  * Returns all licensed products which are working under subscription license.
  */
 export const fetchFindSubscriptionProducts = (
 	variables: FindSubscriptionProductsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.SubscriptionProducts,
 		FindSubscriptionProductsError,
 		undefined,
 		{},
 		{},
 		{}
-	>({ url: "/subscription-products", method: "get", ...variables });
+	>({ url: "/subscription-products", method: "get", ...variables, signal });
 
 /**
  * Returns all licensed products which are working under subscription license.
  */
-export const useFindSubscriptionProducts = (
+export const useFindSubscriptionProducts = <
+	TData = Schemas.SubscriptionProducts,
+>(
 	variables: FindSubscriptionProductsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.SubscriptionProducts,
 			FindSubscriptionProductsError,
-			Schemas.SubscriptionProducts
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.SubscriptionProducts,
 		FindSubscriptionProductsError,
-		Schemas.SubscriptionProducts
+		TData
 	>(
 		queryKeyFn({
 			path: "/subscription-products",
 			operationId: "findSubscriptionProducts",
 			variables,
 		}),
-		() => fetchFindSubscriptionProducts({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchFindSubscriptionProducts(
+				{ ...fetcherOptions, ...variables },
+				signal,
+			),
 		{
 			...options,
 			...queryOptions,
@@ -2575,47 +2771,52 @@ export type GetAllResourcesError = Fetcher.ErrorWrapper<
 	  }
 >;
 
-export type GetAllResourcesVariables = NapiContext["fetcherOptions"];
+export type GetAllResourcesVariables = NativeApiContext["fetcherOptions"];
 
 /**
  * Returns all known resources and category memberships, grouped by UPID.
  */
-export const fetchGetAllResources = (variables: GetAllResourcesVariables) =>
-	napiFetch<
+export const fetchGetAllResources = (
+	variables: GetAllResourcesVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.AllResourcesResponse,
 		GetAllResourcesError,
 		undefined,
 		{},
 		{},
 		{}
-	>({ url: "/resources/", method: "get", ...variables });
+	>({ url: "/resources/", method: "get", ...variables, signal });
 
 /**
  * Returns all known resources and category memberships, grouped by UPID.
  */
-export const useGetAllResources = (
+export const useGetAllResources = <TData = Schemas.AllResourcesResponse>(
 	variables: GetAllResourcesVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.AllResourcesResponse,
 			GetAllResourcesError,
-			Schemas.AllResourcesResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.AllResourcesResponse,
 		GetAllResourcesError,
-		Schemas.AllResourcesResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/resources/",
 			operationId: "getAllResources",
 			variables,
 		}),
-		() => fetchGetAllResources({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetAllResources({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -2644,47 +2845,52 @@ export type GetSingleResourceError = Fetcher.ErrorWrapper<
 
 export type GetSingleResourceVariables = {
 	pathParams: GetSingleResourcePathParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Returns the Resource with the given `rid`. The `rid` has to be a valid UUID (see [`uuid.UUID`](https://docs.python.org/3/library/uuid.html#uuid.UUID)).
  */
-export const fetchGetSingleResource = (variables: GetSingleResourceVariables) =>
-	napiFetch<
+export const fetchGetSingleResource = (
+	variables: GetSingleResourceVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.SingleResourceResponse,
 		GetSingleResourceError,
 		undefined,
 		{},
 		{},
 		GetSingleResourcePathParams
-	>({ url: "/resources/{rid}", method: "get", ...variables });
+	>({ url: "/resources/{rid}", method: "get", ...variables, signal });
 
 /**
  * Returns the Resource with the given `rid`. The `rid` has to be a valid UUID (see [`uuid.UUID`](https://docs.python.org/3/library/uuid.html#uuid.UUID)).
  */
-export const useGetSingleResource = (
+export const useGetSingleResource = <TData = Schemas.SingleResourceResponse>(
 	variables: GetSingleResourceVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.SingleResourceResponse,
 			GetSingleResourceError,
-			Schemas.SingleResourceResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.SingleResourceResponse,
 		GetSingleResourceError,
-		Schemas.SingleResourceResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/resources/{rid}",
 			operationId: "getSingleResource",
 			variables,
 		}),
-		() => fetchGetSingleResource({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetSingleResource({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -2709,20 +2915,20 @@ export type SignUpError = Fetcher.ErrorWrapper<
 
 export type SignUpVariables = {
 	body: Schemas.UserSignup;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Creates a new user with the given credentials and profile information. Note that this endpoint only requires a valid Application Token for authorization. You don’t have to be authenticated to create a new user, which enables user self-signup from trusted Applications.
  */
-export const fetchSignUp = (variables: SignUpVariables) =>
-	napiFetch<
+export const fetchSignUp = (variables: SignUpVariables, signal?: AbortSignal) =>
+	nativeApiFetch<
 		Schemas.SignUpResponse,
 		SignUpError,
 		Schemas.UserSignup,
 		{},
 		{},
 		{}
-	>({ url: "/users/", method: "post", ...variables });
+	>({ url: "/users/", method: "post", ...variables, signal });
 
 /**
  * Creates a new user with the given credentials and profile information. Note that this endpoint only requires a valid Application Token for authorization. You don’t have to be authenticated to create a new user, which enables user self-signup from trusted Applications.
@@ -2737,7 +2943,7 @@ export const useSignUp = (
 		"mutationFn"
 	>,
 ) => {
-	const { fetcherOptions } = useNapiContext();
+	const { fetcherOptions } = useNativeApiContext();
 	return reactQuery.useMutation<
 		Schemas.SignUpResponse,
 		SignUpError,
@@ -2750,14 +2956,14 @@ export const useSignUp = (
 };
 
 export type GetUserLicensesPathParams = {
-	/*
+	/**
 	 * NativeID – unique enduser identifier
 	 */
 	id: string;
 };
 
 export type GetUserLicensesQueryParams = {
-	/*
+	/**
 	 * if true then list contains also subscribed products
 	 *
 	 * @default false
@@ -2783,47 +2989,52 @@ export type GetUserLicensesError = Fetcher.ErrorWrapper<
 export type GetUserLicensesVariables = {
 	pathParams: GetUserLicensesPathParams;
 	queryParams?: GetUserLicensesQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Retrieve list of enduser licenses
  */
-export const fetchGetUserLicenses = (variables: GetUserLicensesVariables) =>
-	napiFetch<
+export const fetchGetUserLicenses = (
+	variables: GetUserLicensesVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.LicensesResponse,
 		GetUserLicensesError,
 		undefined,
 		{},
 		GetUserLicensesQueryParams,
 		GetUserLicensesPathParams
-	>({ url: "/users/{id}/licenses", method: "get", ...variables });
+	>({ url: "/users/{id}/licenses", method: "get", ...variables, signal });
 
 /**
  * Retrieve list of enduser licenses
  */
-export const useGetUserLicenses = (
+export const useGetUserLicenses = <TData = Schemas.LicensesResponse>(
 	variables: GetUserLicensesVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.LicensesResponse,
 			GetUserLicensesError,
-			Schemas.LicensesResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.LicensesResponse,
 		GetUserLicensesError,
-		Schemas.LicensesResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/users/{id}/licenses",
 			operationId: "getUserLicenses",
 			variables,
 		}),
-		() => fetchGetUserLicenses({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetUserLicenses({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -2846,43 +3057,48 @@ export type GetMyUserInfoError = Fetcher.ErrorWrapper<
 	  }
 >;
 
-export type GetMyUserInfoVariables = NapiContext["fetcherOptions"];
+export type GetMyUserInfoVariables = NativeApiContext["fetcherOptions"];
 
 /**
  * Returns the profile information associated with the authenticated user. The user is derived from the Access Token specified in the Request Header.
  */
-export const fetchGetMyUserInfo = (variables: GetMyUserInfoVariables) =>
-	napiFetch<
+export const fetchGetMyUserInfo = (
+	variables: GetMyUserInfoVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.GetUsersMeResponse,
 		GetMyUserInfoError,
 		undefined,
 		{},
 		{},
 		{}
-	>({ url: "/users/me", method: "get", ...variables });
+	>({ url: "/users/me", method: "get", ...variables, signal });
 
 /**
  * Returns the profile information associated with the authenticated user. The user is derived from the Access Token specified in the Request Header.
  */
-export const useGetMyUserInfo = (
+export const useGetMyUserInfo = <TData = Schemas.GetUsersMeResponse>(
 	variables: GetMyUserInfoVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.GetUsersMeResponse,
 			GetMyUserInfoError,
-			Schemas.GetUsersMeResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.GetUsersMeResponse,
 		GetMyUserInfoError,
-		Schemas.GetUsersMeResponse
+		TData
 	>(
 		queryKeyFn({ path: "/users/me", operationId: "getMyUserInfo", variables }),
-		() => fetchGetMyUserInfo({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetMyUserInfo({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -2907,22 +3123,23 @@ export type UpdateMyCredentialsError = Fetcher.ErrorWrapper<
 
 export type UpdateMyCredentialsVariables = {
 	body?: Schemas.UsersMeInputMessage;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Updates the users profile with a given new username or password. The view will not permit both to be updated in one request. Perform same password validation as on account creation.
  */
 export const fetchUpdateMyCredentials = (
 	variables: UpdateMyCredentialsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.UsersMeResponse,
 		UpdateMyCredentialsError,
 		Schemas.UsersMeInputMessage,
 		{},
 		{},
 		{}
-	>({ url: "/users/me", method: "put", ...variables });
+	>({ url: "/users/me", method: "put", ...variables, signal });
 
 /**
  * Updates the users profile with a given new username or password. The view will not permit both to be updated in one request. Perform same password validation as on account creation.
@@ -2937,7 +3154,7 @@ export const useUpdateMyCredentials = (
 		"mutationFn"
 	>,
 ) => {
-	const { fetcherOptions } = useNapiContext();
+	const { fetcherOptions } = useNativeApiContext();
 	return reactQuery.useMutation<
 		Schemas.UsersMeResponse,
 		UpdateMyCredentialsError,
@@ -2950,7 +3167,7 @@ export const useUpdateMyCredentials = (
 };
 
 export type GetMyProductsQueryParams = {
-	/*
+	/**
 	 * if true then list contains also subscribed products
 	 *
 	 * @default false
@@ -2971,41 +3188,46 @@ export type GetMyProductsError = Fetcher.ErrorWrapper<
 
 export type GetMyProductsVariables = {
 	queryParams?: GetMyProductsQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
-export const fetchGetMyProducts = (variables: GetMyProductsVariables) =>
-	napiFetch<
+export const fetchGetMyProducts = (
+	variables: GetMyProductsVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.MyProductsResponse,
 		GetMyProductsError,
 		undefined,
 		{},
 		GetMyProductsQueryParams,
 		{}
-	>({ url: "/users/me/products", method: "get", ...variables });
+	>({ url: "/users/me/products", method: "get", ...variables, signal });
 
-export const useGetMyProducts = (
+export const useGetMyProducts = <TData = Schemas.MyProductsResponse>(
 	variables: GetMyProductsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.MyProductsResponse,
 			GetMyProductsError,
-			Schemas.MyProductsResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.MyProductsResponse,
 		GetMyProductsError,
-		Schemas.MyProductsResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/users/me/products",
 			operationId: "getMyProducts",
 			variables,
 		}),
-		() => fetchGetMyProducts({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetMyProducts({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -3026,20 +3248,23 @@ export type AddMyProductError = Fetcher.ErrorWrapper<
 
 export type AddMyProductVariables = {
 	body: Schemas.RegisterProductRequest;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 /**
  * Registers a new serial into the user’s account.
  */
-export const fetchAddMyProduct = (variables: AddMyProductVariables) =>
-	napiFetch<
+export const fetchAddMyProduct = (
+	variables: AddMyProductVariables,
+	signal?: AbortSignal,
+) =>
+	nativeApiFetch<
 		Schemas.RegisterProductResponse,
 		AddMyProductError,
 		Schemas.RegisterProductRequest,
 		{},
 		{},
 		{}
-	>({ url: "/users/me/products", method: "post", ...variables });
+	>({ url: "/users/me/products", method: "post", ...variables, signal });
 
 /**
  * Registers a new serial into the user’s account.
@@ -3054,7 +3279,7 @@ export const useAddMyProduct = (
 		"mutationFn"
 	>,
 ) => {
-	const { fetcherOptions } = useNapiContext();
+	const { fetcherOptions } = useNativeApiContext();
 	return reactQuery.useMutation<
 		Schemas.RegisterProductResponse,
 		AddMyProductError,
@@ -3067,7 +3292,7 @@ export const useAddMyProduct = (
 };
 
 export type GetProductDifferencesQueryParams = {
-	/*
+	/**
 	 * licensed product to compare
 	 *
 	 * @example 2173
@@ -3088,43 +3313,53 @@ export type GetProductDifferencesError = Fetcher.ErrorWrapper<
 
 export type GetProductDifferencesVariables = {
 	queryParams: GetProductDifferencesQueryParams;
-} & NapiContext["fetcherOptions"];
+} & NativeApiContext["fetcherOptions"];
 
 export const fetchGetProductDifferences = (
 	variables: GetProductDifferencesVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.ProductDifferencesResponse,
 		GetProductDifferencesError,
 		undefined,
 		{},
 		GetProductDifferencesQueryParams,
 		{}
-	>({ url: "/users/me/product_differences", method: "get", ...variables });
+	>({
+		url: "/users/me/product_differences",
+		method: "get",
+		...variables,
+		signal,
+	});
 
-export const useGetProductDifferences = (
+export const useGetProductDifferences = <
+	TData = Schemas.ProductDifferencesResponse,
+>(
 	variables: GetProductDifferencesVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.ProductDifferencesResponse,
 			GetProductDifferencesError,
-			Schemas.ProductDifferencesResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.ProductDifferencesResponse,
 		GetProductDifferencesError,
-		Schemas.ProductDifferencesResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/users/me/product_differences",
 			operationId: "getProductDifferences",
 			variables,
 		}),
-		() => fetchGetProductDifferences({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetProductDifferences({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -3143,43 +3378,46 @@ export type GetMySubscriptionsError = Fetcher.ErrorWrapper<
 	  }
 >;
 
-export type GetMySubscriptionsVariables = NapiContext["fetcherOptions"];
+export type GetMySubscriptionsVariables = NativeApiContext["fetcherOptions"];
 
 export const fetchGetMySubscriptions = (
 	variables: GetMySubscriptionsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.MySubscriptionsResponse,
 		GetMySubscriptionsError,
 		undefined,
 		{},
 		{},
 		{}
-	>({ url: "/users/me/subscriptions", method: "get", ...variables });
+	>({ url: "/users/me/subscriptions", method: "get", ...variables, signal });
 
-export const useGetMySubscriptions = (
+export const useGetMySubscriptions = <TData = Schemas.MySubscriptionsResponse>(
 	variables: GetMySubscriptionsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.MySubscriptionsResponse,
 			GetMySubscriptionsError,
-			Schemas.MySubscriptionsResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.MySubscriptionsResponse,
 		GetMySubscriptionsError,
-		Schemas.MySubscriptionsResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/users/me/subscriptions",
 			operationId: "getMySubscriptions",
 			variables,
 		}),
-		() => fetchGetMySubscriptions({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetMySubscriptions({ ...fetcherOptions, ...variables }, signal),
 		{
 			...options,
 			...queryOptions,
@@ -3198,43 +3436,52 @@ export type GetMyProductUpgradePathsError = Fetcher.ErrorWrapper<
 	  }
 >;
 
-export type GetMyProductUpgradePathsVariables = NapiContext["fetcherOptions"];
+export type GetMyProductUpgradePathsVariables =
+	NativeApiContext["fetcherOptions"];
 
 export const fetchGetMyProductUpgradePaths = (
 	variables: GetMyProductUpgradePathsVariables,
+	signal?: AbortSignal,
 ) =>
-	napiFetch<
+	nativeApiFetch<
 		Schemas.ProductUpgradePathsResponse,
 		GetMyProductUpgradePathsError,
 		undefined,
 		{},
 		{},
 		{}
-	>({ url: "/users/me/upgrade_paths", method: "get", ...variables });
+	>({ url: "/users/me/upgrade_paths", method: "get", ...variables, signal });
 
-export const useGetMyProductUpgradePaths = (
+export const useGetMyProductUpgradePaths = <
+	TData = Schemas.ProductUpgradePathsResponse,
+>(
 	variables: GetMyProductUpgradePathsVariables,
 	options?: Omit<
 		reactQuery.UseQueryOptions<
 			Schemas.ProductUpgradePathsResponse,
 			GetMyProductUpgradePathsError,
-			Schemas.ProductUpgradePathsResponse
+			TData
 		>,
 		"queryKey" | "queryFn"
 	>,
 ) => {
-	const { fetcherOptions, queryOptions, queryKeyFn } = useNapiContext(options);
+	const { fetcherOptions, queryOptions, queryKeyFn } =
+		useNativeApiContext(options);
 	return reactQuery.useQuery<
 		Schemas.ProductUpgradePathsResponse,
 		GetMyProductUpgradePathsError,
-		Schemas.ProductUpgradePathsResponse
+		TData
 	>(
 		queryKeyFn({
 			path: "/users/me/upgrade_paths",
 			operationId: "getMyProductUpgradePaths",
 			variables,
 		}),
-		() => fetchGetMyProductUpgradePaths({ ...fetcherOptions, ...variables }),
+		({ signal }) =>
+			fetchGetMyProductUpgradePaths(
+				{ ...fetcherOptions, ...variables },
+				signal,
+			),
 		{
 			...options,
 			...queryOptions,
