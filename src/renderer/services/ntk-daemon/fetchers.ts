@@ -1,10 +1,13 @@
+import { measuredAsyncFn } from "~/common/measure";
 import { normalizeNtkDaemonResponse } from "~/common/ntk-daemon/response";
 import bridge from "~/renderer/bridge";
 
-export const fetchDaemonVersion = () =>
-	normalizeNtkDaemonResponse(bridge.getNtkDaemonVersion());
+export const fetchDaemonVersion = measuredAsyncFn("fetchDaemonVersion", () =>
+	normalizeNtkDaemonResponse(bridge.getNtkDaemonVersion()),
+);
 
-export const fetchKnownProducts = () =>
+export const fetchKnownProducts = measuredAsyncFn("fetchKnownProducts", () =>
 	normalizeNtkDaemonResponse(bridge.getNtkDaemonKnownProducts()).then(
 		({ knownProducts }) => knownProducts,
-	);
+	),
+);

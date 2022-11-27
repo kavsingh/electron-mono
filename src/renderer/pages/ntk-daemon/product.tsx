@@ -6,7 +6,8 @@ import { NtkDaemonQueryKey } from "~/renderer/services/ntk-daemon/constants";
 
 export default memo(function Product({ upid }: { upid: string }) {
 	const { data: product } = useQuery({
-		cacheTime: Infinity,
+		staleTime: Infinity,
+		refetchOnMount: false,
 		queryKey: [NtkDaemonQueryKey.KnownProducts],
 		queryFn: fetchKnownProducts,
 		select: (data) => data.find((item) => item.upid === upid),
