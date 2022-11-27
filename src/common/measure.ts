@@ -1,32 +1,35 @@
 import { error, log } from "./log";
 
-const isDev = process.env["NODE_ENV"] === "development";
+let measuredAsyncFn: MeasuredAsyncFn = (_id, fn) => fn;
 
-export const measuredAsyncFn = <T extends GenericAsyncFn>(
-	name: string,
-	fn: T,
-) =>
-	isDev
-		? async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
-				log(`called ${name}`);
+if (IS_DEVELOPMENT) {
+	measuredAsyncFn =
+		(id, fn) =>
+		async (...args) => {
+			log(`called ${id}`);
 
-				const start = Date.now();
+			const start = Date.now();
 
-				try {
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-					const result = await fn(...args);
+			try {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				const result = await fn(...args);
 
-					log(`${name} succeeded in ${Date.now() - start}ms`);
+				log(`${id} succeeded in ${Date.now() - start}ms`);
 
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-					return result;
-				} catch (reason) {
-					error(`${name} failed in ${Date.now() - start}ms`, reason);
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+				return result;
+			} catch (reason) {
+				error(`${id} failed in ${Date.now() - start}ms`, reason);
 
-					throw reason;
-				}
-		  }
-		: fn;
+				throw reason;
+			}
+		};
+}
+
+export { measuredAsyncFn };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type GenericAsyncFn = (...args: any[]) => any;
+export type MeasuredAsyncFn = <T extends (...args: any[]) => Promise<any>>(
+	id: string,
+	fn: T,
+) => (...args: Parameters<T>) => Promise<Awaited<ReturnType<T>>>;

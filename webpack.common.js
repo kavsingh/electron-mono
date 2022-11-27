@@ -1,4 +1,5 @@
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const { DefinePlugin } = require("webpack");
 
 /** @typedef {import("webpack").Configuration} Configuration */
 
@@ -13,6 +14,10 @@ const rules = [
 
 /** @type {Configuration["plugins"]} */
 const plugins = [
+	new DefinePlugin({
+		IS_DEVELOPMENT: process.env["NODE_ENV"] === "development",
+		IS_PRODUCTION: process.env["NODE_ENV"] === "production",
+	}),
 	new ForkTsCheckerWebpackPlugin({
 		typescript: {
 			mode: "write-references",
