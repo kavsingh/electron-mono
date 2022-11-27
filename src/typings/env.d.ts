@@ -1,2 +1,1 @@
-declare const IS_DEVELOPMENT: boolean;
-declare const IS_PRODUCTION: boolean;
+declare const MODE: "production" | "development";

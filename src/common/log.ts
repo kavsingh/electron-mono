@@ -1,4 +1,3 @@
-const isDev = process.env["NODE_ENV"] === "development";
 const noop = () => undefined;
 
 let log: typeof console.log = noop;
@@ -7,9 +6,9 @@ let error: typeof console.error = noop;
 
 if (MODE === "development") {
 	/* eslint-disable no-console */
-	log = isDev ? console.log.bind(console) : noop;
-	warn = isDev ? console.warn.bind(console) : noop;
-	error = isDev ? console.error.bind(console) : noop;
+	log = console.log.bind(console);
+	warn = console.warn.bind(console);
+	error = console.error.bind(console);
 	/* eslint-enable */
 }
 
