@@ -2,7 +2,7 @@ import { error, log } from "./log";
 
 let measuredAsyncFn: MeasuredAsyncFn = (_id, fn) => fn;
 
-if (IS_DEVELOPMENT) {
+if (MODE === "development") {
 	measuredAsyncFn =
 		(id, fn) =>
 		async (...args) => {

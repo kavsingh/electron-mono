@@ -12,11 +12,10 @@ const rules = [
 	},
 ];
 
-/** @type {Configuration["plugins"]} */
-const plugins = [
+/** @type {(mode: string) => Configuration["plugins"]} */
+const plugins = (mode) => [
 	new DefinePlugin({
-		IS_DEVELOPMENT: process.env["NODE_ENV"] === "development",
-		IS_PRODUCTION: process.env["NODE_ENV"] === "production",
+		MODE: JSON.stringify(mode || "production"),
 	}),
 	new ForkTsCheckerWebpackPlugin({
 		typescript: {
