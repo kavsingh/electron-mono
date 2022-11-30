@@ -5,9 +5,6 @@ import { setupResponders } from "./ipc/responders";
 import restrictNavigation from "./lib/restrict-navigation";
 import { createMainWindow } from "./windows";
 
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require("electron-squirrel-startup")) app.quit();
-
 const removeResponders = setupResponders();
 let mainWindow: BrowserWindow;
 let detachHeartbeat: ReturnType<typeof attachHeartbeat> | undefined;

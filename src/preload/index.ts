@@ -1,7 +1,7 @@
 import { contextBridge } from "electron";
 
-import { rendererSubscriber } from "./bridge/pubsub";
-import { rendererRequester } from "./bridge/request";
+import { rendererSubscriber } from "~/bridge/pubsub";
+import { rendererRequester } from "~/bridge/request";
 
 const bridge = {
 	getSystemInfo: rendererRequester("getSystemInfo"),

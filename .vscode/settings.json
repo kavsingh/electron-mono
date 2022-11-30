@@ -5,13 +5,11 @@
 	},
 	"files.watcherExclude": {
 		"**/node_modules": true,
-		"**/out/": true,
-		"**/.webpack/": true
+		"**/out/": true
 	},
 	"search.exclude": {
 		"**/node_modules": true,
-		"**/out/": true,
-		"**/.webpack/": true
+		"**/out/": true
 	},
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"[javascript]": {

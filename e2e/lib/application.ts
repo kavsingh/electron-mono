@@ -9,7 +9,7 @@ import type { ElectronApplication } from "@playwright/test";
 
 export const setupApplication = async (): Promise<ElectronApplication> =>
 	electron.launch({
-		args: [path.join(PROJECT_ROOT, ".webpack/main/index.js")],
+		args: [path.join(PROJECT_ROOT, "out/main/index.js")],
 		env: {
 			...(os.platform() === "win32"
 				? {

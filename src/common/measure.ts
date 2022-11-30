@@ -2,7 +2,7 @@ import { error, log } from "./log";
 
 let measuredAsyncFn: MeasuredAsyncFn = (_id, fn) => fn;
 
-if (MODE === "development") {
+if (import.meta.env.DEV) {
 	measuredAsyncFn =
 		(id, fn) =>
 		async (...args) => {
