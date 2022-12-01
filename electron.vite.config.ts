@@ -1,23 +1,29 @@
-/// <reference types="vitest" />
-
-import { resolve } from "path";
-
 import reactPlugin from "@vitejs/plugin-react";
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 
-const srcAlias = { "~": resolve(__dirname, "./src") };
+import { alias } from "./vite.config.common";
 
 export default defineConfig({
 	main: {
-		resolve: { alias: srcAlias },
+		resolve: { alias },
 		plugins: [externalizeDepsPlugin()],
 	},
 	preload: {
-		resolve: { alias: srcAlias },
+		resolve: { alias },
 		plugins: [externalizeDepsPlugin()],
+		test: {
+			include: ["src/preload/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+			environment: "node",
+			setupFiles: ["./vitest.setup.preload.ts"],
+		},
 	},
 	renderer: {
-		resolve: { alias: srcAlias },
+		resolve: { alias },
 		plugins: [reactPlugin()],
+		test: {
+			include: ["src/renderer/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+			environment: "jsdom",
+			setupFiles: ["./vitest.setup.renderer.ts"],
+		},
 	},
 });
