@@ -15,7 +15,7 @@
 		"test": "pnpm test:node && pnpm test:renderer",
 		"test:node": "vitest run -c vitest.config.node.ts",
 		"test:renderer": "vitest run -c vitest.config.renderer.ts",
-		"test:e2e": "pnpm build && playwright test",
+		"test:e2e": "E2E=true pnpm build && playwright test",
 		"build:win": "pnpm run build && electron-builder --win --config",
 		"build:mac": "pnpm run build && electron-builder --mac --config",
 		"build:linux": "pnpm run build && electron-builder --linux --config"
