@@ -47,10 +47,9 @@ export const mainResponder = <K extends RequestChannelName>(
 
 const assertValidSender = (event: IpcMainInvokeEvent) => {
 	const host = new URL(event.senderFrame.url).host;
-	const isValidHost = typeof host === "string";
-	// const isValidHost = import.meta.env.DEV
-	// 	? host.startsWith("localhost")
-	// 	: host === "";
+	const isValidHost = import.meta.env.DEV
+		? host.startsWith("localhost")
+		: host === "";
 
 	if (!isValidHost) throw new Error("Invalid sender");
 };
