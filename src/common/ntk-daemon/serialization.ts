@@ -4,7 +4,6 @@ import {
 } from "@nativeinstruments/ntk-daemon-node-lib";
 // eslint-disable-next-line import/no-named-as-default
 import Long from "long";
-import { serializeError } from "serialize-error";
 
 import type {
 	NtkDaemonBridgeResponse,
@@ -33,12 +32,12 @@ export const serializeNtkDaemonResponse = async <T>(
 		}
 
 		if (reason instanceof Error) {
-			return { result: "error", message: serializeError(reason) };
+			return { result: "error", message: await serializeError(reason) };
 		}
 
 		return {
 			result: "error",
-			message: serializeError(new Error(String(reason))),
+			message: await serializeError(new Error(String(reason))),
 		};
 	}
 };
@@ -84,3 +83,9 @@ const serializeDaemonClientError = (
 	type: error.type,
 	stack: error.stack,
 });
+
+const serializeError = async (error: Error) => {
+	const lib = await import("serialize-error");
+
+	return lib.serializeError(error);
+};

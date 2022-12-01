@@ -1,7 +1,7 @@
 import { mergeConfig } from "vite";
 import { defineConfig } from "vitest/config";
 
-import { nodeConfig } from "./electron.vite.config";
+import { nodeConfig } from "./electron.vite.config.mjs";
 
 export default mergeConfig(
 	nodeConfig,

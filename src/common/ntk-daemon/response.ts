@@ -2,7 +2,6 @@ import {
 	DaemonClientError,
 	DaemonError,
 } from "@nativeinstruments/ntk-daemon-node-lib";
-import { deserializeError } from "serialize-error";
 
 import type {
 	ExtractErrorMessage,
@@ -27,7 +26,7 @@ export const normalizeNtkDaemonResponse = async <T>(
 		throw new DaemonClientError(message);
 	}
 
-	throw deserializeError(message);
+	throw await deserializeError(message);
 };
 
 const isSerializedDaemonError = (
@@ -39,3 +38,9 @@ const isSerializedDaemonClientError = (
 	message: ExtractErrorMessage<NtkDaemonBridgeResponse<unknown>>,
 ): message is SerializedDaemonClientError =>
 	message.name === "DaemonClientError";
+
+const deserializeError = async (error: unknown) => {
+	const lib = await import("serialize-error");
+
+	return lib.serializeError(error);
+};

@@ -63,7 +63,7 @@
 		"@vitejs/plugin-react": "2.2.0",
 		"@vitest/coverage-c8": "0.25.3",
 		"dotenv": "16.0.3",
-		"electron": "22.0.0",
+		"electron": "20.3.0",
 		"electron-builder": "23.6.0",
 		"electron-vite": "1.0.14",
 		"eslint": "8.28.0",
