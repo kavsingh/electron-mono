@@ -1,4 +1,8 @@
-import { BrowserWindow } from "electron";
+import { join } from "path";
+
+import { app, BrowserWindow } from "electron";
+
+import { error } from "~/common/log";
 
 export const createMainWindow = () => {
 	const mainWindow = new BrowserWindow({
@@ -6,12 +10,25 @@ export const createMainWindow = () => {
 		width: 800,
 		titleBarStyle: "hiddenInset",
 		show: false,
-		webPreferences: { preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY },
+		webPreferences: {
+			preload: join(__dirname, "../preload/index.js"),
+		},
 	});
 
-	void mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+	// HMR for renderer based on electron-vite cli.
+	// Load the remote URL for development or the local html file for production.
+	if (app.isPackaged || E2E) {
+		void mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
+	} else if (process.env["ELECTRON_RENDERER_URL"]) {
+		void mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
+	} else {
+		error("No entry point available", {
+			isPackaged: app.isPackaged,
+			devUrl: process.env["ELECTRON_RENDERER_URL"],
+		});
+	}
 
-	if (process.env["NODE_ENV"] === "development") {
+	if (import.meta.env.DEV) {
 		mainWindow.webContents.openDevTools();
 	}
 

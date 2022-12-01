@@ -1,1 +1,3 @@
-declare const MODE: "production" | "development";
+/// <reference types="vite/client" />
+
+declare const E2E: boolean;

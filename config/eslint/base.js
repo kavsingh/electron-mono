@@ -103,11 +103,6 @@ module.exports = {
 			},
 		},
 		{
-			files: testFilePatterns({ root: "./src" }),
-			env: { "jest/globals": true },
-			extends: ["plugin:jest/recommended", "plugin:jest/style"],
-		},
-		{
 			files: testFilePatterns({ root: "./src", extensions: "[jt]s?(x)" }),
 			extends: ["plugin:jest-dom/recommended", "plugin:testing-library/react"],
 		},

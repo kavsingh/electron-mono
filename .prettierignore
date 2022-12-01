@@ -1,6 +1,6 @@
 .DS_Store
-/.webpack
 /node_modules
 /out
+/dist
 /coverage
 /e2e/results
