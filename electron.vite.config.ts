@@ -1,29 +1,24 @@
+import { resolve } from "path";
+
 import reactPlugin from "@vitejs/plugin-react";
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 
-import { alias } from "./vite.config.common";
+import type { AliasOptions, UserConfig } from "vite";
+
+const alias: AliasOptions = { "~": resolve(__dirname, "./src") };
+
+export const nodeConfig: UserConfig = {
+	resolve: { alias },
+	plugins: [externalizeDepsPlugin()],
+};
+
+export const rendererConfig: UserConfig = {
+	resolve: { alias },
+	plugins: [reactPlugin()],
+};
 
 export default defineConfig({
-	main: {
-		resolve: { alias },
-		plugins: [externalizeDepsPlugin()],
-	},
-	preload: {
-		resolve: { alias },
-		plugins: [externalizeDepsPlugin()],
-		test: {
-			include: ["src/preload/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
-			environment: "node",
-			setupFiles: ["./vitest.setup.preload.ts"],
-		},
-	},
-	renderer: {
-		resolve: { alias },
-		plugins: [reactPlugin()],
-		test: {
-			include: ["src/renderer/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
-			environment: "jsdom",
-			setupFiles: ["./vitest.setup.renderer.ts"],
-		},
-	},
+	main: nodeConfig,
+	preload: nodeConfig,
+	renderer: rendererConfig,
 });

@@ -1,14 +1,17 @@
+import { mergeConfig } from "vite";
 import { defineConfig } from "vitest/config";
 
-import { alias } from "./vite.config.common";
+import { nodeConfig } from "./electron.vite.config";
 
-export default defineConfig({
-	resolve: { alias },
-	test: {
-		include: [
-			"src/{main,common,bridge,preload}/**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
-		],
-		environment: "node",
-		setupFiles: ["./vitest.setup.node.ts"],
-	},
-});
+export default mergeConfig(
+	nodeConfig,
+	defineConfig({
+		test: {
+			include: [
+				"src/{main,common,bridge,preload}/**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
+			],
+			environment: "node",
+			setupFiles: ["./vitest.setup.node.ts"],
+		},
+	}),
+);
