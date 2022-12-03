@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@emotion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { darkTheme, lightTheme } from "./theme";
 
@@ -7,24 +7,26 @@ import type { Theme } from "./theme";
 import type { FC, ReactNode } from "react";
 
 const AppThemeProvider: FC<{ children: ReactNode }> = ({ children }) => {
-	const prefersDarkQuery = getPrefersDarkSchemeQuery();
+	const prefersDarkQueryRef = useRef(getPrefersDarkSchemeQuery());
 	const [theme, setTheme] = useState<Theme>(
-		prefersDarkQuery?.matches ? darkTheme : lightTheme,
+		prefersDarkQueryRef.current?.matches ? darkTheme : lightTheme,
 	);
 
 	useEffect(() => {
-		if (!prefersDarkQuery) return;
+		const { current: query } = prefersDarkQueryRef;
+
+		if (!query) return;
 
 		const handleQueryChange = ({ matches }: MediaQueryListEvent) => {
 			setTheme(matches ? darkTheme : lightTheme);
 		};
 
-		prefersDarkQuery.addEventListener("change", handleQueryChange);
+		query.addEventListener("change", handleQueryChange);
 
 		return () => {
-			prefersDarkQuery.removeEventListener("change", handleQueryChange);
+			query.removeEventListener("change", handleQueryChange);
 		};
-	}, [prefersDarkQuery]);
+	}, []);
 
 	return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };
