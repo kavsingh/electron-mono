@@ -11,7 +11,7 @@ export default mergeConfig(
 				"src/renderer/**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
 			],
 			environment: "jsdom",
-			setupFiles: ["./vitest.setup.renderer.ts"],
+			setupFiles: ["./renderer.vitest.setup.ts"],
 		},
 	}),
 );

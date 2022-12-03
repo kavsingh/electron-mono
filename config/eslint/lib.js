@@ -2,9 +2,9 @@ const path = require("path");
 
 const testFilePatterns = ({ root = "", extensions = "*" } = {}) =>
 	[
-		"*.{test,mock}",
-		"{test,mock}-helpers*",
-		"__{mock,mocks,test,tests,fixtures}__/**/*",
+		"*.{test,spec}",
+		"__{mocks,fixtures}__/**/*",
+		"__{test,mock}-{helpers,data}__/**/*",
 	].map((pattern) => path.join(root, `**/${pattern}.${extensions}`));
 
 const allowTypes = (restrictedImportsOptions) => {

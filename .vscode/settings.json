@@ -32,5 +32,29 @@
 	},
 	"[yaml]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	}
+	},
+	"vsicons.associations.folders": [
+		{
+			"extensions": ["__test-helpers__", "__test-data__"],
+			"icon": "test",
+			"format": "svg"
+		},
+		{
+			"extensions": ["design-system"],
+			"icon": "style",
+			"format": "svg"
+		}
+	],
+	"vsicons.associations.files": [
+		{
+			"extensions": ["vite.config.ts"],
+			"icon": "vite",
+			"format": "svg"
+		},
+		{
+			"extensions": ["vitest.config.ts", "vitest.setup.ts"],
+			"icon": "vitest",
+			"format": "svg"
+		}
+	]
 }

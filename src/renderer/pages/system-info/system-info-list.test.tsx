@@ -1,7 +1,7 @@
 import { render, waitFor, screen } from "@testing-library/react";
 import { describe, beforeEach, it, expect, vi } from "vitest";
 
-import { setupRenderWrapper } from "~/renderer/__test__/render-wrapper";
+import { setupRenderWrapper } from "~/renderer/__test-helpers__/render-wrapper";
 
 import SystemInfoList from "./system-info-list";
 
