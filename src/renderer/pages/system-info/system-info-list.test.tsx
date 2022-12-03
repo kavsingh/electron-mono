@@ -5,8 +5,6 @@ import { setupRenderWrapper } from "~/renderer/__test-helpers__/render-wrapper";
 
 import SystemInfoList from "./system-info-list";
 
-vi.mock("~/renderer/bridge");
-
 describe("<SystemInfoList />", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
