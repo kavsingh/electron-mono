@@ -10,9 +10,7 @@ export const createMainWindow = () => {
 		width: 800,
 		titleBarStyle: "hiddenInset",
 		show: false,
-		webPreferences: {
-			preload: join(__dirname, "../preload/index.js"),
-		},
+		webPreferences: { preload: join(__dirname, "../preload/index.js") },
 	});
 
 	// HMR for renderer based on electron-vite cli.
@@ -28,7 +26,7 @@ export const createMainWindow = () => {
 		});
 	}
 
-	if (import.meta.env.DEV) {
+	if (import.meta.env.DEV && !E2E) {
 		mainWindow.webContents.openDevTools();
 	}
 
