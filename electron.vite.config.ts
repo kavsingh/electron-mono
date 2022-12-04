@@ -10,13 +10,13 @@ const define = { E2E: JSON.stringify(process.env["E2E"] === "true") };
 
 export const nodeConfig: UserConfig = {
 	define,
-	resolve: { alias },
+	resolve: { alias, conditions: ["development", "node"] },
 	plugins: [externalizeDepsPlugin()],
 };
 
 export const rendererConfig: UserConfig = {
 	define,
-	resolve: { alias },
+	resolve: { alias, conditions: ["development", "browser"] },
 	plugins: [solidPlugin()],
 };
 

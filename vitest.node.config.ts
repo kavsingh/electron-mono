@@ -11,7 +11,7 @@ export default mergeConfig(
 				"src/{main,common,bridge,preload}/**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
 			],
 			environment: "node",
-			setupFiles: ["./node.vitest.setup.ts"],
+			setupFiles: ["./vitest.node.setup.ts"],
 		},
 	}),
 );

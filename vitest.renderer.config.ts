@@ -12,7 +12,7 @@ export default mergeConfig(
 				"src/renderer/**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
 			],
 			environment: "jsdom",
-			setupFiles: ["./renderer.vitest.setup.ts"],
+			setupFiles: ["./vitest.renderer.setup.ts"],
 			deps: {
 				inline: [
 					/solid-js/,

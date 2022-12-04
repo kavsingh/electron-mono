@@ -38,11 +38,6 @@
 			"extensions": ["__test-helpers__", "__test-data__"],
 			"icon": "test",
 			"format": "svg"
-		},
-		{
-			"extensions": ["design-system"],
-			"icon": "style",
-			"format": "svg"
 		}
 	],
 	"vsicons.associations.files": [
@@ -52,8 +47,20 @@
 			"format": "svg"
 		},
 		{
-			"extensions": ["vitest.config.ts", "vitest.setup.ts"],
+			"extensions": [
+				"vitest.node.config.ts",
+				"vitest.node.setup.ts",
+				"vitest.renderer.config.ts",
+				"vitest.renderer.setup.ts"
+			],
 			"icon": "vitest",
+			"filename": true,
+			"format": "svg"
+		},
+		{
+			"extensions": ["electron-builder.config.js"],
+			"icon": "config",
+			"filename": true,
 			"format": "svg"
 		}
 	]

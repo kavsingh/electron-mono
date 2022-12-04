@@ -1,7 +1,7 @@
 import { Router } from "@solidjs/router";
 import userEvent from "@testing-library/user-event";
 
-import AppThemeProvider from "../design-system/app-theme-provider";
+import AppThemeProvider from "../style/app-theme-provider";
 
 import type { ParentComponent } from "solid-js";
 

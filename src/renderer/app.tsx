@@ -2,10 +2,10 @@ import { Router, hashIntegration, Route, Routes } from "@solidjs/router";
 import { styled } from "solid-styled-components";
 
 import Masthead from "./components/masthead";
-import AppThemeProvider from "./design-system/app-theme-provider";
-import GlobalStyles from "./design-system/global-styles";
 import Files from "./pages/files";
 import SystemInfo from "./pages/system-info";
+import AppThemeProvider from "./style/app-theme-provider";
+import GlobalStyles from "./style/global-styles";
 
 import type { Component } from "solid-js";
 
