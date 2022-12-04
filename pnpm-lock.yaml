@@ -35,7 +35,7 @@ specifiers:
   solid-js: 1.6.2
   solid-styled-components: 0.28.5
   solid-testing-library: 0.5.0
-  systeminformation: 5.16.0
+  systeminformation: 5.16.1
   ts-node: 10.9.1
   typescript: 4.9.3
   typescript-styled-plugin: 0.18.2
@@ -48,7 +48,7 @@ dependencies:
   serialize-error: 11.0.0
   solid-js: 1.6.2
   solid-styled-components: 0.28.5_solid-js@1.6.2
-  systeminformation: 5.16.0
+  systeminformation: 5.16.1
 
 devDependencies:
   '@babel/core': 7.20.5
@@ -4589,8 +4589,8 @@ packages:
       tslib: 2.4.0
     dev: true
 
-  /systeminformation/5.16.0:
-    resolution: {integrity: sha512-CLD9AChcuFPw+Ify3kcntAh8O0A1i9no/MrTBnfQxvMvakaOFcPPFN8wXwuEK08Ezxyh1/g/9mLXHbLnY8LlpQ==}
+  /systeminformation/5.16.1:
+    resolution: {integrity: sha512-n2YQycKZar7ijkkZz10Pnn5mdt3kep2HlGplvQj5d7BFiT9bw7EH/Zeaa8qFS1l93aohp6fistGkcFYgw+6v1g==}
     engines: {node: '>=8.0.0'}
     os: [darwin, linux, win32, freebsd, openbsd, netbsd, sunos, android]
     hasBin: true
