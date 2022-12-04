@@ -17,7 +17,7 @@
 		"test:renderer": "vitest run -c vitest.renderer.config.ts",
 		"t:node": "vitest -c vitest.node.config.ts",
 		"t:renderer": "vitest -c vitest.renderer.config.ts",
-		"test:e2e": "E2E=true pnpm build && playwright test",
+		"test:e2e": "cross-env E2E=true pnpm build && playwright test",
 		"build:win": "pnpm run build && electron-builder --win --config",
 		"build:mac": "pnpm run build && electron-builder --mac --config",
 		"build:linux": "pnpm run build && electron-builder --linux --config"
@@ -47,6 +47,7 @@
 		"@typescript-eslint/eslint-plugin": "5.45.0",
 		"@typescript-eslint/parser": "5.45.0",
 		"@vitest/coverage-c8": "0.25.3",
+		"cross-env": "7.0.3",
 		"electron": "22.0.0",
 		"electron-builder": "23.6.0",
 		"electron-vite": "1.0.14",
