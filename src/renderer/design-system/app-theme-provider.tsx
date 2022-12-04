@@ -1,39 +1,13 @@
-import { ThemeProvider } from "@emotion/react";
-import { useEffect, useRef, useState } from "react";
+import { ThemeProvider } from "solid-styled-components";
 
-import { darkTheme, lightTheme } from "./theme";
+import { usePreferredTheme } from "./use-preferred-theme";
 
-import type { Theme } from "./theme";
-import type { FC, ReactNode } from "react";
+import type { ParentComponent } from "solid-js";
 
-const AppThemeProvider: FC<{ children: ReactNode }> = ({ children }) => {
-	const prefersDarkQueryRef = useRef(getPrefersDarkSchemeQuery());
-	const [theme, setTheme] = useState<Theme>(
-		prefersDarkQueryRef.current?.matches ? darkTheme : lightTheme,
-	);
+const AppThemeProvider: ParentComponent = (props) => {
+	const theme = usePreferredTheme();
 
-	useEffect(() => {
-		const { current: query } = prefersDarkQueryRef;
-
-		if (!query) return;
-
-		const handleQueryChange = ({ matches }: MediaQueryListEvent) => {
-			setTheme(matches ? darkTheme : lightTheme);
-		};
-
-		query.addEventListener("change", handleQueryChange);
-
-		return () => {
-			query.removeEventListener("change", handleQueryChange);
-		};
-	}, []);
-
-	return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+	return <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;
 };
 
 export default AppThemeProvider;
-
-const getPrefersDarkSchemeQuery = () =>
-	typeof window !== "undefined" && typeof window.matchMedia === "function"
-		? window.matchMedia("(prefers-color-scheme: dark)")
-		: undefined;

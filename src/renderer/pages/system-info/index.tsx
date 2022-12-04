@@ -1,8 +1,8 @@
 import SystemInfoList from "./system-info-list";
 
-import type { FC } from "react";
+import type { Component } from "solid-js";
 
-const SystemInfo: FC = () => (
+const SystemInfo: Component = () => (
 	<div>
 		<h2>System Info</h2>
 		<SystemInfoList />

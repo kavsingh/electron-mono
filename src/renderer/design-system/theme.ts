@@ -1,4 +1,4 @@
-const font: Theme["font"] = {
+const font: Theme["fonts"] = {
 	body: "system-ui, sans-serif",
 };
 
@@ -13,22 +13,22 @@ const radius: Theme["radius"] = {
 };
 
 export const lightTheme: Theme = {
-	font,
+	fonts: font,
 	spacing,
 	radius,
 	name: "light",
-	color: {
+	colors: {
 		surface: { 0: "#fefefe" },
 		text: { 100: "#dedede", 400: "#222" },
 	},
 };
 
 export const darkTheme: Theme = {
-	font,
+	fonts: font,
 	spacing,
 	radius,
 	name: "dark",
-	color: {
+	colors: {
 		surface: { 0: "#222" },
 		text: { 100: "#434343", 400: "#fefefe" },
 	},
@@ -36,10 +36,10 @@ export const darkTheme: Theme = {
 
 export type Theme = Immutable<{
 	name: "light" | "dark";
-	font: {
+	fonts: {
 		body: string;
 	};
-	color: {
+	colors: {
 		surface: { 0: string };
 		text: { 100: string; 400: string };
 	};

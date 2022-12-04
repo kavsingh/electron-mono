@@ -1,39 +1,34 @@
-import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { Show, For, createResource, onCleanup } from "solid-js";
+import { styled } from "solid-styled-components";
 
 import { measuredAsyncFn } from "~/common/measure";
 import bridge from "~/renderer/bridge";
 
-import type { FC } from "react";
+import type { Component } from "solid-js";
 
-const SystemInfoList: FC = () => {
-	const [info, setInfo] = useState<AsyncResult<typeof getSystemInfo>>();
-	const [error, setError] = useState<Error | undefined>(undefined);
+const SystemInfoList: Component = () => {
+	const [infoResource, { mutate }] = createResource(getSystemInfo);
+	const unsubscribe = bridge.subscribeSystemInfo((message) => {
+		mutate(message);
+	});
 
-	useEffect(() => {
-		void getSystemInfo()
-			.then(setInfo)
-			.catch((reason) => {
-				setError(reason instanceof Error ? reason : new Error(String(reason)));
-			});
+	onCleanup(unsubscribe);
 
-		return bridge.subscribeSystemInfo((message) => {
-			setInfo(message);
-		});
-	}, []);
-
-	return info ? (
-		<Container>
-			{error ? error.message : null}
-			{Object.entries(info).map(([key, val]) => (
-				<InfoItem key={key}>
-					<span>{key}</span>
-					<span>{String(val)}</span>
-				</InfoItem>
-			))}
-		</Container>
-	) : (
-		<>Loading...</>
+	return (
+		<Show when={infoResource()} fallback={<>Loading...</>} keyed>
+			{(info) => (
+				<Container>
+					<For each={Object.entries(info)}>
+						{([key, val]) => (
+							<InfoItem>
+								<span>{key}</span>
+								<span>{String(val)}</span>
+							</InfoItem>
+						)}
+					</For>
+				</Container>
+			)}
+		</Show>
 	);
 };
 
@@ -46,17 +41,17 @@ const Container = styled.ul`
 	flex-direction: column;
 	padding: 0;
 	margin: 0;
-	gap: ${({ theme }) => theme.spacing.fixed[1]};
+	gap: ${(props) => props.theme?.spacing.fixed[1]};
 	list-style-type: none;
 `;
 
 const InfoItem = styled.li`
 	display: flex;
 	flex-direction: column;
-	gap: ${({ theme }) => theme.spacing.fixed[0]};
+	gap: ${(props) => props.theme?.spacing.fixed[0]};
 
 	&:not(:last-of-type) {
-		padding-block-end: ${({ theme }) => theme.spacing.fixed[1]};
-		border-block-end: 1px solid ${({ theme }) => theme.color.text[100]};
+		padding-block-end: ${(props) => props.theme?.spacing.fixed[1]};
+		border-block-end: 1px solid ${(props) => props.theme?.colors.text[100]};
 	}
 `;

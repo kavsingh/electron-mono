@@ -1,44 +1,30 @@
-import { Global, css, useTheme } from "@emotion/react";
+import { createGlobalStyles } from "solid-styled-components";
 
-import type { FC } from "react";
+const GlobalStyles = () => {
+	const Styles = createGlobalStyles`
+		html {
+			box-sizing: border-box;
+		}
 
-const GlobalStyles: FC = () => {
-	const theme = useTheme();
+		*,
+		*::before,
+		*::after {
+			box-sizing: inherit;
+		}
 
-	return (
-		<Global
-			styles={css`
-				html {
-					box-sizing: border-box;
-					font-size: 16px;
-					color: ${theme.color.text[400]};
-					background-color: ${theme.color.surface[0]};
-				}
+		html,
+		body {
+			margin: 0;
+			padding: 0;
+		}
 
-				*,
-				*::before,
-				*::after {
-					box-sizing: inherit;
-				}
+		#app-root {
+			inline-size: 100vw;
+			block-size: 100vh;
+		}
+	`;
 
-				html,
-				body {
-					margin: 0;
-					padding: 0;
-				}
-
-				body {
-					inline-size: 100vw;
-					block-size: 100vh;
-				}
-
-				#app-root {
-					inline-size: 100%;
-					block-size: 100%;
-				}
-			`}
-		/>
-	);
+	return <Styles />;
 };
 
 export default GlobalStyles;

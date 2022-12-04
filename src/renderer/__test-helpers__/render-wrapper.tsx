@@ -1,22 +1,17 @@
+import { Router } from "@solidjs/router";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
 
 import AppThemeProvider from "../design-system/app-theme-provider";
 
-import type { FC, ReactNode } from "react";
+import type { ParentComponent } from "solid-js";
 
 export const setupRenderWrapper = () => {
 	const user = userEvent.setup();
-	const Wrapper: FC<WrapperProps> = ({ route = "/", children }) => (
-		<AppThemeProvider>
-			<MemoryRouter initialEntries={[route]}>{children}</MemoryRouter>
-		</AppThemeProvider>
+	const Wrapper: ParentComponent = (props) => (
+		<Router>
+			<AppThemeProvider>{props.children}</AppThemeProvider>
+		</Router>
 	);
 
 	return { user, Wrapper };
 };
-
-interface WrapperProps {
-	children: ReactNode;
-	route?: string;
-}

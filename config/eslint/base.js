@@ -18,6 +18,7 @@ module.exports = {
 			files: ["*.ts?(x)"],
 			parser: "@typescript-eslint/parser",
 			parserOptions: { project: "./tsconfig.json" },
+			plugins: ["deprecation"],
 			extends: [
 				"plugin:@typescript-eslint/recommended",
 				"plugin:@typescript-eslint/recommended-requiring-type-checking",
@@ -42,6 +43,7 @@ module.exports = {
 					"error",
 					{ argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
 				],
+				"deprecation/deprecation": "warn",
 			},
 		},
 		{
@@ -67,20 +69,7 @@ module.exports = {
 		{
 			files: ["src/renderer/**/*"],
 			env: { node: false, browser: true },
-			settings: { react: { version: "detect" } },
-			plugins: ["@emotion"],
-			extends: ["plugin:react/recommended", "plugin:react-hooks/recommended"],
-			rules: {
-				"react/jsx-filename-extension": [
-					"error",
-					{ extensions: [".tsx", ".jsx"] },
-				],
-				"react/jsx-uses-react": "off",
-				"react/prop-types": "off",
-				"react/react-in-jsx-scope": "off",
-				"@emotion/no-vanilla": "error",
-				"@emotion/syntax-preference": ["error", "string"],
-			},
+			extends: ["plugin:solid/typescript"],
 		},
 		{
 			files: testFilePatterns(),
@@ -103,8 +92,11 @@ module.exports = {
 			},
 		},
 		{
-			files: testFilePatterns({ root: "./src", extensions: "[jt]s?(x)" }),
-			extends: ["plugin:jest-dom/recommended", "plugin:testing-library/react"],
+			files: testFilePatterns({
+				root: "./src/renderer",
+				extensions: "[jt]s?(x)",
+			}),
+			extends: ["plugin:testing-library/dom", "plugin:jest-dom/recommended"],
 		},
 		{
 			files: testFilePatterns({ root: "./e2e" }),

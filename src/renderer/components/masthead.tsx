@@ -1,35 +1,32 @@
-import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { A } from "@solidjs/router";
+import { createSignal, onCleanup } from "solid-js";
+import { styled } from "solid-styled-components";
 
 import bridge from "~/renderer/bridge";
 
 import Pulse from "./pulse";
 import StatusBadge from "./status-badge";
 
-import type { FC } from "react";
+import type { Component } from "solid-js";
 
-const Masthead: FC = () => {
-	const [status, setStatus] = useState("");
-	const [timestamp, setTimestamp] = useState("");
+const Masthead: Component = () => {
+	const [status, setStatus] = createSignal("");
+	const [timestamp, setTimestamp] = createSignal("");
+	const unsubscribe = bridge.subscribeHealth((event) => {
+		setStatus(event.status);
+		setTimestamp(event.timestamp.toString());
+	});
 
-	useEffect(
-		() =>
-			bridge.subscribeHealth((event) => {
-				setStatus(event.status);
-				setTimestamp(event.timestamp.toString());
-			}),
-		[],
-	);
+	onCleanup(unsubscribe);
 
 	return (
 		<Container>
 			<Nav>
-				<Link to="/">System Info</Link>
-				<Link to="/files">Files</Link>
+				<A href="/">System Info</A>
+				<A href="/files">Files</A>
 			</Nav>
-			<Pulse key={timestamp}>
-				<StatusBadge>{status}</StatusBadge>
+			<Pulse trigger={timestamp}>
+				<StatusBadge>{status()}</StatusBadge>
 			</Pulse>
 		</Container>
 	);
@@ -46,5 +43,5 @@ const Container = styled.div`
 const Nav = styled.nav`
 	display: flex;
 	align-items: center;
-	gap: ${({ theme }) => theme.spacing.fixed[0]};
+	gap: ${(props) => props.theme?.spacing.fixed[0]};
 `;

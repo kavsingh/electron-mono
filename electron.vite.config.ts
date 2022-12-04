@@ -1,7 +1,7 @@
 import { resolve } from "path";
 
-import reactPlugin from "@vitejs/plugin-react";
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
+import solidPlugin from "vite-plugin-solid";
 
 import type { AliasOptions, UserConfig } from "vite";
 
@@ -17,7 +17,7 @@ export const nodeConfig: UserConfig = {
 export const rendererConfig: UserConfig = {
 	define,
 	resolve: { alias },
-	plugins: [reactPlugin()],
+	plugins: [solidPlugin()],
 };
 
 export default defineConfig({

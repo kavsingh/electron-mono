@@ -1,46 +1,48 @@
-import { useCallback, useMemo, useState } from "react";
-
-import type { DragEventHandler } from "react";
+import { createSignal } from "solid-js";
 
 export const useFileDrop = () => {
-	const [dropped, setDropped] = useState<DroppedFile[]>();
-	const [isActive, setIsActive] = useState(false);
+	const [droppedFiles, setDroppedFiles] = createSignal<DroppedFile[]>();
+	const [isActive, setIsActive] = createSignal(false);
 
-	const onDragOver = useCallback<DragEventHandler>((event) => {
+	const onDragOver = (event: DragEvent) => {
 		// needed for drop handler
 		event.preventDefault();
-	}, []);
+	};
 
-	const onDragEnter = useCallback<DragEventHandler>((event) => {
+	const onDragEnter = (event: DragEvent) => {
 		// needed for drop handler
 		event.preventDefault();
 		setIsActive(true);
-	}, []);
+	};
 
-	const onDragLeave = useCallback<DragEventHandler>(() => {
+	const onDragLeave = () => {
 		setIsActive(false);
-	}, []);
+	};
 
-	const onDrop = useCallback<DragEventHandler>((event) => {
-		const { items, files } = event.dataTransfer;
-		const entries = Array.from(items).map((item) => item.webkitGetAsEntry());
-		const droppedFiles = Array.from(files).map((file) => {
-			const { isDirectory, isFile } =
-				entries.find((e) => e?.name === file.name) ?? {};
+	const onDrop = (event: DragEvent) => {
+		event.preventDefault();
 
-			return { file, isDirectory, isFile };
-		});
+		const { items, files } = event.dataTransfer ?? {};
+		const entries = items
+			? Array.from(items).map((item) => item.webkitGetAsEntry())
+			: [];
+		const dropped = files
+			? Array.from(files).map((file) => {
+					const { isDirectory, isFile } =
+						entries.find((e) => e?.name === file.name) ?? {};
+
+					return { file, isDirectory, isFile };
+			  })
+			: [];
 
 		setIsActive(false);
-		setDropped(droppedFiles);
-	}, []);
+		setDroppedFiles(dropped);
+	};
 
-	const elementHandles = useMemo(
-		() => ({ onDragOver, onDragEnter, onDragLeave, onDrop }),
-		[onDragEnter, onDragLeave, onDragOver, onDrop],
-	);
-
-	return [{ files: dropped, isActive }, elementHandles] as const;
+	return [
+		{ isActive, files: droppedFiles },
+		{ onDragOver, onDragEnter, onDragLeave, onDrop },
+	] as const;
 };
 
 export interface DroppedFile {

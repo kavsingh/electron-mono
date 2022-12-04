@@ -1,4 +1,4 @@
-import { render, waitFor, screen } from "@testing-library/react";
+import { render, waitFor, screen } from "solid-testing-library";
 import { describe, beforeEach, it, expect, vi } from "vitest";
 
 import { setupRenderWrapper } from "~/renderer/__test-helpers__/render-wrapper";
@@ -13,11 +13,11 @@ describe("<SystemInfoList />", () => {
 	it("should render system info", async () => {
 		const { Wrapper } = setupRenderWrapper();
 
-		render(
+		render(() => (
 			<Wrapper>
 				<SystemInfoList />
-			</Wrapper>,
-		);
+			</Wrapper>
+		));
 
 		expect(screen.getByText("Loading...")).toBeInTheDocument();
 

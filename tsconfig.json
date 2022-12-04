@@ -4,7 +4,7 @@
 		"checkJs": false,
 		"isolatedModules": true,
 		"jsx": "preserve",
-		"jsxImportSource": "@emotion/react",
+		"jsxImportSource": "solid-js",
 		"lib": ["esnext", "dom"],
 		"module": "esnext",
 		"noEmit": true,

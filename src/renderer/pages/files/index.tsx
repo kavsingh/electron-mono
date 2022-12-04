@@ -1,34 +1,22 @@
-import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { For } from "solid-js";
+import { styled } from "solid-styled-components";
 
 import { useFileDrop } from "~/renderer/hooks/file";
 
-import type { FC } from "react";
+import type { Component } from "solid-js";
 import type { DroppedFile } from "~/renderer/hooks/file";
 
-const Files: FC = () => {
+const Files: Component = () => {
 	const [{ files, isActive }, elementHandles] = useFileDrop();
-	const [droppedFiles, setDroppedFiles] = useState<DroppedFile[]>(files ?? []);
-
-	useEffect(() => {
-		if (!files?.length) return;
-
-		setDroppedFiles((current) => [
-			...current,
-			...files.filter(
-				({ file }) => !current.find((c) => c.file.path === file.path),
-			),
-		]);
-	}, [files]);
 
 	return (
 		<div>
 			<h2>Files</h2>
-			<DropRegion isActive={isActive} {...elementHandles} />
+			<DropRegion isActive={isActive()} {...elementHandles} />
 			<ul>
-				{droppedFiles.map((droppedFile) => (
-					<FileItem key={droppedFile.file.path} {...droppedFile} />
-				))}
+				<For each={files()}>
+					{(droppedFile) => <FileItem {...droppedFile} />}
+				</For>
 			</ul>
 		</div>
 	);
@@ -36,15 +24,17 @@ const Files: FC = () => {
 
 export default Files;
 
-const FileItem: FC<DroppedFile> = ({ file, isDirectory }) => (
+const FileItem: Component<DroppedFile> = (props) => (
 	<li>
-		<span>{file.path}</span> ({isDirectory ? "directory" : "file"})
+		<span>{props.file.path}</span> ({props.isDirectory ? "directory" : "file"})
 	</li>
 );
 
 const DropRegion = styled.div<{ isActive: boolean }>`
 	block-size: 200px;
-	border: 1px solid ${({ theme }) => theme.color.text[100]};
-	background-color: ${({ theme, isActive }) =>
-		isActive ? `${theme.color.text[100]}88` : "transparent"};
+	border: 1px solid ${(props) => props.theme?.colors.text[100]};
+	background-color: ${(props) =>
+		props.isActive
+			? `${props.theme?.colors.text[100] ?? ""}88`
+			: "transparent"};
 `;

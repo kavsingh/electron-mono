@@ -1,6 +1,5 @@
-import styled from "@emotion/styled";
-import { StrictMode } from "react";
-import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { Router, hashIntegration, Route, Routes } from "@solidjs/router";
+import { styled } from "solid-styled-components";
 
 import Masthead from "./components/masthead";
 import AppThemeProvider from "./design-system/app-theme-provider";
@@ -8,24 +7,22 @@ import GlobalStyles from "./design-system/global-styles";
 import Files from "./pages/files";
 import SystemInfo from "./pages/system-info";
 
-import type { FC } from "react";
+import type { Component } from "solid-js";
 
-const App: FC = () => (
-	<StrictMode>
+const App: Component = () => (
+	<Router source={hashIntegration()}>
 		<AppThemeProvider>
 			<GlobalStyles />
-			<MemoryRouter>
-				<UIRoot>
-					<Dragable />
-					<Masthead />
-					<Routes>
-						<Route path="/" element={<SystemInfo />} />
-						<Route path="/files" element={<Files />} />
-					</Routes>
-				</UIRoot>
-			</MemoryRouter>
+			<UIRoot>
+				<Dragable />
+				<Masthead />
+				<Routes>
+					<Route path="/" element={<SystemInfo />} />
+					<Route path="/files" element={<Files />} />
+				</Routes>
+			</UIRoot>
 		</AppThemeProvider>
-	</StrictMode>
+	</Router>
 );
 
 export default App;
@@ -34,9 +31,9 @@ const UIRoot = styled.div`
 	min-block-size: 100%;
 	padding-block: 2em;
 	padding-inline: 1em;
-	color: ${({ theme }) => theme.color.text[400]};
-	font-family: ${({ theme }) => theme.font.body};
-	background-color: ${({ theme }) => theme.color.surface[0]};
+	font: 16px/1.3 ${(props) => props.theme?.fonts.body};
+	color: ${(props) => props.theme?.colors.text[400]};
+	background-color: ${(props) => props.theme?.colors.surface[0]};
 `;
 
 const Dragable = styled.div`

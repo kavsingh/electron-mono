@@ -1,6 +1,7 @@
+import "solid-styled-components";
 import type { Theme as AppTheme } from "~/renderer/design-system/theme";
 
-declare module "@emotion/react" {
+declare module "solid-styled-components" {
 	// eslint-disable-next-line @typescript-eslint/no-empty-interface
-	export interface Theme extends AppTheme {}
+	export interface DefaultTheme extends AppTheme {}
 }
