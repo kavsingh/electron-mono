@@ -18,7 +18,7 @@ specifiers:
   cross-env: 7.0.3
   electron: 22.0.0
   electron-builder: 23.6.0
-  electron-vite: 1.0.14
+  electron-vite: 1.0.15
   eslint: 8.29.0
   eslint-config-prettier: 8.5.0
   eslint-import-resolver-typescript: 3.5.2
@@ -68,7 +68,7 @@ devDependencies:
   cross-env: 7.0.3
   electron: 22.0.0
   electron-builder: 23.6.0
-  electron-vite: 1.0.14_vite@3.2.4
+  electron-vite: 1.0.15_vite@3.2.4
   eslint: 8.29.0
   eslint-config-prettier: 8.5.0_eslint@8.29.0
   eslint-import-resolver-typescript: 3.5.2_lt3hqehuojhfcbzgzqfngbtmrq
@@ -1994,8 +1994,8 @@ packages:
     resolution: {integrity: sha512-M8WEXFuKXMYMVr45fo8mq0wUrrJHheiKZf6BArTKk9ZBYCKJEOU5H8cdWgDT+qCVZf7Na4lVUaZsA+h6uA9+PA==}
     dev: true
 
-  /electron-vite/1.0.14_vite@3.2.4:
-    resolution: {integrity: sha512-lRg55OQoRIKhsFQnnbrhl2h1QEcjCwXWdE2MmVSjWVG03k4uc3Kli4oTud/WfV7kqUD7GUfsB0W8nXZlg4oN1w==}
+  /electron-vite/1.0.15_vite@3.2.4:
+    resolution: {integrity: sha512-+6BkXy6uQni72OGCxYvIKe1d4m6TbLEZe1/SDQvEnNv97J1CK1aYlM+L+xXNNeZ/RG6lgIL6qsIDTC//NLpH7w==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:

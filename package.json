@@ -50,7 +50,7 @@
 		"cross-env": "7.0.3",
 		"electron": "22.0.0",
 		"electron-builder": "23.6.0",
-		"electron-vite": "1.0.14",
+		"electron-vite": "1.0.15",
 		"eslint": "8.29.0",
 		"eslint-config-prettier": "8.5.0",
 		"eslint-import-resolver-typescript": "3.5.2",
