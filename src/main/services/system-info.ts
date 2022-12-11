@@ -1,6 +1,6 @@
 import { osInfo, mem } from "systeminformation";
 
-import type { Requests } from "~/common/bridge/types";
+import type { Requests } from "~/bridge/types";
 
 export const getSystemInfo = async (): Promise<
 	ReturnType<Requests["getSystemInfo"]>

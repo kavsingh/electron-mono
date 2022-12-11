@@ -1,4 +1,4 @@
-import type { SystemInfo } from "~/common/bridge/types";
+import type { SystemInfo } from "~/bridge/types";
 
 export const createMockSystemInfo = (
 	info: Partial<SystemInfo> = {},

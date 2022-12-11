@@ -1,7 +1,7 @@
 import { ipcRenderer } from "electron";
 
+import type { Messages, MessageChannelName } from "./types";
 import type { IpcRendererEvent, BrowserWindow } from "electron";
-import type { Messages, MessageChannelName } from "~/common/bridge/types";
 
 export const mainPublish = <K extends MessageChannelName>(
 	win: BrowserWindow,
@@ -16,7 +16,7 @@ export const mainPublish = <K extends MessageChannelName>(
 export const rendererSubscriber =
 	<K extends MessageChannelName>(channel: K) =>
 	(handler: RendererMessageHandler<K>): (() => void) => {
-		const ipcHandler: RendererEventHandler<K> = (_, message) =>
+		const ipcHandler: RendererIpcEventHandler<K> = (_, message) =>
 			handler(message);
 
 		ipcRenderer.on(channel, ipcHandler);
@@ -28,7 +28,7 @@ type RendererMessageHandler<K extends MessageChannelName> = (
 	message: Messages[K],
 ) => void;
 
-type RendererEventHandler<K extends MessageChannelName> = (
+type RendererIpcEventHandler<K extends MessageChannelName> = (
 	event: IpcRendererEvent,
 	message: Messages[K],
 ) => void;

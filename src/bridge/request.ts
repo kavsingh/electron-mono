@@ -1,7 +1,7 @@
 import { ipcMain, ipcRenderer } from "electron";
 
+import type { Requests, RequestChannelName } from "./types";
 import type { IpcMainInvokeEvent } from "electron";
-import type { Requests, RequestChannelName } from "~/common/bridge/types";
 
 export const rendererRequester =
 	<K extends RequestChannelName>(channel: K) =>
@@ -47,9 +47,12 @@ export const mainResponder = <K extends RequestChannelName>(
 
 const assertValidSender = (event: IpcMainInvokeEvent) => {
 	const host = new URL(event.senderFrame.url).host;
-	const isValidHost = import.meta.env.DEV
-		? host.startsWith("localhost")
-		: host === "";
+	// for some reason import.meta.env.DEV is false despite MODE development
+	// TODO: keep eye out for a fix
+	const isValidHost =
+		import.meta.env.MODE === "development"
+			? host.startsWith("localhost")
+			: host === "";
 
 	if (!isValidHost) throw new Error("Invalid sender");
 };

@@ -4,7 +4,9 @@ let log: typeof console.log = noop;
 let warn: typeof console.warn = noop;
 let error: typeof console.error = noop;
 
-if (import.meta.env.DEV) {
+// for some reason import.meta.env.DEV is false despite MODE development
+// TODO: keep eye out for a fix
+if (import.meta.env.MODE === "development") {
 	/* eslint-disable no-console */
 	log = console.log.bind(console);
 	warn = console.warn.bind(console);
