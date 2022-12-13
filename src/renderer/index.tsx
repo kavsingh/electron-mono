@@ -6,4 +6,8 @@ const appRoot = document.getElementById("app-root");
 
 if (!appRoot) throw new Error("#app-root not found");
 
-render(() => <App />, appRoot);
+const dispose = render(() => <App />, appRoot);
+
+if (import.meta.hot) {
+	import.meta.hot.dispose(dispose);
+}

@@ -2,9 +2,7 @@ import { error, log } from "./log";
 
 let measuredAsyncFn: MeasuredAsyncFn = (_id, fn) => fn;
 
-// for some reason import.meta.env.DEV is false despite MODE development
-// TODO: keep eye out for a fix
-if (import.meta.env.MODE === "development") {
+if (import.meta.env.DEV) {
 	measuredAsyncFn =
 		(id, fn) =>
 		async (...args) => {
