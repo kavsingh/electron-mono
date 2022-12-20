@@ -7,6 +7,13 @@ const testFilePatterns = ({ root = "", extensions = "*" } = {}) =>
 		"__{test,mock}-{helpers,data}__/**/*",
 	].map((pattern) => path.join(root, `**/${pattern}.${extensions}`));
 
+/**
+ * @typedef {Object} RestrictedImportsOptions
+ * @property {unknown} paths
+ * @property {unknown} patterns
+ * */
+
+/** @param {RestrictedImportsOptions} restrictedImportsOptions */
 const allowTypes = (restrictedImportsOptions) => {
 	const nextOptions = { ...restrictedImportsOptions };
 
@@ -33,7 +40,11 @@ const allowTypes = (restrictedImportsOptions) => {
 	return nextOptions;
 };
 
-const restrictFrom = (rootPath, config) => {
+/**
+ * @param {string} rootPath
+ * @param {RestrictedImportsOptions} restrictedImportsOptions
+ */
+const restrictFrom = (rootPath, restrictedImportsOptions) => {
 	const isTsFile = /\.ts[x]?$/.test(rootPath);
 	const isJsFile = /\.js[x]?$/.test(rootPath);
 	const isFile = isJsFile || isTsFile;
@@ -42,7 +53,9 @@ const restrictFrom = (rootPath, config) => {
 		isJsFile || !isFile
 			? {
 					files: isFile ? [rootPath] : [path.join(rootPath, "**/*.js?(x)")],
-					rules: { "no-restricted-imports": ["error", config] },
+					rules: {
+						"no-restricted-imports": ["error", restrictedImportsOptions],
+					},
 			  }
 			: undefined,
 		isTsFile || !isFile
@@ -52,7 +65,7 @@ const restrictFrom = (rootPath, config) => {
 						"no-restricted-imports": "off",
 						"@typescript-eslint/no-restricted-imports": [
 							"error",
-							allowTypes(config),
+							allowTypes(restrictedImportsOptions),
 						],
 					},
 			  }

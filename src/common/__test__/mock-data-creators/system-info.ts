@@ -1,3 +1,5 @@
+// allow type-only import
+// eslint-disable-next-line import/no-restricted-paths
 import type { SystemInfo } from "~/bridge/types";
 
 export const createMockSystemInfo = (
