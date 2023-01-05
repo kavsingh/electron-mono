@@ -36,7 +36,6 @@
 	"devDependencies": {
 		"@babel/core": "7.20.7",
 		"@electron/notarize": "1.2.3",
-		"@emotion/eslint-plugin": "11.10.0",
 		"@playwright/test": "1.29.1",
 		"@testing-library/dom": "8.19.1",
 		"@testing-library/jest-dom": "5.16.5",
