@@ -1,9 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@babel/core': 7.20.7
   '@electron/notarize': 1.2.3
-  '@emotion/eslint-plugin': 11.10.0
   '@playwright/test': 1.29.1
   '@solidjs/router': 0.6.0
   '@testing-library/dom': 8.19.1
@@ -52,9 +50,7 @@ dependencies:
   systeminformation: 5.16.9
 
 devDependencies:
-  '@babel/core': 7.20.7
   '@electron/notarize': 1.2.3
-  '@emotion/eslint-plugin': 11.10.0_eslint@8.31.0
   '@playwright/test': 1.29.1
   '@testing-library/dom': 8.19.1
   '@testing-library/jest-dom': 5.16.5
@@ -506,15 +502,6 @@ packages:
 
   /@emmetio/scanner/1.0.0:
     resolution: {integrity: sha512-8HqW8EVqjnCmWXVpqAOZf+EGESdkR27odcMMMGefgKXtar00SoYNSryGv//TELI4T3QFsECo78p+0lmalk/CFA==}
-    dev: true
-
-  /@emotion/eslint-plugin/11.10.0_eslint@8.31.0:
-    resolution: {integrity: sha512-nWpuoQQrzI9aM9fgn+Pbb0pOau4BhheXyVqHcOYKFq46uSuSR2ivZaDwwCJKI6ScA8Pm7OcoOpwdRH2iisf9cg==}
-    engines: {node: '>=6'}
-    peerDependencies:
-      eslint: 6 || 7 || 8
-    dependencies:
-      eslint: 8.31.0
     dev: true
 
   /@esbuild/android-arm/0.16.4:
