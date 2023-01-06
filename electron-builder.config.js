@@ -8,7 +8,7 @@ const config = {
 	directories: {
 		buildResources: "build",
 	},
-	files: ["dist/**"],
+	files: ["out/**"],
 	asarUnpack: "**/*.{node,dll}",
 	afterSign: "build/notarize.js",
 	win: {
