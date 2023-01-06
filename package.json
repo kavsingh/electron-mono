@@ -29,9 +29,9 @@
 	"dependencies": {
 		"@solidjs/router": "0.6.0",
 		"serialize-error": "11.0.0",
-		"solid-js": "1.6.6",
+		"solid-js": "1.6.8",
 		"solid-styled-components": "0.28.5",
-		"systeminformation": "5.16.9"
+		"systeminformation": "5.17.0"
 	},
 	"devDependencies": {
 		"@electron/notarize": "1.2.3",
