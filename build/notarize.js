@@ -1,5 +1,7 @@
 const { notarize } = require("@electron/notarize");
 
+const builderConfig = require("../electron-builder.config");
+
 module.exports = async (context) => {
 	if (process.platform !== "darwin") return;
 
@@ -17,18 +19,16 @@ module.exports = async (context) => {
 		return;
 	}
 
-	const appId = "com.ts-electron.app";
-
+	const { appId } = builderConfig;
 	const { appOutDir } = context;
-
-	const appName = context.packager.appInfo.productFilename;
+	const { productFilename } = context.packager.appInfo;
 
 	try {
 		await notarize({
 			appBundleId: appId,
-			appPath: `${appOutDir}/${appName}.app`,
+			appPath: `${appOutDir}/${productFilename}.app`,
 			appleId: process.env.APPLE_ID,
-			appleIdPassword: process.env.APPLEIDPASS,
+			appleIdPassword: process.env.APPLE_ID_PASS,
 		});
 	} catch (error) {
 		console.error(error);
