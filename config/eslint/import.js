@@ -11,7 +11,7 @@ const browserOnlyImports = {
 	patterns: ["react-*", "@emotion*"],
 };
 
-const tsconfigPathAliases = Object.keys(tsconfig.compilerOptions.paths);
+const tsconfigPathPatterns = Object.keys(tsconfig.compilerOptions.paths);
 
 module.exports = {
 	extends: ["plugin:import/recommended", "plugin:import/typescript"],
@@ -44,8 +44,8 @@ module.exports = {
 					"type",
 				],
 				"pathGroups": [
-					...tsconfigPathAliases.map((alias) => ({
-						pattern: alias,
+					...tsconfigPathPatterns.map((pattern) => ({
+						pattern,
 						group: "internal",
 					})),
 				],
