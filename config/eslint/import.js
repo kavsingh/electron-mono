@@ -1,4 +1,5 @@
 const { restrictFrom } = require("./lib");
+const tsconfig = require("../../tsconfig.json");
 
 const nodeOnlyImports = {
 	paths: ["electron", "usb-detection", ...require("module").builtinModules],
@@ -9,6 +10,8 @@ const browserOnlyImports = {
 	paths: ["react"],
 	patterns: ["react-*", "@emotion*"],
 };
+
+const tsconfigPathAliases = Object.keys(tsconfig.compilerOptions.paths);
 
 module.exports = {
 	extends: ["plugin:import/recommended", "plugin:import/typescript"],
@@ -36,10 +39,16 @@ module.exports = {
 					"builtin",
 					"external",
 					"internal",
-					["parent", "sibling", "index"],
+					["parent", "sibling"],
+					"index",
 					"type",
 				],
-				"pathGroups": [{ pattern: "~/**", group: "internal" }],
+				"pathGroups": [
+					...tsconfigPathAliases.map((alias) => ({
+						pattern: alias,
+						group: "internal",
+					})),
+				],
 				"pathGroupsExcludedImportTypes": ["type"],
 				"alphabetize": { order: "asc" },
 				"newlines-between": "always",
