@@ -53,20 +53,6 @@ module.exports = {
 			},
 		},
 		{
-			files: ["src/**/*"],
-			rules: {
-				"no-console": "error",
-				"no-restricted-properties": [
-					"error",
-					{
-						object: "window",
-						property: "bridge",
-						message: "Use default export from ~/renderer/bridge",
-					},
-				],
-			},
-		},
-		{
 			files: ["src/renderer/**/*"],
 			env: { node: false, browser: true },
 			extends: ["plugin:solid/typescript"],

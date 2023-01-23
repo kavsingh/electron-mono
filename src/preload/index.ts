@@ -1,18 +1,7 @@
-import { contextBridge } from "electron";
+// @ts-expect-error fucking ESM interop with package exports, fixing for one breaks 1000 other things, igonre this shit for now. fuck ESM i swear to god.
+import { exposeElectronTRPC } from "electron-trpc/main";
 
-import { rendererSubscriber } from "~/bridge/pubsub";
-import { rendererRequester } from "~/bridge/request";
-
-const bridge = {
-	getSystemInfo: rendererRequester("getSystemInfo"),
-	subscribeHealth: rendererSubscriber("health"),
-	subscribeSystemInfo: rendererSubscriber("systemInfo"),
-};
-
-contextBridge.exposeInMainWorld("bridge", bridge);
-
-declare global {
-	interface Window {
-		bridge: Immutable<typeof bridge>;
-	}
-}
+process.once("loaded", () => {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+	exposeElectronTRPC();
+});

@@ -1,10 +1,8 @@
 import { osInfo, mem } from "systeminformation";
 
-import type { Requests } from "~/bridge/types";
+import type { SystemInfo } from "~/common/trpc/types";
 
-export const getSystemInfo = async (): Promise<
-	ReturnType<Requests["getSystemInfo"]>
-> => {
+export const getSystemInfo = async (): Promise<SystemInfo> => {
 	const [sysOsInfo, sysMem] = await Promise.all([osInfo(), mem()]);
 
 	return {

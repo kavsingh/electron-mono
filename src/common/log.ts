@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 const error = console.error.bind(console);
 const noop = () => undefined;
 

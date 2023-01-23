@@ -2,22 +2,21 @@ import { A } from "@solidjs/router";
 import { createSignal, onCleanup } from "solid-js";
 import { styled } from "solid-styled-components";
 
-import bridge from "~/renderer/bridge";
-
 import Pulse from "./pulse";
 import StatusBadge from "./status-badge";
+import { getTRPCClient } from "../trpc/client";
 
 import type { Component } from "solid-js";
 
 const Masthead: Component = () => {
-	const [status, setStatus] = createSignal("");
 	const [timestamp, setTimestamp] = createSignal("");
-	const unsubscribe = bridge.subscribeHealth((event) => {
-		setStatus(event.status);
-		setTimestamp(event.timestamp.toString());
+	const subscription = getTRPCClient().heartbeat.subscribe(undefined, {
+		onData: () => {
+			setTimestamp(String(Date.now()));
+		},
 	});
 
-	onCleanup(unsubscribe);
+	onCleanup(() => subscription.unsubscribe());
 
 	return (
 		<Container>
@@ -26,7 +25,7 @@ const Masthead: Component = () => {
 				<A href="/files">Files</A>
 			</Nav>
 			<Pulse trigger={timestamp}>
-				<StatusBadge>{status()}</StatusBadge>
+				<StatusBadge>{"OK"}</StatusBadge>
 			</Pulse>
 		</Container>
 	);

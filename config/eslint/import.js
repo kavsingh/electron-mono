@@ -2,13 +2,13 @@ const { restrictFrom } = require("./lib");
 const tsconfig = require("../../tsconfig.json");
 
 const nodeOnlyImports = {
-	paths: ["electron", "usb-detection", ...require("module").builtinModules],
+	paths: ["electron", ...require("module").builtinModules],
 	patterns: [],
 };
 
 const browserOnlyImports = {
-	paths: ["react"],
-	patterns: ["react-*", "@emotion*"],
+	paths: ["solid-js"],
+	patterns: ["solid-*", "@solidjs/*"],
 };
 
 const tsconfigPathPatterns = Object.keys(tsconfig.compilerOptions.paths);
@@ -63,15 +63,10 @@ module.exports = {
 					{ target: "./src/main", from: "./src/renderer" },
 					{ target: "./src/main", from: "./src/preload" },
 					{ target: "./src/renderer", from: "./src/main" },
-					{ target: "./src/renderer", from: "./src/bridge" },
 					{ target: "./src/renderer", from: "./src/preload" },
 					{ target: "./src/common", from: "./src/main" },
-					{ target: "./src/common", from: "./src/bridge" },
 					{ target: "./src/common", from: "./src/renderer" },
 					{ target: "./src/common", from: "./src/preload" },
-					{ target: "./src/bridge", from: "./src/main" },
-					{ target: "./src/bridge", from: "./src/renderer" },
-					{ target: "./src/bridge", from: "./src/preload" },
 					{ target: "./src/preload", from: "./src/main" },
 					{ target: "./src/preload", from: "./src/renderer" },
 				],
@@ -97,13 +92,6 @@ module.exports = {
 
 		...restrictFrom("src/common", {
 			paths: [...nodeOnlyImports.paths, ...browserOnlyImports.paths],
-			patterns: [...nodeOnlyImports.patterns, ...browserOnlyImports.patterns],
-		}),
-
-		...restrictFrom("src/bridge", {
-			paths: [...nodeOnlyImports.paths, ...browserOnlyImports.paths].filter(
-				(path) => !/^electron/.test(path),
-			),
 			patterns: [...nodeOnlyImports.patterns, ...browserOnlyImports.patterns],
 		}),
 
