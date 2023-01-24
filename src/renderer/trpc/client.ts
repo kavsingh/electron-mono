@@ -1,5 +1,5 @@
 import { createTRPCProxyClient } from "@trpc/client";
-// @ts-expect-error fucking ESM interop with package exports, fixing for one breaks 1000 other things, ignore this shit for now.
+// @ts-expect-error fucking ESM interop with package exports. switching to type:module + node 16 resolution breaks 100 other things. ignore for now
 import { ipcLink } from "electron-trpc/renderer";
 
 // type only imports stripped at runtime

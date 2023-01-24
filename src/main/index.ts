@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from "electron";
-// @ts-expect-error fucking ESM interop with package exports, fixing for one breaks 1000 other things, igonre this shit for now. fuck ESM i swear to god.
+// @ts-expect-error fucking ESM interop with package exports. switching to type:module + node 16 resolution breaks 100 other things. ignore for now
 import { createIPCHandler } from "electron-trpc/main";
 
 import restrictNavigation from "./lib/restrict-navigation";
