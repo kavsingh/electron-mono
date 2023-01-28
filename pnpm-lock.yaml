@@ -51,7 +51,7 @@ dependencies:
   '@solidjs/router': 0.7.0_solid-js@1.6.9
   '@trpc/client': 10.9.0_@trpc+server@10.9.0
   '@trpc/server': 10.9.0
-  electron-trpc: 0.3.0_aok2ps7rwykyevthpbpylwxbge
+  electron-trpc: 0.3.0_5v6f6ow6o6xr4bvntvd4c7466m
   serialize-error: 11.0.0
   solid-js: 1.6.9
   solid-styled-components: 0.28.5_solid-js@1.6.9
@@ -2561,7 +2561,7 @@ packages:
     resolution: {integrity: sha512-M8WEXFuKXMYMVr45fo8mq0wUrrJHheiKZf6BArTKk9ZBYCKJEOU5H8cdWgDT+qCVZf7Na4lVUaZsA+h6uA9+PA==}
     dev: true
 
-  /electron-trpc/0.3.0_aok2ps7rwykyevthpbpylwxbge:
+  /electron-trpc/0.3.0_5v6f6ow6o6xr4bvntvd4c7466m:
     resolution: {integrity: sha512-qFQ1Lz1uuJnkPuw0Y0m6NUPm8459lbllzh38MfZuhOjCuWam1LX0/Ik83Ib+PU97q/Jmb3dNFxSqJ6GYy3Ri4A==}
     peerDependencies:
       '@trpc/client': '>10.0.0'
@@ -2570,7 +2570,7 @@ packages:
     dependencies:
       '@trpc/client': 10.9.0_@trpc+server@10.9.0
       '@trpc/server': 10.9.0
-      electron: 22.0.3
+      electron: 22.1.0
     dev: false
 
   /electron-vite/1.0.18_vite@4.0.4:
