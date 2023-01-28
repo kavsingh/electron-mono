@@ -6,7 +6,7 @@ import { ipcLink } from "electron-trpc/renderer";
 // eslint-disable-next-line import/no-restricted-paths
 import type { AppRouter } from "~/main/trpc/router";
 
-let trpcClient: ReturnType<typeof createTRPCProxyClient<AppRouter>> | undefined;
+let trpcClient: AppTRPCClient | undefined;
 
 export const getTRPCClient = () => {
 	trpcClient ??= createTRPCProxyClient<AppRouter>({
@@ -16,3 +16,5 @@ export const getTRPCClient = () => {
 
 	return trpcClient;
 };
+
+export type AppTRPCClient = ReturnType<typeof createTRPCProxyClient<AppRouter>>;
