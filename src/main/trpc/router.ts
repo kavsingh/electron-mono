@@ -38,7 +38,7 @@ export const startHeartbeat = () => {
 			if (!active) return;
 
 			heartbeatEmitter.emit("event", info);
-			timeout = setTimeout(tick, 1000);
+			timeout = setTimeout(tick, 1200);
 		});
 	};
 

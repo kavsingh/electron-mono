@@ -25,7 +25,7 @@ const Masthead: Component = () => {
 				<A href="/files">Files</A>
 			</Nav>
 			<Pulse trigger={timestamp}>
-				<StatusBadge>{"OK"}</StatusBadge>
+				<StatusBadge>OK</StatusBadge>
 			</Pulse>
 		</Container>
 	);
