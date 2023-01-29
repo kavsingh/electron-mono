@@ -1,22 +1,23 @@
 import { app, BrowserWindow } from "electron";
+import { createIPCHandler } from "electron-trpc/main";
 
-import { attachSystemInfo, attachHeartbeat } from "./ipc/pubsub";
-import { setupResponders } from "./ipc/responders";
 import restrictNavigation from "./lib/restrict-navigation";
+import { appRouter, startHeartbeat } from "./trpc/router";
 import { createMainWindow } from "./windows";
 
-const removeResponders = setupResponders();
-let mainWindow: BrowserWindow;
-let detachHeartbeat: ReturnType<typeof attachHeartbeat> | undefined;
-let detachSystemInfo: ReturnType<typeof attachSystemInfo> | undefined;
+let trpcIpcHandler: ReturnType<typeof createIPCHandler> | undefined = undefined;
+let stopHeartbeat: ReturnType<typeof startHeartbeat> | undefined = undefined;
 
 const showMainWindow = () => {
-	detachHeartbeat?.();
-	mainWindow = createMainWindow();
-	detachHeartbeat = attachHeartbeat(mainWindow);
-	detachSystemInfo = attachSystemInfo(mainWindow);
+	const mainWindow = createMainWindow();
+
 	mainWindow.on("ready-to-show", () => {
+		trpcIpcHandler?.attachWindow(mainWindow);
 		mainWindow.show();
+	});
+
+	mainWindow.on("closed", () => {
+		trpcIpcHandler?.detachWindow(mainWindow);
 	});
 };
 
@@ -34,13 +35,13 @@ app.on("window-all-closed", () => {
 	if (process.platform !== "darwin") app.quit();
 });
 
-app.on("will-quit", () => {
-	detachHeartbeat?.();
-	detachSystemInfo?.();
-	removeResponders();
+app.on("quit", () => {
+	stopHeartbeat?.();
 });
 
 app.enableSandbox();
 void app.whenReady().then(() => {
+	trpcIpcHandler = createIPCHandler({ router: appRouter });
+	stopHeartbeat = startHeartbeat();
 	showMainWindow();
 });

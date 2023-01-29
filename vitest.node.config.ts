@@ -8,7 +8,7 @@ export default mergeConfig(
 	defineConfig({
 		test: {
 			include: [
-				"src/{main,common,bridge,preload}/**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
+				"src/{main,common,preload}/**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
 			],
 			environment: "node",
 			setupFiles: ["./vitest.node.setup.ts"],
