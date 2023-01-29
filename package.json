@@ -30,7 +30,7 @@
 		"@solidjs/router": "0.7.0",
 		"@trpc/client": "10.9.0",
 		"@trpc/server": "10.9.0",
-		"electron-trpc": "0.3.0",
+		"electron-trpc": "0.3.2",
 		"serialize-error": "11.0.0",
 		"solid-js": "1.6.9",
 		"solid-styled-components": "0.28.5",

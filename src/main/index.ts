@@ -1,5 +1,4 @@
 import { app, BrowserWindow } from "electron";
-// @ts-expect-error fucking ESM interop with package exports. switching to type:module + node 16 resolution breaks 100 other things. ignore for now
 import { createIPCHandler } from "electron-trpc/main";
 
 import restrictNavigation from "./lib/restrict-navigation";
@@ -13,13 +12,11 @@ const showMainWindow = () => {
 	const mainWindow = createMainWindow();
 
 	mainWindow.on("ready-to-show", () => {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 		trpcIpcHandler?.attachWindow(mainWindow);
 		mainWindow.show();
 	});
 
 	mainWindow.on("closed", () => {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 		trpcIpcHandler?.detachWindow(mainWindow);
 	});
 };
@@ -44,7 +41,6 @@ app.on("quit", () => {
 
 app.enableSandbox();
 void app.whenReady().then(() => {
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
 	trpcIpcHandler = createIPCHandler({ router: appRouter });
 	stopHeartbeat = startHeartbeat();
 	showMainWindow();

@@ -18,7 +18,7 @@ specifiers:
   cross-env: 7.0.3
   electron: 22.1.0
   electron-builder: 23.6.0
-  electron-trpc: 0.3.0
+  electron-trpc: 0.3.2
   electron-vite: 1.0.18
   eslint: 8.33.0
   eslint-config-prettier: 8.6.0
@@ -51,7 +51,7 @@ dependencies:
   '@solidjs/router': 0.7.0_solid-js@1.6.9
   '@trpc/client': 10.9.0_@trpc+server@10.9.0
   '@trpc/server': 10.9.0
-  electron-trpc: 0.3.0_5v6f6ow6o6xr4bvntvd4c7466m
+  electron-trpc: 0.3.2_5v6f6ow6o6xr4bvntvd4c7466m
   serialize-error: 11.0.0
   solid-js: 1.6.9
   solid-styled-components: 0.28.5_solid-js@1.6.9
@@ -2561,8 +2561,8 @@ packages:
     resolution: {integrity: sha512-M8WEXFuKXMYMVr45fo8mq0wUrrJHheiKZf6BArTKk9ZBYCKJEOU5H8cdWgDT+qCVZf7Na4lVUaZsA+h6uA9+PA==}
     dev: true
 
-  /electron-trpc/0.3.0_5v6f6ow6o6xr4bvntvd4c7466m:
-    resolution: {integrity: sha512-qFQ1Lz1uuJnkPuw0Y0m6NUPm8459lbllzh38MfZuhOjCuWam1LX0/Ik83Ib+PU97q/Jmb3dNFxSqJ6GYy3Ri4A==}
+  /electron-trpc/0.3.2_5v6f6ow6o6xr4bvntvd4c7466m:
+    resolution: {integrity: sha512-vND5sx4ZZxcidNW7iGIsstfqE22B9DIFJTDoAtDGeCzLW/X29JKVzXA0qOWjSc+d7gklidNSoqEbYelg+Da0xQ==}
     peerDependencies:
       '@trpc/client': '>10.0.0'
       '@trpc/server': '>10.0.0'
