@@ -1,7 +1,5 @@
 import { osInfo, mem } from "systeminformation";
 
-import type { SystemInfo } from "~/common/trpc/types";
-
 export const getSystemInfo = async (): Promise<SystemInfo> => {
 	const [sysOsInfo, sysMem] = await Promise.all([osInfo(), mem()]);
 
@@ -11,3 +9,9 @@ export const getSystemInfo = async (): Promise<SystemInfo> => {
 		freeMemory: BigInt(sysMem.free),
 	};
 };
+
+export interface SystemInfo {
+	os: string;
+	totalMemory: bigint;
+	freeMemory: bigint;
+}

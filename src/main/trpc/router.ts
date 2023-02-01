@@ -5,7 +5,7 @@ import { observable } from "@trpc/server/observable";
 
 import { getSystemInfo } from "../services/system-info";
 
-import type { SystemInfo } from "~/common/trpc/types";
+import type { SystemInfo } from "../services/system-info";
 
 const trpc = initTRPC.create();
 const heartbeatEmitter = new EventEmitter();

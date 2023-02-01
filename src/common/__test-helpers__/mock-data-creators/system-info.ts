@@ -1,6 +1,6 @@
-// allow type-only import
-
-import type { SystemInfo } from "~/common/trpc/types";
+// type-only import
+// eslint-disable-next-line import/no-restricted-paths
+import type { SystemInfo } from "~/main/services/system-info";
 
 export const createMockSystemInfo = (
 	info: Partial<SystemInfo> = {},
