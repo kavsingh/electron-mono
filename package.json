@@ -28,8 +28,8 @@
 	"packageManager": "^pnpm@7.17.1",
 	"dependencies": {
 		"@solidjs/router": "0.7.0",
-		"@trpc/client": "10.9.1",
-		"@trpc/server": "10.9.1",
+		"@trpc/client": "10.10.0",
+		"@trpc/server": "10.10.0",
 		"electron-trpc": "0.3.2",
 		"serialize-error": "11.0.0",
 		"solid-js": "1.6.10",
