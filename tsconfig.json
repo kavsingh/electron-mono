@@ -16,6 +16,7 @@
 	"exclude": ["**/node_modules"],
 	"include": ["./src", "./e2e", "./config", "./*.ts"],
 	"ts-node": {
+		"swc": true,
 		"transpileOnly": true,
 		"compilerOptions": {
 			"isolatedModules": false,
