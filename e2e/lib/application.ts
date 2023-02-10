@@ -7,8 +7,8 @@ import { PROJECT_ROOT } from "./constants";
 
 import type { ElectronApplication } from "@playwright/test";
 
-export const setupApplication = async (): Promise<ElectronApplication> =>
-	electron.launch({
+export function setupApplication() {
+	return electron.launch({
 		args: [path.join(PROJECT_ROOT, "out/main/index.js")],
 		env: {
 			...(os.platform() === "win32"
@@ -19,7 +19,8 @@ export const setupApplication = async (): Promise<ElectronApplication> =>
 				: {}),
 		},
 	});
+}
 
-export const teardownApplication = async (
-	app: ElectronApplication,
-): Promise<void> => app.close();
+export function teardownApplication(app: ElectronApplication) {
+	return app.close();
+}

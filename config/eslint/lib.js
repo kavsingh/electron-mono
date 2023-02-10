@@ -1,11 +1,12 @@
 const path = require("path");
 
-const testFilePatterns = ({ root = "", extensions = "*" } = {}) =>
-	[
+function testFilePatterns({ root = "", extensions = "*" } = {}) {
+	return [
 		"*.{test,spec}",
 		"__{mocks,fixtures}__/**/*",
 		"__{test,mock}-{helpers,data}__/**/*",
 	].map((pattern) => path.join(root, `**/${pattern}.${extensions}`));
+}
 
 /**
  * @typedef {Object} RestrictedImportsOptions
@@ -14,7 +15,7 @@ const testFilePatterns = ({ root = "", extensions = "*" } = {}) =>
  * */
 
 /** @param {RestrictedImportsOptions} restrictedImportsOptions */
-const allowTypes = (restrictedImportsOptions) => {
+function allowTypes(restrictedImportsOptions) {
 	const nextOptions = { ...restrictedImportsOptions };
 
 	if (Array.isArray(nextOptions.paths)) {
@@ -38,13 +39,13 @@ const allowTypes = (restrictedImportsOptions) => {
 	}
 
 	return nextOptions;
-};
+}
 
 /**
  * @param {string} rootPath
  * @param {RestrictedImportsOptions} restrictedImportsOptions
  */
-const restrictFrom = (rootPath, restrictedImportsOptions) => {
+function restrictFrom(rootPath, restrictedImportsOptions) {
 	const isTsFile = /\.ts[x]?$/.test(rootPath);
 	const isJsFile = /\.js[x]?$/.test(rootPath);
 	const isFile = isJsFile || isTsFile;
@@ -71,6 +72,6 @@ const restrictFrom = (rootPath, restrictedImportsOptions) => {
 			  }
 			: undefined,
 	].filter(Boolean);
-};
+}
 
 module.exports = { testFilePatterns, restrictFrom };
