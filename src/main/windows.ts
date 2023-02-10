@@ -4,7 +4,7 @@ import { app, BrowserWindow } from "electron";
 
 import { error } from "~/common/log";
 
-export const createMainWindow = () => {
+export function createMainWindow() {
 	const mainWindow = new BrowserWindow({
 		height: 600,
 		width: 800,
@@ -31,4 +31,4 @@ export const createMainWindow = () => {
 	}
 
 	return mainWindow;
-};
+}

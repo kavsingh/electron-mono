@@ -12,4 +12,6 @@ const mockClient: AppTRPCClient = {
 	heartbeat: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
 };
 
-export const getTRPCClient = () => mockClient;
+export function getTRPCClient() {
+	return mockClient;
+}

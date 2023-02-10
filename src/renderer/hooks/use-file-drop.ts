@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 
-export const useFileDrop = () => {
+export default function useFileDrop() {
 	const [droppedFiles, setDroppedFiles] = createSignal<DroppedFile[]>();
 	const [isActive, setIsActive] = createSignal(false);
 
@@ -43,10 +43,10 @@ export const useFileDrop = () => {
 		{ isActive, files: droppedFiles },
 		{ onDragOver, onDragEnter, onDragLeave, onDrop },
 	] as const;
-};
+}
 
-export interface DroppedFile {
+export type DroppedFile = {
 	isDirectory: FileSystemEntry["isDirectory"] | undefined;
 	isFile: FileSystemEntry["isFile"] | undefined;
 	file: File;
-}
+};

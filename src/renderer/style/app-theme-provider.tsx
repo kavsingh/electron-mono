@@ -1,6 +1,6 @@
 import { ThemeProvider } from "solid-styled-components";
 
-import { usePreferredTheme } from "./use-preferred-theme";
+import usePreferredTheme from "./use-preferred-theme";
 
 import type { ParentComponent } from "solid-js";
 

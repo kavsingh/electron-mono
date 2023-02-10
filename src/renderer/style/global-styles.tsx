@@ -1,6 +1,8 @@
 import { createGlobalStyles } from "solid-styled-components";
 
-const GlobalStyles = () => {
+import type { Component } from "solid-js";
+
+const GlobalStyles: Component = () => {
 	const Styles = createGlobalStyles`
 		html {
 			box-sizing: border-box;

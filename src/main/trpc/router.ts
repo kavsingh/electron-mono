@@ -27,11 +27,11 @@ export const appRouter = trpc.router({
 	),
 });
 
-export const startHeartbeat = () => {
+export function startHeartbeat() {
 	let active = true;
 	let timeout: NodeJS.Timeout | undefined = undefined;
 
-	const tick = () => {
+	function tick() {
 		if (!active) return;
 
 		void getSystemInfo().then((info) => {
@@ -40,7 +40,7 @@ export const startHeartbeat = () => {
 			heartbeatEmitter.emit("event", info);
 			timeout = setTimeout(tick, 1200);
 		});
-	};
+	}
 
 	tick();
 
@@ -52,6 +52,6 @@ export const startHeartbeat = () => {
 			timeout = undefined;
 		}
 	};
-};
+}
 
 export type AppRouter = typeof appRouter;

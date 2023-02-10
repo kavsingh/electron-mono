@@ -1,10 +1,10 @@
 import { For } from "solid-js";
 import { styled } from "solid-styled-components";
 
-import { useFileDrop } from "~/renderer/hooks/file";
+import useFileDrop from "~/renderer/hooks/use-file-drop";
 
 import type { Component } from "solid-js";
-import type { DroppedFile } from "~/renderer/hooks/file";
+import type { DroppedFile } from "~/renderer/hooks/use-file-drop";
 
 const Files: Component = () => {
 	const [{ files, isActive }, elementHandles] = useFileDrop();

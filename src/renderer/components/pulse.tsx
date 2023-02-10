@@ -26,7 +26,7 @@ const Pulse: ParentComponent<Props> = (_props) => {
 			{...props}
 			classList={{
 				...props.classList,
-				[pulseStyles(props.durationMs)]: isActive(),
+				[getPulseStyles(props.durationMs)]: isActive(),
 			}}
 		>
 			{props.children}
@@ -54,11 +54,11 @@ const pulse = keyframes`
   }
 `;
 
-const pulseStyles = (durationMs: number) => css`
+const getPulseStyles = (durationMs: number) => css`
 	animation: ${pulse} ${String(durationMs)}ms ease-out forwards;
 `;
 
-interface Props extends ComponentProps<typeof Container> {
+type Props = {
 	durationMs?: number;
 	trigger?: Accessor<unknown>;
-}
+} & ComponentProps<typeof Container>;

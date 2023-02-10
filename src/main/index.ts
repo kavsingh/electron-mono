@@ -8,19 +8,6 @@ import { createMainWindow } from "./windows";
 let trpcIpcHandler: ReturnType<typeof createIPCHandler> | undefined = undefined;
 let stopHeartbeat: ReturnType<typeof startHeartbeat> | undefined = undefined;
 
-const showMainWindow = () => {
-	const mainWindow = createMainWindow();
-
-	mainWindow.on("ready-to-show", () => {
-		trpcIpcHandler?.attachWindow(mainWindow);
-		mainWindow.show();
-	});
-
-	mainWindow.on("closed", () => {
-		trpcIpcHandler?.detachWindow(mainWindow);
-	});
-};
-
 app.on("activate", () => {
 	// On OS X it's common to re-create a window in the app when the
 	// dock icon is clicked and there are no other windows open.
@@ -45,3 +32,16 @@ void app.whenReady().then(() => {
 	stopHeartbeat = startHeartbeat();
 	showMainWindow();
 });
+
+function showMainWindow() {
+	const mainWindow = createMainWindow();
+
+	mainWindow.on("ready-to-show", () => {
+		trpcIpcHandler?.attachWindow(mainWindow);
+		mainWindow.show();
+	});
+
+	mainWindow.on("closed", () => {
+		trpcIpcHandler?.detachWindow(mainWindow);
+	});
+}

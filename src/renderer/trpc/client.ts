@@ -7,12 +7,12 @@ import type { AppRouter } from "~/main/trpc/router";
 
 let trpcClient: AppTRPCClient | undefined;
 
-export const getTRPCClient = (): AppTRPCClient => {
+export function getTRPCClient(): AppTRPCClient {
 	trpcClient ??= createTRPCProxyClient<AppRouter>({
 		links: [ipcLink()],
 	});
 
 	return trpcClient;
-};
+}
 
 export type AppTRPCClient = ReturnType<typeof createTRPCProxyClient<AppRouter>>;

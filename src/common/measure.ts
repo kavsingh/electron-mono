@@ -3,9 +3,8 @@ import { error, log } from "./log";
 let measuredAsyncFn: MeasuredAsyncFn = (_id, fn) => fn;
 
 if (import.meta.env.DEV) {
-	measuredAsyncFn =
-		(id, fn) =>
-		async (...args) => {
+	measuredAsyncFn = (id, fn) => {
+		async function measured(...args: Parameters<typeof fn>) {
 			log(`called ${id}`);
 
 			const start = Date.now();
@@ -23,7 +22,14 @@ if (import.meta.env.DEV) {
 
 				throw reason;
 			}
-		};
+		}
+
+		Object.defineProperty(measured, "name", {
+			value: `${fn.name || "anonymous"}_measured`,
+		});
+
+		return measured;
+	};
 }
 
 export { measuredAsyncFn };

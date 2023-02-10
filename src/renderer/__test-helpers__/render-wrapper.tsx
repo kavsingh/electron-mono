@@ -5,7 +5,7 @@ import AppThemeProvider from "../style/app-theme-provider";
 
 import type { ParentComponent } from "solid-js";
 
-export const setupRenderWrapper = () => {
+export function setupRenderWrapper() {
 	const user = userEvent.setup();
 	const Wrapper: ParentComponent = (props) => (
 		<Router>
@@ -14,4 +14,4 @@ export const setupRenderWrapper = () => {
 	);
 
 	return { user, Wrapper };
-};
+}

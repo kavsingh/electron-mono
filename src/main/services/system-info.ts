@@ -1,6 +1,6 @@
 import { osInfo, mem } from "systeminformation";
 
-export const getSystemInfo = async (): Promise<SystemInfo> => {
+export async function getSystemInfo(): Promise<SystemInfo> {
 	const [sysOsInfo, sysMem] = await Promise.all([osInfo(), mem()]);
 
 	return {
@@ -8,10 +8,10 @@ export const getSystemInfo = async (): Promise<SystemInfo> => {
 		totalMemory: BigInt(sysMem.total),
 		freeMemory: BigInt(sysMem.free),
 	};
-};
+}
 
-export interface SystemInfo {
+export type SystemInfo = {
 	os: string;
 	totalMemory: bigint;
 	freeMemory: bigint;
-}
+};
