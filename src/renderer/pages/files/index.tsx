@@ -1,6 +1,6 @@
 import { For } from "solid-js";
-import { styled } from "solid-styled-components";
 
+import PageHeader from "~/renderer/components/page-header";
 import useFileDrop from "~/renderer/hooks/use-file-drop";
 
 import type { Component } from "solid-js";
@@ -10,15 +10,19 @@ const Files: Component = () => {
 	const [{ files, isActive }, elementHandles] = useFileDrop();
 
 	return (
-		<div>
-			<h2>Files</h2>
-			<DropRegion isActive={isActive()} {...elementHandles} />
+		<>
+			<PageHeader>Files</PageHeader>
+			<div
+				class="border border-100 bs-[200px]"
+				classList={{ "border-400": isActive() }}
+				{...elementHandles}
+			/>
 			<ul>
 				<For each={files()}>
 					{(droppedFile) => <FileItem {...droppedFile} />}
 				</For>
 			</ul>
-		</div>
+		</>
 	);
 };
 
@@ -29,12 +33,3 @@ const FileItem: Component<DroppedFile> = (props) => (
 		<span>{props.file.path}</span> ({props.isDirectory ? "directory" : "file"})
 	</li>
 );
-
-const DropRegion = styled.div<{ isActive: boolean }>`
-	block-size: 200px;
-	border: 1px solid ${(props) => props.theme?.colors.text[100]};
-	background-color: ${(props) =>
-		props.isActive
-			? `${props.theme?.colors.text[100] ?? ""}88`
-			: "transparent"};
-`;

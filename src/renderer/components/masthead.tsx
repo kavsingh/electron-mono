@@ -1,6 +1,5 @@
 import { A } from "@solidjs/router";
 import { createSignal, onCleanup } from "solid-js";
-import { styled } from "solid-styled-components";
 
 import Pulse from "./pulse";
 import StatusBadge from "./status-badge";
@@ -19,28 +18,16 @@ const Masthead: Component = () => {
 	onCleanup(() => subscription.unsubscribe());
 
 	return (
-		<Container>
-			<Nav>
+		<div class="flex items-center justify-between">
+			<nav class="flex items-center gap-2">
 				<A href="/">System Info</A>
 				<A href="/files">Files</A>
-			</Nav>
+			</nav>
 			<Pulse trigger={timestamp}>
 				<StatusBadge>OK</StatusBadge>
 			</Pulse>
-		</Container>
+		</div>
 	);
 };
 
 export default Masthead;
-
-const Container = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-`;
-
-const Nav = styled.nav`
-	display: flex;
-	align-items: center;
-	gap: ${(props) => props.theme?.spacing.fixed[0]};
-`;

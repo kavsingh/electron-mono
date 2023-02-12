@@ -1,0 +1,15 @@
+@import url("./style/colors.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+	color: var(--color-text-400);
+	background-color: var(--color-bg-0);
+}
+
+#app-root {
+	width: 100vw;
+	height: 100vh;
+}

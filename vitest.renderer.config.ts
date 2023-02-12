@@ -14,12 +14,7 @@ export default mergeConfig(
 			environment: "jsdom",
 			setupFiles: ["./vitest.renderer.setup.ts"],
 			deps: {
-				inline: [
-					/solid-js/,
-					/@solidjs\/router/,
-					/solid-styled-components/,
-					/solid-testing-library/,
-				],
+				inline: [/solid-js/, /@solidjs\/router/, /solid-testing-library/],
 			},
 		},
 		resolve: { conditions: ["development", "browser"] },

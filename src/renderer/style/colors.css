@@ -1,0 +1,17 @@
+:root {
+	--color-text-100: #434343;
+	--color-text-400: #fefefe;
+	--color-border-100: #434343;
+	--color-border-400: #fefefe;
+	--color-bg-0: #222;
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--color-text-100: #dedede;
+		--color-text-400: #222;
+		--color-border-100: #dedede;
+		--color-border-400: #222;
+		--color-bg-0: #fefefe;
+	}
+}

@@ -8,7 +8,6 @@
 		"module": "esnext",
 		"noEmit": true,
 		"paths": { "~/*": ["./src/*"] },
-		"plugins": [{ "name": "typescript-styled-plugin", "validate": true }],
 		"resolveJsonModule": true,
 		"sourceMap": true,
 		"target": "esnext"
