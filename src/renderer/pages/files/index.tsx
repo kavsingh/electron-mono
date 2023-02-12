@@ -14,7 +14,7 @@ const Files: Component = () => {
 			<PageHeader>Files</PageHeader>
 			<div
 				class="border border-100 bs-[200px]"
-				classList={{ "border-400": isActive() }}
+				classList={{ "border-current": isActive() }}
 				{...elementHandles}
 			/>
 			<ul>
