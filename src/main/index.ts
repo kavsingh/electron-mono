@@ -2,7 +2,8 @@ import { app, BrowserWindow } from "electron";
 import { createIPCHandler } from "electron-trpc/main";
 
 import restrictNavigation from "./lib/restrict-navigation";
-import { appRouter, startHeartbeat } from "./trpc/router";
+import { startHeartbeat } from "./services/heartbeat";
+import { appRouter } from "./trpc/router";
 import { createMainWindow } from "./windows";
 
 let trpcIpcHandler: ReturnType<typeof createIPCHandler> | undefined = undefined;
