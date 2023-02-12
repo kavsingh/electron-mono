@@ -27,7 +27,7 @@ const Pulse: ParentComponent<Props> = (_props) => {
 			class="opacity-0"
 			classList={{
 				...props.classList,
-				"animate-[pulseOut_ease-out_forwards]": isActive(),
+				"animate-[pulse-out_ease-out_forwards]": isActive(),
 			}}
 		>
 			{props.children}

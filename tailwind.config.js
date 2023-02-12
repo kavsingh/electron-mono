@@ -18,7 +18,7 @@ module.exports = {
 				400: "var(--color-border-400)",
 			},
 			keyframes: {
-				pulseOut: {
+				"pulse-out": {
 					"0%": { opacity: "0" },
 					"10%": { opacity: "1" },
 					"100%": { opacity: "0" },
