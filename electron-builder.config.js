@@ -9,6 +9,7 @@ const config = {
 		buildResources: "build",
 	},
 	files: ["out/**"],
+	asar: true,
 	asarUnpack: "**/*.{node,dll}",
 	afterSign: "build/notarize.js",
 	win: {
@@ -21,6 +22,9 @@ const config = {
 		createDesktopShortcut: "always",
 	},
 	mac: {
+		target: { target: "default", arch: ["arm64", "x64"] },
+		type: "distribution",
+		hardenedRuntime: true,
 		entitlementsInherit: "build/entitlements.mac.plist",
 		extendInfo: [
 			"NSCameraUsageDescription: Application requests access to the device's camera.",
@@ -30,7 +34,7 @@ const config = {
 		],
 	},
 	dmg: {
-		artifactName: "${name}-${version}.${ext}",
+		artifactName: "${name}-${version}-${arch}.${ext}",
 	},
 	linux: {
 		target: ["AppImage", "snap", "deb"],
