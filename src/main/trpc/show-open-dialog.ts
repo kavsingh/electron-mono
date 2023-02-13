@@ -37,13 +37,15 @@ const openDialogOptions = z.object({
 const showOpenDialog = publicProcedure
 	.input(openDialogOptions)
 	.query(({ input }) => {
-		// TODO: determine which window made the request
-		const targetWindow = BrowserWindow.getAllWindows()[0];
+		// TODO: determine requesting window somehow?
+		const focusedWindow = BrowserWindow.getAllWindows().find((win) =>
+			win.isFocused(),
+		);
 
-		if (!targetWindow) throw new Error("No active browser window");
+		if (!focusedWindow) throw new Error("No focused window");
 
 		return dialog.showOpenDialog(
-			targetWindow,
+			focusedWindow,
 			// get around exactOptionalPropertyTypes
 			input as StripUndefined<typeof input>,
 		);
