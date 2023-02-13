@@ -1,16 +1,16 @@
-import { initTRPC } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
 
+import showOpenDialog from "./show-open-dialog";
+import { publicProcedure, router } from "./trpc-server";
 import { heartbeatEmitter } from "../services/heartbeat";
 import { getSystemInfo } from "../services/system-info";
 
 import type { HeartbeatEventMap } from "../services/heartbeat";
 
-const trpc = initTRPC.create();
-
-export const appRouter = trpc.router({
-	systemInfo: trpc.procedure.query(() => getSystemInfo()),
-	heartbeat: trpc.procedure.subscription(() =>
+export const appRouter = router({
+	showOpenDialog,
+	systemInfo: publicProcedure.query(() => getSystemInfo()),
+	heartbeat: publicProcedure.subscription(() =>
 		observable<HeartbeatPayload>((emit) => {
 			const handler: HeartbeatHandler = (payload) => {
 				emit.next(payload);

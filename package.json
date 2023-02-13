@@ -33,7 +33,8 @@
 		"electron-trpc": "0.4.1",
 		"eventemitter3": "5.0.0",
 		"solid-js": "1.6.10",
-		"systeminformation": "5.17.9"
+		"systeminformation": "5.17.9",
+		"zod": "3.20.6"
 	},
 	"devDependencies": {
 		"@electron/notarize": "1.2.3",

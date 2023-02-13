@@ -52,6 +52,7 @@ specifiers:
   vite-plugin-solid: 2.5.0
   vite-tsconfig-paths: 4.0.5
   vitest: 0.28.4
+  zod: 3.20.6
 
 dependencies:
   '@solidjs/router': 0.7.0_solid-js@1.6.10
@@ -61,6 +62,7 @@ dependencies:
   eventemitter3: 5.0.0
   solid-js: 1.6.10
   systeminformation: 5.17.9
+  zod: 3.20.6
 
 devDependencies:
   '@electron/notarize': 1.2.3
@@ -6166,3 +6168,7 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
     dev: true
+
+  /zod/3.20.6:
+    resolution: {integrity: sha512-oyu0m54SGCtzh6EClBVqDDlAYRz4jrVtKwQ7ZnsEmMI9HnzuZFj8QFwAY1M5uniIYACdGvv0PBWPF2kO0aNofA==}
+    dev: false
