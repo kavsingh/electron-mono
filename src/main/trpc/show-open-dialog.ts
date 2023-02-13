@@ -10,28 +10,26 @@ const fileFilter = z.object({
 	name: z.string(),
 });
 
+const property = z.union([
+	z.literal("openFile"),
+	z.literal("openDirectory"),
+	z.literal("multiSelections"),
+	z.literal("showHiddenFiles"),
+	z.literal("createDirectory"),
+	z.literal("promptToCreate"),
+	z.literal("noResolveAliases"),
+	z.literal("treatPackageAsDirectory"),
+	z.literal("dontAddToRecent"),
+]);
+
 const openDialogOptions = z.object({
-	title: z.optional(z.string()),
-	defaultPath: z.optional(z.string()),
-	buttonLabel: z.optional(z.string()),
+	title: z.ostring(),
+	defaultPath: z.ostring(),
+	buttonLabel: z.ostring(),
 	filters: z.optional(z.array(fileFilter)),
-	properties: z.optional(
-		z.array(
-			z.union([
-				z.literal("openFile"),
-				z.literal("openDirectory"),
-				z.literal("multiSelections"),
-				z.literal("showHiddenFiles"),
-				z.literal("createDirectory"),
-				z.literal("promptToCreate"),
-				z.literal("noResolveAliases"),
-				z.literal("treatPackageAsDirectory"),
-				z.literal("dontAddToRecent"),
-			]),
-		),
-	),
-	message: z.optional(z.string()),
-	securityScopedBookmarks: z.optional(z.boolean()),
+	properties: z.optional(z.array(property)),
+	message: z.ostring(),
+	securityScopedBookmarks: z.oboolean(),
 });
 
 //
