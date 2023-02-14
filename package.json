@@ -28,11 +28,11 @@
 	"packageManager": "^pnpm@7.17.1",
 	"dependencies": {
 		"@solidjs/router": "0.7.0",
-		"@trpc/client": "10.11.0",
-		"@trpc/server": "10.11.0",
+		"@trpc/client": "10.11.1",
+		"@trpc/server": "10.11.1",
 		"electron-trpc": "0.4.1",
 		"eventemitter3": "5.0.0",
-		"solid-js": "1.6.10",
+		"solid-js": "1.6.11",
 		"systeminformation": "5.17.9",
 		"zod": "3.20.6"
 	},
@@ -47,9 +47,9 @@
 		"@tsconfig/node18-strictest": "1.0.0",
 		"@types/node": "18.13.0",
 		"@types/testing-library__jest-dom": "5.14.5",
-		"@typescript-eslint/eslint-plugin": "5.51.0",
-		"@typescript-eslint/parser": "5.51.0",
-		"@vitest/coverage-c8": "0.28.4",
+		"@typescript-eslint/eslint-plugin": "5.52.0",
+		"@typescript-eslint/parser": "5.52.0",
+		"@vitest/coverage-c8": "0.28.5",
 		"autoprefixer": "10.4.13",
 		"cross-env": "7.0.3",
 		"electron": "23.0.0",
@@ -80,6 +80,6 @@
 		"vite": "4.1.1",
 		"vite-plugin-solid": "2.5.0",
 		"vite-tsconfig-paths": "4.0.5",
-		"vitest": "0.28.4"
+		"vitest": "0.28.5"
 	}
 }
