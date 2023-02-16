@@ -1,8 +1,8 @@
 import { createEffect, createSignal, mergeProps, onCleanup } from "solid-js";
 
-import type { Accessor, ParentComponent, JSX } from "solid-js";
+import type { Accessor, JSX, ParentProps } from "solid-js";
 
-const Pulse: ParentComponent<Props> = (_props) => {
+export default function Pulse(_props: ParentProps<Props>) {
 	const props = mergeProps({ durationMs: 1200 }, _props);
 	const [isActive, setIsActive] = createSignal(false);
 	let fadeTimeout: NodeJS.Timeout;
@@ -33,9 +33,7 @@ const Pulse: ParentComponent<Props> = (_props) => {
 			{props.children}
 		</div>
 	);
-};
-
-export default Pulse;
+}
 
 type Props = {
 	durationMs?: number;

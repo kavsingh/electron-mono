@@ -5,9 +5,7 @@ import Pulse from "./pulse";
 import StatusBadge from "./status-badge";
 import { getTRPCClient } from "../trpc/client";
 
-import type { Component } from "solid-js";
-
-const Masthead: Component = () => {
+export default function Masthead() {
 	const [timestamp, setTimestamp] = createSignal("");
 	const subscription = getTRPCClient().heartbeat.subscribe(undefined, {
 		onData: () => {
@@ -28,6 +26,4 @@ const Masthead: Component = () => {
 			</Pulse>
 		</div>
 	);
-};
-
-export default Masthead;
+}

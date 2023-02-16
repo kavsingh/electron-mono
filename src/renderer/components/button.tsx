@@ -1,15 +1,19 @@
-import type { Component, JSX } from "solid-js";
+import { createMemo } from "solid-js";
+import { twMerge } from "tailwind-merge";
 
-const Button: Component<JSX.ButtonHTMLAttributes<HTMLButtonElement>> = (
-	props,
-) => (
-	<button
-		{...props}
-		class={`rounded border border-100 plb-1 pli-2 hover:border-400 focus-visible:border-400 active:border-400 ${
-			props.class ?? ""
-		}`}
-		classList={props.classList ?? {}}
-	/>
-);
+import type { JSX } from "solid-js";
 
-export default Button;
+export default function Button(
+	props: JSX.ButtonHTMLAttributes<HTMLButtonElement>,
+) {
+	const className = createMemo(() =>
+		twMerge(
+			"rounded border border-100 plb-1 pli-2 hover:border-400 focus-visible:border-400 active:border-400",
+			props.class,
+		),
+	);
+
+	return (
+		<button {...props} class={className()} classList={props.classList ?? {}} />
+	);
+}

@@ -5,9 +5,7 @@ import PageHeader from "~/renderer/components/page-header";
 import useFileDrop from "~/renderer/hooks/use-file-drop";
 import useFileSelectDialog from "~/renderer/hooks/use-file-select-dialog";
 
-import type { Component } from "solid-js";
-
-const Files: Component = () => {
+export default function Files() {
 	const [selectedFiles, setSelectedFiles] = createSignal<string[]>([]);
 
 	function handleFileSelect(selected: string[]) {
@@ -30,23 +28,17 @@ const Files: Component = () => {
 			</ul>
 		</>
 	);
-};
+}
 
-export default Files;
-
-const DialogFileSelect: Component<{
-	onSelect: (selected: string[]) => void;
-}> = (props) => {
+function DialogFileSelect(props: { onSelect: (selected: string[]) => void }) {
 	const [files, selectFiles] = useFileSelectDialog();
 
 	createEffect(() => props.onSelect(files()));
 
 	return <Button onClick={() => void selectFiles()}>Select files</Button>;
-};
+}
 
-const DragFileSelect: Component<{
-	onSelect: (selected: string[]) => void;
-}> = (props) => {
+function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
 	const [{ files, isActive }, dragDropHandlers] = useFileDrop();
 
 	createEffect(() => {
@@ -65,4 +57,4 @@ const DragFileSelect: Component<{
 			{...dragDropHandlers}
 		/>
 	);
-};
+}

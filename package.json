@@ -34,6 +34,7 @@
 		"eventemitter3": "5.0.0",
 		"solid-js": "1.6.11",
 		"systeminformation": "5.17.9",
+		"tailwind-merge": "1.9.1",
 		"zod": "3.20.6"
 	},
 	"devDependencies": {

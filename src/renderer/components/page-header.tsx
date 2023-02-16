@@ -1,7 +1,5 @@
-import type { ParentComponent } from "solid-js";
+import type { ParentProps } from "solid-js";
 
-const PageHeader: ParentComponent = (props) => (
-	<h2 class="text-lg">{props.children}</h2>
-);
-
-export default PageHeader;
+export default function PageHeader(props: ParentProps) {
+	return <h2 class="text-lg">{props.children}</h2>;
+}
