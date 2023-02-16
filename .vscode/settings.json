@@ -3,6 +3,12 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll": true
 	},
+	"editor.quickSuggestions": {
+		"strings": true
+	},
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
 	"files.watcherExclude": {
 		"**/node_modules": true,
 		"**/out": true,
@@ -13,6 +19,7 @@
 		"**/out": true,
 		"**/dist": true
 	},
+	"tailwindCSS.validate": true,
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"[javascript]": {
 		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
