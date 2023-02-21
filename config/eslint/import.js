@@ -1,5 +1,7 @@
+const requireJSON5 = require("require-json5");
+const tsconfig = requireJSON5("../../tsconfig.json");
+
 const { restrictFrom } = require("./lib");
-const tsconfig = require("../../tsconfig.json");
 
 const nodeOnlyImports = {
 	paths: ["electron", ...require("module").builtinModules],

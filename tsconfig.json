@@ -10,7 +10,13 @@
 		"paths": { "~/*": ["./src/*"] },
 		"resolveJsonModule": true,
 		"sourceMap": true,
-		"target": "esnext"
+		"target": "esnext",
+		// leave the following to eslint
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		// leave to eslint: some extensions delete
+		// unreachable code detected via ts too eagerly
+		"allowUnreachableCode": true
 	},
 	"exclude": ["**/node_modules"],
 	"include": ["./src", "./e2e", "./config", "./*.ts"],

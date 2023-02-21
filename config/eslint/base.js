@@ -1,6 +1,8 @@
 const { testFilePatterns } = require("./lib");
 
 module.exports = {
+	root: true,
+	reportUnusedDisableDirectives: true,
 	env: { es2022: true, node: true, browser: false },
 	plugins: ["filenames"],
 	extends: ["eslint:recommended", "plugin:prettier/recommended"],
@@ -12,7 +14,6 @@ module.exports = {
 		"filenames/match-exported": ["error", "kebab"],
 		"prettier/prettier": "warn",
 	},
-	reportUnusedDisableDirectives: true,
 	overrides: [
 		{
 			files: ["*.ts?(x)"],
