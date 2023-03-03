@@ -1,5 +1,5 @@
 const requireJSON5 = require("require-json5");
-const tsconfig = requireJSON5("../../tsconfig.json");
+const tsconfig = requireJSON5("./tsconfig.json");
 
 const { restrictFrom } = require("./lib");
 

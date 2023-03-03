@@ -5,8 +5,8 @@
 @tailwind utilities;
 
 html {
-	color: var(--color-text-400);
-	background-color: var(--color-bg-0);
+	color: theme(colors.text400);
+	background-color: theme(colors.bg0);
 }
 
 #app-root {
