@@ -41,8 +41,7 @@ module.exports = {
 					"builtin",
 					"external",
 					"internal",
-					["parent", "sibling"],
-					"index",
+					["parent", "sibling", "index"],
 					"type",
 				],
 				"pathGroups": [
