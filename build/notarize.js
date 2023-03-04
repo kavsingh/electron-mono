@@ -14,7 +14,7 @@ module.exports = async (context) => {
 
 	if (!("APPLE_ID" in process.env && "APPLE_ID_PASS" in process.env)) {
 		console.warn(
-			"skipping notarizing, APPLE_ID and APPLE_ID_PASS env variables must be set.",
+			"skipping notarizing, APPLE_ID and APPLE_ID_PASS env variables must be set."
 		);
 		return;
 	}

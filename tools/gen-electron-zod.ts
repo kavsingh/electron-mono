@@ -7,7 +7,7 @@ import { formatTypescriptContent } from "./format";
 
 const typesPath = path.join(
 	__dirname,
-	"../node_modules/electron/electron.d.ts",
+	"../node_modules/electron/electron.d.ts"
 );
 
 function nameFilter(name: string) {
@@ -31,6 +31,6 @@ if (require.main === module) {
 	console.log(process.cwd());
 
 	void genElectronZod(
-		path.join(__dirname, "../src/common/schemas/electron.ts"),
+		path.join(__dirname, "../src/common/schemas/electron.ts")
 	);
 }

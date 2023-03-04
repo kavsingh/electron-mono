@@ -20,7 +20,7 @@ export default function Files() {
 			<ul class="m-0 flex list-none flex-col gap-1 p-0 text-sm">
 				<For each={selectedFiles()}>
 					{(file) => (
-						<li class="pbe-1 border-be border-be-border100 last:pbe-0 last:border-be-0">
+						<li class="pbe-1 border-be border-be-accent100 last:pbe-0 last:border-be-0">
 							{file}
 						</li>
 					)}
@@ -44,7 +44,7 @@ function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
 	createEffect(() => {
 		const filePaths = files()?.map(
 			({ file, isDirectory }) =>
-				`${file.path} (${isDirectory ? "directory" : "file"})`,
+				`${file.path} (${isDirectory ? "directory" : "file"})`
 		);
 
 		props.onSelect(filePaths ?? []);
@@ -52,7 +52,7 @@ function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
 
 	return (
 		<div
-			class="border border-border100 bs-[200px]"
+			class="border-border100 border bs-[200px]"
 			classList={{ "border-current": isActive() }}
 			{...dragDropHandlers}
 		/>

@@ -18,5 +18,5 @@ export default mergeConfig(
 			},
 		},
 		resolve: { conditions: ["development", "browser"] },
-	}),
+	})
 );

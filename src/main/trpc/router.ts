@@ -22,14 +22,14 @@ export const appRouter = router({
 			return function unsubscribe() {
 				heartbeatEmitter.off("heartbeat", handler);
 			};
-		}),
+		})
 	),
 	showOpenDialog: publicProcedure
 		.input(electronOpenDialogOptionsSchema)
 		.query(({ input }) => {
 			// TODO: determine requesting window somehow?
 			const focusedWindow = BrowserWindow.getAllWindows().find((win) =>
-				win.isFocused(),
+				win.isFocused()
 			);
 
 			if (!focusedWindow) throw new Error("No focused window");
@@ -38,7 +38,7 @@ export const appRouter = router({
 				focusedWindow,
 				// circumvent exactOptionalPropertyTypes conflict with
 				// upstream types
-				input as StripUndefined<typeof input>,
+				input as StripUndefined<typeof input>
 			);
 		}),
 });

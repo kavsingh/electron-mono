@@ -37,5 +37,5 @@ export { measuredAsyncFn };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MeasuredAsyncFn = <T extends (...args: any[]) => Promise<any>>(
 	id: string,
-	fn: T,
+	fn: T
 ) => (...args: Parameters<T>) => Promise<Awaited<ReturnType<T>>>;

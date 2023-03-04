@@ -3,7 +3,7 @@
 import type { SystemInfo } from "~/main/services/system-info";
 
 export function createMockSystemInfo(
-	info: Partial<SystemInfo> = {},
+	info: Partial<SystemInfo> = {}
 ): SystemInfo {
 	return {
 		os: "OS",

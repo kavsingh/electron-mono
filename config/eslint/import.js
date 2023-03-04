@@ -103,7 +103,7 @@ module.exports = {
 
 		...restrictFrom("src/preload.ts", {
 			paths: [...nodeOnlyImports.paths, ...browserOnlyImports.paths].filter(
-				(path) => !/^electron/.test(path),
+				(path) => !/^electron/.test(path)
 			),
 			patterns: [...nodeOnlyImports.patterns, ...browserOnlyImports.patterns],
 		}),
