@@ -1,6 +1,8 @@
 import { observable } from "@trpc/server/observable";
+import { BrowserWindow, dialog } from "electron";
 
-import showOpenDialog from "./show-open-dialog";
+import { electronOpenDialogOptionsSchema } from "~/common/schemas/electron";
+
 import { publicProcedure, router } from "./trpc-server";
 import { heartbeatEmitter } from "../services/heartbeat";
 import { getSystemInfo } from "../services/system-info";
@@ -8,7 +10,6 @@ import { getSystemInfo } from "../services/system-info";
 import type { HeartbeatEventMap } from "../services/heartbeat";
 
 export const appRouter = router({
-	showOpenDialog,
 	systemInfo: publicProcedure.query(() => getSystemInfo()),
 	heartbeat: publicProcedure.subscription(() =>
 		observable<HeartbeatPayload>((emit) => {
@@ -23,6 +24,21 @@ export const appRouter = router({
 			};
 		}),
 	),
+	showOpenDialog: publicProcedure
+		.input(electronOpenDialogOptionsSchema)
+		.query(({ input }) => {
+			// TODO: determine requesting window somehow?
+			const focusedWindow = BrowserWindow.getAllWindows().find((win) =>
+				win.isFocused(),
+			);
+
+			if (!focusedWindow) throw new Error("No focused window");
+
+			return dialog.showOpenDialog(
+				focusedWindow,
+				input as StripUndefined<typeof input>,
+			);
+		}),
 });
 
 export type AppRouter = typeof appRouter;
