@@ -15,6 +15,7 @@ const browserOnlyImports = {
 
 const tsconfigPathPatterns = Object.keys(tsconfig.compilerOptions.paths);
 
+/** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
 	extends: ["plugin:import/recommended", "plugin:import/typescript"],
 	rules: {
