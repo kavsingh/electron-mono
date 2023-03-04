@@ -5,7 +5,7 @@ const testFileSuffixes = ["test", "spec", "mock"];
 function testFilePatterns({ root = "", extensions = "*" } = {}) {
 	return [
 		`*.{${testFileSuffixes.join(",")}}`,
-		"__{test,mocks,fixtures}__/**/*",
+		"__{test,tests,mocks,fixtures}__/**/*",
 		"__{test,mock,fixture}-*__/**/*",
 	].map((pattern) => path.join(root, `**/${pattern}.${extensions}`));
 }
