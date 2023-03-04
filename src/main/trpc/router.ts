@@ -1,7 +1,7 @@
 import { observable } from "@trpc/server/observable";
 import { BrowserWindow, dialog } from "electron";
 
-import { electronOpenDialogOptionsSchema } from "~/common/schemas/electron";
+import { electronOpenDialogOptionsSchema } from "~/common/schema/electron";
 
 import { publicProcedure, router } from "./trpc-server";
 import { heartbeatEmitter } from "../services/heartbeat";
@@ -36,6 +36,8 @@ export const appRouter = router({
 
 			return dialog.showOpenDialog(
 				focusedWindow,
+				// circumvent exactOptionalPropertyTypes conflict with
+				// upstream types
 				input as StripUndefined<typeof input>,
 			);
 		}),
