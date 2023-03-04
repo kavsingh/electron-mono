@@ -1,4 +1,4 @@
-const { testFilePatterns } = require("./lib");
+const { testFilePatterns, testFileSuffixes } = require("./lib");
 
 module.exports = {
 	root: true,
@@ -27,6 +27,10 @@ module.exports = {
 			],
 			rules: {
 				"camelcase": "off",
+				"no-restricted-syntax": [
+					"warn",
+					{ selector: "TSEnumDeclaration", message: "Avoid using enums" },
+				],
 				"no-shadow": "off",
 				"no-throw-literal": "off",
 				"no-unused-vars": "off",
@@ -69,7 +73,11 @@ module.exports = {
 			env: { node: true },
 			rules: {
 				"no-console": "off",
-				"filenames/match-exported": ["error", "kebab", "\\.test$"],
+				"filenames/match-exported": [
+					"error",
+					"kebab",
+					`\\.(${testFileSuffixes.join("|")})$`,
+				],
 			},
 		},
 		{

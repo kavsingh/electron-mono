@@ -1,10 +1,12 @@
 const path = require("path");
 
+const testFileSuffixes = ["test", "spec", "mock"];
+
 function testFilePatterns({ root = "", extensions = "*" } = {}) {
 	return [
-		"*.{test,spec}",
+		`*.{${testFileSuffixes.join(",")}}`,
 		"__{mocks,fixtures}__/**/*",
-		"__{test,mock}-{helpers,data}__/**/*",
+		"__{test,mock}-*__/**/*",
 	].map((pattern) => path.join(root, `**/${pattern}.${extensions}`));
 }
 
@@ -74,4 +76,4 @@ function restrictFrom(rootPath, restrictedImportsOptions) {
 	].filter(Boolean);
 }
 
-module.exports = { testFilePatterns, restrictFrom };
+module.exports = { testFileSuffixes, testFilePatterns, restrictFrom };
