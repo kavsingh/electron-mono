@@ -56,7 +56,7 @@ specifiers:
   vite-plugin-solid: 2.6.1
   vite-tsconfig-paths: 4.0.5
   vitest: 0.29.2
-  zod: 3.20.6
+  zod: 3.21.0
 
 dependencies:
   '@solidjs/router': 0.7.0_solid-js@1.6.11
@@ -67,7 +67,7 @@ dependencies:
   solid-js: 1.6.11
   systeminformation: 5.17.12
   tailwind-merge: 1.10.0
-  zod: 3.20.6
+  zod: 3.21.0
 
 devDependencies:
   '@electron/notarize': 1.2.3
@@ -6151,7 +6151,7 @@ packages:
       tslib: 2.4.1
       tsutils: 3.21.0_typescript@4.9.5
       typescript: 4.9.5
-      zod: 3.20.6
+      zod: 3.21.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -6713,5 +6713,5 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /zod/3.20.6:
-    resolution: {integrity: sha512-oyu0m54SGCtzh6EClBVqDDlAYRz4jrVtKwQ7ZnsEmMI9HnzuZFj8QFwAY1M5uniIYACdGvv0PBWPF2kO0aNofA==}
+  /zod/3.21.0:
+    resolution: {integrity: sha512-UYdykTcVxB6lfdyLzAqLyyYAlOcpoluECvjsdoaqfQmz9p+3LRaIqYcNiL/J2kFYp66fBM8wwBvIGVEjq7KtZw==}
