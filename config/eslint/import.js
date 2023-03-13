@@ -1,16 +1,23 @@
+/* @ts-expect-error upstream type module setup */
 const requireJSON5 = require("require-json5");
 const tsconfig = requireJSON5("./tsconfig.json");
 
 const { restrictFrom } = require("./lib");
 
 const nodeOnlyImports = {
-	paths: ["electron", ...require("module").builtinModules],
+	paths: [
+		"electron",
+		"systeminformation",
+		"@trpc/server",
+		"eventemitter3",
+		...require("module").builtinModules,
+	],
 	patterns: [],
 };
 
 const browserOnlyImports = {
-	paths: ["solid-js"],
-	patterns: ["solid-*", "@solidjs/*"],
+	paths: ["@trpc/client"],
+	patterns: ["solid-*", "@solidjs/*", "tailwind-*"],
 };
 
 const tsconfigPathPatterns = Object.keys(tsconfig.compilerOptions.paths);

@@ -19,18 +19,14 @@ export default async function genElectronZod(outFile: string) {
 		nameFilter,
 		sourceText: (await readFile(typesPath)).toString(),
 	});
-	const rawSchemas = result.getZodSchemasFile(typesPath);
+	const rawSchema = result.getZodSchemasFile(typesPath);
 	const output = formatTypescriptContent(`
-		${rawSchemas.replaceAll("const electron", "export const electron")}
+		${rawSchema.replace(/^const electron/gm, "export const electron")}
 	`);
 
 	return writeFile(outFile, output, "utf-8");
 }
 
 if (require.main === module) {
-	console.log(process.cwd());
-
-	void genElectronZod(
-		path.join(__dirname, "../src/common/schemas/electron.ts")
-	);
+	void genElectronZod(path.join(__dirname, "../src/common/schema/electron.ts"));
 }

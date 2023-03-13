@@ -18,6 +18,8 @@ test.describe("e2e tests", () => {
 	test("should open at home page", async () => {
 		const page = await app.firstWindow();
 
-		await test.expect(page.locator("h2 >> text=System Info")).toBeVisible();
+		await test
+			.expect(page.getByRole("heading", { name: "System Info" }))
+			.toBeVisible();
 	});
 });
