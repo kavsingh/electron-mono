@@ -4,7 +4,7 @@ import { expect, vi } from "vitest";
 import type { TestingLibraryMatchers } from "@testing-library/jest-dom/matchers";
 
 expect.extend(matchers);
-vi.mock("./src/renderer/trpc/client");
+vi.mock("~/src/renderer/trpc/client");
 
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
