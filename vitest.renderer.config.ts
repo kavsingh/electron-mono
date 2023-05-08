@@ -13,6 +13,7 @@ export default mergeConfig(
 			],
 			environment: "jsdom",
 			setupFiles: ["./vitest.renderer.setup.ts"],
+			clearMocks: true,
 			deps: {
 				inline: [/solid-js/, /@solidjs\/router/, /solid-testing-library/],
 			},
