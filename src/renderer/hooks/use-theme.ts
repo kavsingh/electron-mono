@@ -1,14 +1,15 @@
 import { createMemo, createSignal, onCleanup } from "solid-js";
 
+import { uiStore } from "~/renderer/stores/ui";
+
+import type { Theme } from "~/renderer/stores/ui";
+
 export default function useTheme() {
-	const [userTheme] = createSignal<"system" | Theme>("system");
 	const [queryTheme, setQueryTheme] = createSignal<Theme | undefined>(
 		getQueryTheme(),
 	);
 	const theme = createMemo(() => {
-		const user = userTheme();
-
-		return user === "system" ? queryTheme() : user;
+		return uiStore.savedTheme === "system" ? queryTheme() : uiStore.savedTheme;
 	});
 
 	function handleQuery() {
@@ -35,5 +36,3 @@ function getQueryTheme(): Theme | undefined {
 
 const darkSchemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 const lightSchemeQuery = window.matchMedia("(prefers-color-scheme: light)");
-
-export type Theme = "light" | "dark";
