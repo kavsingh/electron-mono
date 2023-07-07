@@ -1,12 +1,15 @@
-@import url("./style/colors.css");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html {
-	color: theme(colors.text400);
-	background-color: theme(colors.bg0);
+:root {
+	color: theme(colors.zinc.950);
+	background-color: theme(colors.zinc.50);
+}
+
+.dark {
+	color: theme(colors.zinc.200);
+	background-color: theme(colors.zinc.950);
 }
 
 #app-root {

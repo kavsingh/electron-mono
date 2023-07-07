@@ -1,12 +1,9 @@
-const { colors } = require("./tw-extends");
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ["./src/renderer/index.html", "./src/renderer/**/*.tsx"],
-	darkMode: "media",
+	darkMode: "class",
 	theme: {
 		extend: {
-			colors,
 			keyframes: {
 				"pulse-out": {
 					"0%": { opacity: "0" },
