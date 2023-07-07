@@ -7,9 +7,9 @@ import SystemInfo from "./pages/system-info";
 export default function App() {
 	return (
 		<Router source={hashIntegration()}>
-			<div class="min-bs-screen plb-8 pli-4">
+			<div class="min-h-full px-4 py-8">
 				<div
-					class="fixed z-[1] bs-8 inset-inline-0 block-start-0"
+					class="fixed inset-x-0 top-0 z-[1] h-8"
 					style={{ "-webkit-app-region": "drag" }}
 				/>
 				<Masthead />

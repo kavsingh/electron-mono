@@ -17,7 +17,7 @@ export default function SystemInfoList() {
 				<ul class="m-0 flex list-none flex-col gap-2 p-0">
 					<For each={Object.entries(info)}>
 						{([key, val]) => (
-							<li class="flex gap-1 pbe-2 border-be border-be-accent100 last:pbe-0 last:border-be-0">
+							<li class="flex gap-1 border-b border-b-accent100 pb-2 last:border-b-0 last:pb-0">
 								<span class="after:content-[':']">{key}</span>
 								<span>{String(val)}</span>
 							</li>

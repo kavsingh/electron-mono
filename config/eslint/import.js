@@ -1,4 +1,3 @@
-/* @ts-expect-error upstream type module setup */
 const requireJSON5 = require("require-json5");
 const tsconfig = requireJSON5("./tsconfig.json");
 

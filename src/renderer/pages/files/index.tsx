@@ -20,7 +20,7 @@ export default function Files() {
 			<ul class="m-0 flex list-none flex-col gap-1 p-0 text-sm">
 				<For each={selectedFiles()}>
 					{(file) => (
-						<li class="pbe-1 border-be border-be-accent100 last:pbe-0 last:border-be-0">
+						<li class="border-b border-b-accent100 pb-1 last:border-b-0 last:pb-0">
 							{file}
 						</li>
 					)}
@@ -52,7 +52,7 @@ function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
 
 	return (
 		<div
-			class="border border-accent100 bs-[200px]"
+			class="h-[200px] border border-accent100"
 			classList={{ "border-current": isActive() }}
 			{...dragDropHandlers}
 		/>

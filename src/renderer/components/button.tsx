@@ -9,7 +9,7 @@ export default function Button(
 		<button
 			{...props}
 			class={twMerge(
-				"rounded border border-accent100 plb-1 pli-2 hover:border-accent400 focus-visible:border-accent400 active:border-accent400",
+				"rounded border border-accent100 px-2 py-1 hover:border-accent400 focus-visible:border-accent400 active:border-accent400",
 				props.class
 			)}
 			classList={props.classList ?? {}}

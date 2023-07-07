@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 import { setupApplication, teardownApplication } from "./lib/application";
 
@@ -18,8 +18,8 @@ test.describe("e2e tests", () => {
 	test("should open at home page", async () => {
 		const page = await app.firstWindow();
 
-		await test
-			.expect(page.getByRole("heading", { name: "System Info" }))
-			.toBeVisible();
+		await expect(
+			page.getByRole("heading", { name: "System Info" })
+		).toBeVisible();
 	});
 });
