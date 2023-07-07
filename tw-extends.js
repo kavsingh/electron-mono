@@ -25,7 +25,7 @@ function cssVarsToObject(filePath, filterLine, transformName) {
 const colors = cssVarsToObject(
 	"./src/renderer/style/colors.css",
 	(line) => line.startsWith("--color-"),
-	(name) => name.replace(/^--color-(\w*)-(\d*)/, "$1$2")
+	(name) => name.replace(/^--color-(\w*)-(\d*)/, "$1$2"),
 );
 
 module.exports = { colors };

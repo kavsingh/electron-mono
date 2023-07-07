@@ -44,7 +44,7 @@ function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
 	createEffect(() => {
 		const filePaths = files()?.map(
 			({ file, isDirectory }) =>
-				`${file.path} (${isDirectory ? "directory" : "file"})`
+				`${file.path} (${isDirectory ? "directory" : "file"})`,
 		);
 
 		props.onSelect(filePaths ?? []);

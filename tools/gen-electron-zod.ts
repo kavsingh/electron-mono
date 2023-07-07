@@ -7,7 +7,7 @@ import { formatTypescriptContent } from "./format";
 
 const typesPath = path.join(
 	__dirname,
-	"../node_modules/electron/electron.d.ts"
+	"../node_modules/electron/electron.d.ts",
 );
 
 function nameFilter(name: string) {

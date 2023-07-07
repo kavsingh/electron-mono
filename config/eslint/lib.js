@@ -24,19 +24,19 @@ function allowTypes(restrictedImportsOptions) {
 		nextOptions.paths = nextOptions.paths.map((pathRule) =>
 			typeof pathRule === "string"
 				? { name: pathRule, allowTypeImports: true }
-				: { ...pathRule, allowTypeImports: true }
+				: { ...pathRule, allowTypeImports: true },
 		);
 	}
 
 	if (Array.isArray(nextOptions.patterns)) {
 		nextOptions.patterns = nextOptions.patterns.every(
-			(item) => typeof item === "string"
+			(item) => typeof item === "string",
 		)
 			? [{ groups: nextOptions.patterns, allowTypeImports: true }]
 			: nextOptions.patterns.map((pattern) =>
 					typeof pattern === "string"
 						? { groups: [pattern], allowTypeImports: true }
-						: { ...pattern, allowTypeImports: true }
+						: { ...pattern, allowTypeImports: true },
 			  );
 	}
 

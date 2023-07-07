@@ -19,7 +19,7 @@ test.describe("e2e tests", () => {
 		const page = await app.firstWindow();
 
 		await expect(
-			page.getByRole("heading", { name: "System Info" })
+			page.getByRole("heading", { name: "System Info" }),
 		).toBeVisible();
 	});
 });

@@ -30,5 +30,5 @@ export default function SystemInfoList() {
 }
 
 const getSystemInfo = measuredAsyncFn("getSystemInfo", () =>
-	getTRPCClient().systemInfo.query()
+	getTRPCClient().systemInfo.query(),
 );

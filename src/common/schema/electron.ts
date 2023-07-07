@@ -23,7 +23,7 @@ export const electronOpenDialogOptionsSchema = z.object({
 				z.literal("noResolveAliases"),
 				z.literal("treatPackageAsDirectory"),
 				z.literal("dontAddToRecent"),
-			])
+			]),
 		)
 		.optional(),
 	message: z.string().optional(),
