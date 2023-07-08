@@ -1,6 +1,7 @@
 import { observable } from "@trpc/server/observable";
-import { BrowserWindow, dialog } from "electron";
+import { BrowserWindow, dialog, nativeTheme } from "electron";
 
+import { themeSourceSchema } from "~/common/lib/theme";
 import { electronOpenDialogOptionsSchema } from "~/common/schema/electron";
 
 import { publicProcedure, router } from "./trpc-server";
@@ -8,9 +9,11 @@ import { heartbeatEmitter } from "../services/heartbeat";
 import { getSystemInfo } from "../services/system-info";
 
 import type { HeartbeatEventMap } from "../services/heartbeat";
+import type { ThemeSource } from "~/common/lib/theme";
 
 export const appRouter = router({
 	systemInfo: publicProcedure.query(() => getSystemInfo()),
+
 	heartbeat: publicProcedure.subscription(() =>
 		observable<HeartbeatPayload>((emit) => {
 			const handler: HeartbeatHandler = (payload) => {
@@ -24,6 +27,17 @@ export const appRouter = router({
 			};
 		}),
 	),
+
+	themeSource: publicProcedure.query(
+		(): ThemeSource => nativeTheme.themeSource,
+	),
+
+	setThemeSource: publicProcedure
+		.input(themeSourceSchema)
+		.mutation(({ input }) => {
+			nativeTheme.themeSource = input;
+		}),
+
 	showOpenDialog: publicProcedure
 		.input(electronOpenDialogOptionsSchema)
 		.query(({ input }) => {

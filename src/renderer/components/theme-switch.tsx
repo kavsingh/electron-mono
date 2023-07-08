@@ -1,18 +1,24 @@
-import { For, Match, Switch } from "solid-js";
+import { For, Match, Switch, createResource } from "solid-js";
 
-import { saveTheme, uiStore } from "~/renderer/stores/ui";
+import { THEME_SOURCES, type ThemeSource } from "~/common/lib/theme";
+import { getTRPCClient } from "~/renderer/trpc/client";
 
 import type { JSX } from "solid-js";
-import type { SavedTheme } from "~/renderer/stores/ui";
 
 export default function ThemeSwitch() {
-	const themeOptions: SavedTheme[] = ["system", "dark", "light"];
+	const [themeSource, { refetch }] = createResource(getThemeSource);
+
+	async function saveThemeSource(theme: ThemeSource) {
+		await getTRPCClient().setThemeSource.mutate(theme);
+		await refetch();
+	}
+
 	const handleRadio: JSX.ChangeEventHandlerUnion<HTMLInputElement, Event> = (
 		event,
 	) => {
-		if (event.currentTarget.value === "system") saveTheme("system");
-		if (event.currentTarget.value === "light") saveTheme("light");
-		if (event.currentTarget.value === "dark") saveTheme("dark");
+		if (event.currentTarget.value === "system") void saveThemeSource("system");
+		if (event.currentTarget.value === "light") void saveThemeSource("light");
+		if (event.currentTarget.value === "dark") void saveThemeSource("dark");
 	};
 
 	return (
@@ -20,7 +26,7 @@ export default function ThemeSwitch() {
 			<fieldset>
 				<legend>Theme</legend>
 				<div class="flex gap-3">
-					<For each={themeOptions}>
+					<For each={THEME_SOURCES}>
 						{(option) => (
 							<label for={option}>
 								<LabelText theme={option} />
@@ -29,7 +35,7 @@ export default function ThemeSwitch() {
 									id={option}
 									name={option}
 									value={option}
-									checked={uiStore.savedTheme === option}
+									checked={themeSource() === option}
 									onChange={handleRadio}
 								/>
 							</label>
@@ -41,7 +47,7 @@ export default function ThemeSwitch() {
 	);
 }
 
-function LabelText(props: { theme: SavedTheme }) {
+function LabelText(props: { theme: ThemeSource }) {
 	return (
 		<Switch fallback={null}>
 			<Match when={props.theme === "system"}>
@@ -55,4 +61,8 @@ function LabelText(props: { theme: SavedTheme }) {
 			</Match>
 		</Switch>
 	);
+}
+
+function getThemeSource() {
+	return getTRPCClient().themeSource.query();
 }
