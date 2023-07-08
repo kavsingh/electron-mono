@@ -1,14 +1,15 @@
 import { A } from "@solidjs/router";
 import { createSignal, onCleanup } from "solid-js";
 
+import { useTRPCClient } from "~/renderer/contexts/trpc-client";
+
 import Pulse from "./pulse";
 import StatusBadge from "./status-badge";
 import ThemeSwitch from "./theme-switch";
-import { getTRPCClient } from "../trpc/client";
 
 export default function Masthead() {
 	const [timestamp, setTimestamp] = createSignal("");
-	const subscription = getTRPCClient().heartbeat.subscribe(undefined, {
+	const subscription = useTRPCClient().heartbeat.subscribe(undefined, {
 		onData: () => {
 			setTimestamp(String(Date.now()));
 		},

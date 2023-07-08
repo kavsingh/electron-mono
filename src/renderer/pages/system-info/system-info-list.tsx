@@ -1,11 +1,14 @@
 import { Show, For, createResource, onCleanup } from "solid-js";
 
 import { measuredAsyncFn } from "~/common/measure";
-import { getTRPCClient } from "~/renderer/trpc/client";
+import { useTRPCClient } from "~/renderer/contexts/trpc-client";
 
 export default function SystemInfoList() {
-	const [infoResource, { mutate }] = createResource(getSystemInfo);
-	const subscription = getTRPCClient().heartbeat.subscribe(undefined, {
+	const client = useTRPCClient();
+	const [infoResource, { mutate }] = createResource(
+		measuredAsyncFn("getSystemInfo", () => client.systemInfo.query()),
+	);
+	const subscription = client.heartbeat.subscribe(undefined, {
 		onData: mutate,
 	});
 
@@ -28,7 +31,3 @@ export default function SystemInfoList() {
 		</Show>
 	);
 }
-
-const getSystemInfo = measuredAsyncFn("getSystemInfo", () =>
-	getTRPCClient().systemInfo.query(),
-);
