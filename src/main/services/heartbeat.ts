@@ -1,12 +1,8 @@
-import { EventEmitter } from "eventemitter3";
-
 import { getSystemInfo } from "./system-info";
 
-import type { SystemInfo } from "./system-info";
+import type { AppEventBus } from "./app-event-bus";
 
-export const heartbeatEmitter = new EventEmitter<HeartbeatEventMap>();
-
-export function startHeartbeat() {
+export function startHeartbeat(eventBus: AppEventBus) {
 	let active = true;
 	let timeout: NodeJS.Timeout | undefined = undefined;
 
@@ -16,7 +12,7 @@ export function startHeartbeat() {
 		void getSystemInfo().then((info) => {
 			if (!active) return;
 
-			heartbeatEmitter.emit("heartbeat", info);
+			eventBus.emit("app/heartbeatEvent", info);
 			timeout = setTimeout(tick, 1200);
 		});
 	}
@@ -32,7 +28,3 @@ export function startHeartbeat() {
 		}
 	};
 }
-
-export type HeartbeatEventMap = {
-	heartbeat: (payload: SystemInfo) => void;
-};

@@ -2,10 +2,12 @@ import { app, BrowserWindow } from "electron";
 import { createIPCHandler } from "electron-trpc/main";
 
 import restrictNavigation from "./lib/restrict-navigation";
+import { createAppEventBus } from "./services/app-event-bus";
 import { startHeartbeat } from "./services/heartbeat";
-import { appRouter } from "./trpc/router";
+import { createAppRouter } from "./trpc/router";
 import { createMainWindow } from "./windows";
 
+const appEventBus = createAppEventBus();
 let trpcIpcHandler: ReturnType<typeof createIPCHandler> | undefined = undefined;
 let stopHeartbeat: ReturnType<typeof startHeartbeat> | undefined = undefined;
 
@@ -29,8 +31,8 @@ app.on("quit", () => {
 
 app.enableSandbox();
 void app.whenReady().then(() => {
-	trpcIpcHandler = createIPCHandler({ router: appRouter });
-	stopHeartbeat = startHeartbeat();
+	trpcIpcHandler = createIPCHandler({ router: createAppRouter(appEventBus) });
+	stopHeartbeat = startHeartbeat(appEventBus);
 	showMainWindow();
 });
 

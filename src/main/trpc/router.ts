@@ -3,61 +3,61 @@ import { BrowserWindow, dialog, nativeTheme } from "electron";
 
 import { themeSourceSchema } from "~/common/lib/theme";
 import { electronOpenDialogOptionsSchema } from "~/common/schema/electron";
+import { getSystemInfo } from "~/main/services/system-info";
 
 import { publicProcedure, router } from "./trpc-server";
-import { heartbeatEmitter } from "../services/heartbeat";
-import { getSystemInfo } from "../services/system-info";
 
-import type { HeartbeatEventMap } from "../services/heartbeat";
 import type { ThemeSource } from "~/common/lib/theme";
+import type { AppEvent, AppEventBus } from "~/main/services/app-event-bus";
 
-export const appRouter = router({
-	systemInfo: publicProcedure.query(() => getSystemInfo()),
+export function createAppRouter(eventBus: AppEventBus) {
+	return router({
+		systemInfo: publicProcedure.query(() => getSystemInfo()),
 
-	heartbeat: publicProcedure.subscription(() =>
-		observable<HeartbeatPayload>((emit) => {
-			const handler: HeartbeatHandler = (payload) => {
-				emit.next(payload);
-			};
+		heartbeat: publicProcedure.subscription(() => {
+			type Payload = AppEvent<"app/heartbeatEvent">;
 
-			heartbeatEmitter.on("heartbeat", handler);
+			return observable<Payload>((emit) => {
+				function handler(payload: Payload) {
+					emit.next(payload);
+				}
 
-			return function unsubscribe() {
-				heartbeatEmitter.off("heartbeat", handler);
-			};
-		}),
-	),
+				eventBus.on("app/heartbeatEvent", handler);
 
-	themeSource: publicProcedure.query(
-		(): ThemeSource => nativeTheme.themeSource,
-	),
-
-	setThemeSource: publicProcedure
-		.input(themeSourceSchema)
-		.mutation(({ input }) => {
-			nativeTheme.themeSource = input;
+				return function unsubscribe() {
+					eventBus.off("app/heartbeatEvent", handler);
+				};
+			});
 		}),
 
-	showOpenDialog: publicProcedure
-		.input(electronOpenDialogOptionsSchema)
-		.query(({ input }) => {
-			// TODO: determine requesting window somehow?
-			const focusedWindow = BrowserWindow.getAllWindows().find((win) =>
-				win.isFocused(),
-			);
+		themeSource: publicProcedure.query(
+			(): ThemeSource => nativeTheme.themeSource,
+		),
 
-			if (!focusedWindow) throw new Error("No focused window");
+		setThemeSource: publicProcedure
+			.input(themeSourceSchema)
+			.mutation(({ input }) => {
+				nativeTheme.themeSource = input;
+			}),
 
-			return dialog.showOpenDialog(
-				focusedWindow,
-				// circumvent exactOptionalPropertyTypes conflict with
-				// upstream types
-				input as StripUndefined<typeof input>,
-			);
-		}),
-});
+		showOpenDialog: publicProcedure
+			.input(electronOpenDialogOptionsSchema)
+			.query(({ input }) => {
+				// TODO: determine requesting window somehow?
+				const focusedWindow = BrowserWindow.getAllWindows().find((win) =>
+					win.isFocused(),
+				);
 
-export type AppRouter = typeof appRouter;
+				if (!focusedWindow) throw new Error("No focused window");
 
-type HeartbeatHandler = HeartbeatEventMap["heartbeat"];
-type HeartbeatPayload = Parameters<HeartbeatHandler>[0];
+				return dialog.showOpenDialog(
+					focusedWindow,
+					// circumvent exactOptionalPropertyTypes conflict with
+					// upstream types
+					input as StripUndefined<typeof input>,
+				);
+			}),
+	});
+}
+
+export type AppRouter = ReturnType<typeof createAppRouter>;
