@@ -12,10 +12,4 @@ export const THEME_SOURCES = ["system", "light", "dark"] satisfies [
 	ThemeSource,
 ];
 
-export function isValidThemeSource(value: unknown): value is ThemeSource {
-	return (
-		typeof value === "string" && THEME_SOURCES.includes(value as ThemeSource)
-	);
-}
-
 export type ThemeSource = z.infer<typeof themeSourceSchema>;

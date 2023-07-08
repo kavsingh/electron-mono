@@ -1,25 +1,19 @@
 import { For, Match, Switch, createResource } from "solid-js";
 
-import { THEME_SOURCES, type ThemeSource } from "~/common/lib/theme";
+import { THEME_SOURCES } from "~/common/lib/theme";
 import { getTRPCClient } from "~/renderer/trpc/client";
 
-import type { JSX } from "solid-js";
+import type { ThemeSource } from "~/common/lib/theme";
 
 export default function ThemeSwitch() {
-	const [themeSource, { refetch }] = createResource(getThemeSource);
+	const [themeSource, { refetch }] = createResource(() => {
+		return getTRPCClient().themeSource.query();
+	});
 
 	async function saveThemeSource(theme: ThemeSource) {
 		await getTRPCClient().setThemeSource.mutate(theme);
 		await refetch();
 	}
-
-	const handleRadio: JSX.ChangeEventHandlerUnion<HTMLInputElement, Event> = (
-		event,
-	) => {
-		if (event.currentTarget.value === "system") void saveThemeSource("system");
-		if (event.currentTarget.value === "light") void saveThemeSource("light");
-		if (event.currentTarget.value === "dark") void saveThemeSource("dark");
-	};
 
 	return (
 		<form onSubmit={(ev) => ev.preventDefault()}>
@@ -29,14 +23,14 @@ export default function ThemeSwitch() {
 					<For each={THEME_SOURCES}>
 						{(option) => (
 							<label for={option}>
-								<LabelText theme={option} />
+								<LabelText themeSource={option} />
 								<input
 									type="radio"
 									id={option}
 									name={option}
 									value={option}
 									checked={themeSource() === option}
-									onChange={handleRadio}
+									onChange={[saveThemeSource, option]}
 								/>
 							</label>
 						)}
@@ -47,22 +41,18 @@ export default function ThemeSwitch() {
 	);
 }
 
-function LabelText(props: { theme: ThemeSource }) {
+function LabelText(props: { themeSource: ThemeSource }) {
 	return (
 		<Switch fallback={null}>
-			<Match when={props.theme === "system"}>
+			<Match when={props.themeSource === "system"}>
 				<>System</>
 			</Match>
-			<Match when={props.theme === "light"}>
+			<Match when={props.themeSource === "light"}>
 				<>Light</>
 			</Match>
-			<Match when={props.theme === "dark"}>
+			<Match when={props.themeSource === "dark"}>
 				<>Dark</>
 			</Match>
 		</Switch>
 	);
-}
-
-function getThemeSource() {
-	return getTRPCClient().themeSource.query();
 }
