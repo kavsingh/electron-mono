@@ -1,5 +1,7 @@
 import { osInfo, mem } from "systeminformation";
 
+import { logError } from "~/common/log";
+
 import type { AppEventBus } from "./app-event-bus";
 
 export async function getSystemInfo(): Promise<SystemInfo> {
@@ -16,20 +18,21 @@ export function startSystemInfoUpdates(eventBus: AppEventBus) {
 	let active = true;
 	let timeout: NodeJS.Timeout | undefined = undefined;
 
-	function tick() {
+	async function tick() {
 		if (!active) return;
 
-		void getSystemInfo().then((info) => {
-			if (!active) return;
-
-			eventBus.emit("systemInfo", info);
-			timeout = setTimeout(tick, 1000);
-		});
+		try {
+			eventBus.emit("systemInfo", await getSystemInfo());
+		} catch (reason) {
+			logError(reason);
+		} finally {
+			timeout = setTimeout(() => void tick(), 1000);
+		}
 	}
 
-	tick();
+	void tick();
 
-	return function stopHeartbeat() {
+	return function stopSystemInfoUpdates() {
 		active = false;
 
 		if (timeout) {

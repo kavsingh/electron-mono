@@ -1,4 +1,4 @@
-import { error, log } from "./log";
+import { logError, log } from "./log";
 
 let measuredAsyncFn: MeasuredAsyncFn = (_id, fn) => fn;
 
@@ -18,7 +18,7 @@ if (import.meta.env.DEV) {
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 				return result;
 			} catch (reason) {
-				error(`${id} failed in ${Date.now() - start}ms`, reason);
+				logError(`${id} failed in ${Date.now() - start}ms`, reason);
 
 				throw reason;
 			}

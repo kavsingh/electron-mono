@@ -1,13 +1,13 @@
 import { shell } from "electron";
 
-import { warn } from "~/common/log";
+import { logWarn } from "~/common/log";
 
 import type { WebContents } from "electron";
 
 export default function restrictNavigation(contents: WebContents) {
 	// https://www.electronjs.org/docs/latest/tutorial/security#13-disable-or-limit-navigation
 	contents.on("will-navigate", (event, url) => {
-		warn(`Blocked navigation attempt to ${url}`);
+		logWarn(`Blocked navigation attempt to ${url}`);
 		event.preventDefault();
 	});
 
@@ -16,7 +16,7 @@ export default function restrictNavigation(contents: WebContents) {
 		if (isAllowedHost(url)) {
 			setImmediate(() => void shell.openExternal(url));
 		} else {
-			warn(`Blocked attempt to open ${url}`);
+			logWarn(`Blocked attempt to open ${url}`);
 		}
 
 		return { action: "deny" };
