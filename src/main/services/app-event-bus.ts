@@ -13,5 +13,6 @@ export type AppEventName = keyof AppEventMap;
 export type AppEvent<K extends AppEventName> = AppEventMap[K][0];
 
 type AppEventMap = {
-	"app/heartbeatEvent": [SystemInfo];
+	heartbeat: [{ timestamp: number }];
+	systemInfo: [SystemInfo];
 };

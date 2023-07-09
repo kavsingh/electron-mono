@@ -8,10 +8,10 @@ import StatusBadge from "./status-badge";
 import ThemeSwitch from "./theme-switch";
 
 export default function Masthead() {
-	const [timestamp, setTimestamp] = createSignal("");
-	const subscription = useTRPCClient().heartbeat.subscribe(undefined, {
-		onData: () => {
-			setTimestamp(String(Date.now()));
+	const [timestamp, setTimestamp] = createSignal(0);
+	const subscription = useTRPCClient().heartbeatEvent.subscribe(undefined, {
+		onData(data) {
+			setTimestamp(data.timestamp);
 		},
 	});
 

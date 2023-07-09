@@ -1,5 +1,3 @@
-import { getSystemInfo } from "./system-info";
-
 import type { AppEventBus } from "./app-event-bus";
 
 export function startHeartbeat(eventBus: AppEventBus) {
@@ -9,12 +7,8 @@ export function startHeartbeat(eventBus: AppEventBus) {
 	function tick() {
 		if (!active) return;
 
-		void getSystemInfo().then((info) => {
-			if (!active) return;
-
-			eventBus.emit("app/heartbeatEvent", info);
-			timeout = setTimeout(tick, 1200);
-		});
+		eventBus.emit("heartbeat", { timestamp: Date.now() });
+		timeout = setTimeout(tick, 5000);
 	}
 
 	tick();

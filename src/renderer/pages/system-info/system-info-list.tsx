@@ -1,18 +1,9 @@
-import { Show, For, createResource, onCleanup } from "solid-js";
+import { Show, For } from "solid-js";
 
-import { measuredAsyncFn } from "~/common/measure";
-import { useTRPCClient } from "~/renderer/contexts/trpc-client";
+import useSystemInfo from "~/renderer/hooks/use-system-info";
 
 export default function SystemInfoList() {
-	const client = useTRPCClient();
-	const [infoResource, { mutate }] = createResource(
-		measuredAsyncFn("getSystemInfo", () => client.systemInfo.query()),
-	);
-	const subscription = client.heartbeat.subscribe(undefined, {
-		onData: mutate,
-	});
-
-	onCleanup(() => subscription.unsubscribe());
+	const infoResource = useSystemInfo();
 
 	return (
 		<Show when={infoResource()} fallback={<>Loading...</>} keyed>
