@@ -20,6 +20,7 @@
 		"**/dist": true
 	},
 	"tailwindCSS.validate": true,
+	"tailwindCSS.classAttributes": ["class", "classList"],
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"[javascript]": {
 		"editor.defaultFormatter": "dbaeumer.vscode-eslint"

@@ -55,7 +55,9 @@ module.exports = {
 		},
 		{
 			files: ["./src/**/*.tsx"],
-			settings: { tailwindcss: { callees: ["twMerge", "twJoin"] } },
+			settings: {
+				tailwindcss: { callees: ["twMerge", "twJoin", "classList"] },
+			},
 			extends: ["plugin:tailwindcss/recommended"],
 		},
 		{
