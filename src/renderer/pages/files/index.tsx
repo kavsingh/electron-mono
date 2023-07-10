@@ -33,7 +33,9 @@ export default function Files() {
 function DialogFileSelect(props: { onSelect: (selected: string[]) => void }) {
 	const [files, selectFiles] = useFileSelectDialog();
 
-	createEffect(() => props.onSelect(files()));
+	createEffect(() => {
+		props.onSelect(files());
+	});
 
 	return <Button onClick={() => void selectFiles()}>Select files</Button>;
 }

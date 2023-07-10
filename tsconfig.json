@@ -22,7 +22,15 @@
 		"allowUnreachableCode": true
 	},
 	"exclude": ["**/node_modules"],
-	"include": ["./src", "./tools", "./e2e", "./config", "./*.ts"],
+	"include": [
+		"./src",
+		"./tools",
+		"./e2e",
+		"./config",
+		"./*.ts",
+		"./*.*.js",
+		"./*.*.cjs"
+	],
 	"ts-node": {
 		"swc": true,
 		"transpileOnly": true,

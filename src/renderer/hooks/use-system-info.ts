@@ -12,7 +12,9 @@ export default function useSystemInfo() {
 		onData: mutate,
 	});
 
-	onCleanup(() => subscription.unsubscribe());
+	onCleanup(() => {
+		subscription.unsubscribe();
+	});
 
 	return infoResource;
 }

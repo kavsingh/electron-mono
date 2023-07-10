@@ -11,13 +11,17 @@ export default function ThemeSwitch() {
 		return client.themeSource.query();
 	});
 
+	function handleSubmit(event: Event) {
+		event.preventDefault();
+	}
+
 	async function saveThemeSource(theme: ThemeSource) {
 		await client.setThemeSource.mutate(theme);
 		await refetch();
 	}
 
 	return (
-		<form onSubmit={(ev) => ev.preventDefault()}>
+		<form onSubmit={handleSubmit}>
 			<fieldset>
 				<legend>Theme</legend>
 				<div class="flex gap-3">

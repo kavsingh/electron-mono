@@ -1,32 +1,38 @@
 const requireJSON5 = require("require-json5");
 const tsconfig = requireJSON5("./tsconfig.json");
 
-const { restrictFrom } = require("./lib");
-
-const nodeOnlyImports = {
+const restrictFromBrowser = {
 	paths: [
-		"electron",
-		"systeminformation",
-		"@trpc/server",
-		"eventemitter3",
-		...require("module").builtinModules,
+		{ name: "electron", allowTypeImports: true },
+		{ name: "systeminformation", allowTypeImports: true },
+		{ name: "@trpc/server", allowTypeImports: true },
+		{ name: "eventemitter3" },
+		...require("module").builtinModules.map((mod) => ({
+			name: mod,
+			allowTypeImports: true,
+		})),
 	],
-	patterns: [],
 };
 
-const browserOnlyImports = {
-	paths: ["@trpc/client"],
-	patterns: ["solid-*", "@solidjs/*", "tailwind-*"],
+const restrictFromNode = {
+	paths: [{ name: "solid-js" }, { name: "@trpc/client" }],
+	patterns: [{ group: ["solid-*", "@solidjs/-*", "tailwind-*"] }],
 };
 
 const tsconfigPathPatterns = Object.keys(tsconfig.compilerOptions.paths);
 
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
+	settings: {
+		"import/parsers": {
+			"@typescript-eslint/parser": [".ts", ".tsx"],
+		},
+		"import/resolver": {
+			"eslint-import-resolver-typescript": { project: "./tsconfig.json" },
+		},
+	},
 	extends: ["plugin:import/recommended", "plugin:import/typescript"],
 	rules: {
-		// everything outside renderer should not be loading browser packages
-		"no-restricted-imports": ["error", browserOnlyImports],
 		"import/no-cycle": "error",
 		"import/no-self-import": "error",
 		"import/no-unused-modules": "error",
@@ -80,38 +86,56 @@ module.exports = {
 				],
 			},
 		],
+		// node processes should not import browser modules
+		"no-restricted-imports": "off",
+		"@typescript-eslint/no-restricted-imports": ["error", restrictFromNode],
 	},
 	overrides: [
+		// common should not import modules exclusive to either node or browser
 		{
-			files: ["*.ts?(x)"],
-			settings: {
-				"import/parsers": {
-					"@typescript-eslint/parser": [".ts", ".tsx"],
-				},
-				"import/resolver": {
-					"eslint-import-resolver-typescript": {
-						project: "./tsconfig.json",
+			files: ["src/common/**/*"],
+			rules: {
+				"@typescript-eslint/no-restricted-imports": [
+					"error",
+					{
+						paths: [...restrictFromBrowser.paths, ...restrictFromNode.paths],
+						patterns: restrictFromNode.patterns,
 					},
-				},
+				],
 			},
 		},
 
-		...restrictFrom("", browserOnlyImports),
+		{
+			files: ["src/main/**/*"],
+			rules: {
+				"@typescript-eslint/no-restricted-imports": ["error", restrictFromNode],
+			},
+		},
 
-		...restrictFrom("src/common", {
-			paths: [...nodeOnlyImports.paths, ...browserOnlyImports.paths],
-			patterns: [...nodeOnlyImports.patterns, ...browserOnlyImports.patterns],
-		}),
+		{
+			files: ["src/renderer/**/*"],
+			rules: {
+				"@typescript-eslint/no-restricted-imports": [
+					"error",
+					restrictFromBrowser,
+				],
+			},
+		},
 
-		...restrictFrom("src/main", browserOnlyImports),
-
-		...restrictFrom("src/renderer", nodeOnlyImports),
-
-		...restrictFrom("src/preload.ts", {
-			paths: [...nodeOnlyImports.paths, ...browserOnlyImports.paths].filter(
-				(path) => !/^electron/.test(path),
-			),
-			patterns: [...nodeOnlyImports.patterns, ...browserOnlyImports.patterns],
-		}),
+		{
+			files: ["src/preload.ts"],
+			rules: {
+				"@typescript-eslint/no-restricted-imports": [
+					"error",
+					{
+						paths: [
+							...restrictFromBrowser.paths,
+							...restrictFromNode.paths,
+						].filter((path) => !/^electron/.test(path)),
+						patterns: restrictFromNode.patterns,
+					},
+				],
+			},
+		},
 	],
 };

@@ -1,4 +1,5 @@
 import matchers from "@testing-library/jest-dom/matchers";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { cleanup } from "solid-testing-library";
 import { vi, afterEach, expect } from "vitest";
 

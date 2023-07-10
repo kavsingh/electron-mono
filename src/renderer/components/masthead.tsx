@@ -15,7 +15,9 @@ export default function Masthead() {
 		},
 	});
 
-	onCleanup(() => subscription.unsubscribe());
+	onCleanup(() => {
+		subscription.unsubscribe();
+	});
 
 	return (
 		<div class="flex flex-col gap-2">
