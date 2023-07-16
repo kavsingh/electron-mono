@@ -6,13 +6,20 @@ import { createMockSystemInfo } from "~/common/__test-helpers__/mock-data-creato
 import type { AppTRPCClient } from "../client";
 
 const mockClient: AppTRPCClient = {
+	themeSource: {
+		query: vi.fn(() => Promise.resolve("dark")),
+	},
+	setThemeSource: {
+		mutate: vi.fn(() => Promise.resolve()),
+	},
 	systemInfo: {
 		query: vi.fn(() => Promise.resolve(createMockSystemInfo())),
 	},
 	showOpenDialog: {
 		query: vi.fn(() => Promise.resolve(createMockOpenDialogReturnValue())),
 	},
-	heartbeat: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
+	systemInfoEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
+	heartbeatEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
 };
 
 export function getTRPCClient() {
