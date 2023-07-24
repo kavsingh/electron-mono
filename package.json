@@ -18,9 +18,9 @@
 		"testwatch:node": "vitest -c vitest.node.config.ts",
 		"testwatch:renderer": "vitest -c vitest.renderer.config.ts",
 		"test:e2e": "cross-env E2E=true pnpm build && playwright test",
-		"build:win": "pnpm run build && electron-builder --win --config electron-builder.config.js",
-		"build:mac": "pnpm run build && electron-builder --mac --config electron-builder.config.js",
-		"build:linux": "pnpm run build && electron-builder --linux --config electron-builder.config.js",
+		"build:win": "pnpm run build && electron-builder --win --config electron-builder.config.cjs",
+		"build:mac": "pnpm run build && electron-builder --mac --config electron-builder.config.cjs",
+		"build:linux": "pnpm run build && electron-builder --linux --config electron-builder.config.cjs",
 		"gen:schema": "ts-node ./tools/gen-electron-zod.ts"
 	},
 	"keywords": [],
