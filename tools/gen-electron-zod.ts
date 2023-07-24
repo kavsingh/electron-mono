@@ -20,7 +20,7 @@ export default async function genElectronZod(outFile: string) {
 		sourceText: (await readFile(typesPath)).toString(),
 	});
 	const rawSchema = result.getZodSchemasFile(typesPath);
-	const output = formatTypescriptContent(`
+	const output = await formatTypescriptContent(`
 		${rawSchema.replace(/^const electron/gm, "export const electron")}
 	`);
 

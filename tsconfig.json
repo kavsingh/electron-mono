@@ -4,6 +4,7 @@
 		"@tsconfig/strictest/tsconfig.json"
 	],
 	"compilerOptions": {
+		"allowJs": true,
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
 		"lib": ["esnext", "dom"],
@@ -32,7 +33,6 @@
 		"./*.*.cjs"
 	],
 	"ts-node": {
-		"swc": true,
 		"transpileOnly": true,
 		"compilerOptions": {
 			"isolatedModules": false,

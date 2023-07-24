@@ -1,3 +1,4 @@
+/** @type {import("path")} */
 const path = require("path");
 
 const testFileSuffixes = ["test", "spec", "mock"];

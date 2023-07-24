@@ -1,6 +1,6 @@
 import { format } from "prettier";
 
-import config from "../.prettierrc";
+import config from "../.prettierrc.cjs";
 
 import type { Options } from "prettier";
 

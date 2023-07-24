@@ -1,5 +1,14 @@
-const requireJSON5 = require("require-json5");
-const tsconfig = requireJSON5("./tsconfig.json");
+/** @type {import("typescript")} */
+const ts = require("typescript");
+
+const tsconfigFile = ts.findConfigFile(
+	__dirname,
+	ts.sys.fileExists,
+	"tsconfig.json",
+);
+const tsconfig = tsconfigFile
+	? ts.readConfigFile(tsconfigFile, ts.sys.readFile)
+	: undefined;
 
 const restrictFromBrowser = {
 	paths: [
@@ -7,10 +16,10 @@ const restrictFromBrowser = {
 		{ name: "systeminformation", allowTypeImports: true },
 		{ name: "@trpc/server", allowTypeImports: true },
 		{ name: "eventemitter3" },
-		...require("module").builtinModules.map((mod) => ({
-			name: mod,
-			allowTypeImports: true,
-		})),
+		...require("module").builtinModules.map(
+			/** @param {string} mod **/
+			(mod) => ({ name: mod, allowTypeImports: true }),
+		),
 	],
 };
 
@@ -19,7 +28,9 @@ const restrictFromNode = {
 	patterns: [{ group: ["solid-*", "@solidjs/-*", "tailwind-*"] }],
 };
 
-const tsconfigPathPatterns = Object.keys(tsconfig.compilerOptions.paths);
+const tsconfigPathPatterns = Object.keys(
+	tsconfig?.config.compilerOptions.paths ?? {},
+);
 
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
