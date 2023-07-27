@@ -1,8 +1,5 @@
 {
-	"extends": [
-		"@tsconfig/node20/tsconfig.json",
-		"@tsconfig/strictest/tsconfig.json"
-	],
+	"extends": "@tsconfig/node20/tsconfig.json",
 	"compilerOptions": {
 		"allowJs": true,
 		"jsx": "preserve",
@@ -15,6 +12,24 @@
 		"resolveJsonModule": true,
 		"sourceMap": true,
 		"target": "esnext",
+
+		// latest ts-node release does not support extends array
+		// manually add strictect config here
+		// TODO: replace with "@tsconfig/strictest/tsconfig.json" in extends
+		// array when supported by ts-node
+		"strict": true,
+		"allowUnusedLabels": false,
+		"exactOptionalPropertyTypes": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+
 		// leave the following to eslint
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
