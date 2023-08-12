@@ -12,9 +12,8 @@ export default mergeConfig(rendererConfig, {
 		environment: "jsdom",
 		setupFiles: ["./vitest.renderer.setup.ts"],
 		clearMocks: true,
-		deps: {
-			inline: [/solid-js/, /@solidjs\/router/, /solid-testing-library/],
-		},
+		server: { deps: { inline: [/solid-js/] } },
+		deps: { optimizer: { web: { include: ["solid-js"] } } },
 	},
 	resolve: { conditions: ["development", "browser"] },
 } satisfies UserConfig);

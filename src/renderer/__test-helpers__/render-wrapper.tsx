@@ -8,6 +8,8 @@ import type { ParentProps } from "solid-js";
 
 export function setupRenderWrapper() {
 	const trpcClient = getTRPCClient();
+	// TODO: upstream bug? setup() is not thenable
+	// eslint-disable-next-line testing-library/await-async-events
 	const user = userEvent.setup();
 
 	function Wrapper(props: ParentProps) {
