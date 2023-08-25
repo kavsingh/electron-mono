@@ -13,7 +13,6 @@ function testFilePatterns({ root = "", extensions = "*" } = {}) {
 
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
-	root: true,
 	reportUnusedDisableDirectives: true,
 	env: { es2022: true, node: true, browser: false },
 	parser: "@typescript-eslint/parser",
@@ -33,6 +32,7 @@ module.exports = {
 			"warn",
 			{ selector: "TSEnumDeclaration", message: "Avoid using enums" },
 		],
+		"no-unreachable": "error",
 
 		"@typescript-eslint/consistent-type-definitions": ["warn", "type"],
 		"@typescript-eslint/consistent-type-imports": ["error"],
@@ -76,7 +76,7 @@ module.exports = {
 			},
 		},
 		{
-			files: ["*.js", "*.c[jt]s"],
+			files: ["*.c[jt]s"],
 			rules: {
 				"@typescript-eslint/no-var-requires": "off",
 			},

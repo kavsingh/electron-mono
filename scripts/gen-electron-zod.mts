@@ -1,10 +1,12 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { generate } from "ts-to-zod";
 
-import { formatTypescriptContent } from "./format";
+import { formatTypescriptContent } from "./format.mjs";
 
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const typesPath = path.join(
 	__dirname,
 	"../node_modules/electron/electron.d.ts",
@@ -27,6 +29,9 @@ export default async function genElectronZod(outFile: string) {
 	return writeFile(outFile, output, "utf-8");
 }
 
-if (require.main === module) {
+if (
+	process.argv[0] &&
+	pathToFileURL(import.meta.url).href === process.argv[0]
+) {
 	void genElectronZod(path.join(__dirname, "../src/common/schema/electron.ts"));
 }

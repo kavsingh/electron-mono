@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 :root {
-	color: theme(colors.zinc.950);
-	background-color: theme(colors.zinc.50);
+	color: theme(colors.neutral.950);
+	background-color: theme(colors.neutral.50);
 }
 
 .dark {
-	color: theme(colors.zinc.200);
-	background-color: theme(colors.zinc.950);
+	color: theme(colors.neutral.200);
+	background-color: theme(colors.neutral.950);
 }
 
 #app-root {

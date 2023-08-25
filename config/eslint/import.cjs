@@ -134,7 +134,7 @@ module.exports = {
 		},
 
 		{
-			files: ["src/preload.ts"],
+			files: ["src/preload/**/*"],
 			rules: {
 				"@typescript-eslint/no-restricted-imports": [
 					"error",

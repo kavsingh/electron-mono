@@ -1,5 +1,5 @@
 /**
- * @type {import('electron-builder').Configuration}
+ * @type {import("electron-builder").Configuration}
  * @see https://www.electron.build/configuration/configuration
  */
 const config = {
@@ -11,7 +11,7 @@ const config = {
 	files: ["out/**"],
 	asar: true,
 	asarUnpack: "**/*.{node,dll}",
-	afterSign: "build/notarize.js",
+	afterSign: "build/after-sign.cjs",
 	win: {
 		executableName: "ts-electron",
 	},
