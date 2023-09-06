@@ -1,7 +1,7 @@
 {
 	"extends": [
-		"@tsconfig/node20/tsconfig.json",
-		"@tsconfig/strictest/tsconfig.json"
+		"@tsconfig/strictest/tsconfig.json",
+		"@tsconfig/node20/tsconfig.json"
 	],
 	"compilerOptions": {
 		"allowJs": true,
@@ -18,8 +18,6 @@
 		// leave the following to eslint
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
-		// leave to eslint: some extensions delete
-		// unreachable code detected via ts too eagerly
 		"allowUnreachableCode": true
 	},
 	"exclude": ["**/node_modules"],
