@@ -1,11 +1,9 @@
-import { mergeConfig } from "vite";
+import { defineConfig } from "vite";
 
 import { rendererConfig } from "./electron.vite.config";
 
-import type { UserConfig } from "vite";
-
-// TODO: switch back to vitest defineConfig when upstream types resolved
-export default mergeConfig(rendererConfig, {
+export default defineConfig({
+	...rendererConfig,
 	// https://dev.to/mbarzeev/testing-a-solidjs-component-using-vitest-2h35
 	test: {
 		include: ["src/renderer/**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
@@ -16,4 +14,4 @@ export default mergeConfig(rendererConfig, {
 		deps: { optimizer: { web: { include: ["solid-js"] } } },
 	},
 	resolve: { conditions: ["development", "browser"] },
-} satisfies UserConfig);
+});
