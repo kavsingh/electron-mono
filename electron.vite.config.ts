@@ -11,7 +11,7 @@ const define = {
 } satisfies NonNullable<UserConfig["define"]>;
 
 const build = {
-	minify: isE2E && "esbuild",
+	minify: isE2E ? "esbuild" : false,
 	sourcemap: !isE2E,
 } satisfies NonNullable<UserConfig["build"]>;
 
@@ -19,7 +19,12 @@ export const nodeConfig: UserConfig = {
 	define,
 	build,
 	resolve: { conditions: ["node"] },
-	plugins: [tsconfigPathsPlugin(), externalizeDepsPlugin()],
+	plugins: [
+		tsconfigPathsPlugin(),
+		// workaround after this PR:
+		// https://github.com/alex8088/electron-vite/pull/254
+		externalizeDepsPlugin({ exclude: ["electron-trpc"] }),
+	],
 };
 
 export const rendererConfig: UserConfig = {
