@@ -1,8 +1,6 @@
-/**
- * @type {import("electron-builder").Configuration}
- * @see https://www.electron.build/configuration/configuration
- */
-const config = {
+import type { Configuration } from "electron-builder";
+
+const config: Configuration = {
 	appId: "com.ts-electron.app",
 	productName: "TSElectron",
 	directories: {
@@ -51,4 +49,4 @@ const config = {
 	},
 };
 
-module.exports = config;
+export default config;

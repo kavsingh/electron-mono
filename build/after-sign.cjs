@@ -1,7 +1,5 @@
 const { notarize: electronNotarize } = require("@electron/notarize");
 
-const builderConfig = require("../electron-builder.config.cjs");
-
 /** @param {import("electron-builder").AfterPackContext} context */
 async function afterSign(context) {
 	console.log("afterSign hook triggered");
@@ -36,22 +34,21 @@ async function notarize(context) {
 		return;
 	}
 
-	const { appId: appBundleId } = builderConfig;
-	const { appOutDir } = context;
-	const { productFilename } = context.packager.appInfo;
+	const { appOutDir, packager } = context;
+	const { productFilename, macBundleIdentifier } = packager.appInfo;
 
 	try {
 		await electronNotarize({
-			appBundleId,
 			appleId,
 			appleIdPassword,
+			appBundleId: macBundleIdentifier,
 			appPath: `${appOutDir}/${productFilename}.app`,
 		});
 	} catch (reason) {
 		console.error(reason);
 	}
 
-	console.log(`done notarizing ${appBundleId}.`);
+	console.log(`done notarizing ${macBundleIdentifier}.`);
 }
 
 module.exports = afterSign;
