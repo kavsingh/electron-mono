@@ -1,8 +1,5 @@
 {
-	"extends": [
-		"@tsconfig/strictest/tsconfig.json",
-		"@tsconfig/node20/tsconfig.json"
-	],
+	"extends": "@tsconfig/strictest/tsconfig.json",
 	"compilerOptions": {
 		"allowJs": true,
 		"jsx": "preserve",
@@ -12,7 +9,6 @@
 		"moduleResolution": "bundler",
 		"noEmit": true,
 		"paths": { "~/*": ["./src/*"] },
-		"resolveJsonModule": true,
 		"sourceMap": true,
 		"target": "esnext",
 		// leave the following to eslint
