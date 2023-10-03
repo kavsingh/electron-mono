@@ -1,5 +1,6 @@
-import ThemeSwitch from "~/renderer/components/theme-switch";
 import Page from "~/renderer/layouts/page";
+
+import ThemeSwitch from "./theme-switch";
 
 export default function Preferences() {
 	return (

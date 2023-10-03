@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const logError = console.error.bind(console);
 const noop = () => undefined;
 

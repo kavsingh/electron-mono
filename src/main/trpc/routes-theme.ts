@@ -16,6 +16,8 @@ export default function routesTheme() {
 			.input(themeSourceSchema)
 			.mutation(({ input }) => {
 				nativeTheme.themeSource = input;
+
+				return nativeTheme.themeSource;
 			}),
 	} as const;
 }

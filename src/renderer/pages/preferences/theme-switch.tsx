@@ -7,21 +7,20 @@ import type { ThemeSource } from "~/common/lib/theme";
 
 export default function ThemeSwitch() {
 	const client = useTRPCClient();
-	const [themeSource, { refetch }] = createResource(() => {
+	const [themeSource, { mutate }] = createResource(() => {
 		return client.themeSource.query();
 	});
 
-	function handleSubmit(event: Event) {
-		event.preventDefault();
-	}
-
 	async function saveThemeSource(theme: ThemeSource) {
-		await client.setThemeSource.mutate(theme);
-		await refetch();
+		mutate(await client.setThemeSource.mutate(theme));
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<form
+			onSubmit={(event) => {
+				event.preventDefault();
+			}}
+		>
 			<fieldset>
 				<legend>Theme</legend>
 				<div class="flex gap-3">
@@ -48,7 +47,7 @@ export default function ThemeSwitch() {
 
 function LabelText(props: { themeSource: ThemeSource }) {
 	return (
-		<Switch fallback={null}>
+		<Switch>
 			<Match when={props.themeSource === "system"}>
 				<>System</>
 			</Match>

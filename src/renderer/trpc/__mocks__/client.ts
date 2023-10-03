@@ -10,7 +10,7 @@ const mockClient: AppTRPCClient = {
 		query: vi.fn(() => Promise.resolve("dark")),
 	},
 	setThemeSource: {
-		mutate: vi.fn(() => Promise.resolve()),
+		mutate: vi.fn((source) => Promise.resolve(source)),
 	},
 	systemInfo: {
 		query: vi.fn(() => Promise.resolve(createMockSystemInfo())),
@@ -19,7 +19,6 @@ const mockClient: AppTRPCClient = {
 		query: vi.fn(() => Promise.resolve(createMockOpenDialogReturnValue())),
 	},
 	systemInfoEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
-	heartbeatEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
 };
 
 export function getTRPCClient() {
