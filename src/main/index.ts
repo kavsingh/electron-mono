@@ -1,12 +1,12 @@
 import { app, BrowserWindow } from "electron";
 import { createIPCHandler } from "electron-trpc/main";
 
+import { createMainWindow } from "./app-windows/main-window";
 import restrictNavigation from "./lib/restrict-navigation";
 import { createAppEventBus } from "./services/app-event-bus";
 import { startHeartbeat } from "./services/heartbeat";
 import { startSystemInfoUpdates } from "./services/system-info";
 import { createAppRouter } from "./trpc/router";
-import { createMainWindow } from "./windows";
 
 const appEventBus = createAppEventBus();
 let trpcIpcHandler: ReturnType<typeof createIPCHandler> | undefined = undefined;

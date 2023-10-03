@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import solidPlugin from "vite-plugin-solid";
 import tsconfigPathsPlugin from "vite-tsconfig-paths";
