@@ -1,9 +1,9 @@
 import { createEffect, createSignal, For } from "solid-js";
 
 import Button from "~/renderer/components/button";
-import PageHeader from "~/renderer/components/page-header";
 import useFileDrop from "~/renderer/hooks/use-file-drop";
 import useFileSelectDialog from "~/renderer/hooks/use-file-select-dialog";
+import Page from "~/renderer/layouts/page";
 
 export default function Files() {
 	const [selectedFiles, setSelectedFiles] = createSignal<string[]>([]);
@@ -13,20 +13,22 @@ export default function Files() {
 	}
 
 	return (
-		<>
-			<PageHeader>Files</PageHeader>
-			<DialogFileSelect onSelect={handleFileSelect} />
-			<DragFileSelect onSelect={handleFileSelect} />
-			<ul class="m-0 flex list-none flex-col gap-1 p-0 text-sm">
-				<For each={selectedFiles()}>
-					{(file) => (
-						<li class="border-b border-b-neutral-800 pb-1 last:border-b-0 last:pb-0 dark:border-b-neutral-300">
-							{file}
-						</li>
-					)}
-				</For>
-			</ul>
-		</>
+		<Page.Root>
+			<Page.Header>Files</Page.Header>
+			<Page.Content>
+				<DialogFileSelect onSelect={handleFileSelect} />
+				<DragFileSelect onSelect={handleFileSelect} />
+				<ul class="m-0 flex list-none flex-col gap-1 p-0 text-sm">
+					<For each={selectedFiles()}>
+						{(file) => (
+							<li class="border-b border-b-neutral-800 pb-1 last:border-b-0 last:pb-0 dark:border-b-neutral-300">
+								{file}
+							</li>
+						)}
+					</For>
+				</ul>
+			</Page.Content>
+		</Page.Root>
 	);
 }
 

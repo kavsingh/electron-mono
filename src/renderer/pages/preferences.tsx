@@ -1,11 +1,13 @@
-import PageHeader from "~/renderer/components/page-header";
 import ThemeSwitch from "~/renderer/components/theme-switch";
+import Page from "~/renderer/layouts/page";
 
 export default function Preferences() {
 	return (
-		<>
-			<PageHeader>Preferences</PageHeader>
-			<ThemeSwitch />
-		</>
+		<Page.Root>
+			<Page.Header>Preferences</Page.Header>
+			<Page.Content>
+				<ThemeSwitch />
+			</Page.Content>
+		</Page.Root>
 	);
 }
