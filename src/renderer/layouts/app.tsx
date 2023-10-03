@@ -16,7 +16,9 @@ export default function App(props: ParentProps) {
 					</nav>
 				</div>
 				<div class="h-full overflow-auto">
-					<Page.Root>{props.children}</Page.Root>
+					<div class="min-h-full bg-white dark:bg-neutral-900">
+						{props.children}
+					</div>
 				</div>
 			</div>
 			<div
