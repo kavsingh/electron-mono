@@ -13,7 +13,7 @@ export default function Files() {
 	}
 
 	return (
-		<Page.Root>
+		<>
 			<Page.Header>Files</Page.Header>
 			<Page.Content>
 				<DialogFileSelect onSelect={handleFileSelect} />
@@ -28,7 +28,7 @@ export default function Files() {
 					</For>
 				</ul>
 			</Page.Content>
-		</Page.Root>
+		</>
 	);
 }
 
