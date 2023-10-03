@@ -3,10 +3,10 @@ import { Show, For } from "solid-js";
 import useSystemInfo from "~/renderer/hooks/use-system-info";
 
 export default function SystemInfoList() {
-	const infoResource = useSystemInfo();
+	const infoQuery = useSystemInfo();
 
 	return (
-		<Show when={infoResource()} fallback={<>Loading...</>} keyed>
+		<Show when={infoQuery.data} fallback={<>Loading...</>} keyed>
 			{(info) => (
 				<ul class="m-0 flex list-none flex-col gap-2 p-0">
 					<For each={Object.entries(info)}>

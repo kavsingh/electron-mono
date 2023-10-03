@@ -28,6 +28,7 @@
 	"license": "MIT",
 	"packageManager": "yarn@3.6.3",
 	"dependencies": {
+		"@tanstack/solid-query": "5.0.0-rc.4",
 		"@trpc/server": "10.38.5",
 		"electron-trpc": "0.5.2",
 		"eventemitter3": "5.0.1",
