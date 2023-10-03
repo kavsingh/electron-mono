@@ -26,10 +26,6 @@ export default function App() {
 						<Route path="/preferences" element={<Preferences />} />
 					</Routes>
 				</AppLayout>
-				<div
-					class="fixed inset-x-0 top-0 z-10 h-8"
-					style={{ "-webkit-app-region": "drag" }}
-				/>
 			</Router>
 		</TRPCClientProvider>
 	);
