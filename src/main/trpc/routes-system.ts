@@ -25,21 +25,5 @@ export default function routesSystem(eventBus: AppEventBus) {
 				};
 			});
 		}),
-
-		heartbeatEvent: publicProcedure.subscription(() => {
-			type Payload = AppEvent<"heartbeat">;
-
-			return observable<Payload>((emit) => {
-				function handler(payload: Payload) {
-					emit.next(payload);
-				}
-
-				eventBus.on("heartbeat", handler);
-
-				return function unsubscribe() {
-					eventBus.off("heartbeat", handler);
-				};
-			});
-		}),
 	} as const;
 }

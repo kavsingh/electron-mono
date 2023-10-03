@@ -1,10 +1,11 @@
 import { Router, hashIntegration, Route, Routes } from "@solidjs/router";
 import { createEffect } from "solid-js";
 
-import Masthead from "./components/masthead";
 import { TRPCClientProvider } from "./contexts/trpc-client";
 import useTheme from "./hooks/use-theme";
+import AppLayout from "./layouts/app";
 import Files from "./pages/files";
+import Preferences from "./pages/preferences";
 import SystemInfo from "./pages/system-info";
 import { getTRPCClient } from "./trpc/client";
 
@@ -18,17 +19,17 @@ export default function App() {
 	return (
 		<TRPCClientProvider client={getTRPCClient()}>
 			<Router source={hashIntegration()}>
-				<div class="min-h-full px-4 py-8">
-					<div
-						class="fixed inset-x-0 top-0 z-[1] h-8"
-						style={{ "-webkit-app-region": "drag" }}
-					/>
-					<Masthead />
+				<AppLayout>
 					<Routes>
 						<Route path="/" element={<SystemInfo />} />
 						<Route path="/files" element={<Files />} />
+						<Route path="/preferences" element={<Preferences />} />
 					</Routes>
-				</div>
+				</AppLayout>
+				<div
+					class="fixed inset-x-0 top-0 z-10 h-8"
+					style={{ "-webkit-app-region": "drag" }}
+				/>
 			</Router>
 		</TRPCClientProvider>
 	);

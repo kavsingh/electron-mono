@@ -4,12 +4,10 @@
 
 :root {
 	color: theme(colors.neutral.950);
-	background-color: theme(colors.neutral.50);
 }
 
 .dark {
 	color: theme(colors.neutral.200);
-	background-color: theme(colors.neutral.950);
 }
 
 #app-root {
