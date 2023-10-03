@@ -1,7 +1,5 @@
 import { A } from "@solidjs/router";
 
-import Page from "./page";
-
 import type { ParentProps } from "solid-js";
 
 export default function App(props: ParentProps) {
