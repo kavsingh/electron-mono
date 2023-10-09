@@ -1244,22 +1244,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.0.0-rc.4":
-  version: 5.0.0-rc.4
-  resolution: "@tanstack/query-core@npm:5.0.0-rc.4"
-  checksum: ae11ea9c73078658a45f5496caf9cca94304e35d225d1a39882d75055c9fa7e8f008fbf86ff47c2bf63078819b70f3ae6cca660c6deb8c6ba606dd3f629c94e3
+"@tanstack/query-core@npm:5.0.0-rc.5":
+  version: 5.0.0-rc.5
+  resolution: "@tanstack/query-core@npm:5.0.0-rc.5"
+  checksum: 7b2f3837e84c56bc32884d364844e960b6a06e90d7a8072c714faaf343d138154adb1b166d3051ec2dfe09142c52385a68fe676e9b4ccc39e4d3744929d43426
   languageName: node
   linkType: hard
 
-"@tanstack/solid-query@npm:5.0.0-rc.4":
-  version: 5.0.0-rc.4
-  resolution: "@tanstack/solid-query@npm:5.0.0-rc.4"
+"@tanstack/solid-query@npm:5.0.0-rc.5":
+  version: 5.0.0-rc.5
+  resolution: "@tanstack/solid-query@npm:5.0.0-rc.5"
   dependencies:
-    "@tanstack/query-core": 5.0.0-rc.4
+    "@tanstack/query-core": 5.0.0-rc.5
     solid-js: ^1.7.8
   peerDependencies:
     solid-js: ^1.6.0
-  checksum: e11adc77f3d08a59ccf81f05ef9358ee63ea3c926e1d107766823d6daede6256ba1d4118add2e96f2cc9fb3616077352aba8e7156c5636f6d76730c4df9b3412
+  checksum: dc2bb142443c954ba97ef409a4bff71339588de5f0fc3d541b8368e1ce9331e8ab0ec57dcd72274e46cf5a2e6a54cfc736b8e2c5e31243cceb3d9b20ed2b1db9
   languageName: node
   linkType: hard
 
@@ -8014,7 +8014,7 @@ __metadata:
     "@playwright/test": 1.38.1
     "@solidjs/router": 0.8.3
     "@tailwindcss/container-queries": 0.1.1
-    "@tanstack/solid-query": 5.0.0-rc.4
+    "@tanstack/solid-query": 5.0.0-rc.5
     "@testing-library/dom": 9.3.3
     "@testing-library/jest-dom": 6.1.3
     "@testing-library/user-event": 14.5.1
