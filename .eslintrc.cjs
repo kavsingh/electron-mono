@@ -81,16 +81,16 @@ module.exports = {
 			},
 		},
 		{
-			files: ["./src/**/*.tsx"],
+			files: ["src/renderer/**/*"],
+			env: { node: false, browser: true },
+			extends: ["plugin:solid/typescript"],
+		},
+		{
+			files: ["./src/renderer/**/*.tsx"],
 			settings: {
 				tailwindcss: { callees: ["twMerge", "twJoin", "classList"] },
 			},
 			extends: ["plugin:tailwindcss/recommended"],
-		},
-		{
-			files: ["src/renderer/**/*"],
-			env: { node: false, browser: true },
-			extends: ["plugin:solid/typescript"],
 		},
 		{
 			files: testFilePatterns(),
