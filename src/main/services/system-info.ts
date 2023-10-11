@@ -8,9 +8,11 @@ export async function getSystemInfo(): Promise<SystemInfo> {
 	const [sysOsInfo, sysMem] = await Promise.all([osInfo(), mem()]);
 
 	return {
-		os: sysOsInfo.codename,
-		totalMemory: BigInt(sysMem.total),
-		freeMemory: BigInt(sysMem.free),
+		osName: sysOsInfo.codename,
+		osVersion: sysOsInfo.release,
+		osArch: sysOsInfo.arch,
+		memTotal: BigInt(sysMem.total),
+		memAvailable: BigInt(sysMem.available),
 	};
 }
 
@@ -43,7 +45,9 @@ export function startSystemInfoUpdates(eventBus: AppEventBus) {
 }
 
 export type SystemInfo = {
-	os: string;
-	totalMemory: bigint;
-	freeMemory: bigint;
+	osName: string;
+	osVersion: string;
+	osArch: string;
+	memTotal: bigint;
+	memAvailable: bigint;
 };

@@ -22,12 +22,11 @@ export default function ThemeSwitch() {
 			}}
 		>
 			<fieldset>
-				<legend>Theme</legend>
-				<div class="flex gap-3">
+				<legend class="mb-2 font-semibold">Theme</legend>
+				<ul class="flex gap-3">
 					<For each={THEME_SOURCES}>
 						{(option) => (
-							<label for={option}>
-								<LabelText themeSource={option} />
+							<li class="flex items-center gap-1">
 								<input
 									type="radio"
 									id={option}
@@ -35,11 +34,18 @@ export default function ThemeSwitch() {
 									value={option}
 									checked={themeSource() === option}
 									onChange={[saveThemeSource, option]}
+									class="peer h-4 w-4 cursor-pointer"
 								/>
-							</label>
+								<label
+									class="cursor-pointer text-neutral-500 transition-colors peer-checked:text-black dark:peer-checked:text-white"
+									for={option}
+								>
+									<LabelText themeSource={option} />
+								</label>
+							</li>
 						)}
 					</For>
-				</div>
+				</ul>
 			</fieldset>
 		</form>
 	);

@@ -10,7 +10,7 @@ export default function Button(
 		<button
 			{...passProps}
 			class={twMerge(
-				"rounded border border-neutral-800 px-2 py-1 hover:border-neutral-950 focus-visible:border-neutral-950 active:border-neutral-950 dark:border-neutral-400 dark:hover:border-neutral-50 dark:focus-visible:border-neutral-50 dark:active:border-neutral-50",
+				"rounded border border-neutral-800 px-2 py-1 transition-colors hover:border-neutral-950 focus-visible:border-neutral-950 active:border-neutral-950 dark:border-neutral-400 dark:hover:border-neutral-50 dark:focus-visible:border-neutral-50 dark:active:border-neutral-50",
 				localProps.class,
 			)}
 		/>

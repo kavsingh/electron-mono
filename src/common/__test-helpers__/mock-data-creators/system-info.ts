@@ -7,8 +7,8 @@ export function createMockSystemInfo(
 ): SystemInfo {
 	return {
 		os: "OS",
-		totalMemory: BigInt(10_000_000_000),
-		freeMemory: BigInt(1_000_000_000),
+		memTotal: BigInt(10_000_000_000),
+		memAvailable: BigInt(1_000_000_000),
 		...info,
 	};
 }

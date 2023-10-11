@@ -1,4 +1,5 @@
 import { createEffect, createSignal, For } from "solid-js";
+import { twMerge } from "tailwind-merge";
 
 import Button from "~/renderer/components/button";
 import useFileDrop from "~/renderer/hooks/use-file-drop";
@@ -18,10 +19,10 @@ export default function Files() {
 			<Page.Content>
 				<DialogFileSelect onSelect={handleFileSelect} />
 				<DragFileSelect onSelect={handleFileSelect} />
-				<ul class="m-0 flex list-none flex-col gap-1 p-0 text-sm">
+				<ul class="flex flex-col gap-1">
 					<For each={selectedFiles()}>
 						{(file) => (
-							<li class="border-b border-b-neutral-800 pb-1 last:border-b-0 last:pb-0 dark:border-b-neutral-300">
+							<li class="flex gap-2 border-b border-b-neutral-200 pb-2 text-neutral-700 last:border-b-0 last:pb-0 dark:border-b-neutral-700 dark:text-neutral-400">
 								{file}
 							</li>
 						)}
@@ -56,9 +57,14 @@ function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
 
 	return (
 		<div
-			class="h-[200px] border border-neutral-300 dark:border-neutral-700"
-			classList={{ "border-current": isActive() }}
+			class={twMerge(
+				"my-3 grid h-[200px] place-items-center rounded-lg border border-neutral-300 text-neutral-600 transition-colors dark:border-neutral-700 dark:text-neutral-400",
+				isActive() &&
+					"border-black bg-black/10 text-black dark:border-white dark:bg-white/10 dark:text-white",
+			)}
 			{...dragDropHandlers}
-		/>
+		>
+			Drop files
+		</div>
 	);
 }
