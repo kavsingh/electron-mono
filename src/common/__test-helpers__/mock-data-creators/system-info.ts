@@ -6,7 +6,9 @@ export function createMockSystemInfo(
 	info: Partial<SystemInfo> = {},
 ): SystemInfo {
 	return {
-		os: "OS",
+		osName: "osName",
+		osArch: "osArch",
+		osVersion: "osVersion",
 		memTotal: BigInt(10_000_000_000),
 		memAvailable: BigInt(1_000_000_000),
 		...info,
