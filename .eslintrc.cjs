@@ -113,6 +113,13 @@ module.exports = {
 			},
 		},
 		{
+			files: testFilePatterns({ root: "./src" }),
+			extends: ["plugin:vitest/all"],
+			rules: {
+				"vitest/no-hooks": "off",
+			},
+		},
+		{
 			files: testFilePatterns({
 				root: "./src/renderer",
 				extensions: "[jt]s?(x)",

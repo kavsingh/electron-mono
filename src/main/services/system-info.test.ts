@@ -20,7 +20,7 @@ describe("system-info", () => {
 				available: 50,
 			});
 
-			await expect(getSystemInfo()).resolves.toEqual({
+			await expect(getSystemInfo()).resolves.toStrictEqual({
 				osName: "OS Code",
 				osVersion: "1.0.0",
 				osArch: "arch",

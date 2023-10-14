@@ -1707,7 +1707,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:6.7.5, @typescript-eslint/utils@npm:^6.0.0, @typescript-eslint/utils@npm:^6.4.0":
+"@typescript-eslint/utils@npm:6.7.5, @typescript-eslint/utils@npm:^6.0.0, @typescript-eslint/utils@npm:^6.4.0, @typescript-eslint/utils@npm:^6.6.0":
   version: 6.7.5
   resolution: "@typescript-eslint/utils@npm:6.7.5"
   dependencies:
@@ -3892,6 +3892,21 @@ __metadata:
   peerDependencies:
     eslint: ^7.5.0 || ^8.0.0
   checksum: 67d2f521a6af623c157d05bbefa743d9aa360d5462a9b38a82a79b0ba008cb4d6ba3f604f54ac9d12405c53b6744695fc7fde7875f2b83aa3f85a8ced7687be3
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-vitest@npm:0.3.2":
+  version: 0.3.2
+  resolution: "eslint-plugin-vitest@npm:0.3.2"
+  dependencies:
+    "@typescript-eslint/utils": ^6.6.0
+  peerDependencies:
+    eslint: ">=8.0.0"
+    vitest: "*"
+  peerDependenciesMeta:
+    "@typescript-eslint/eslint-plugin":
+      optional: true
+  checksum: 807b503a716cd51daf4ac197c34adbdad5109436238eae824bf19fb12ed6416f8e3e93845f56f4a5159873aabe5ea0339fd680fb8bdbb8e0788438370426bb4b
   languageName: node
   linkType: hard
 
@@ -8037,6 +8052,7 @@ __metadata:
     eslint-plugin-solid: 0.13.0
     eslint-plugin-tailwindcss: 3.13.0
     eslint-plugin-testing-library: 6.1.0
+    eslint-plugin-vitest: 0.3.2
     eventemitter3: 5.0.1
     jsdom: 22.1.0
     npm-run-all: 4.1.5
