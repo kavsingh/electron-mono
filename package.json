@@ -26,7 +26,7 @@
 	"keywords": [],
 	"author": "<author>",
 	"license": "MIT",
-	"packageManager": "yarn@3.6.3",
+	"packageManager": "yarn@3.6.4",
 	"dependencies": {
 		"@trpc/server": "10.40.0",
 		"electron-trpc": "0.5.2",
