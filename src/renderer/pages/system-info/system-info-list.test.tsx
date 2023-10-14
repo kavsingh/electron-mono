@@ -22,7 +22,7 @@ describe("<SystemInfoList />", () => {
 		expect(screen.getByText("Loading...")).toBeInTheDocument();
 
 		await waitFor(() => {
-			expect(screen.getByText(/^os/)).toBeInTheDocument();
+			expect(screen.getByText(/^total memory/)).toBeInTheDocument();
 		});
 
 		expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
