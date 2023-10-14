@@ -19,10 +19,7 @@ export default function App(props: ParentProps) {
 					</div>
 				</div>
 			</div>
-			<div
-				class="fixed inset-x-0 top-0 z-10 h-8"
-				style={{ "-webkit-app-region": "drag" }}
-			/>
+			<div class="fixed inset-x-0 top-0 z-10 h-8 [-webkit-app-region:drag]" />
 		</>
 	);
 }
