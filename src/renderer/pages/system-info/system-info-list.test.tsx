@@ -1,4 +1,4 @@
-import { render, waitFor, screen } from "solid-testing-library";
+import { render, waitFor, screen } from "@solidjs/testing-library";
 import { describe, beforeEach, it, expect, vi } from "vitest";
 
 import { setupRenderWrapper } from "~/renderer/__test-helpers__/render-wrapper";
