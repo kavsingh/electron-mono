@@ -1337,19 +1337,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trpc/client@npm:10.43.0":
-  version: 10.43.0
-  resolution: "@trpc/client@npm:10.43.0"
+"@trpc/client@npm:10.43.1":
+  version: 10.43.1
+  resolution: "@trpc/client@npm:10.43.1"
   peerDependencies:
-    "@trpc/server": 10.43.0
-  checksum: db5964ac6a10e089f55a03c3d621ce187bda26abe77fa7252644725d23a601a1155cb25895896cb0fba972751ef8b87d12721186b5dd55c852b854dcd3011859
+    "@trpc/server": 10.43.1
+  checksum: 370546793dc7963aa7367c66f156f897b0f85f17f0de68d309b81fd899f1bf9d19ad95443cc8379be3b192fcd272ca699533ad80692fda6a586cf648300406c3
   languageName: node
   linkType: hard
 
-"@trpc/server@npm:10.43.0":
-  version: 10.43.0
-  resolution: "@trpc/server@npm:10.43.0"
-  checksum: 3db6087ceb3df26655fb74ffebf4556782291a237488153613b132d80fa1657dabc0ae7577d98b54a47a419849aa96fedd8ab1d5034f364580407ef4f48d7258
+"@trpc/server@npm:10.43.1":
+  version: 10.43.1
+  resolution: "@trpc/server@npm:10.43.1"
+  checksum: 3b504d0e602eda61ab166b677660a53801a9971a6ee7cc68c0dfe42ab79e78dff2af5955c635a0d7a2124a09b49de7fb59f25ffa5e64387ed1df54939294bb78
   languageName: node
   linkType: hard
 
@@ -1747,7 +1747,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:6.9.1, @typescript-eslint/utils@npm:^6.7.5":
+"@typescript-eslint/utils@npm:6.9.1, @typescript-eslint/utils@npm:^6.9.1":
   version: 6.9.1
   resolution: "@typescript-eslint/utils@npm:6.9.1"
   dependencies:
@@ -3413,16 +3413,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:27.0.2":
-  version: 27.0.2
-  resolution: "electron@npm:27.0.2"
+"electron@npm:27.0.3":
+  version: 27.0.3
+  resolution: "electron@npm:27.0.3"
   dependencies:
     "@electron/get": "npm:^2.0.0"
     "@types/node": "npm:^18.11.18"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: de597920b1888b25995570566403e8caa89f55d5fc4396ead6bd7f43b6da1fec362ad525b4bd772a03ef672e607fcd98ed463bffe301c7cca59eddcf7093eb0f
+  checksum: 3abd8e966e0dcd28a11e2297b26bb86ece776756389b127d6d82a0362d3818ade8ef06605fac70af5a70cded19665724e2ebc69d0ef52a8d6dd3ab8fd9a0564b
   languageName: node
   linkType: hard
 
@@ -3971,18 +3971,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vitest@npm:0.3.8":
-  version: 0.3.8
-  resolution: "eslint-plugin-vitest@npm:0.3.8"
+"eslint-plugin-vitest@npm:0.3.9":
+  version: 0.3.9
+  resolution: "eslint-plugin-vitest@npm:0.3.9"
   dependencies:
-    "@typescript-eslint/utils": "npm:^6.7.5"
+    "@typescript-eslint/utils": "npm:^6.9.1"
   peerDependencies:
     eslint: ">=8.0.0"
     vitest: "*"
   peerDependenciesMeta:
     "@typescript-eslint/eslint-plugin":
       optional: true
-  checksum: 81521ef5ddd4d50709ce99e646dcf36402930ae039552721e08a2c8b574d0a38b84b2edabf63fdd4dd649f3074dadaed01d20770de3f962e4c49aa1c4f0195a5
+    vitest:
+      optional: true
+  checksum: 7475889279f6f100f866a2ca8fdf6fc4d16016bad28749d8d9001997ec3dcd4acf0da3a2f29ca08b476ddcf32e0c2d63629f9acc190896d857a2f1c753e4b1d5
   languageName: node
   linkType: hard
 
@@ -8130,8 +8132,8 @@ __metadata:
     "@testing-library/dom": "npm:9.3.3"
     "@testing-library/jest-dom": "npm:6.1.4"
     "@testing-library/user-event": "npm:14.5.1"
-    "@trpc/client": "npm:10.43.0"
-    "@trpc/server": "npm:10.43.0"
+    "@trpc/client": "npm:10.43.1"
+    "@trpc/server": "npm:10.43.1"
     "@tsconfig/strictest": "npm:2.0.2"
     "@types/eslint": "npm:8.44.6"
     "@types/node": "npm:20.8.10"
@@ -8140,7 +8142,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:0.34.6"
     autoprefixer: "npm:10.4.16"
     cross-env: "npm:7.0.3"
-    electron: "npm:27.0.2"
+    electron: "npm:27.0.3"
     electron-builder: "npm:24.6.4"
     electron-trpc: "npm:0.5.2"
     electron-vite: "npm:1.0.28"
@@ -8156,7 +8158,7 @@ __metadata:
     eslint-plugin-solid: "npm:0.13.0"
     eslint-plugin-tailwindcss: "npm:3.13.0"
     eslint-plugin-testing-library: "npm:6.1.0"
-    eslint-plugin-vitest: "npm:0.3.8"
+    eslint-plugin-vitest: "npm:0.3.9"
     eventemitter3: "npm:5.0.1"
     jsdom: "npm:22.1.0"
     npm-run-all: "npm:4.1.5"
