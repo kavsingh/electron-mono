@@ -854,9 +854,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^2.1.2":
-  version: 2.1.2
-  resolution: "@eslint/eslintrc@npm:2.1.2"
+"@eslint/eslintrc@npm:^2.1.3":
+  version: 2.1.3
+  resolution: "@eslint/eslintrc@npm:2.1.3"
   dependencies:
     ajv: "npm:^6.12.4"
     debug: "npm:^4.3.2"
@@ -867,14 +867,14 @@ __metadata:
     js-yaml: "npm:^4.1.0"
     minimatch: "npm:^3.1.2"
     strip-json-comments: "npm:^3.1.1"
-  checksum: fa25638f2666cac6810f98ee7d0f4b912f191806467c1b40d72bac759fffef0b3357f12a1869817286837b258e4de3517e0c7408520e156ca860fc53a1fbaed9
+  checksum: 77b70a89232fe702c2f765b5b92970f5e4224b55363b923238b996c66fcd991504f40d3663c0543ae17d6c5049ab9b07ab90b65d7601e6f25e8bcd4caf69ac75
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.52.0":
-  version: 8.52.0
-  resolution: "@eslint/js@npm:8.52.0"
-  checksum: 86beff213d0ae4ced203a922b74e2cc4d767d109e7815f985bf648946ba072198977102e32afc9fa04f7825a6de83a831874f6b6675ba0c1d0743ade2dc2d53d
+"@eslint/js@npm:8.53.0":
+  version: 8.53.0
+  resolution: "@eslint/js@npm:8.53.0"
+  checksum: a372d55aa2bbe0d9399acc8de3c892dcfe507fd914d29fde6826ae54a13452619be626aa7eb70b1ec4d4da5302b6ed8e8ac9bf1f830003f15c0ad56c30b4f520
   languageName: node
   linkType: hard
 
@@ -1256,22 +1256,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.4.3":
-  version: 5.4.3
-  resolution: "@tanstack/query-core@npm:5.4.3"
-  checksum: 01a0ffab4dfae4741f2629a2884fceb1af7cb5e280f3e37952bff4af7210cc57a69b2683cea16099b68af4fdd858f2bbd6b5a76d4f847a07cec2ae1b3f598839
+"@tanstack/query-core@npm:5.7.2":
+  version: 5.7.2
+  resolution: "@tanstack/query-core@npm:5.7.2"
+  checksum: cbf2c59a922d5a0db428a26c9e2bc7ce1d49732815622e6b8d8328ad2890e365962a05d29a7201107be215f3e686041cf1c1c0ce83252b782b760bdc92e50bf0
   languageName: node
   linkType: hard
 
-"@tanstack/solid-query@npm:5.4.3":
-  version: 5.4.3
-  resolution: "@tanstack/solid-query@npm:5.4.3"
+"@tanstack/solid-query@npm:5.7.2":
+  version: 5.7.2
+  resolution: "@tanstack/solid-query@npm:5.7.2"
   dependencies:
-    "@tanstack/query-core": "npm:5.4.3"
+    "@tanstack/query-core": "npm:5.7.2"
     solid-js: "npm:^1.7.8"
   peerDependencies:
     solid-js: ^1.6.0
-  checksum: d592ed0998a5a43f7bf2b2eae102c16e907b5a27d4e8203f4c224bbf1317bd0798380bcc780fde93f58bd5918c4eab4170806c7eae91f9d77951f17ab46571b1
+  checksum: e418d31ae26b013a9b6d43b82906102567262f6eaf30778e915cf7c164e53c86dc92b20d574c464d1808d9932858ceb220076f1e42980e104b3e65269b310959
   languageName: node
   linkType: hard
 
@@ -4015,14 +4015,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.52.0":
-  version: 8.52.0
-  resolution: "eslint@npm:8.52.0"
+"eslint@npm:8.53.0":
+  version: 8.53.0
+  resolution: "eslint@npm:8.53.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.2.0"
     "@eslint-community/regexpp": "npm:^4.6.1"
-    "@eslint/eslintrc": "npm:^2.1.2"
-    "@eslint/js": "npm:8.52.0"
+    "@eslint/eslintrc": "npm:^2.1.3"
+    "@eslint/js": "npm:8.53.0"
     "@humanwhocodes/config-array": "npm:^0.11.13"
     "@humanwhocodes/module-importer": "npm:^1.0.1"
     "@nodelib/fs.walk": "npm:^1.2.8"
@@ -4059,7 +4059,7 @@ __metadata:
     text-table: "npm:^0.2.0"
   bin:
     eslint: bin/eslint.js
-  checksum: 01784ab15351d749bc95446039ed7acd5124f7cc84acdbf98c7199272eae06212a8f3ea4a9b47e7cc54ab17ca094c3a664bbfc3002c7de27936220e278b5028a
+  checksum: e305a71ce2b9a8631b293266fe53e346c76f28bc8d004af33f10e537cf133db1fb87af3599376e70ed6e0f89a78be10c4f08ddd0c1c9c0c497cd143b4a270420
   languageName: node
   linkType: hard
 
@@ -8128,7 +8128,7 @@ __metadata:
     "@solidjs/router": "npm:0.8.3"
     "@solidjs/testing-library": "npm:0.8.4"
     "@tailwindcss/container-queries": "npm:0.1.1"
-    "@tanstack/solid-query": "npm:5.4.3"
+    "@tanstack/solid-query": "npm:5.7.2"
     "@testing-library/dom": "npm:9.3.3"
     "@testing-library/jest-dom": "npm:6.1.4"
     "@testing-library/user-event": "npm:14.5.1"
@@ -8146,7 +8146,7 @@ __metadata:
     electron-builder: "npm:24.6.4"
     electron-trpc: "npm:0.5.2"
     electron-vite: "npm:1.0.28"
-    eslint: "npm:8.52.0"
+    eslint: "npm:8.53.0"
     eslint-config-prettier: "npm:9.0.0"
     eslint-import-resolver-typescript: "npm:3.6.1"
     eslint-plugin-deprecation: "npm:2.0.0"
