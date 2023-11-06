@@ -5,7 +5,7 @@ import type { ParentProps } from "solid-js";
 export default function App(props: ParentProps) {
 	return (
 		<>
-			<div class="grid h-full grid-cols-app-layout">
+			<div class="grid h-full grid-cols-[min-content_1fr]">
 				<div class="min-h-full p-4 pt-9">
 					<nav class="flex flex-col gap-2">
 						<A href="/">System Info</A>
