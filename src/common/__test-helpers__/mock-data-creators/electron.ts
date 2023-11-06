@@ -1,11 +1,6 @@
+import mockCreator from "./mock-creator";
+
 import type { OpenDialogReturnValue } from "electron";
 
-export function createMockOpenDialogReturnValue(
-	value: Partial<OpenDialogReturnValue> = {},
-): OpenDialogReturnValue {
-	return {
-		canceled: false,
-		filePaths: [],
-		...value,
-	};
-}
+export const createMockOpenDialogReturnValue =
+	mockCreator<OpenDialogReturnValue>({ canceled: false, filePaths: [] });
