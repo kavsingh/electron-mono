@@ -6,9 +6,14 @@ const tsconfigFile = ts.findConfigFile(
 	ts.sys.fileExists,
 	"tsconfig.json",
 );
+
 const tsconfig = tsconfigFile
 	? ts.readConfigFile(tsconfigFile, ts.sys.readFile)
 	: undefined;
+
+const tsconfigPathPatterns = Object.keys(
+	tsconfig?.config.compilerOptions.paths ?? {},
+);
 
 const restrictFromBrowser = {
 	paths: [
@@ -28,10 +33,6 @@ const restrictFromNode = {
 	patterns: [{ group: ["solid-*", "@solidjs/-*", "tailwind-*"] }],
 };
 
-const tsconfigPathPatterns = Object.keys(
-	tsconfig?.config.compilerOptions.paths ?? {},
-);
-
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
 	settings: {
@@ -44,6 +45,11 @@ module.exports = {
 	},
 	extends: ["plugin:import/recommended", "plugin:import/typescript"],
 	rules: {
+		"@typescript-eslint/consistent-type-imports": [
+			"error",
+			{ prefer: "type-imports", fixStyle: "separate-type-imports" },
+		],
+
 		"import/no-cycle": "error",
 		"import/no-self-import": "error",
 		"import/no-unused-modules": "error",
@@ -79,6 +85,7 @@ module.exports = {
 				"newlines-between": "always",
 			},
 		],
+
 		// enforce context isolation
 		"import/no-restricted-paths": [
 			"error",
@@ -97,6 +104,7 @@ module.exports = {
 				],
 			},
 		],
+
 		// node processes should not import browser modules
 		"no-restricted-imports": "off",
 		"@typescript-eslint/no-restricted-imports": ["error", restrictFromNode],

@@ -1,5 +1,7 @@
-import { splitProps, type JSX } from "solid-js";
+import { splitProps } from "solid-js";
 import { twMerge } from "tailwind-merge";
+
+import type { JSX } from "solid-js";
 
 export default function Button(
 	_props: Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, "classList">,
