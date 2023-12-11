@@ -1,4 +1,4 @@
-import { Router, hashIntegration, Route, Routes } from "@solidjs/router";
+import { Route, HashRouter } from "@solidjs/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { createEffect } from "solid-js";
 
@@ -20,15 +20,11 @@ export default function App() {
 	return (
 		<TRPCClientProvider client={getTRPCClient()}>
 			<QueryClientProvider client={new QueryClient()}>
-				<Router source={hashIntegration()}>
-					<AppLayout>
-						<Routes>
-							<Route path="/" element={<SystemInfo />} />
-							<Route path="/files" element={<Files />} />
-							<Route path="/preferences" element={<Preferences />} />
-						</Routes>
-					</AppLayout>
-				</Router>
+				<HashRouter root={AppLayout}>
+					<Route path="/" component={SystemInfo} />
+					<Route path="/files" component={Files} />
+					<Route path="/preferences" component={Preferences} />
+				</HashRouter>
 			</QueryClientProvider>
 		</TRPCClientProvider>
 	);

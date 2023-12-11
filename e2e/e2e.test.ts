@@ -4,7 +4,8 @@ import { setupApplication, teardownApplication } from "./lib/application";
 
 import type { ElectronApplication } from "@playwright/test";
 
-test.describe("e2e tests", () => {
+// TODO: Re-enable when https://github.com/microsoft/playwright/pull/28499 released
+test.describe.skip("e2e tests", () => {
 	let app: ElectronApplication;
 
 	test.beforeAll(async () => {
