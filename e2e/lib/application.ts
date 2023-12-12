@@ -15,7 +15,7 @@ export function setupApplication() {
 				? {
 						CommonProgramFiles: "C:\\Program Files\\Common Files",
 						Public: "C:\\Users\\Public",
-				  }
+					}
 				: {}),
 		},
 	});

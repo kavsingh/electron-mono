@@ -32,7 +32,7 @@ export default function useFileDrop() {
 						entries.find((e) => e?.name === file.name) ?? {};
 
 					return { file, isDirectory, isFile };
-			  })
+				})
 			: [];
 
 		setIsActive(false);
