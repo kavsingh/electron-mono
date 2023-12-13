@@ -15,8 +15,7 @@ export default defineConfig(
 			setupFiles: ["./vitest.renderer.setup.ts"],
 			clearMocks: true,
 			testTransformMode: { web: ["/.[jt]sx?$/"] },
-			server: { deps: { inline: [/@solidjs/] } },
+			server: { deps: { inline: [/solidjs/, /@solidjs/] } },
 		},
-		resolve: { conditions: ["development", "browser"] },
 	} satisfies UserWorkspaceConfig),
 );

@@ -19,7 +19,19 @@ const build = {
 
 export const nodeConfig: UserConfig = {
 	define,
-	build,
+	build: {
+		...build,
+		rollupOptions: {
+			// TODO: output as esm
+			output: {
+				format: "cjs",
+				inlineDynamicImports: true,
+				entryFileNames: "[name].cjs",
+				chunkFileNames: "[name].cjs",
+				assetFileNames: "[name].[ext]",
+			},
+		},
+	},
 	resolve: { conditions: ["node"] },
 	plugins: [
 		tsconfigPathsPlugin(),

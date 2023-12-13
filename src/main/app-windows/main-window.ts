@@ -12,7 +12,7 @@ export function createMainWindow() {
 		vibrancy: "under-window",
 		height: 600,
 		width: 800,
-		webPreferences: { preload: join(__dirname, "../preload/index.js") },
+		webPreferences: { preload: join(__dirname, "../preload/index.cjs") },
 		show: false,
 	});
 
