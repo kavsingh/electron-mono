@@ -19,19 +19,7 @@ const build = {
 
 export const nodeConfig: UserConfig = {
 	define,
-	build: {
-		...build,
-		rollupOptions: {
-			// TODO: output as esm
-			output: {
-				format: "cjs",
-				inlineDynamicImports: true,
-				entryFileNames: "[name].cjs",
-				chunkFileNames: "[name].cjs",
-				assetFileNames: "[name].[ext]",
-			},
-		},
-	},
+	build,
 	resolve: { conditions: ["node"] },
 	plugins: [
 		tsconfigPathsPlugin(),
@@ -48,8 +36,24 @@ export const rendererConfig: UserConfig = {
 	plugins: [tsconfigPathsPlugin(), solidPlugin()],
 };
 
+const preloadConfig: UserConfig = {
+	...nodeConfig,
+	build: {
+		...nodeConfig.build,
+		rollupOptions: {
+			output: {
+				format: "cjs",
+				inlineDynamicImports: true,
+				entryFileNames: "[name].cjs",
+				chunkFileNames: "[name].cjs",
+				assetFileNames: "[name].[ext]",
+			},
+		},
+	},
+};
+
 export default defineConfig({
 	main: nodeConfig,
-	preload: nodeConfig,
+	preload: preloadConfig,
 	renderer: rendererConfig,
 });
