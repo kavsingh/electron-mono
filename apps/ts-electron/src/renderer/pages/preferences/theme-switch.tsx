@@ -1,18 +1,31 @@
-import { For, Match, Switch, createResource } from "solid-js";
+import { createMutation, createQuery } from "@merged/solid-apollo";
+import { For, Match, Switch } from "solid-js";
 
-import { THEME_SOURCES } from "#common/lib/theme";
-import { useTRPCClient } from "#renderer/contexts/trpc-client";
+import { ThemeSource } from "#renderer/graphql/__generated__/types";
 
-import type { ThemeSource } from "#common/lib/theme";
+import {
+	SetThemeSourceDocument,
+	ThemeSourceDocument,
+} from "./theme-switch.generated";
+
+import type {
+	SetThemeSourceMutation,
+	ThemeSourceQuery,
+} from "./theme-switch.generated";
 
 export default function ThemeSwitch() {
-	const client = useTRPCClient();
-	const [themeSource, { mutate }] = createResource(() => {
-		return client.themeSource.query();
-	});
+	const themeSource = createQuery<ThemeSourceQuery>(
+		// @ts-expect-error upstream
+		ThemeSourceDocument,
+	);
+	const [setThemeSource] = createMutation<SetThemeSourceMutation>(
+		// @ts-expect-error upstream
+		SetThemeSourceDocument,
+		{ refetchQueries: [ThemeSourceDocument, "themeSource"] },
+	);
 
-	async function saveThemeSource(theme: ThemeSource) {
-		mutate(await client.setThemeSource.mutate(theme));
+	function saveThemeSource(theme: ThemeSource) {
+		void setThemeSource({ variables: { input: theme } });
 	}
 
 	return (
@@ -24,7 +37,7 @@ export default function ThemeSwitch() {
 			<fieldset>
 				<legend class="mb-2 font-semibold">Theme</legend>
 				<ul class="flex gap-3">
-					<For each={THEME_SOURCES}>
+					<For each={[ThemeSource.System, ThemeSource.Light, ThemeSource.Dark]}>
 						{(option) => (
 							<li class="flex items-center gap-1">
 								<input
@@ -32,7 +45,7 @@ export default function ThemeSwitch() {
 									id={option}
 									name={option}
 									value={option}
-									checked={themeSource() === option}
+									checked={themeSource()?.themeSource === option}
 									onChange={[saveThemeSource, option]}
 									class="peer h-4 w-4 cursor-pointer"
 								/>
@@ -53,15 +66,15 @@ export default function ThemeSwitch() {
 
 function LabelText(props: { themeSource: ThemeSource }) {
 	return (
-		<Switch>
-			<Match when={props.themeSource === "system"}>
+		<Switch fallback={null}>
+			<Match when={props.themeSource === ThemeSource.System}>
 				<>System</>
 			</Match>
-			<Match when={props.themeSource === "light"}>
-				<>Light</>
-			</Match>
-			<Match when={props.themeSource === "dark"}>
+			<Match when={props.themeSource === ThemeSource.Dark}>
 				<>Dark</>
+			</Match>
+			<Match when={props.themeSource === ThemeSource.Light}>
+				<>Light</>
 			</Match>
 		</Switch>
 	);

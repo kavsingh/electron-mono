@@ -17,7 +17,6 @@ const restrictFromBrowser = {
 	paths: [
 		{ name: "electron", allowTypeImports: true },
 		{ name: "systeminformation", allowTypeImports: true },
-		{ name: "@trpc/server", allowTypeImports: true },
 		{ name: "eventemitter3", allowTypeImports: true },
 		...require("module").builtinModules.map(
 			/** @param {string} mod **/

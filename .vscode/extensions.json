@@ -4,6 +4,7 @@
 		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode",
 		"bradlc.vscode-tailwindcss",
+		"GraphQL.vscode-graphql",
 		"vscode-icons-team.vscode-icons"
 	]
 }

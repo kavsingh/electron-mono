@@ -1,0 +1,60 @@
+scalar BigInt
+
+type SystemInfo {
+	osName: String!
+	osVersion: String!
+	osArch: String!
+	memTotal: BigInt!
+	memAvailable: BigInt!
+}
+
+input ElectronFileFilter {
+	name: String!
+	extensions: [String!]!
+}
+
+enum ElectronOpenDialogProperty {
+	openFile
+	openDirectory
+	multiSelections
+	showHiddenFiles
+	createDirectory
+	promptToCreate
+	noResolveAliases
+	treatPackageAsDirectory
+	dontAddToRecent
+}
+
+input ElectronOpenDialogOptions {
+	title: String
+	defaultPath: String
+	buttonLabel: String
+	filters: [ElectronFileFilter!]
+	properties: [ElectronOpenDialogProperty!]
+	message: String
+	securityScopedBookmarks: Boolean
+}
+
+type ElectronOpenDialogReturnValue {
+	canceled: Boolean!
+	filePaths: [String!]!
+	bookmarks: [String!]
+}
+
+enum ThemeSource {
+	system
+	dark
+	light
+}
+
+type Query {
+	systemInfo: SystemInfo!
+	themeSource: ThemeSource!
+}
+
+type Mutation {
+	setThemeSource(input: ThemeSource!): ThemeSource!
+	showOpenDialog(
+		options: ElectronOpenDialogOptions!
+	): ElectronOpenDialogReturnValue!
+}

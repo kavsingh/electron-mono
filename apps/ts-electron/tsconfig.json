@@ -8,7 +8,9 @@
 		"lib": ["esnext", "dom"],
 		"noEmit": true,
 		"paths": { "#*": ["./src/*"] },
-		"sourceMap": true
+		"sourceMap": true,
+		// needed for "@merged/solid-apollo"
+		"moduleResolution": "node"
 	},
 	"exclude": ["**/node_modules"],
 	"include": [

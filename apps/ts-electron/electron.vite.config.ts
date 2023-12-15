@@ -1,10 +1,12 @@
 /// <reference types="vitest" />
 
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
+// @ts-expect-error no types
+import gqlPlugin from "vite-plugin-simple-gql";
 import solidPlugin from "vite-plugin-solid";
 import tsconfigPathsPlugin from "vite-tsconfig-paths";
 
-import type { UserConfig } from "vite";
+import type { PluginOption, UserConfig } from "vite";
 
 const isE2E = process.env["E2E"] === "true";
 
@@ -17,16 +19,14 @@ const build = {
 	sourcemap: !isE2E,
 } satisfies NonNullable<UserConfig["build"]>;
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
+const gqlPluginWrap: () => PluginOption = () => gqlPlugin.default();
+
 export const nodeConfig: UserConfig = {
 	define,
 	build,
 	resolve: { conditions: ["node"] },
-	plugins: [
-		tsconfigPathsPlugin(),
-		// workaround after this PR:
-		// https://github.com/alex8088/electron-vite/pull/254
-		externalizeDepsPlugin({ exclude: ["electron-trpc"] }),
-	],
+	plugins: [tsconfigPathsPlugin(), gqlPluginWrap(), externalizeDepsPlugin()],
 };
 
 export const rendererConfig: UserConfig = {

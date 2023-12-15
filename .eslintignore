@@ -1,2 +1,7 @@
 /.vscode
 **/node_modules
+/out
+/dist
+/coverage
+**/__generated__
+**/*.generated.*

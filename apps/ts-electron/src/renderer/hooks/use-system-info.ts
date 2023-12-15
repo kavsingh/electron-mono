@@ -1,26 +1,19 @@
-import { createQuery, useQueryClient } from "@tanstack/solid-query";
-import { onCleanup } from "solid-js";
+import { createQuery } from "@merged/solid-apollo";
 
-import { useTRPCClient } from "#renderer/contexts/trpc-client";
+import { SystemInfoDocument } from "./system-info-query.generated";
+
+import type { SystemInfoQuery } from "./system-info-query.generated";
 
 export default function useSystemInfo() {
-	const client = useTRPCClient();
-	const queryClient = useQueryClient();
+	const infoResource = createQuery<SystemInfoQuery>(
+		// @ts-expect-error upstream types
+		SystemInfoDocument,
+	);
+	// const subscription = client.systemInfoEvent.subscribe(undefined, {
+	// 	onData: mutate,
+	// });
 
-	const query = createQuery(() => ({
-		queryKey: ["systemInfo"],
-		queryFn: () => client.systemInfo.query(),
-	}));
+	// onCleanup(() => subscription.unsubscribe());
 
-	const subscription = client.systemInfoEvent.subscribe(undefined, {
-		onData(data) {
-			queryClient.setQueryData(["systemInfo"], () => data);
-		},
-	});
-
-	onCleanup(() => {
-		subscription.unsubscribe();
-	});
-
-	return query;
+	return infoResource;
 }

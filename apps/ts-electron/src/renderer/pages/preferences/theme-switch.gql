@@ -1,0 +1,7 @@
+query ThemeSource {
+	themeSource
+}
+
+mutation SetThemeSource($input: ThemeSource!) {
+	setThemeSource(input: $input)
+}

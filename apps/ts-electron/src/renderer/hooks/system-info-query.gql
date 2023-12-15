@@ -1,0 +1,9 @@
+query SystemInfo {
+	systemInfo {
+		osName
+		osVersion
+		osArch
+		memAvailable
+		memTotal
+	}
+}

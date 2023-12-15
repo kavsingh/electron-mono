@@ -1,14 +1,13 @@
 import { app, BrowserWindow } from "electron";
-import { createIPCHandler } from "electron-trpc/main";
 
 import { createMainWindow } from "./app-windows/main-window";
+import { initGraphQl } from "./graphql";
 import restrictNavigation from "./lib/restrict-navigation";
 import { createAppEventBus } from "./services/app-event-bus";
 import { startSystemInfoUpdates } from "./services/system-info";
-import { createAppRouter } from "./trpc/router";
 
 const appEventBus = createAppEventBus();
-let trpcIpcHandler: ReturnType<typeof createIPCHandler> | undefined = undefined;
+
 let stopSystemInfoUpdates:
 	| ReturnType<typeof startSystemInfoUpdates>
 	| undefined = undefined;
@@ -33,8 +32,8 @@ app.on("quit", () => {
 
 app.enableSandbox();
 void app.whenReady().then(() => {
-	trpcIpcHandler = createIPCHandler({ router: createAppRouter(appEventBus) });
 	stopSystemInfoUpdates = startSystemInfoUpdates(appEventBus);
+	initGraphQl();
 	showMainWindow();
 });
 
@@ -42,11 +41,6 @@ function showMainWindow() {
 	const mainWindow = createMainWindow();
 
 	mainWindow.on("ready-to-show", () => {
-		trpcIpcHandler?.attachWindow(mainWindow);
 		mainWindow.show();
-	});
-
-	mainWindow.on("closed", () => {
-		trpcIpcHandler?.detachWindow(mainWindow);
 	});
 }

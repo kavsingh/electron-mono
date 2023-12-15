@@ -1,7 +1,5 @@
 import { createSignal, onCleanup } from "solid-js";
 
-import type { ThemeSource } from "#common/lib/theme";
-
 export default function useTheme() {
 	const [theme, setTheme] = createSignal<UiTheme | undefined>(getQueryTheme());
 
@@ -20,7 +18,7 @@ export default function useTheme() {
 	return theme;
 }
 
-export type UiTheme = Exclude<ThemeSource, "system">;
+export type UiTheme = "dark" | "light";
 
 function getQueryTheme(): UiTheme | undefined {
 	if (lightSchemeQuery.matches) return "light";
