@@ -20,7 +20,7 @@ const restrictFromBrowser = {
 		{ name: "electron", allowTypeImports: true },
 		{ name: "systeminformation", allowTypeImports: true },
 		{ name: "@trpc/server", allowTypeImports: true },
-		{ name: "eventemitter3" },
+		{ name: "eventemitter3", allowTypeImports: true },
 		...require("module").builtinModules.map(
 			/** @param {string} mod **/
 			(mod) => ({ name: mod, allowTypeImports: true }),
@@ -151,7 +151,7 @@ module.exports = {
 						paths: [
 							...restrictFromBrowser.paths,
 							...restrictFromNode.paths,
-						].filter((path) => !/^electron/.test(path)),
+						].filter((path) => !/^electron/.test(path.name)),
 						patterns: restrictFromNode.patterns,
 					},
 				],
