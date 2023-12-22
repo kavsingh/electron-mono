@@ -1,6 +1,6 @@
 import { createSignal, onCleanup } from "solid-js";
 
-import type { ThemeSource } from "~/common/lib/theme";
+import type { ThemeSource } from "#common/lib/theme";
 
 export default function useTheme() {
 	const [theme, setTheme] = createSignal<UiTheme | undefined>(getQueryTheme());

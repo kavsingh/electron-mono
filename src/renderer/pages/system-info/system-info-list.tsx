@@ -1,6 +1,6 @@
 import { Show } from "solid-js";
 
-import useSystemInfo from "~/renderer/hooks/use-system-info";
+import useSystemInfo from "#renderer/hooks/use-system-info";
 
 import type { ParentProps } from "solid-js";
 

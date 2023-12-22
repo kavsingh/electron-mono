@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 
-import { createMockOpenDialogReturnValue } from "~/common/__test-helpers__/mock-data-creators/electron";
-import { createMockSystemInfo } from "~/common/__test-helpers__/mock-data-creators/system-info";
+import { createMockOpenDialogReturnValue } from "#common/__test-helpers__/mock-data-creators/electron";
+import { createMockSystemInfo } from "#common/__test-helpers__/mock-data-creators/system-info";
 
 import type { AppTRPCClient } from "../client";
 

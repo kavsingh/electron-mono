@@ -1,10 +1,10 @@
 import { createEffect, createSignal, For } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
-import Button from "~/renderer/components/button";
-import useFileDrop from "~/renderer/hooks/use-file-drop";
-import useFileSelectDialog from "~/renderer/hooks/use-file-select-dialog";
-import Page from "~/renderer/layouts/page";
+import Button from "#renderer/components/button";
+import useFileDrop from "#renderer/hooks/use-file-drop";
+import useFileSelectDialog from "#renderer/hooks/use-file-select-dialog";
+import Page from "#renderer/layouts/page";
 
 export default function Files() {
 	const [selectedFiles, setSelectedFiles] = createSignal<string[]>([]);

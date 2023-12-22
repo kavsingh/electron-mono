@@ -2,8 +2,8 @@ import { Router } from "@solidjs/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { userEvent } from "@testing-library/user-event";
 
-import { TRPCClientProvider } from "~/renderer/contexts/trpc-client";
-import { getTRPCClient } from "~/renderer/trpc/client";
+import { TRPCClientProvider } from "#renderer/contexts/trpc-client";
+import { getTRPCClient } from "#renderer/trpc/client";
 
 import type { ParentProps } from "solid-js";
 

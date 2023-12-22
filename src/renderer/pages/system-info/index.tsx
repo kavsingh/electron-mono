@@ -1,4 +1,4 @@
-import Page from "~/renderer/layouts/page";
+import Page from "#renderer/layouts/page";
 
 import SystemInfoList from "./system-info-list";
 

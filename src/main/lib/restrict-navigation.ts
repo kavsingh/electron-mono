@@ -1,6 +1,6 @@
 import { shell } from "electron";
 
-import { logWarn } from "~/common/log";
+import { logWarn } from "#common/log";
 
 import type { WebContents } from "electron";
 

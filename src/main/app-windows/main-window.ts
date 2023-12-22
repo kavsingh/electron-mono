@@ -2,7 +2,7 @@ import { join } from "node:path";
 
 import { app, BrowserWindow } from "electron";
 
-import { logError } from "~/common/log";
+import { logError } from "#common/log";
 
 export function createMainWindow() {
 	const mainWindow = new BrowserWindow({

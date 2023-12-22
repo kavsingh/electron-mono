@@ -1,7 +1,7 @@
 import { createQuery, useQueryClient } from "@tanstack/solid-query";
 import { onCleanup } from "solid-js";
 
-import { useTRPCClient } from "~/renderer/contexts/trpc-client";
+import { useTRPCClient } from "#renderer/contexts/trpc-client";
 
 export default function useSystemInfo() {
 	const client = useTRPCClient();

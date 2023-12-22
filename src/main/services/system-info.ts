@@ -1,6 +1,6 @@
 import { osInfo, mem } from "systeminformation";
 
-import { logError } from "~/common/log";
+import { logError } from "#common/log";
 
 import type { AppEventBus } from "./app-event-bus";
 

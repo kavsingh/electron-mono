@@ -1,7 +1,7 @@
 import { createContext, useContext } from "solid-js";
 
+import type { AppTRPCClient } from "#renderer/trpc/client";
 import type { ParentProps } from "solid-js";
-import type { AppTRPCClient } from "~/renderer/trpc/client";
 
 export function TRPCClientProvider(
 	props: ParentProps<{ client: AppTRPCClient }>,

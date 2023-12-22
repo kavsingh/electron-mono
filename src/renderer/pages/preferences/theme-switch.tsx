@@ -1,9 +1,9 @@
 import { For, Match, Switch, createResource } from "solid-js";
 
-import { THEME_SOURCES } from "~/common/lib/theme";
-import { useTRPCClient } from "~/renderer/contexts/trpc-client";
+import { THEME_SOURCES } from "#common/lib/theme";
+import { useTRPCClient } from "#renderer/contexts/trpc-client";
 
-import type { ThemeSource } from "~/common/lib/theme";
+import type { ThemeSource } from "#common/lib/theme";
 
 export default function ThemeSwitch() {
 	const client = useTRPCClient();

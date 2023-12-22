@@ -1,10 +1,10 @@
 import { observable } from "@trpc/server/observable";
 
-import { getSystemInfo } from "~/main/services/system-info";
+import { getSystemInfo } from "#main/services/system-info";
 
 import { publicProcedure } from "./trpc-server";
 
-import type { AppEvent, AppEventBus } from "~/main/services/app-event-bus";
+import type { AppEvent, AppEventBus } from "#main/services/app-event-bus";
 
 export default function routesSystem(eventBus: AppEventBus) {
 	return {

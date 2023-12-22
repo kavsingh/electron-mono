@@ -3,7 +3,7 @@ import { ipcLink } from "electron-trpc/renderer";
 import { SuperJSON } from "superjson";
 
 // eslint-disable-next-line import/no-restricted-paths
-import type { AppRouter } from "~/main/trpc/router";
+import type { AppRouter } from "#main/trpc/router";
 
 let trpcClient: AppTRPCClient | undefined;
 

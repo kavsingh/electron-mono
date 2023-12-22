@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 
-import { useTRPCClient } from "~/renderer/contexts/trpc-client";
+import { useTRPCClient } from "#renderer/contexts/trpc-client";
 
 export default function useFileSelectDialog() {
 	const client = useTRPCClient();

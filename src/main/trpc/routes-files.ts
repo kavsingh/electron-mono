@@ -1,6 +1,6 @@
 import { BrowserWindow, dialog } from "electron";
 
-import { electronOpenDialogOptionsSchema } from "~/common/schema/electron";
+import { electronOpenDialogOptionsSchema } from "#common/schema/electron";
 
 import { publicProcedure } from "./trpc-server";
 
