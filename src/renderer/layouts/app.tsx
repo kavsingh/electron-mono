@@ -13,7 +13,7 @@ export default function App(props: ParentProps) {
 						<A href="/preferences">Preferences</A>
 					</nav>
 				</div>
-				<div class="h-full overflow-auto">
+				<div class="h-full overflow-y-auto overflow-x-hidden">
 					<div class="min-h-full bg-white dark:bg-neutral-900">
 						{props.children}
 					</div>

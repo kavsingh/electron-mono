@@ -11,6 +11,8 @@ describe("<SystemInfoList />", () => {
 	});
 
 	it("should render system info", async () => {
+		expect.assertions(3);
+
 		const { Wrapper } = setupRenderWrapper();
 
 		render(() => (

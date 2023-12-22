@@ -8,6 +8,8 @@ vi.mock("systeminformation");
 describe("system-info", () => {
 	describe("getSystemInfo", () => {
 		it("should provide system info", async () => {
+			expect.assertions(1);
+
 			// @ts-expect-error sparse mock
 			vi.spyOn(systeminformation, "osInfo").mockResolvedValueOnce({
 				codename: "OS Code",
