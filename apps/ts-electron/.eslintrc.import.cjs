@@ -1,3 +1,7 @@
+/** @type {import("node:path")} */
+const path = require("node:path");
+
+/** @type {import("../../.eslint.helpers.cjs")} */
 const { readTsConfig } = require("../../.eslint.helpers.cjs");
 
 const tsconfigPathPatterns = Object.keys(
@@ -29,20 +33,12 @@ module.exports = {
 			"@typescript-eslint/parser": [".ts", ".tsx"],
 		},
 		"import/resolver": {
-			"eslint-import-resolver-typescript": { project: "./tsconfig.json" },
+			"eslint-import-resolver-typescript": {
+				project: path.resolve(__dirname, "./tsconfig.json"),
+			},
 		},
 	},
-	extends: ["plugin:import/recommended", "plugin:import/typescript"],
 	rules: {
-		"@typescript-eslint/consistent-type-imports": [
-			"error",
-			{ prefer: "type-imports", fixStyle: "separate-type-imports" },
-		],
-
-		"import/no-cycle": "error",
-		"import/no-self-import": "error",
-		"import/no-unused-modules": "error",
-		"import/no-useless-path-segments": "error",
 		"import/order": [
 			"warn",
 			{
@@ -130,7 +126,7 @@ module.exports = {
 						paths: [
 							...restrictFromBrowser.paths,
 							...restrictFromNode.paths,
-						].filter((path) => !/^electron/.test(path.name)),
+						].filter(({ name }) => !/^electron/.test(name)),
 						patterns: restrictFromNode.patterns,
 					},
 				],

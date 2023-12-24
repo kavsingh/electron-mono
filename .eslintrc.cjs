@@ -1,3 +1,4 @@
+/** @type {import("./.eslint.helpers.cjs")} */
 const { testFileSuffixes, testFilePatterns } = require("./.eslint.helpers.cjs");
 
 /** @type {import('eslint').ESLint.ConfigData} */
@@ -10,6 +11,8 @@ module.exports = {
 		"eslint:recommended",
 		"plugin:@typescript-eslint/strict-type-checked",
 		"plugin:@typescript-eslint/stylistic-type-checked",
+		"plugin:import/recommended",
+		"plugin:import/typescript",
 		"plugin:prettier/recommended",
 	],
 	plugins: ["filenames", "deprecation"],
@@ -24,6 +27,10 @@ module.exports = {
 		"no-unreachable": "error",
 
 		"@typescript-eslint/consistent-type-definitions": ["warn", "type"],
+		"@typescript-eslint/consistent-type-imports": [
+			"error",
+			{ prefer: "type-imports", fixStyle: "separate-type-imports" },
+		],
 		"@typescript-eslint/member-ordering": ["warn"],
 
 		"no-shadow": "off",
@@ -44,6 +51,10 @@ module.exports = {
 			{ argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
 		],
 
+		"import/no-cycle": "error",
+		"import/no-self-import": "error",
+		"import/no-unused-modules": "error",
+		"import/no-useless-path-segments": "error",
 		"deprecation/deprecation": "warn",
 		"filenames/match-regex": ["error", "^[a-z-.0-9]+$", true],
 		"filenames/match-exported": ["error", "kebab"],

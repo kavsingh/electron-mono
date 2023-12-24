@@ -1,6 +1,7 @@
 /** @type {import("node:path")} */
 const path = require("node:path");
 
+/** @type {import("../../.eslint.helpers.cjs")} */
 const { testFilePatterns } = require("../../.eslint.helpers.cjs");
 
 /** @type {import('eslint').ESLint.ConfigData} */
@@ -48,7 +49,7 @@ module.exports = {
 		},
 		{
 			files: testFilePatterns({ root: "./e2e" }),
-			extends: ["plugin:playwright/playwright-test"],
+			extends: ["plugin:playwright/recommended"],
 		},
 	],
 };
