@@ -81,24 +81,6 @@ module.exports = {
 			},
 		},
 		{
-			files: ["./src/**/*"],
-			rules: {
-				"no-console": "error",
-			},
-		},
-		{
-			files: ["src/renderer/**/*"],
-			env: { node: false, browser: true },
-			extends: ["plugin:solid/typescript"],
-		},
-		{
-			files: ["./src/renderer/**/*.tsx"],
-			settings: {
-				tailwindcss: { callees: ["twMerge", "twJoin", "classList"] },
-			},
-			extends: ["plugin:tailwindcss/recommended"],
-		},
-		{
 			files: testFilePatterns(),
 			env: { node: true },
 			rules: {

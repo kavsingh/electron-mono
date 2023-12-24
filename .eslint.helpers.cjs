@@ -4,8 +4,10 @@ const path = require("node:path");
 /** @type {import("typescript")} */
 const ts = require("typescript");
 
-/** @param {string} dirname */
-/** @returns {Record<string, unknown> | undefined} */
+/**
+ * @param {string} dirname
+ * @returns {Record<string, any> | undefined}
+ * */
 function readTsConfig(dirname) {
 	const tsconfigFile = ts.findConfigFile(
 		dirname,
@@ -22,10 +24,10 @@ const testFileSuffixes = ["test", "spec", "mock"];
 
 /**
  * @typedef {object} PatternsConfig
- * @property {string?} root
- * @property {string?} extensions
+ * @property {string} [root]
+ * @property {string} [extensions]
  * 
- * @param {PatternsConfig?} config
+ * @param {PatternsConfig} [config]
  */
 function testFilePatterns(config) {
 	const root = config?.root ?? "";

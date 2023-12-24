@@ -5,7 +5,7 @@ const path = require("node:path");
 const { readTsConfig } = require("../../.eslint.helpers.cjs");
 
 const tsconfigPathPatterns = Object.keys(
-	readTsConfig(__dirname)?.compilerOptions?.paths ?? {},
+	readTsConfig(__dirname)?.["compilerOptions"]?.["paths"] ?? {},
 );
 
 const restrictFromBrowser = {
