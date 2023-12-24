@@ -4,6 +4,11 @@ const path = require("node:path");
 /** @type {import("../../.eslint.helpers.cjs")} */
 const { readTsConfig } = require("../../.eslint.helpers.cjs");
 
+/** @param {Parameters<typeof path.resolve>} args */
+function fromDirname(...args) {
+	return path.resolve(__dirname, ...args);
+}
+
 const tsconfigPathPatterns = Object.keys(
 	readTsConfig(__dirname)?.["compilerOptions"]?.["paths"] ?? {},
 );
@@ -34,7 +39,7 @@ module.exports = {
 		},
 		"import/resolver": {
 			"eslint-import-resolver-typescript": {
-				project: path.resolve(__dirname, "./tsconfig.json"),
+				project: fromDirname("./tsconfig.json"),
 			},
 		},
 	},
@@ -68,15 +73,42 @@ module.exports = {
 			{
 				zones: [
 					// [target] cannot import [from]
-					{ target: "./src/main", from: "./src/renderer" },
-					{ target: "./src/main", from: "./src/preload" },
-					{ target: "./src/renderer", from: "./src/main" },
-					{ target: "./src/renderer", from: "./src/preload" },
-					{ target: "./src/common", from: "./src/main" },
-					{ target: "./src/common", from: "./src/renderer" },
-					{ target: "./src/common", from: "./src/preload" },
-					{ target: "./src/preload", from: "./src/main" },
-					{ target: "./src/preload", from: "./src/renderer" },
+					{
+						target: fromDirname("./src/main"),
+						from: fromDirname("./src/renderer"),
+					},
+					{
+						target: fromDirname("./src/main"),
+						from: fromDirname("./src/preload"),
+					},
+					{
+						target: fromDirname("./src/renderer"),
+						from: fromDirname("./src/main"),
+					},
+					{
+						target: fromDirname("./src/renderer"),
+						from: fromDirname("./src/preload"),
+					},
+					{
+						target: fromDirname("./src/common"),
+						from: fromDirname("./src/main"),
+					},
+					{
+						target: fromDirname("./src/common"),
+						from: fromDirname("./src/renderer"),
+					},
+					{
+						target: fromDirname("./src/common"),
+						from: fromDirname("./src/preload"),
+					},
+					{
+						target: fromDirname("./src/preload"),
+						from: fromDirname("./src/main"),
+					},
+					{
+						target: fromDirname("./src/preload"),
+						from: fromDirname("./src/renderer"),
+					},
 				],
 			},
 		],
