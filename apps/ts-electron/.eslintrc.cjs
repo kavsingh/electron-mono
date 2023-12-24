@@ -24,14 +24,10 @@ module.exports = {
 		{
 			files: ["src/renderer/**/*"],
 			env: { node: false, browser: true },
-			extends: ["plugin:solid/typescript"],
-		},
-		{
-			files: ["./src/renderer/**/*.tsx"],
 			settings: {
 				tailwindcss: { callees: ["twMerge", "twJoin", "classList"] },
 			},
-			extends: ["plugin:tailwindcss/recommended"],
+			extends: ["plugin:solid/typescript", "plugin:tailwindcss/recommended"],
 		},
 		{
 			files: testFilePatterns({ root: "./src" }),
