@@ -1,3 +1,4 @@
+/** @type {import("@electron/notarize")} */
 const { notarize: electronNotarize } = require("@electron/notarize");
 
 /** @param {import("electron-builder").AfterPackContext} context */
@@ -17,7 +18,7 @@ async function notarize(context) {
 		return;
 	}
 
-	if (!process.env.CI) {
+	if (!process.env["CI"]) {
 		console.log(`skipping notarize, not in CI.`);
 
 		return;

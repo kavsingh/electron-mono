@@ -1,7 +1,4 @@
-/** @type {import("node:path")} */
-const path = require("node:path");
-
-const testFileSuffixes = ["test", "spec", "mock"];
+const { testFileSuffixes, testFilePatterns } = require("./.eslint.helpers.cjs");
 
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
@@ -13,7 +10,6 @@ module.exports = {
 		"eslint:recommended",
 		"plugin:@typescript-eslint/strict-type-checked",
 		"plugin:@typescript-eslint/stylistic-type-checked",
-		require.resolve("./.eslintrc.import.cjs"),
 		"plugin:prettier/recommended",
 	],
 	plugins: ["filenames", "deprecation"],
@@ -111,31 +107,5 @@ module.exports = {
 				"@typescript-eslint/unbound-method": "off",
 			},
 		},
-		{
-			files: testFilePatterns({ root: "./src" }),
-			extends: ["plugin:vitest/all"],
-			rules: {
-				"vitest/no-hooks": "off",
-			},
-		},
-		{
-			files: testFilePatterns({
-				root: "./src/renderer",
-				extensions: "[jt]s?(x)",
-			}),
-			extends: ["plugin:testing-library/dom", "plugin:jest-dom/recommended"],
-		},
-		{
-			files: testFilePatterns({ root: "./e2e" }),
-			extends: ["plugin:playwright/playwright-test"],
-		},
 	],
 };
-
-function testFilePatterns({ root = "", extensions = "*" } = {}) {
-	return [
-		`*.{${testFileSuffixes.join(",")}}`,
-		"__{test,tests,mocks,fixtures}__/**/*",
-		"__{test,mock,fixture}-*__/**/*",
-	].map((pattern) => path.join(root, `**/${pattern}.${extensions}`));
-}

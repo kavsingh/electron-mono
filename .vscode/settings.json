@@ -74,7 +74,10 @@
 			"format": "svg"
 		},
 		{
-			"extensions": ["electron-builder.config.js"],
+			"extensions": [
+				"electron-builder.config.js",
+				"electron-builder.config.ts"
+			],
 			"icon": "config",
 			"filename": true,
 			"format": "svg"

@@ -1,18 +1,7 @@
-/** @type {import("typescript")} */
-const ts = require("typescript");
-
-const tsconfigFile = ts.findConfigFile(
-	__dirname,
-	ts.sys.fileExists,
-	"tsconfig.json",
-);
-
-const tsconfig = tsconfigFile
-	? ts.readConfigFile(tsconfigFile, ts.sys.readFile)
-	: undefined;
+const { readTsConfig } = require("../../.eslint.helpers.cjs");
 
 const tsconfigPathPatterns = Object.keys(
-	tsconfig?.config.compilerOptions.paths ?? {},
+	readTsConfig(__dirname)?.compilerOptions?.paths ?? {},
 );
 
 const restrictFromBrowser = {
@@ -54,16 +43,6 @@ module.exports = {
 		"import/no-self-import": "error",
 		"import/no-unused-modules": "error",
 		"import/no-useless-path-segments": "error",
-		"import/no-extraneous-dependencies": [
-			"error",
-			{
-				// needed for all cases since electron must be installed as a dev dependency
-				// TODO: is there a way around this so we can set this to false in src/?
-				devDependencies: true,
-				optionalDependencies: false,
-				peerDependencies: false,
-			},
-		],
 		"import/order": [
 			"warn",
 			{
