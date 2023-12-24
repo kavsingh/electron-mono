@@ -29,7 +29,7 @@ const testFileSuffixes = ["test", "spec", "mock"];
  */
 function testFilePatterns(config) {
 	const root = config?.root ?? "";
-	const extensions = config?.extensions ?? "";
+	const extensions = config?.extensions ?? "*";
 
 	return [
 		`*.{${testFileSuffixes.join(",")}}`,
