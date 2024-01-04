@@ -33,7 +33,10 @@ app.on("quit", () => {
 
 app.enableSandbox();
 void app.whenReady().then(() => {
-	trpcIpcHandler = createIPCHandler({ router: createAppRouter(appEventBus) });
+	trpcIpcHandler = createIPCHandler({
+		// @ts-expect-error upstream types
+		router: createAppRouter(appEventBus),
+	});
 	stopSystemInfoUpdates = startSystemInfoUpdates(appEventBus);
 	showMainWindow();
 });
