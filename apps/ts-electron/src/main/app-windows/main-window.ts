@@ -9,9 +9,9 @@ export function createMainWindow() {
 		transparent: true,
 		titleBarStyle: "hiddenInset",
 		backgroundMaterial: "acrylic",
-		vibrancy: "under-window",
-		height: 600,
+		vibrancy: "sidebar",
 		width: 800,
+		height: 600,
 		webPreferences: { preload: join(__dirname, "../preload/index.cjs") },
 		show: false,
 	});
