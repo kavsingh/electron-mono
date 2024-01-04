@@ -11,6 +11,7 @@
 		"dev": "bun x turbo dev",
 		"build:mac": "bun x turbo build:mac",
 		"test": "bun x turbo test",
+		"test:e2e": "bun x turbo test:e2e",
 		"typecheck": "bun x turbo typecheck",
 		"lint": "bun x turbo lint",
 		"codecheck": "bun x turbo codecheck"
@@ -35,7 +36,7 @@
 		"npm-run-all": "4.1.5",
 		"prettier": "3.1.1",
 		"rimraf": "5.0.5",
-		"turbo": "1.11.2",
+		"turbo": "1.11.3",
 		"typescript": "5.3.3"
 	},
 	"resolutions": {
