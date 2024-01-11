@@ -17,7 +17,6 @@ async function getElectronTypesPath() {
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 function nameFilter(name: string) {
-	// return true;
 	return /opendialogoptions/i.test(name) || /filefilter/i.test(name);
 }
 
