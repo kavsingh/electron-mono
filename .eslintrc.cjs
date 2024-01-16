@@ -27,10 +27,7 @@ module.exports = {
 		"no-unreachable": "error",
 
 		"@typescript-eslint/consistent-type-definitions": ["warn", "type"],
-		"@typescript-eslint/consistent-type-imports": [
-			"error",
-			{ prefer: "type-imports", fixStyle: "separate-type-imports" },
-		],
+		"@typescript-eslint/consistent-type-imports": "error",
 		"@typescript-eslint/member-ordering": ["warn"],
 
 		"no-shadow": "off",
@@ -51,10 +48,27 @@ module.exports = {
 			{ argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
 		],
 
+		"import/consistent-type-specifier-style": ["error", "prefer-top-level"],
 		"import/no-cycle": "error",
 		"import/no-self-import": "error",
 		"import/no-unused-modules": "error",
 		"import/no-useless-path-segments": "error",
+		"import/order": [
+			"warn",
+			{
+				"groups": [
+					"builtin",
+					"external",
+					"internal",
+					"parent",
+					["sibling", "index"],
+					"type",
+				],
+				"pathGroupsExcludedImportTypes": ["type"],
+				"alphabetize": { order: "asc" },
+				"newlines-between": "always",
+			},
+		],
 		"deprecation/deprecation": "warn",
 		"filenames/match-regex": ["error", "^[a-z-.0-9]+$", true],
 		"filenames/match-exported": ["error", "kebab"],

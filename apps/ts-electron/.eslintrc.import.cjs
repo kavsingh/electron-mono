@@ -3,6 +3,8 @@ const path = require("node:path");
 
 /** @type {import("../../.eslint.helpers.cjs")} */
 const { readTsConfig } = require("../../.eslint.helpers.cjs");
+/** @type {import("../../.eslintrc.cjs")} */
+const baseConfig = require("../../.eslintrc.cjs");
 
 /** @param {Parameters<typeof path.resolve>} args */
 function fromDirname(...args) {
@@ -31,6 +33,10 @@ const restrictFromNode = {
 	patterns: [{ group: ["solid-*", "@solidjs/-*", "tailwind-*"] }],
 };
 
+const baseImportOrderRule = baseConfig.rules?.["import/order"];
+const baseImportOrderLevel = baseImportOrderRule?.[0] ?? "error";
+const baseImportOrderConfig = baseImportOrderRule?.[1] ?? {};
+
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
 	settings: {
@@ -45,25 +51,16 @@ module.exports = {
 	},
 	rules: {
 		"import/order": [
-			"warn",
+			baseImportOrderLevel,
 			{
-				"groups": [
-					"builtin",
-					"external",
-					"internal",
-					"parent",
-					["sibling", "index"],
-					"type",
-				],
-				"pathGroups": [
+				...baseImportOrderConfig,
+				pathGroups: [
+					...(baseImportOrderConfig["pathGroups"] ?? []),
 					...tsconfigPathPatterns.map((pattern) => ({
 						pattern,
 						group: "internal",
 					})),
 				],
-				"pathGroupsExcludedImportTypes": ["type"],
-				"alphabetize": { order: "asc" },
-				"newlines-between": "always",
 			},
 		],
 
