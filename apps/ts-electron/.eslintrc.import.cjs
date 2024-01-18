@@ -34,8 +34,11 @@ const restrictFromNode = {
 };
 
 const baseImportOrderRule = baseConfig.rules?.["import/order"];
-const baseImportOrderLevel = baseImportOrderRule?.[0] ?? "error";
-const baseImportOrderConfig = baseImportOrderRule?.[1] ?? {};
+const [baseImportOrderLevel, baseImportOrderConfig] = Array.isArray(
+	baseImportOrderRule,
+)
+	? [baseImportOrderRule[0] ?? "error", baseImportOrderRule[1] ?? {}]
+	: ["error", {}];
 
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
