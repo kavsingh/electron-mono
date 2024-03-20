@@ -4,17 +4,17 @@
 	"description": "TS Electron monorepo setup",
 	"type": "module",
 	"private": true,
-	"workspaces": [
-		"apps/*"
-	],
+	"packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589",
 	"scripts": {
-		"dev": "bun x turbo dev",
-		"build:mac": "bun x turbo build:mac",
-		"test": "bun x turbo test",
-		"test:e2e": "bun x turbo test:e2e",
-		"typecheck": "bun x turbo typecheck",
-		"lint": "bun x turbo lint",
-		"codecheck": "bun x turbo codecheck"
+		"dev": "pnpm turbo dev",
+		"build:win": "pnpm turbo build:win",
+		"build:mac": "pnpm turbo build:mac",
+		"build:linux": "pnpm turbo build:linux",
+		"test": "pnpm turbo test",
+		"test:e2e": "pnpm turbo test:e2e",
+		"typecheck": "pnpm turbo typecheck",
+		"lint": "pnpm turbo lint",
+		"codecheck": "pnpm turbo codecheck"
 	},
 	"keywords": [],
 	"author": "<author>",

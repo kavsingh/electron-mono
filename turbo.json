@@ -1,11 +1,15 @@
 {
 	"$schema": "https://turbo.build/schema.json",
 	"pipeline": {
-		"build": {
+		"build:win": {
 			"outputs": ["dist/**"],
 			"dependsOn": ["^build"]
 		},
 		"build:mac": {
+			"outputs": ["dist/**"],
+			"dependsOn": ["^build"]
+		},
+		"build:linux": {
 			"outputs": ["dist/**"],
 			"dependsOn": ["^build"]
 		},

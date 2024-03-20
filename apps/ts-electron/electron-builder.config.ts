@@ -20,7 +20,7 @@ const config: Configuration = {
 		createDesktopShortcut: "always",
 	},
 	mac: {
-		target: { target: "default", arch: ["arm64", "x64"] },
+		target: { target: "default", arch: ["universal"] },
 		type: "distribution",
 		hardenedRuntime: true,
 		entitlementsInherit: "build/entitlements.mac.plist",
