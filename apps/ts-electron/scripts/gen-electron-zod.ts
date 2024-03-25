@@ -22,6 +22,9 @@ export default async function genElectronZod(outFile: string) {
 		nameFilter,
 		sourceText: (await readFile(typesPath)).toString(),
 	});
+
+	if (result.errors.length) console.warn(result.errors.join(""));
+
 	const rawSchema = result.getZodSchemasFile(typesPath);
 	const output = await formatTypescriptContent(`
 		${rawSchema.replace(/^const electron/gm, "export const electron")}
