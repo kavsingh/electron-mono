@@ -6,15 +6,11 @@ import { generate } from "ts-to-zod";
 
 import { formatTypescriptContent } from "./format";
 
-async function getElectronTypesPath() {
-	// eslint-disable-next-line @typescript-eslint/await-thenable
-	const electronEntryPath = await import.meta.resolve("electron");
-	const electronModulePath = path.parse(electronEntryPath).dir;
-
-	return path.join(electronModulePath, "electron.d.ts");
-}
-
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
+
+function getElectronTypesPath() {
+	return path.resolve(__dirname, "../node_modules/electron/electron.d.ts");
+}
 
 function nameFilter(name: string) {
 	return /opendialogoptions/i.test(name) || /filefilter/i.test(name);
@@ -34,10 +30,8 @@ export default async function genElectronZod(outFile: string) {
 	return writeFile(outFile, output, "utf-8");
 }
 
-if (
-	// bun has bun executable at argv[0], file path at argv[1]
-	process.argv[1] &&
-	fileURLToPath(import.meta.url) === process.argv[1]
-) {
-	void genElectronZod(path.join(__dirname, "../src/common/schema/electron.ts"));
+if (fileURLToPath(import.meta.url) === process.argv[1]) {
+	void genElectronZod(
+		path.resolve(__dirname, "../src/common/schema/electron.ts"),
+	);
 }
