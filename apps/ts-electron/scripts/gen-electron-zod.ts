@@ -17,7 +17,7 @@ function nameFilter(name: string) {
 }
 
 export default async function genElectronZod(outFile: string) {
-	const typesPath = await getElectronTypesPath();
+	const typesPath = getElectronTypesPath();
 	const result = generate({
 		nameFilter,
 		sourceText: (await readFile(typesPath)).toString(),
