@@ -120,6 +120,9 @@ importers:
       '@trpc/client':
         specifier: 10.45.2
         version: 10.45.2(@trpc/server@10.45.2)
+      '@ts-electron/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@vitest/coverage-v8':
         specifier: 1.4.0
         version: 1.4.0(vitest@1.4.0)
@@ -243,6 +246,12 @@ importers:
       vite-tsconfig-paths:
         specifier: 4.3.2
         version: 4.3.2(typescript@5.4.3)(vite@5.2.6)
+    devDependencies:
+      '@ts-electron/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+
+  packages/shared: {}
 
 packages:
 

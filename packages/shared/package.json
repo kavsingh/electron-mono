@@ -1,0 +1,7 @@
+{
+	"name": "@ts-electron/shared",
+	"type": "module",
+	"files": [
+		"./*.ts"
+	]
+}

@@ -1,3 +1,5 @@
+import { join } from "node:path";
+
 import { BrowserView, BrowserWindow } from "electron";
 import { z } from "zod";
 
@@ -5,18 +7,29 @@ import { publicProcedure } from "./trpc-server";
 
 import type { BrowserViewConstructorOptions, Rectangle } from "electron";
 
+const SHOW_DEVTOOLS = import.meta.env.DEV && !E2E;
+
 export default function routesViews() {
 	return {
 		showBrowserView: publicProcedure
 			.input(showBrowserViewSchema)
 			.mutation(({ input }) => {
-				const view = new BrowserView(input.browserViewOptions);
+				const view = new BrowserView({
+					...input.browserViewOptions,
+					webPreferences: {
+						devTools: SHOW_DEVTOOLS,
+						preload: join(__dirname, "../preload/web.cjs"),
+						...input.browserViewOptions?.webPreferences,
+					},
+				});
 				const focusedWindow = BrowserWindow.getFocusedWindow();
 				const viewId = view.webContents.id;
 
 				focusedWindow?.addBrowserView(view);
 				view.setBounds(input.bounds);
 				void view.webContents.loadURL(input.url);
+
+				if (SHOW_DEVTOOLS) view.webContents.openDevTools({ mode: "detach" });
 
 				return viewId;
 			}),
@@ -34,7 +47,11 @@ export default function routesViews() {
 			.mutation(({ input }) => {
 				const [view, win] = getBrowserView(input) ?? [];
 
-				if (view) win?.removeBrowserView(view);
+				if (view) {
+					view.webContents.close();
+					view.webContents.closeDevTools();
+					win?.removeBrowserView(view);
+				}
 			}),
 	} as const;
 }

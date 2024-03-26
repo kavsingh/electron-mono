@@ -1,4 +1,5 @@
 /// <reference types="vitest" />
+import path from "node:path";
 
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import solidPlugin from "vite-plugin-solid";
@@ -41,9 +42,13 @@ const preloadConfig: UserConfig = {
 	build: {
 		...nodeConfig.build,
 		rollupOptions: {
+			input: {
+				renderer: path.resolve(__dirname, "src/preload/renderer.ts"),
+				web: path.resolve(__dirname, "src/preload/web.ts"),
+			},
 			output: {
 				format: "cjs",
-				inlineDynamicImports: true,
+				// inlineDynamicImports: true,
 				entryFileNames: "[name].cjs",
 				chunkFileNames: "[name].cjs",
 				assetFileNames: "[name].[ext]",

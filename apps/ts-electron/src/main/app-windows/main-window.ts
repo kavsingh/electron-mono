@@ -12,7 +12,7 @@ export function createMainWindow() {
 		vibrancy: "sidebar",
 		width: 800,
 		height: 600,
-		webPreferences: { preload: join(__dirname, "../preload/index.cjs") },
+		webPreferences: { preload: join(__dirname, "../preload/renderer.cjs") },
 		show: false,
 	});
 

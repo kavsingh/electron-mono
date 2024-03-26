@@ -1,6 +1,9 @@
 import { A } from "@solidjs/router";
+import { clientOnly } from "@solidjs/start";
 
 import Counter from "#components/counter";
+
+const HostInfo = clientOnly(() => import("#components/host-info"));
 
 export default function Home() {
 	return (
@@ -9,6 +12,7 @@ export default function Home() {
 				Hosted Page
 			</h1>
 			<Counter />
+			<HostInfo />
 			<p class="mt-8">
 				Visit{" "}
 				<a
