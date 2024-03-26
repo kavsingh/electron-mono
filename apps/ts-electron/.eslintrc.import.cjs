@@ -2,18 +2,12 @@
 const path = require("node:path");
 
 /** @type {import("../../.eslint.helpers.cjs")} */
-const { readTsConfig } = require("../../.eslint.helpers.cjs");
-/** @type {import("../../.eslintrc.cjs")} */
-const baseConfig = require("../../.eslintrc.cjs");
+const { importOrderConfig } = require("../../.eslint.helpers.cjs");
 
 /** @param {Parameters<typeof path.resolve>} args */
 function fromDirname(...args) {
 	return path.resolve(__dirname, ...args);
 }
-
-const tsconfigPathPatterns = Object.keys(
-	readTsConfig(__dirname)?.["compilerOptions"]?.["paths"] ?? {},
-);
 
 const restrictFromBrowser = {
 	paths: [
@@ -33,13 +27,6 @@ const restrictFromNode = {
 	patterns: [{ group: ["solid-*", "@solidjs/-*", "tailwind-*"] }],
 };
 
-const baseImportOrderRule = baseConfig.rules?.["import/order"];
-const [baseImportOrderLevel, baseImportOrderConfig] = Array.isArray(
-	baseImportOrderRule,
-)
-	? [baseImportOrderRule[0] ?? "error", baseImportOrderRule[1] ?? {}]
-	: ["error", {}];
-
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
 	settings: {
@@ -53,19 +40,7 @@ module.exports = {
 		},
 	},
 	rules: {
-		"import/order": [
-			baseImportOrderLevel,
-			{
-				...baseImportOrderConfig,
-				pathGroups: [
-					...(baseImportOrderConfig["pathGroups"] ?? []),
-					...tsconfigPathPatterns.map((pattern) => ({
-						pattern,
-						group: "internal",
-					})),
-				],
-			},
-		],
+		"import/order": importOrderConfig("tsconfig.json"),
 
 		// enforce context isolation
 		"import/no-restricted-paths": [

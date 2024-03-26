@@ -1,10 +1,12 @@
 /** @type {import("path")} */
 const path = require("node:path");
 
-/** @type {any} */
-const { importOrderConfig } = require("../../.eslint.helpers.cjs");
-
-const testFileSuffixes = ["test", "spec", "mock"];
+/** @type {import("../../.eslint.helpers.cjs")} */
+const {
+	importOrderConfig,
+	testFilePatterns,
+	testFileSuffixes,
+} = require("../../.eslint.helpers.cjs");
 
 /** @type {import("eslint").ESLint.ConfigData} */
 module.exports = {
@@ -41,8 +43,11 @@ module.exports = {
 			},
 		},
 		{
-			files: ["src/routes/*.tsx"],
-			rules: { "filenames/match-exported": "off" },
+			files: ["src/routes/**/*.ts", "src/routes/**/*.tsx"],
+			rules: {
+				"filenames/match-exported": "off",
+				"filenames/match-regex": "off",
+			},
 		},
 		{
 			files: testFilePatterns(),
@@ -72,11 +77,3 @@ module.exports = {
 		},
 	],
 };
-
-function testFilePatterns({ root = "", extensions = "*" } = {}) {
-	return [
-		`*.{${testFileSuffixes.join(",")}}`,
-		"__{test,tests,mocks,fixtures}__/**/*",
-		"__{test,mock,fixture}-*__/**/*",
-	].map((pattern) => path.join(root, `**/${pattern}.${extensions}`));
-}

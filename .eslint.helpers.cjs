@@ -4,22 +4,6 @@ const path = require("node:path");
 /** @type {import("typescript")} */
 const ts = require("typescript");
 
-/**
- * @param {string} dirname
- * @returns {Record<string, any> | undefined}
- * */
-function readTsConfig(dirname) {
-	const tsconfigFile = ts.findConfigFile(
-		dirname,
-		ts.sys.fileExists,
-		"tsconfig.json",
-	);
-
-	return tsconfigFile
-		? ts.readConfigFile(tsconfigFile, ts.sys.readFile).config
-		: undefined;
-}
-
 const testFileSuffixes = ["test", "spec", "mock"];
 
 /**
@@ -40,4 +24,46 @@ function testFilePatterns(config) {
 	].map((pattern) => path.join(root, `**/${pattern}.${extensions}`));
 }
 
-module.exports = { readTsConfig, testFileSuffixes, testFilePatterns };
+/**
+ * @typedef {import("eslint").Linter.RuleLevel} RuleLevel
+ * @param {string} tsconfigName
+ * @param {(config: Record<string, unknown>) => Record<string, unknown>} customizer
+ *
+ * @returns {[RuleLevel, Record<string, unknown>]}
+ **/
+function importOrderConfig(
+	tsconfigName,
+	customizer = (config) => config,
+) {
+	const tsconfigFile = ts.findConfigFile(
+		__dirname,
+		ts.sys.fileExists,
+		tsconfigName,
+	);
+
+	const config = tsconfigFile
+		? ts.readConfigFile(tsconfigFile, ts.sys.readFile)
+		: undefined;
+
+	const aliases = Object.keys(config?.config?.compilerOptions?.paths ?? {});
+
+	return [
+		"warn",
+		customizer({
+			"alphabetize": { order: "asc" },
+			"groups": [
+				"builtin",
+				"external",
+				"internal",
+				"parent",
+				["sibling", "index"],
+				"type",
+			],
+			"pathGroups": aliases.map((pattern) => ({ pattern, group: "internal" })),
+			"pathGroupsExcludedImportTypes": ["type"],
+			"newlines-between": "always",
+		}),
+	];
+}
+
+module.exports = { testFileSuffixes, testFilePatterns, importOrderConfig };
