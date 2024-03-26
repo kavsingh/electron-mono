@@ -11,12 +11,11 @@ export default function App(props: ParentProps) {
 						<A href="/">System Info</A>
 						<A href="/files">Files</A>
 						<A href="/preferences">Preferences</A>
+						<A href="/web">Web</A>
 					</nav>
 				</div>
-				<div class="h-full overflow-y-auto overflow-x-hidden">
-					<div class="min-h-full bg-white dark:bg-neutral-900">
-						{props.children}
-					</div>
+				<div class="h-full overflow-y-auto overflow-x-hidden bg-white dark:bg-neutral-900">
+					{props.children}
 				</div>
 			</div>
 			<div class="fixed inset-x-0 top-0 z-10 h-8 [-webkit-app-region:drag]" />

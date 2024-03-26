@@ -8,6 +8,7 @@ import AppLayout from "./layouts/app";
 import Files from "./pages/files";
 import Preferences from "./pages/preferences";
 import SystemInfo from "./pages/system-info";
+import Web from "./pages/web";
 import { getTRPCClient } from "./trpc/client";
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
 					<Route path="/" component={SystemInfo} />
 					<Route path="/files" component={Files} />
 					<Route path="/preferences" component={Preferences} />
+					<Route path="/web" component={Web} />
 				</HashRouter>
 			</QueryClientProvider>
 		</TRPCClientProvider>

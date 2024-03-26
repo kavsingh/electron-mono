@@ -1,0 +1,11 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"jsx": "preserve",
+		"jsxImportSource": "solid-js",
+		"lib": ["esnext", "dom"],
+		"paths": { "#*": ["./src/*"] },
+		"sourceMap": true
+	},
+	"include": ["./src", "./*.ts", "./*.cjs", "./.*.cjs"]
+}
