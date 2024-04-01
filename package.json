@@ -2,8 +2,11 @@
 	"name": "ts-electron-mono",
 	"version": "0.0.0",
 	"description": "TS Electron monorepo setup",
-	"type": "module",
+	"author": "<author>",
+	"keywords": [],
+	"license": "MIT",
 	"private": true,
+	"type": "module",
 	"packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589",
 	"scripts": {
 		"dev": "pnpm turbo dev",
@@ -16,13 +19,10 @@
 		"lint": "pnpm turbo lint",
 		"codecheck": "pnpm turbo codecheck"
 	},
-	"keywords": [],
-	"author": "<author>",
-	"license": "MIT",
 	"devDependencies": {
-		"@tsconfig/strictest": "2.0.4",
-		"@types/eslint": "8.56.6",
-		"@types/node": "20.11.30",
+		"@tsconfig/strictest": "2.0.5",
+		"@types/eslint": "8.56.7",
+		"@types/node": "20.12.2",
 		"@typescript-eslint/eslint-plugin": "7.4.0",
 		"@typescript-eslint/parser": "7.4.0",
 		"cross-env": "7.0.3",
@@ -37,7 +37,7 @@
 		"prettier": "3.2.5",
 		"rimraf": "5.0.5",
 		"tsx": "4.7.1",
-		"turbo": "1.13.0",
+		"turbo": "1.13.1",
 		"typescript": "5.4.3"
 	},
 	"resolutions": {
