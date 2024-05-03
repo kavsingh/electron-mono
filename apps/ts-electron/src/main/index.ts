@@ -46,7 +46,7 @@ function showMainWindow() {
 		mainWindow.show();
 	});
 
-	mainWindow.on("closed", () => {
+	mainWindow.on("close", () => {
 		trpcIpcHandler?.detachWindow(mainWindow);
 	});
 }

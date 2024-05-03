@@ -11,8 +11,8 @@ const SHOW_DEVTOOLS = import.meta.env.DEV && !E2E;
 
 export default function routesViews() {
 	return {
-		showBrowserView: publicProcedure
-			.input(showBrowserViewSchema)
+		showEmbeddedWebView: publicProcedure
+			.input(showEmbeddedWebViewInputSchema)
 			.mutation(({ input }) => {
 				const view = new BrowserView({
 					...input.browserViewOptions,
@@ -34,15 +34,15 @@ export default function routesViews() {
 				return viewId;
 			}),
 
-		updateBrowserView: publicProcedure
-			.input(updateBrowserViewSchema)
+		updateEmbeddedWebView: publicProcedure
+			.input(updateEmbeddedWebViewInputSchema)
 			.mutation(({ input }) => {
 				const [view] = getBrowserView(input.viewId) ?? [];
 
 				view?.setBounds(input.bounds);
 			}),
 
-		removeBrowserView: publicProcedure
+		removeEmbeddedWebView: publicProcedure
 			.input(z.number())
 			.mutation(({ input }) => {
 				const [view, win] = getBrowserView(input) ?? [];
@@ -65,18 +65,20 @@ const zRectSchema = z.object({
 
 const boundsSchema = z.custom<Rectangle>((input) => zRectSchema.parse(input));
 
-export const showBrowserViewSchema = z.object({
+export const showEmbeddedWebViewInputSchema = z.object({
 	url: z.string(),
 	bounds: boundsSchema,
 	browserViewOptions: z.custom<BrowserViewConstructorOptions>().optional(),
 });
 
-export const updateBrowserViewSchema = z.object({
+export const updateEmbeddedWebViewInputSchema = z.object({
 	viewId: z.number(),
 	bounds: boundsSchema,
 });
 
-export type ShowBrowserViewInput = z.infer<typeof showBrowserViewSchema>;
+export type ShowEmbeddedWebViewInput = z.infer<
+	typeof showEmbeddedWebViewInputSchema
+>;
 
 function getBrowserView(
 	viewId: number,

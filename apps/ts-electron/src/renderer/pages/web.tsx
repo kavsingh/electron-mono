@@ -12,7 +12,7 @@ export default function Web() {
 	function updateBounds() {
 		if (!(containerRef && viewId)) return;
 
-		void trpc.updateBrowserView.mutate({
+		void trpc.updateEmbeddedWebView.mutate({
 			viewId,
 			bounds: domRectToBounds(containerRef.getBoundingClientRect()),
 		});
@@ -21,7 +21,7 @@ export default function Web() {
 	createEffect(() => {
 		if (!containerRef) return;
 
-		void trpc.showBrowserView
+		void trpc.showEmbeddedWebView
 			.mutate({
 				url: "http://localhost:3000",
 				bounds: domRectToBounds(containerRef.getBoundingClientRect()),
@@ -34,7 +34,7 @@ export default function Web() {
 	onCleanup(() => {
 		window.removeEventListener("resize", updateBounds);
 
-		if (viewId) void trpc.removeBrowserView.mutate(viewId);
+		if (viewId) void trpc.removeEmbeddedWebView.mutate(viewId);
 	});
 
 	return <div class="size-full" ref={(ref) => (containerRef = ref)} />;

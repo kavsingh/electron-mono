@@ -1,6 +1,8 @@
 /** @type {import("node:path")} */
 const path = require("node:path");
 
+const vitest = require("eslint-plugin-vitest");
+
 /** @type {import("../../.eslint.helpers.cjs")} */
 const { testFilePatterns } = require("../../.eslint.helpers.cjs");
 
@@ -31,8 +33,10 @@ module.exports = {
 		},
 		{
 			files: testFilePatterns({ root: "./src" }),
-			extends: ["plugin:vitest/all"],
+			plugins: ["vitest"],
 			rules: {
+				// @ts-expect-error type import mismatch
+				...vitest.configs.all.rules,
 				"vitest/no-hooks": "off",
 			},
 		},

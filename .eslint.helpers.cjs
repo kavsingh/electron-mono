@@ -10,7 +10,7 @@ const testFileSuffixes = ["test", "spec", "mock"];
  * @typedef {object} PatternsConfig
  * @property {string} [root]
  * @property {string} [extensions]
- * 
+ *
  * @param {PatternsConfig} [config]
  */
 function testFilePatterns(config) {
@@ -26,20 +26,19 @@ function testFilePatterns(config) {
 
 /**
  * @typedef {import("eslint").Linter.RuleLevel} RuleLevel
- * @param {string} tsconfigName
+ * @param {string} tsconfigPath
  * @param {(config: Record<string, unknown>) => Record<string, unknown>} customizer
  *
  * @returns {[RuleLevel, Record<string, unknown>]}
  **/
-function importOrderConfig(
-	tsconfigName,
-	customizer = (config) => config,
-) {
-	const tsconfigFile = ts.findConfigFile(
-		__dirname,
-		ts.sys.fileExists,
-		tsconfigName,
+function importOrderConfig(tsconfigPath, customizer = (config) => config) {
+	const { dir, base } = path.parse(
+		path.isAbsolute(tsconfigPath)
+			? tsconfigPath
+			: path.resolve(__dirname, tsconfigPath),
 	);
+
+	const tsconfigFile = ts.findConfigFile(dir, ts.sys.fileExists, base);
 
 	const config = tsconfigFile
 		? ts.readConfigFile(tsconfigFile, ts.sys.readFile)

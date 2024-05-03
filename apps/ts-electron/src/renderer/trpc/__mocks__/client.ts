@@ -18,6 +18,15 @@ const mockClient: AppTRPCClient = {
 	showOpenDialog: {
 		query: vi.fn(() => Promise.resolve(createMockOpenDialogReturnValue())),
 	},
+	showEmbeddedWebView: {
+		mutate: vi.fn(() => Promise.resolve(1)),
+	},
+	updateEmbeddedWebView: {
+		mutate: vi.fn(() => Promise.resolve()),
+	},
+	removeEmbeddedWebView: {
+		mutate: vi.fn(() => Promise.resolve()),
+	},
 	systemInfoEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
 };
 
