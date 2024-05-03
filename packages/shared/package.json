@@ -1,6 +1,9 @@
 {
 	"name": "@ts-electron/shared",
 	"type": "module",
+	"engines": {
+		"node": ">=20"
+	},
 	"files": [
 		"./*.ts"
 	]

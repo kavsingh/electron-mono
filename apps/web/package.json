@@ -1,6 +1,9 @@
 {
 	"name": "web",
 	"type": "module",
+	"engines": {
+		"node": ">=20"
+	},
 	"scripts": {
 		"dev": "vinxi dev",
 		"build": "vinxi build",
@@ -30,8 +33,5 @@
 	"devDependencies": {
 		"@ts-electron/shared": "workspace:*",
 		"ts-electron": "workspace:*"
-	},
-	"engines": {
-		"node": ">=18"
 	}
 }

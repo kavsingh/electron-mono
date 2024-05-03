@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"description": "TS Electron setup",
 	"type": "module",
+	"engines": {
+		"node": ">=20"
+	},
 	"main": "./out/main/index.js",
 	"scripts": {
 		"dev": "electron-vite dev",
