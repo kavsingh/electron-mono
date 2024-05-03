@@ -14,6 +14,10 @@ export default function routesViews() {
 		showEmbeddedWebView: publicProcedure
 			.input(showEmbeddedWebViewInputSchema)
 			.mutation(({ input }) => {
+				const targetWindow = BrowserWindow.getFocusedWindow();
+
+				if (!targetWindow) throw new Error("No focused window found");
+
 				const view = new BrowserView({
 					...input.browserViewOptions,
 					webPreferences: {
@@ -22,16 +26,14 @@ export default function routesViews() {
 						...input.browserViewOptions?.webPreferences,
 					},
 				});
-				const focusedWindow = BrowserWindow.getFocusedWindow();
-				const viewId = view.webContents.id;
 
-				focusedWindow?.addBrowserView(view);
+				targetWindow.addBrowserView(view);
 				view.setBounds(input.bounds);
 				void view.webContents.loadURL(input.url);
 
 				if (SHOW_DEVTOOLS) view.webContents.openDevTools({ mode: "detach" });
 
-				return viewId;
+				return view.webContents.id;
 			}),
 
 		updateEmbeddedWebView: publicProcedure
@@ -47,11 +49,11 @@ export default function routesViews() {
 			.mutation(({ input }) => {
 				const [view, win] = getBrowserView(input) ?? [];
 
-				if (view) {
-					view.webContents.close();
-					view.webContents.closeDevTools();
-					win?.removeBrowserView(view);
-				}
+				if (!view) return;
+
+				view.webContents.close();
+				view.webContents.closeDevTools();
+				win?.removeBrowserView(view);
 			}),
 	} as const;
 }
