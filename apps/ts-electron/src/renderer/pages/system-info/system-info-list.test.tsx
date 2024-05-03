@@ -15,18 +15,14 @@ describe("<SystemInfoList />", () => {
 
 		const { Wrapper } = setupRenderWrapper();
 
-		render(() => (
-			<Wrapper>
-				<SystemInfoList />
-			</Wrapper>
-		));
+		render(() => <SystemInfoList />, { wrapper: Wrapper });
 
-		expect(screen.getByText("Loading...")).toBeInTheDocument();
+		expect(screen.getByText("loading...")).toBeInTheDocument();
 
 		await waitFor(() => {
 			expect(screen.getByText(/^total memory/)).toBeInTheDocument();
 		});
 
-		expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+		expect(screen.queryByText("loading...")).not.toBeInTheDocument();
 	});
 });

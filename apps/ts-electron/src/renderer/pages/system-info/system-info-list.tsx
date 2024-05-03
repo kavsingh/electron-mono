@@ -8,7 +8,7 @@ export default function SystemInfoList() {
 	const infoQuery = useSystemInfo();
 
 	return (
-		<Show when={infoQuery.data} fallback={<>Loading...</>} keyed>
+		<Show when={infoQuery.data} fallback={<>loading...</>} keyed>
 			{(info) => (
 				<ul class="m-0 flex list-none flex-col gap-2 p-0">
 					<InfoEntry>
