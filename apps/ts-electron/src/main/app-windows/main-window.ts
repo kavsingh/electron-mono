@@ -1,8 +1,7 @@
 import { join } from "node:path";
 
 import { app, BrowserWindow } from "electron";
-
-import { logError } from "#common/log";
+import log from "electron-log";
 
 export function createMainWindow() {
 	const mainWindow = new BrowserWindow({
@@ -23,7 +22,7 @@ export function createMainWindow() {
 	} else if (process.env["ELECTRON_RENDERER_URL"]) {
 		void mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
 	} else {
-		logError("No entry point available", {
+		log.error("No entry point available", {
 			isPackaged: app.isPackaged,
 			devUrl: process.env["ELECTRON_RENDERER_URL"],
 		});

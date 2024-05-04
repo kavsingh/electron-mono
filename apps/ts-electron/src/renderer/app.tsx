@@ -1,5 +1,6 @@
 import { Route, HashRouter } from "@solidjs/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
+import log from "electron-log/renderer";
 import { createEffect } from "solid-js";
 
 import { TRPCClientProvider } from "./contexts/trpc-client";
@@ -13,6 +14,8 @@ import { getTRPCClient } from "./trpc/client";
 
 export default function App() {
 	const theme = useTheme();
+
+	log.info("App mounted");
 
 	createEffect(() => {
 		document.documentElement.classList.toggle("dark", theme() === "dark");

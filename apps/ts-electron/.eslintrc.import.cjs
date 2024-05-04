@@ -20,11 +20,16 @@ const restrictFromBrowser = {
 			(mod) => ({ name: mod, allowTypeImports: true }),
 		),
 	],
+	patterns: [{ group: ["electron-log/main"] }],
 };
 
 const restrictFromNode = {
 	paths: [{ name: "solid-js" }, { name: "@trpc/client" }],
-	patterns: [{ group: ["solid-*", "@solidjs/-*", "tailwind-*"] }],
+	patterns: [
+		{
+			group: ["solid-*", "@solidjs/-*", "tailwind-*", "electron-log/renderer"],
+		},
+	],
 };
 
 /** @type {import('eslint').ESLint.ConfigData} */

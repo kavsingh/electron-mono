@@ -1,6 +1,5 @@
+import log from "electron-log";
 import { osInfo, mem } from "systeminformation";
-
-import { logError } from "#common/log";
 
 import type { AppEventBus } from "./app-event-bus";
 
@@ -26,7 +25,7 @@ export function startSystemInfoUpdates(eventBus: AppEventBus) {
 		try {
 			eventBus.emit("systemInfo", await getSystemInfo());
 		} catch (reason) {
-			logError(reason);
+			log.error(reason);
 		} finally {
 			timeout = setTimeout(() => void tick(), 1000);
 		}
