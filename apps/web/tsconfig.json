@@ -7,5 +7,5 @@
 		"paths": { "#*": ["./src/*"] },
 		"sourceMap": true
 	},
-	"include": ["./src", "./*.ts", "./*.cjs", "./.*.cjs"]
+	"include": ["./src", "./*.ts", "./*.js", "./*.cjs", "./.*.cjs"]
 }

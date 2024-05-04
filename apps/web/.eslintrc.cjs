@@ -7,7 +7,6 @@ const vitest = require("eslint-plugin-vitest");
 const {
 	importOrderConfig,
 	testFilePatterns,
-	testFileSuffixes,
 } = require("../../.eslint.helpers.cjs");
 
 /** @type {import("eslint").ESLint.ConfigData} */
