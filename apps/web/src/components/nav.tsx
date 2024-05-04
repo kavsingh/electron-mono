@@ -5,7 +5,7 @@ import type { ParentProps } from "solid-js";
 
 export default function Nav() {
 	return (
-		<nav class="bg-sky-800">
+		<nav class="bg-sky-800 pt-6">
 			<ul class="container flex items-center p-3 text-gray-200">
 				<NavItem href="/">Home</NavItem>
 				<NavItem href="/about">About</NavItem>

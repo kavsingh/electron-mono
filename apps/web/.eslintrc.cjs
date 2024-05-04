@@ -1,6 +1,8 @@
 /** @type {import("path")} */
 const path = require("node:path");
 
+const vitest = require("eslint-plugin-vitest");
+
 /** @type {import("../../.eslint.helpers.cjs")} */
 const {
 	importOrderConfig,
@@ -50,25 +52,12 @@ module.exports = {
 			},
 		},
 		{
-			files: testFilePatterns(),
-			env: { node: true },
-			extends: ["plugin:vitest/all"],
+			files: testFilePatterns({ root: "./src" }),
+			plugins: ["vitest"],
 			rules: {
-				"no-console": "off",
-				"filenames/match-exported": [
-					"error",
-					"kebab",
-					`\\.(${testFileSuffixes.join("|")})$`,
-				],
+				// @ts-expect-error type import mismatch
+				...vitest.configs.all.rules,
 				"vitest/no-hooks": "off",
-				"@typescript-eslint/no-explicit-any": "off",
-				"@typescript-eslint/no-non-null-assertion": "off",
-				"@typescript-eslint/no-unsafe-argument": "off",
-				"@typescript-eslint/no-unsafe-assignment": "off",
-				"@typescript-eslint/no-unsafe-call": "off",
-				"@typescript-eslint/no-unsafe-member-access": "off",
-				"@typescript-eslint/no-unsafe-return": "off",
-				"@typescript-eslint/unbound-method": "off",
 			},
 		},
 		{

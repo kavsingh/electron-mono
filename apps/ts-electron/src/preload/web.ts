@@ -10,9 +10,6 @@ const bridge: WebBridgeApi = {
 			osVersion: process.getSystemVersion(),
 		});
 	},
-	getUserFiles() {
-		return Promise.resolve(["file1", "file2"]);
-	},
 };
 
 contextBridge.exposeInMainWorld(BRIDGE_NAME, bridge);

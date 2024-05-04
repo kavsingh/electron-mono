@@ -7,7 +7,9 @@
 	"scripts": {
 		"dev": "vinxi dev",
 		"build": "vinxi build",
-		"start": "vinxi start"
+		"start": "vinxi start",
+		"typecheck": "tsc",
+		"lint": "eslint ."
 	},
 	"dependencies": {
 		"@decs/typeschema": "0.12.2",
