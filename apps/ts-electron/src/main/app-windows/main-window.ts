@@ -1,14 +1,19 @@
 import { join } from "node:path";
 
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, nativeTheme } from "electron";
 import log from "electron-log";
 
 export function createMainWindow() {
 	const mainWindow = new BrowserWindow({
-		transparent: true,
 		titleBarStyle: "hiddenInset",
-		backgroundMaterial: "acrylic",
-		vibrancy: "sidebar",
+		// TODO: These seem to break loading WebContentsView into BrowserWindow
+		// backgroundMaterial: "acrylic",
+		// vibrancy: "sidebar",
+		// TODO: Re-enable transparent and remove backgroundColor when above is fixed
+		// transparent: true,
+		backgroundColor: nativeTheme.shouldUseDarkColors
+			? "#00000088"
+			: "#ffffff88",
 		width: 800,
 		height: 600,
 		webPreferences: { preload: join(__dirname, "../preload/renderer.cjs") },

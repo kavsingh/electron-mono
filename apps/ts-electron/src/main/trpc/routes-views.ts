@@ -1,11 +1,15 @@
 import { join } from "node:path";
 
-import { BrowserView, BrowserWindow } from "electron";
+import { BrowserWindow, WebContentsView } from "electron";
 import { z } from "zod";
 
 import { publicProcedure } from "./trpc-server";
 
-import type { BrowserViewConstructorOptions, Rectangle } from "electron";
+import type {
+	Rectangle,
+	View,
+	WebContentsViewConstructorOptions,
+} from "electron";
 
 const SHOW_DEVTOOLS = import.meta.env.DEV && !E2E;
 
@@ -18,16 +22,16 @@ export default function routesViews() {
 
 				if (!targetWindow) throw new Error("No focused window found");
 
-				const view = new BrowserView({
-					...input.browserViewOptions,
+				const view = new WebContentsView({
+					...input.webContentsViewOptions,
 					webPreferences: {
 						devTools: SHOW_DEVTOOLS,
 						preload: join(__dirname, "../preload/web.cjs"),
-						...input.browserViewOptions?.webPreferences,
+						...input.webContentsViewOptions?.webPreferences,
 					},
 				});
 
-				targetWindow.addBrowserView(view);
+				targetWindow.contentView.addChildView(view);
 				view.setBounds(input.bounds);
 				void view.webContents.loadURL(input.url);
 
@@ -39,7 +43,7 @@ export default function routesViews() {
 		updateEmbeddedWebView: publicProcedure
 			.input(updateEmbeddedWebViewInputSchema)
 			.mutation(({ input }) => {
-				const [view] = getBrowserView(input.viewId) ?? [];
+				const [view] = getWebContentsView(input.viewId) ?? [];
 
 				view?.setBounds(input.bounds);
 			}),
@@ -47,13 +51,13 @@ export default function routesViews() {
 		removeEmbeddedWebView: publicProcedure
 			.input(z.number())
 			.mutation(({ input }) => {
-				const [view, win] = getBrowserView(input) ?? [];
+				const [view, contentView] = getWebContentsView(input) ?? [];
 
 				if (!view) return;
 
 				view.webContents.close();
 				view.webContents.closeDevTools();
-				win?.removeBrowserView(view);
+				contentView?.removeChildView(view);
 			}),
 	} as const;
 }
@@ -70,7 +74,9 @@ const boundsSchema = z.custom<Rectangle>((input) => zRectSchema.parse(input));
 export const showEmbeddedWebViewInputSchema = z.object({
 	url: z.string(),
 	bounds: boundsSchema,
-	browserViewOptions: z.custom<BrowserViewConstructorOptions>().optional(),
+	webContentsViewOptions: z
+		.custom<WebContentsViewConstructorOptions>()
+		.optional(),
 });
 
 export const updateEmbeddedWebViewInputSchema = z.object({
@@ -82,13 +88,15 @@ export type ShowEmbeddedWebViewInput = z.infer<
 	typeof showEmbeddedWebViewInputSchema
 >;
 
-function getBrowserView(
+function getWebContentsView(
 	viewId: number,
-): [view: BrowserView, window: BrowserWindow] | undefined {
+): [view: WebContentsView, container: View] | undefined {
 	for (const win of BrowserWindow.getAllWindows()) {
-		for (const view of win.getBrowserViews()) {
-			if (view.webContents.id === viewId) {
-				return [view, win];
+		const container = win.contentView;
+
+		for (const view of container.children) {
+			if (view instanceof WebContentsView && view.webContents.id === viewId) {
+				return [view, container];
 			}
 		}
 	}
