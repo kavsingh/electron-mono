@@ -9,5 +9,3 @@ export const trpc = createTRPCProxyClient<AppRouter>({
 	links: [ipcLink()],
 	transformer: SuperJSON,
 });
-
-export type AppTRPCClient = typeof trpc;
