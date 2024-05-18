@@ -21,7 +21,7 @@
 		"autoprefixer": "10.4.19",
 		"eslint-plugin-jest-dom": "5.4.0",
 		"eslint-plugin-solid": "0.14.0",
-		"eslint-plugin-tailwindcss": "3.15.1",
+		"eslint-plugin-tailwindcss": "3.15.2",
 		"eslint-plugin-testing-library": "6.2.2",
 		"eslint-plugin-vitest": "0.5.4",
 		"postcss": "8.4.38",
