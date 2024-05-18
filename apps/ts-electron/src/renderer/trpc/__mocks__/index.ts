@@ -3,9 +3,9 @@ import { vi } from "vitest";
 import { createMockOpenDialogReturnValue } from "#common/__test-helpers__/mock-data-creators/electron";
 import { createMockSystemInfo } from "#common/__test-helpers__/mock-data-creators/system-info";
 
-import type { AppTRPCClient } from "../client";
+import type { AppTRPCClient } from "..";
 
-const mockClient: AppTRPCClient = {
+export const trpc: AppTRPCClient = {
 	themeSource: {
 		query: vi.fn(() => Promise.resolve("dark")),
 	},
@@ -29,7 +29,3 @@ const mockClient: AppTRPCClient = {
 	},
 	systemInfoEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
 };
-
-export function getTRPCClient() {
-	return mockClient;
-}

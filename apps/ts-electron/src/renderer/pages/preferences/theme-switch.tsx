@@ -1,18 +1,17 @@
 import { For, Match, Switch, createResource } from "solid-js";
 
 import { THEME_SOURCES } from "#common/lib/theme";
-import { useTRPCClient } from "#renderer/contexts/trpc-client";
+import { trpc } from "#renderer/trpc";
 
 import type { ThemeSource } from "#common/lib/theme";
 
 export default function ThemeSwitch() {
-	const client = useTRPCClient();
 	const [themeSource, { mutate }] = createResource(() => {
-		return client.themeSource.query();
+		return trpc.themeSource.query();
 	});
 
 	async function saveThemeSource(theme: ThemeSource) {
-		mutate(await client.setThemeSource.mutate(theme));
+		mutate(await trpc.setThemeSource.mutate(theme));
 	}
 
 	return (

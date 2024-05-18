@@ -1,11 +1,10 @@
 import { createEffect, onCleanup } from "solid-js";
 
-import { useTRPCClient } from "#renderer/contexts/trpc-client";
+import { trpc } from "#renderer/trpc";
 
 import type { Rectangle } from "electron";
 
 export default function Web() {
-	const trpc = useTRPCClient();
 	let containerRef: HTMLDivElement | undefined = undefined;
 	let viewId: number | undefined = undefined;
 
