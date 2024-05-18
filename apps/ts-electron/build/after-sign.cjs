@@ -13,23 +13,24 @@ async function notarize(context) {
 	console.log("notarizing app...");
 
 	if (process.platform !== "darwin") {
-		console.log(`skipping notarize, not darwin.`);
+		console.log(`skipping notarize: not darwin.`);
 
 		return;
 	}
 
 	if (!process.env["CI"]) {
-		console.log(`skipping notarize, not in CI.`);
+		console.log(`skipping notarize: not in CI.`);
 
 		return;
 	}
 
-	const appleId = process.env["APPLE_ID"];
-	const appleIdPassword = process.env["APPLE_ID_PASS"];
+	const appleApiKey = process.env["APPLE_API_KEY"];
+	const appleApiKeyId = process.env["APPLE_API_KEY_ID"];
+	const appleApiIssuer = process.env["APPLE_API_ISSUER"];
 
-	if (!(appleId && appleIdPassword)) {
+	if (!(appleApiKey && appleApiKeyId && appleApiIssuer)) {
 		console.error(
-			"could not notarize, APPLE_ID and APPLE_ID_PASS env variables must be set.",
+			"could not notarize, APPLE_API_KEY, APPLE_API_KEY_ID and APPLE_API_ISSUER env variables must be set.",
 		);
 
 		return;
@@ -40,9 +41,9 @@ async function notarize(context) {
 
 	try {
 		await electronNotarize({
-			appleId,
-			appleIdPassword,
-			appBundleId: macBundleIdentifier,
+			appleApiKey,
+			appleApiKeyId,
+			appleApiIssuer,
 			appPath: `${appOutDir}/${productFilename}.app`,
 		});
 	} catch (reason) {
