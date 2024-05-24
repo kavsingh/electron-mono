@@ -5,7 +5,7 @@ import { setupRenderWrapper } from "#renderer/__test-helpers__/render-wrapper";
 
 import SystemInfoCard from "./system-info-card";
 
-describe("<SystemInfoList />", () => {
+describe("<SystemInfoCard />", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});

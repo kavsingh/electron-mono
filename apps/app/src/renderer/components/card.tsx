@@ -9,114 +9,114 @@ import type { VariantProps } from "tailwind-variants";
 //
 
 export function CardRoot(
-	_props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
-		VariantProps<typeof cardRootClasses>,
+	props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
+		VariantProps<typeof cardRootVariants>,
 ) {
-	const [localProps, passProps] = splitProps(_props, ["class"]);
+	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
-		<div {...passProps} class={cardRootClasses({ class: localProps.class })} />
+		<div {...passProps} class={cardRootVariants({ class: localProps.class })} />
 	);
 }
 
-const cardRootClasses = tv({
+const cardRootVariants = tv({
 	base: "rounded-xl border border-border bg-card text-card-foreground shadow",
 });
 
 //
 
 export function CardHeader(
-	_props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
-		VariantProps<typeof cardHeaderClasses>,
+	props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
+		VariantProps<typeof cardHeaderVariants>,
 ) {
-	const [localProps, passProps] = splitProps(_props, ["class"]);
+	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
 		<div
 			{...passProps}
-			class={cardHeaderClasses({ class: localProps.class })}
+			class={cardHeaderVariants({ class: localProps.class })}
 		/>
 	);
 }
 
-const cardHeaderClasses = tv({
+const cardHeaderVariants = tv({
 	base: "flex flex-col space-y-1.5 p-6",
 });
 
 //
 
 export function CardTitle(
-	_props: Omit<JSX.HTMLAttributes<HTMLHeadingElement>, "classList"> &
-		VariantProps<typeof cardTitleClasses>,
+	props: Omit<JSX.HTMLAttributes<HTMLHeadingElement>, "classList"> &
+		VariantProps<typeof cardTitleVariants>,
 ) {
-	const [localProps, passProps] = splitProps(_props, ["class"]);
+	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
-		<h3 {...passProps} class={cardTitleClasses({ class: localProps.class })} />
+		<h3 {...passProps} class={cardTitleVariants({ class: localProps.class })} />
 	);
 }
 
-const cardTitleClasses = tv({
+const cardTitleVariants = tv({
 	base: "font-semibold leading-none tracking-tight",
 });
 
 //
 
 export function CardDescription(
-	_props: Omit<JSX.HTMLAttributes<HTMLParagraphElement>, "classList"> &
-		VariantProps<typeof cardDescriptionClasses>,
+	props: Omit<JSX.HTMLAttributes<HTMLParagraphElement>, "classList"> &
+		VariantProps<typeof cardDescriptionVariants>,
 ) {
-	const [localProps, passProps] = splitProps(_props, ["class"]);
+	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
 		<p
 			{...passProps}
-			class={cardDescriptionClasses({ class: localProps.class })}
+			class={cardDescriptionVariants({ class: localProps.class })}
 		/>
 	);
 }
 
-const cardDescriptionClasses = tv({
+const cardDescriptionVariants = tv({
 	base: "text-sm text-muted-foreground",
 });
 
 //
 
 export function CardContent(
-	_props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
-		VariantProps<typeof cardContentClasses>,
+	props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
+		VariantProps<typeof cardContentVariants>,
 ) {
-	const [localProps, passProps] = splitProps(_props, ["class"]);
+	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
 		<div
 			{...passProps}
-			class={cardContentClasses({ class: localProps.class })}
+			class={cardContentVariants({ class: localProps.class })}
 		/>
 	);
 }
 
-const cardContentClasses = tv({
+const cardContentVariants = tv({
 	base: "p-6 pt-0",
 });
 
 //
 
 export function CardFooter(
-	_props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
-		VariantProps<typeof cardFooterClasses>,
+	props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
+		VariantProps<typeof cardFooterVariants>,
 ) {
-	const [localProps, passProps] = splitProps(_props, ["class"]);
+	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
 		<div
 			{...passProps}
-			class={cardFooterClasses({ class: localProps.class })}
+			class={cardFooterVariants({ class: localProps.class })}
 		/>
 	);
 }
 
-const cardFooterClasses = tv({
+const cardFooterVariants = tv({
 	base: "flex items-center p-6 pt-0",
 });
 

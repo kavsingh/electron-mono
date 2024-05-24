@@ -65,7 +65,7 @@ function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
 
 	return (
 		<div
-			class={dragFileSelectClasses({ isActive: isActive() })}
+			class={dragFileSelectVariants({ isActive: isActive() })}
 			{...dragDropHandlers}
 		>
 			Drop files
@@ -73,7 +73,7 @@ function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
 	);
 }
 
-const dragFileSelectClasses = tv({
+const dragFileSelectVariants = tv({
 	base: "my-3 grid h-[200px] place-items-center rounded-md border border-border text-muted-foreground transition-colors",
 	variants: {
 		isActive: {

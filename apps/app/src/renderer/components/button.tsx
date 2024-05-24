@@ -1,3 +1,5 @@
+// https://ui.shadcn.com/docs/components/button
+
 import { splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
@@ -5,23 +7,30 @@ import type { JSX } from "solid-js";
 import type { VariantProps } from "tailwind-variants";
 
 export default function Button(
-	_props: Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, "classList"> &
-		VariantProps<typeof buttonClasses>,
+	props: Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, "classList"> &
+		VariantProps<typeof buttonVariants>,
 ) {
-	const [localProps, passProps] = splitProps(_props, ["class", "type"]);
+	const [localProps, passProps] = splitProps(props, [
+		"class",
+		"type",
+		"variant",
+		"size",
+	]);
 
 	return (
 		<button
 			{...passProps}
 			type={localProps.type ?? "button"}
-			class={buttonClasses({ class: localProps.class })}
+			class={buttonVariants({
+				variant: localProps.variant,
+				size: localProps.size,
+				class: localProps.class,
+			})}
 		/>
 	);
 }
 
-// https://ui.shadcn.com/docs/components/button
-
-const buttonClasses = tv({
+const buttonVariants = tv({
 	base: "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
 	variants: {
 		variant: {
