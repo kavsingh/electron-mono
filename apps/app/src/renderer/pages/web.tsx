@@ -8,6 +8,20 @@ export default function Web() {
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const viewIdRef = useRef<number | undefined>(undefined);
 	const showRequestedRef = useRef(false);
+	const { mutate: showEmbeddedWebView } = trpc.showEmbeddedWebView.useMutation({
+		onMutate(variables) {
+			showRequestedRef.current = true;
+
+			return variables;
+		},
+		onSuccess(viewId) {
+			viewIdRef.current = viewId;
+		},
+	});
+	const { mutate: updateEmbeddedWebView } =
+		trpc.updateEmbeddedWebView.useMutation();
+	const { mutate: removeEmbeddedWebView } =
+		trpc.removeEmbeddedWebView.useMutation();
 
 	useLayoutEffect(() => {
 		function updateBounds() {
@@ -16,7 +30,7 @@ export default function Web() {
 
 			if (!(container && typeof viewId === "number")) return;
 
-			void trpc.updateEmbeddedWebView.mutate({
+			updateEmbeddedWebView({
 				viewId,
 				bounds: domRectToBounds(container.getBoundingClientRect()),
 			});
@@ -26,7 +40,7 @@ export default function Web() {
 			window.removeEventListener("resize", updateBounds);
 
 			if (typeof viewIdRef.current === "number") {
-				void trpc.removeEmbeddedWebView.mutate(viewIdRef.current);
+				removeEmbeddedWebView(viewIdRef.current);
 			}
 		}
 
@@ -41,17 +55,15 @@ export default function Web() {
 		}
 
 		showRequestedRef.current = true;
-		void trpc.showEmbeddedWebView
-			.mutate({
-				url: "http://localhost:3000",
-				bounds: domRectToBounds(containerRef.current.getBoundingClientRect()),
-			})
-			.then((id) => (viewIdRef.current = id));
+		showEmbeddedWebView({
+			url: "http://localhost:3000",
+			bounds: domRectToBounds(containerRef.current.getBoundingClientRect()),
+		});
 
 		window.addEventListener("resize", updateBounds);
 
 		return cleanup;
-	}, []);
+	}, [removeEmbeddedWebView, showEmbeddedWebView, updateEmbeddedWebView]);
 
 	return <div className="size-full" ref={containerRef} />;
 }
