@@ -1,7 +1,7 @@
 {
-	"name": "ts-electron",
-	"version": "1.0.0",
-	"description": "TS Electron setup",
+	"name": "app",
+	"version": "1.0.0-dev.0",
+	"description": "an electron app",
 	"type": "module",
 	"engines": {
 		"node": ">=20"
@@ -50,7 +50,7 @@
 		"@testing-library/jest-dom": "6.4.5",
 		"@testing-library/user-event": "14.5.2",
 		"@trpc/client": "10.45.2",
-		"@ts-electron/shared": "workspace:*",
+		"@electron-mono/shared": "workspace:*",
 		"@vitest/coverage-v8": "1.6.0",
 		"autoprefixer": "10.4.19",
 		"electron": "30.0.6",

@@ -1,12 +1,14 @@
-`apps/ts-electron`: Electron, SolidJS + TailwindCSS
+`apps/app`: Electron, SolidJS
+`apps/web`: SolidStart
 
 ```
 corepack enable pnpm
 pnpm i
+pnpm dev
 ```
 
 ---
 
 todo:
 
-- [ ] bun when windows support: https://isbunwindowsyet.com/
+- [ ] bun when windows arm support

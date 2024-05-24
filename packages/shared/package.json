@@ -1,5 +1,5 @@
 {
-	"name": "@ts-electron/shared",
+	"name": "@electron-mono/shared",
 	"type": "module",
 	"engines": {
 		"node": ">=20"

@@ -33,7 +33,7 @@
 		"vinxi": "0.3.11"
 	},
 	"devDependencies": {
-		"@ts-electron/shared": "workspace:*",
-		"ts-electron": "workspace:*"
+		"@electron-mono/shared": "workspace:*",
+		"electron-mono": "workspace:*"
 	}
 }

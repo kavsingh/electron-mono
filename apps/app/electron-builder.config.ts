@@ -1,8 +1,8 @@
 import type { Configuration } from "electron-builder";
 
 const config: Configuration = {
-	appId: "com.ts-electron.app",
-	productName: "TSElectron",
+	appId: "com.app.dev",
+	productName: "App",
 	directories: {
 		buildResources: "build",
 	},
@@ -11,7 +11,7 @@ const config: Configuration = {
 	asarUnpack: "**/*.{node,dll}",
 	afterSign: "build/after-sign.cjs",
 	win: {
-		executableName: "ts-electron",
+		executableName: "App",
 	},
 	nsis: {
 		artifactName: "${name}-${version}-setup.${ext}",

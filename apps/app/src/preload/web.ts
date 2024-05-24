@@ -1,7 +1,7 @@
-import { BRIDGE_NAME } from "@ts-electron/shared/web-bridge-api";
+import { BRIDGE_NAME } from "@electron-mono/shared/web-bridge-api";
 import { contextBridge } from "electron";
 
-import type { WebBridgeApi } from "@ts-electron/shared/web-bridge-api";
+import type { WebBridgeApi } from "@electron-mono/shared/web-bridge-api";
 
 const bridge: WebBridgeApi = {
 	getSystemInfo() {

@@ -1,8 +1,12 @@
 {
-	"name": "ts-electron-mono",
+	"name": "electron-mono",
 	"version": "0.0.0",
-	"description": "TS Electron monorepo setup",
+	"description": "electron monorepo setup",
 	"author": "<author>",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:kavsingh/electron-mono"
+	},
 	"keywords": [],
 	"license": "MIT",
 	"private": true,
@@ -12,15 +16,15 @@
 		"node": ">=20"
 	},
 	"scripts": {
-		"dev": "pnpm turbo dev",
-		"build:win": "pnpm turbo build:win",
-		"build:mac": "pnpm turbo build:mac",
-		"build:linux": "pnpm turbo build:linux",
-		"test": "pnpm turbo test",
-		"test:e2e": "pnpm turbo test:e2e",
-		"typecheck": "pnpm turbo typecheck",
-		"lint": "pnpm turbo lint",
-		"codecheck": "pnpm turbo codecheck"
+		"dev": "turbo dev",
+		"build:win": "turbo build:win",
+		"build:mac": "turbo build:mac",
+		"build:linux": "turbo build:linux",
+		"test": "turbo test",
+		"test:e2e": "turbo test:e2e",
+		"typecheck": "turbo typecheck",
+		"lint": "turbo lint",
+		"codecheck": "turbo codecheck"
 	},
 	"devDependencies": {
 		"@tsconfig/strictest": "2.0.5",
