@@ -11,7 +11,7 @@
 	"license": "MIT",
 	"private": true,
 	"type": "module",
-	"packageManager": "pnpm@9.1.1+sha256.9551e803dcb7a1839fdf5416153a844060c7bce013218ce823410532504ac10b",
+	"packageManager": "pnpm@9.1.2+sha256.19c17528f9ca20bd442e4ca42f00f1b9808a9cb419383cd04ba32ef19322aba7",
 	"engines": {
 		"node": ">=20"
 	},
@@ -30,8 +30,8 @@
 		"@tsconfig/strictest": "2.0.5",
 		"@types/eslint": "8.56.10",
 		"@types/node": "20.12.12",
-		"@typescript-eslint/eslint-plugin": "7.9.0",
-		"@typescript-eslint/parser": "7.9.0",
+		"@typescript-eslint/eslint-plugin": "7.10.0",
+		"@typescript-eslint/parser": "7.10.0",
 		"cross-env": "7.0.3",
 		"eslint": "8.57.0",
 		"eslint-config-prettier": "9.1.0",
@@ -43,7 +43,7 @@
 		"npm-run-all": "4.1.5",
 		"prettier": "3.2.5",
 		"rimraf": "5.0.7",
-		"tsx": "4.10.5",
+		"tsx": "4.11.0",
 		"turbo": "1.13.3",
 		"typescript": "5.4.5"
 	},
