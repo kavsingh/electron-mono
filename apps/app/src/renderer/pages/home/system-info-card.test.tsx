@@ -3,7 +3,7 @@ import { describe, beforeEach, it, expect, vi } from "vitest";
 
 import { setupRenderWrapper } from "#renderer/__test-helpers__/render-wrapper";
 
-import SystemInfoList from "./system-info-list";
+import SystemInfoCard from "./system-info-card";
 
 describe("<SystemInfoList />", () => {
 	beforeEach(() => {
@@ -15,7 +15,7 @@ describe("<SystemInfoList />", () => {
 
 		const { Wrapper } = setupRenderWrapper();
 
-		render(() => <SystemInfoList />, { wrapper: Wrapper });
+		render(() => <SystemInfoCard />, { wrapper: Wrapper });
 
 		expect(screen.getByText("loading...")).toBeInTheDocument();
 

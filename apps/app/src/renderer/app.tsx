@@ -6,8 +6,8 @@ import { AppQueryClientProvider } from "./contexts/app-query-client";
 import useTheme from "./hooks/use-theme";
 import AppLayout from "./layouts/app";
 import Files from "./pages/files";
+import Home from "./pages/home";
 import Preferences from "./pages/preferences";
-import SystemInfo from "./pages/system-info";
 import Web from "./pages/web";
 
 export default function App() {
@@ -22,7 +22,7 @@ export default function App() {
 	return (
 		<AppQueryClientProvider>
 			<HashRouter root={AppLayout}>
-				<Route path="/" component={SystemInfo} />
+				<Route path="/" component={Home} />
 				<Route path="/files" component={Files} />
 				<Route path="/preferences" component={Preferences} />
 				<Route path="/web" component={Web} />

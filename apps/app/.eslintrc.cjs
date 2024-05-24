@@ -27,7 +27,10 @@ module.exports = {
 			files: ["src/renderer/**/*"],
 			env: { node: false, browser: true },
 			settings: {
-				tailwindcss: { callees: ["twMerge", "twJoin", "classList"] },
+				tailwindcss: {
+					callees: ["tv", "classList"],
+					config: path.join(__dirname, "tailwind.config.ts"),
+				},
 			},
 			extends: ["plugin:solid/typescript", "plugin:tailwindcss/recommended"],
 		},

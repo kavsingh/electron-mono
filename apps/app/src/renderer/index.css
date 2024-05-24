@@ -1,13 +1,11 @@
+@import "./theme.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-	color: theme(colors.neutral.950);
-}
-
-.dark {
-	color: theme(colors.neutral.200);
+	@apply bg-background text-primary;
 }
 
 #app-root {

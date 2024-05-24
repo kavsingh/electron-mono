@@ -1,7 +1,8 @@
 import { createEffect, createSignal, For } from "solid-js";
-import { twMerge } from "tailwind-merge";
+import { tv } from "tailwind-variants";
 
 import Button from "#renderer/components/button";
+import Card from "#renderer/components/card";
 import useFileDrop from "#renderer/hooks/use-file-drop";
 import useFileSelectDialog from "#renderer/hooks/use-file-select-dialog";
 import Page from "#renderer/layouts/page";
@@ -19,15 +20,22 @@ export default function Files() {
 			<Page.Content>
 				<DialogFileSelect onSelect={handleFileSelect} />
 				<DragFileSelect onSelect={handleFileSelect} />
-				<ul class="flex flex-col gap-1">
-					<For each={selectedFiles()}>
-						{(file) => (
-							<li class="flex gap-2 border-b border-b-neutral-200 pb-2 text-neutral-700 last:border-b-0 last:pb-0 dark:border-b-neutral-700 dark:text-neutral-400">
-								{file}
-							</li>
-						)}
-					</For>
-				</ul>
+				<Card.Root>
+					<Card.Header>
+						<Card.Title>Selected files</Card.Title>
+					</Card.Header>
+					<Card.Content>
+						<ul class="flex flex-col gap-1">
+							<For each={selectedFiles()}>
+								{(file) => (
+									<li class="flex gap-2 border-b border-border pb-2 text-sm text-muted-foreground last:border-b-0 last:pb-0">
+										{file}
+									</li>
+								)}
+							</For>
+						</ul>
+					</Card.Content>
+				</Card.Root>
 			</Page.Content>
 		</>
 	);
@@ -57,14 +65,19 @@ function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
 
 	return (
 		<div
-			class={twMerge(
-				"my-3 grid h-[200px] place-items-center rounded-lg border border-neutral-300 text-neutral-600 transition-colors dark:border-neutral-700 dark:text-neutral-400",
-				isActive() &&
-					"border-black bg-black/10 text-black dark:border-white dark:bg-white/10 dark:text-white",
-			)}
+			class={dragFileSelectClasses({ isActive: isActive() })}
 			{...dragDropHandlers}
 		>
 			Drop files
 		</div>
 	);
 }
+
+const dragFileSelectClasses = tv({
+	base: "my-3 grid h-[200px] place-items-center rounded-md border border-border text-muted-foreground transition-colors",
+	variants: {
+		isActive: {
+			true: "border-foreground bg-accent/20 text-foreground",
+		},
+	},
+});
