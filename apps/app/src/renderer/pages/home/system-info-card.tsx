@@ -20,7 +20,7 @@ export default function SystemInfoCard() {
 							<InfoEntry>
 								<InfoEntryLabel>os</InfoEntryLabel>
 								<span>
-									{info.osName} ({info.osVersion}) {info.osArch}
+									{info.osName} {info.osVersion} ({info.osArch})
 								</span>
 							</InfoEntry>
 							<InfoEntry>
@@ -52,5 +52,23 @@ function InfoEntryLabel(props: ParentProps) {
 }
 
 function formatMem(mem: bigint) {
-	return `${(Number(mem) / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+	for (const [threshold, unit] of thresholds) {
+		if (mem >= threshold) {
+			return `${bigintDiv(mem, threshold).toFixed(2)} ${unit}`;
+		}
+	}
+
+	return "-";
 }
+
+// https://stackoverflow.com/a/54409977
+function bigintDiv(dividend: bigint, divisor: bigint, precision = 100n) {
+	return Number((dividend * precision) / divisor) / Number(precision);
+}
+
+const thresholds = [
+	[BigInt(1024 * 1024 * 1024), "GB"],
+	[BigInt(1024 * 1024), "MB"],
+	[1024n, "KB"],
+	[0n, "B"],
+] as const;

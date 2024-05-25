@@ -5,7 +5,6 @@ import { trpc } from "#renderer/trpc";
 
 export default function useSystemInfo() {
 	const queryClient = useQueryClient();
-
 	const query = createQuery(() => ({
 		queryKey: ["systemInfo"],
 		queryFn: () => trpc.systemInfo.query(),
