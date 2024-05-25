@@ -9,6 +9,4 @@ if (!appRoot) throw new Error("#app-root not found");
 
 const dispose = render(() => <App />, appRoot);
 
-if (import.meta.hot) {
-	import.meta.hot.dispose(dispose);
-}
+if (import.meta.hot) import.meta.hot.dispose(dispose);

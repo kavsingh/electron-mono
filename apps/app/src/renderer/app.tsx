@@ -7,7 +7,7 @@ import useTheme from "./hooks/use-theme";
 import AppLayout from "./layouts/app";
 import Files from "./pages/files";
 import Home from "./pages/home";
-import Preferences from "./pages/preferences";
+import Settings from "./pages/settings";
 import Web from "./pages/web";
 
 export default function App() {
@@ -24,7 +24,7 @@ export default function App() {
 			<HashRouter root={AppLayout}>
 				<Route path="/" component={Home} />
 				<Route path="/files" component={Files} />
-				<Route path="/preferences" component={Preferences} />
+				<Route path="/settings" component={Settings} />
 				<Route path="/web" component={Web} />
 			</HashRouter>
 		</AppQueryClientProvider>
