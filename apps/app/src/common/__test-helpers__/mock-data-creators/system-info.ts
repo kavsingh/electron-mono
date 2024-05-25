@@ -1,13 +1,12 @@
 import mockCreator from "./mock-creator";
 
-// @type-only import
 // eslint-disable-next-line import/no-restricted-paths
 import type { SystemInfo } from "#main/services/system-info";
 
 export const createMockSystemInfo = mockCreator<SystemInfo>({
-	osName: "osName",
-	osArch: "osArch",
-	osVersion: "osVersion",
-	memTotal: BigInt(10_000_000_000),
-	memAvailable: BigInt(1_000_000_000),
+	osName: "OS Name",
+	osArch: "OS Arch",
+	osVersion: "OS Version",
+	memAvailable: BigInt(1024 * 1024), // 1 MB
+	memTotal: BigInt(1024 * 1024 * 1024), // 1 GB
 });

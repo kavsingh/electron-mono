@@ -1,4 +1,4 @@
-import { Router } from "@solidjs/router";
+import { Route, Router } from "@solidjs/router";
 import { userEvent } from "@testing-library/user-event";
 
 import { AppQueryClientProvider } from "#renderer/contexts/app-query-client";
@@ -11,7 +11,9 @@ export function setupRenderWrapper() {
 	function Wrapper(props: ParentProps) {
 		return (
 			<AppQueryClientProvider>
-				<Router>{props.children}</Router>
+				<Router>
+					<Route path="/" component={() => props.children} />
+				</Router>
 			</AppQueryClientProvider>
 		);
 	}
