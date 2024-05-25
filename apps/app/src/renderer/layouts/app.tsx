@@ -1,6 +1,6 @@
 import { A } from "@solidjs/router";
 
-import type { ParentProps } from "solid-js";
+import type { ComponentProps, ParentProps } from "solid-js";
 
 export default function App(props: ParentProps) {
 	return (
@@ -8,10 +8,10 @@ export default function App(props: ParentProps) {
 			<div class="grid size-full grid-cols-[min-content_1fr]">
 				<div class="min-h-full p-4 pe-8 pt-10 text-sm">
 					<nav class="flex flex-col gap-2">
-						<A href="/">Home</A>
-						<A href="/files">Files</A>
-						<A href="/preferences">Preferences</A>
-						<A href="/web">Web</A>
+						<NavLink href="/">Home</NavLink>
+						<NavLink href="/files">Files</NavLink>
+						<NavLink href="/preferences">Preferences</NavLink>
+						<NavLink href="/web">Web</NavLink>
 					</nav>
 				</div>
 				<div class="h-full overflow-y-auto overflow-x-hidden bg-background">
@@ -20,5 +20,14 @@ export default function App(props: ParentProps) {
 			</div>
 			<div class="fixed inset-x-0 top-0 z-10 h-8 [-webkit-app-region:drag]" />
 		</>
+	);
+}
+
+function NavLink(props: Omit<ComponentProps<typeof A>, "class" | "classList">) {
+	return (
+		<A
+			{...props}
+			class="text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:font-semibold aria-[current=page]:text-foreground"
+		/>
 	);
 }
