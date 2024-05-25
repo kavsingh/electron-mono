@@ -27,7 +27,7 @@ function NavLink(props: Omit<ComponentProps<typeof A>, "class" | "classList">) {
 	return (
 		<A
 			{...props}
-			class="text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:font-semibold aria-[current=page]:text-foreground"
+			class="text-muted-foreground transition-colors hover:underline aria-[current=page]:text-foreground aria-[current=page]:hover:no-underline"
 		/>
 	);
 }

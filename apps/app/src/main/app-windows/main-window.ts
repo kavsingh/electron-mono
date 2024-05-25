@@ -1,6 +1,6 @@
 import { join } from "node:path";
 
-import { app, BrowserWindow, nativeTheme } from "electron";
+import { app, BrowserWindow } from "electron";
 import log from "electron-log";
 
 export function createMainWindow() {
@@ -11,7 +11,7 @@ export function createMainWindow() {
 		// vibrancy: "sidebar",
 		// TODO: Re-enable transparent and remove backgroundColor when above is fixed
 		// transparent: true,
-		backgroundColor: nativeTheme.shouldUseDarkColors ? "#09090b" : "#ffffff",
+		backgroundColor: "#00000000",
 		width: 800,
 		height: 600,
 		webPreferences: { preload: join(__dirname, "../preload/renderer.cjs") },
