@@ -11,9 +11,7 @@ export function createMainWindow() {
 		// vibrancy: "sidebar",
 		// TODO: Re-enable transparent and remove backgroundColor when above is fixed
 		// transparent: true,
-		backgroundColor: nativeTheme.shouldUseDarkColors
-			? "#00000088"
-			: "#ffffff88",
+		backgroundColor: nativeTheme.shouldUseDarkColors ? "#09090b" : "#ffffff",
 		width: 800,
 		height: 600,
 		webPreferences: { preload: join(__dirname, "../preload/renderer.cjs") },

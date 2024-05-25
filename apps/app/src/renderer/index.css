@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-	@apply bg-background text-primary;
+	@apply text-primary;
 }
 
 #app-root {
