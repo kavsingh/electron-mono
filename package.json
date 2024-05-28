@@ -11,7 +11,7 @@
 	"license": "MIT",
 	"private": true,
 	"type": "module",
-	"packageManager": "pnpm@9.1.2+sha256.19c17528f9ca20bd442e4ca42f00f1b9808a9cb419383cd04ba32ef19322aba7",
+	"packageManager": "pnpm@9.1.3+sha256.7f63001edc077f1cff96cacba901f350796287a2800dfa83fe898f94183e4f5f",
 	"engines": {
 		"node": ">=20"
 	},
