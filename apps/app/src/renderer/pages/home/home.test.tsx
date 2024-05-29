@@ -47,7 +47,7 @@ describe("<Home />", () => {
 		expect(screen.queryByText("2.00 MB")).not.toBeInTheDocument();
 
 		publishSystemInfoEvent(
-			createMockSystemInfo({ memAvailable: BigInt(1024 * 1024 * 2) }),
+			createMockSystemInfo({ memAvailable: String(1024 * 1024 * 2) }),
 		);
 
 		await waitFor(() => {

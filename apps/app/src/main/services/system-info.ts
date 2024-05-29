@@ -10,8 +10,8 @@ export async function getSystemInfo(): Promise<SystemInfo> {
 		osName: sysOsInfo.codename,
 		osVersion: sysOsInfo.release,
 		osArch: sysOsInfo.arch,
-		memTotal: BigInt(sysMem.total),
-		memAvailable: BigInt(sysMem.available),
+		memTotal: String(sysMem.total),
+		memAvailable: String(sysMem.available),
 	};
 }
 
@@ -47,6 +47,6 @@ export type SystemInfo = {
 	osName: string;
 	osVersion: string;
 	osArch: string;
-	memTotal: bigint;
-	memAvailable: bigint;
+	memTotal: string;
+	memAvailable: string;
 };

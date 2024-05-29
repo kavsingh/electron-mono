@@ -26,8 +26,8 @@ describe("system-info", () => {
 				osName: "OS Code",
 				osVersion: "1.0.0",
 				osArch: "arch",
-				memTotal: BigInt(100),
-				memAvailable: BigInt(50),
+				memTotal: "100",
+				memAvailable: "50",
 			});
 		});
 	});

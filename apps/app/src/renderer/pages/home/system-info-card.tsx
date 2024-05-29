@@ -51,7 +51,9 @@ function InfoEntryLabel(props: ParentProps) {
 	return <span class="text-muted-foreground">{props.children}</span>;
 }
 
-function formatMem(mem: bigint) {
+function formatMem(memString: string) {
+	const mem = BigInt(memString);
+
 	for (const [threshold, unit] of thresholds) {
 		if (mem >= threshold) {
 			return `${bigintDiv(mem, threshold).toFixed(2)} ${unit}`;

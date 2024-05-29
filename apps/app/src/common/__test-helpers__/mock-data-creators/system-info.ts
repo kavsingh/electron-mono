@@ -7,6 +7,6 @@ export const createMockSystemInfo = mockCreator<SystemInfo>({
 	osName: "OS Name",
 	osArch: "OS Arch",
 	osVersion: "OS Version",
-	memAvailable: BigInt(1024 * 1024), // 1 MB
-	memTotal: BigInt(1024 * 1024 * 1024), // 1 GB
+	memAvailable: String(1024 * 1024), // 1 MB
+	memTotal: String(1024 * 1024 * 1024), // 1 GB
 });
