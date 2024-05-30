@@ -1,16 +1,15 @@
-import { createEffect, createMemo, createSignal, onCleanup } from "solid-js";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { tv } from "tailwind-variants";
 
 import { tryOr } from "#common/lib/error";
 import { normalizeBigint } from "#common/lib/number";
 import { useResizeObserver } from "#renderer/hooks/use-resize-observer";
 
-import type { Accessor } from "solid-js";
 import type { VariantProps } from "tailwind-variants";
 
 export default function ChronoGraph(
 	props: {
-		sampleSource: Accessor<Sample | undefined>;
+		sampleSource: Sample | undefined;
 		minValue?: bigint | undefined;
 		maxValue?: bigint | undefined;
 		maxSamples?: number | undefined;
@@ -20,26 +19,27 @@ export default function ChronoGraph(
 	const schemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 	const observeResize = useResizeObserver();
 	let unobserveResize: ReturnType<typeof observeResize> | undefined;
-	let canvasEl: HTMLCanvasElement | undefined;
-	let rollingMin = 0n;
-	let rollingMax = 0n;
+	const canvasRef = useRef<HTMLCanvasElement | null>(null);
+	const rollingMin = useRef(0n);
+	const rollingMax = useRef(0n);
 
-	const [samples, setSamples] = createSignal<Sample[]>([]);
-	const normalizedValues = createMemo(() => {
-		return normalizeValues(
-			samples(),
-			props.minValue ?? rollingMin,
-			props.maxValue ?? rollingMax,
-		);
-	});
+	const [samples, setSamples] = useState<Sample[]>([]);
+	const normalizedValues = normalizeValues(
+		samples,
+		props.minValue ?? rollingMin.current,
+		props.maxValue ?? rollingMax.current,
+	);
 
-	createEffect(() => {
-		const sample = props.sampleSource();
+	useEffect(() => {
+		const sample = props.sampleSource;
 
 		if (!sample) return;
 
-		if (sample.value < rollingMin) rollingMin = sample.value;
-		else if (sample.value > rollingMax) rollingMax = sample.value;
+		if (sample.value < rollingMin.current) {
+			rollingMin.current = sample.value;
+		} else if (sample.value > rollingMax.current) {
+			rollingMax.current = sample.value;
+		}
 
 		const maxSamples = props.maxSamples ?? 20;
 
@@ -48,26 +48,33 @@ export default function ChronoGraph(
 				.slice(Math.max(current.length - (maxSamples - 1), 0))
 				.concat(sample);
 		});
-	});
+	}, [props.maxSamples, props.sampleSource]);
 
-	function redraw() {
-		if (canvasEl) drawGraph(canvasEl, normalizedValues());
-	}
+	const redraw = useCallback(() => {
+		if (canvasRef.current) drawGraph(canvasRef.current, normalizedValues);
+	}, [normalizedValues]);
 
-	createEffect(redraw);
-	schemeQuery.addEventListener("change", redraw);
+	useEffect(() => {
+		redraw();
+	}, [redraw]);
 
-	onCleanup(() => {
-		unobserveResize?.();
-		schemeQuery.removeEventListener("change", redraw);
-	});
+	useEffect(() => {
+		schemeQuery.addEventListener("change", redraw);
+
+		return function cleanup() {
+			schemeQuery.removeEventListener("change", redraw);
+			unobserveResize?.();
+		};
+	}, [redraw, schemeQuery, unobserveResize]);
 
 	return (
 		<canvas
-			class={chronoGraphVariants({ class: props.class })}
+			className={chronoGraphVariants({ class: props.class })}
 			ref={(el) => {
-				canvasEl = el;
-				observeResize(canvasEl, redraw);
+				if (!el) return;
+
+				canvasRef.current = el;
+				observeResize(canvasRef.current, redraw);
 			}}
 		/>
 	);

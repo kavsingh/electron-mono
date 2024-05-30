@@ -1,4 +1,5 @@
-import { render, waitFor, screen, cleanup } from "@solidjs/testing-library";
+// eslint-disable-next-line testing-library/no-manual-cleanup
+import { render, waitFor, screen, cleanup } from "@testing-library/react";
 import { describe, it, expect, vi, afterEach } from "vitest";
 
 import { createMockSystemStats } from "#common/__test-helpers__/mock-data-creators/system";
@@ -18,7 +19,7 @@ describe("<Home />", () => {
 
 		const { Wrapper } = setupRenderWrapper();
 
-		render(() => <Home />, { wrapper: Wrapper });
+		render(<Home />, { wrapper: Wrapper });
 
 		expect(
 			screen.getByRole("heading", { name: "Home", level: 2 }),
@@ -37,7 +38,7 @@ describe("<Home />", () => {
 
 		const { Wrapper } = setupRenderWrapper();
 
-		render(() => <Home />, { wrapper: Wrapper });
+		render(<Home />, { wrapper: Wrapper });
 
 		await waitFor(() => {
 			expect(screen.getByText("600.00 MB")).toBeInTheDocument();

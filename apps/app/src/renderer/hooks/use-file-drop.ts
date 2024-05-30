@@ -1,10 +1,10 @@
-import { createSignal } from "solid-js";
+import { useState } from "react";
 
-import type { JSX } from "solid-js";
+import type { DragEventHandler } from "react";
 
 export default function useFileDrop() {
-	const [droppedFiles, setDroppedFiles] = createSignal<DroppedFile[]>();
-	const [isActive, setIsActive] = createSignal(false);
+	const [droppedFiles, setDroppedFiles] = useState<DroppedFile[]>();
+	const [isActive, setIsActive] = useState(false);
 
 	const onDragOver: DragEventHandler = (event) => {
 		event.preventDefault();
@@ -22,18 +22,14 @@ export default function useFileDrop() {
 	const onDrop: DragEventHandler = (event) => {
 		event.preventDefault();
 
-		const { items, files } = event.dataTransfer ?? {};
-		const entries = items
-			? Array.from(items).map((item) => item.webkitGetAsEntry())
-			: [];
-		const dropped = files
-			? Array.from(files).map((file) => {
-					const { isDirectory, isFile } =
-						entries.find((e) => e?.name === file.name) ?? {};
+		const { items, files } = event.dataTransfer;
+		const entries = Array.from(items).map((item) => item.webkitGetAsEntry());
+		const dropped = Array.from(files).map((file) => {
+			const { isDirectory, isFile } =
+				entries.find((e) => e?.name === file.name) ?? {};
 
-					return { file, isDirectory, isFile };
-				})
-			: [];
+			return { file, isDirectory, isFile };
+		});
 
 		setIsActive(false);
 		setDroppedFiles(dropped);
@@ -50,5 +46,3 @@ export type DroppedFile = {
 	isFile: FileSystemEntry["isFile"] | undefined;
 	file: File;
 };
-
-type DragEventHandler = JSX.EventHandlerUnion<HTMLElement, DragEvent>;

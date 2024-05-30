@@ -1,9 +1,9 @@
-import { createSignal } from "solid-js";
+import { useState } from "react";
 
 import { trpc } from "#renderer/trpc";
 
 export default function useFileSelectDialog() {
-	const [files, setFiles] = createSignal<string[]>([]);
+	const [files, setFiles] = useState<string[]>([]);
 
 	async function showDialog(options?: Options) {
 		const selectResult = await trpc.showOpenDialog.query({

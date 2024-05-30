@@ -1,31 +1,25 @@
 // https://ui.shadcn.com/docs/components/button
 
-import { splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
-import type { JSX } from "solid-js";
+import type { ButtonHTMLAttributes, RefAttributes } from "react";
 import type { VariantProps } from "tailwind-variants";
 
-export default function Button(
-	props: Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, "classList"> &
-		VariantProps<typeof buttonVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, [
-		"class",
-		"type",
-		"variant",
-		"size",
-	]);
-
+export default function Button({
+	className,
+	variant,
+	size,
+	ref,
+	...passProps
+}: ButtonHTMLAttributes<HTMLButtonElement> &
+	VariantProps<typeof buttonVariants> &
+	// TODO: remove this when react types updated for v19
+	RefAttributes<HTMLButtonElement>) {
 	return (
 		<button
 			{...passProps}
-			type={localProps.type ?? "button"}
-			class={buttonVariants({
-				variant: localProps.variant,
-				size: localProps.size,
-				class: localProps.class,
-			})}
+			ref={ref}
+			className={buttonVariants({ variant, size, className })}
 		/>
 	);
 }
