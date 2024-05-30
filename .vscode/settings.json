@@ -20,7 +20,6 @@
 		"**/dist": true
 	},
 	"tailwindCSS.validate": true,
-	"tailwindCSS.classAttributes": ["class", "classList"],
 	"tailwindCSS.experimental.classRegex": [
 		["tv\\((([^()]*|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
 	],

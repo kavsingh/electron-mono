@@ -1,42 +1,59 @@
-import { createEffect, onCleanup } from "solid-js";
+import { useLayoutEffect, useRef } from "react";
 
 import { trpc } from "#renderer/trpc";
 
 import type { Rectangle } from "electron";
 
 export default function Web() {
-	let containerRef: HTMLDivElement | undefined = undefined;
-	let viewId: number | undefined = undefined;
+	const containerRef = useRef<HTMLDivElement | null>(null);
+	const viewIdRef = useRef<number | undefined>(undefined);
+	const showRequestedRef = useRef(false);
 
-	function updateBounds() {
-		if (!(containerRef && viewId)) return;
+	useLayoutEffect(() => {
+		function updateBounds() {
+			const container = containerRef.current;
+			const viewId = viewIdRef.current;
 
-		void trpc.updateEmbeddedWebView.mutate({
-			viewId,
-			bounds: domRectToBounds(containerRef.getBoundingClientRect()),
-		});
-	}
+			if (!(container && typeof viewId === "number")) return;
 
-	createEffect(() => {
-		if (!containerRef) return;
+			void trpc.updateEmbeddedWebView.mutate({
+				viewId,
+				bounds: domRectToBounds(container.getBoundingClientRect()),
+			});
+		}
 
+		function cleanup() {
+			window.removeEventListener("resize", updateBounds);
+
+			if (typeof viewIdRef.current === "number") {
+				void trpc.removeEmbeddedWebView.mutate(viewIdRef.current);
+			}
+		}
+
+		if (
+			!(
+				!showRequestedRef.current &&
+				typeof viewIdRef.current !== "number" &&
+				containerRef.current
+			)
+		) {
+			return cleanup;
+		}
+
+		showRequestedRef.current = true;
 		void trpc.showEmbeddedWebView
 			.mutate({
 				url: "http://localhost:3000",
-				bounds: domRectToBounds(containerRef.getBoundingClientRect()),
+				bounds: domRectToBounds(containerRef.current.getBoundingClientRect()),
 			})
-			.then((id) => (viewId = id));
+			.then((id) => (viewIdRef.current = id));
 
 		window.addEventListener("resize", updateBounds);
-	});
 
-	onCleanup(() => {
-		window.removeEventListener("resize", updateBounds);
+		return cleanup;
+	}, []);
 
-		if (viewId) void trpc.removeEmbeddedWebView.mutate(viewId);
-	});
-
-	return <div class="size-full" ref={(ref) => (containerRef = ref)} />;
+	return <div className="size-full" ref={containerRef} />;
 }
 
 function domRectToBounds(rect: DOMRect): Rectangle {
