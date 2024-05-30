@@ -1,20 +1,17 @@
 // https://ui.shadcn.com/docs/components/card
 
-import { splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
-import type { ComponentProps } from "solid-js";
+import type { ComponentPropsWithRef } from "react";
 import type { VariantProps } from "tailwind-variants";
 
-export function CardRoot(
-	props: Omit<ComponentProps<"div">, "classList"> &
-		VariantProps<typeof cardRootVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
+//
 
-	return (
-		<div {...passProps} class={cardRootVariants({ class: localProps.class })} />
-	);
+export function CardRoot({
+	className,
+	...passProps
+}: ComponentPropsWithRef<"div"> & VariantProps<typeof cardRootVariants>) {
+	return <div {...passProps} className={cardRootVariants({ className })} />;
 }
 
 const cardRootVariants = tv({
@@ -23,18 +20,11 @@ const cardRootVariants = tv({
 
 //
 
-export function CardHeader(
-	props: Omit<ComponentProps<"div">, "classList"> &
-		VariantProps<typeof cardHeaderVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
-	return (
-		<div
-			{...passProps}
-			class={cardHeaderVariants({ class: localProps.class })}
-		/>
-	);
+export function CardHeader({
+	className,
+	...passProps
+}: ComponentPropsWithRef<"div"> & VariantProps<typeof cardHeaderVariants>) {
+	return <div {...passProps} className={cardHeaderVariants({ className })} />;
 }
 
 const cardHeaderVariants = tv({
@@ -43,15 +33,11 @@ const cardHeaderVariants = tv({
 
 //
 
-export function CardTitle(
-	props: Omit<ComponentProps<"h3">, "classList"> &
-		VariantProps<typeof cardTitleVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
-	return (
-		<h3 {...passProps} class={cardTitleVariants({ class: localProps.class })} />
-	);
+export function CardTitle({
+	className,
+	...passProps
+}: ComponentPropsWithRef<"h3"> & VariantProps<typeof cardTitleVariants>) {
+	return <h3 {...passProps} className={cardTitleVariants({ className })} />;
 }
 
 const cardTitleVariants = tv({
@@ -60,17 +46,12 @@ const cardTitleVariants = tv({
 
 //
 
-export function CardDescription(
-	props: Omit<ComponentProps<"p">, "classList"> &
-		VariantProps<typeof cardDescriptionVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardDescription({
+	className,
+	...passProps
+}: ComponentPropsWithRef<"p"> & VariantProps<typeof cardDescriptionVariants>) {
 	return (
-		<p
-			{...passProps}
-			class={cardDescriptionVariants({ class: localProps.class })}
-		/>
+		<p {...passProps} className={cardDescriptionVariants({ className })} />
 	);
 }
 
@@ -80,18 +61,11 @@ const cardDescriptionVariants = tv({
 
 //
 
-export function CardContent(
-	props: Omit<ComponentProps<"div">, "classList"> &
-		VariantProps<typeof cardContentVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
-	return (
-		<div
-			{...passProps}
-			class={cardContentVariants({ class: localProps.class })}
-		/>
-	);
+export function CardContent({
+	className,
+	...passProps
+}: ComponentPropsWithRef<"div"> & VariantProps<typeof cardContentVariants>) {
+	return <div {...passProps} className={cardContentVariants({ className })} />;
 }
 
 const cardContentVariants = tv({
@@ -100,18 +74,11 @@ const cardContentVariants = tv({
 
 //
 
-export function CardFooter(
-	props: Omit<ComponentProps<"div">, "classList"> &
-		VariantProps<typeof cardFooterVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
-	return (
-		<div
-			{...passProps}
-			class={cardFooterVariants({ class: localProps.class })}
-		/>
-	);
+export function CardFooter({
+	className,
+	...passProps
+}: ComponentPropsWithRef<"div"> & VariantProps<typeof cardFooterVariants>) {
+	return <div {...passProps} className={cardFooterVariants({ className })} />;
 }
 
 const cardFooterVariants = tv({
