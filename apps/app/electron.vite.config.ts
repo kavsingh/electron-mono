@@ -2,8 +2,8 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import reactPlugin from "@vitejs/plugin-react";
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
-import solidPlugin from "vite-plugin-solid";
 import tsconfigPathsPlugin from "vite-tsconfig-paths";
 
 import type { UserConfig } from "vite";
@@ -36,7 +36,12 @@ export const rendererConfig: UserConfig = {
 	define,
 	build,
 	resolve: { conditions: ["browser"] },
-	plugins: [tsconfigPathsPlugin(), solidPlugin()],
+	plugins: [
+		reactPlugin({
+			babel: { plugins: [["babel-plugin-react-compiler", {}]] },
+		}),
+		tsconfigPathsPlugin(),
+	],
 };
 
 const preloadConfig: UserConfig = {
