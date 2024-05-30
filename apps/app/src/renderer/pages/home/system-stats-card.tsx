@@ -1,5 +1,3 @@
-import { Show, createMemo } from "solid-js";
-
 import { tryOr } from "#common/lib/error";
 import { formatMem } from "#common/lib/format";
 import Card from "#renderer/components/card";
@@ -10,10 +8,9 @@ import InfoList from "../../components/info-list";
 
 // eslint-disable-next-line import-x/no-restricted-paths
 import type { SystemStats } from "#main/services/system-stats";
-import type { Sample } from "#renderer/components/chrono-graph";
 
 export default function SystemStatsCard() {
-	const statsQuery = useSystemStats();
+	const { data: stats } = useSystemStats();
 
 	return (
 		<Card.Root>
@@ -21,22 +18,22 @@ export default function SystemStatsCard() {
 				<Card.Title>System stats</Card.Title>
 			</Card.Header>
 			<Card.Content>
-				<div class="grid grid-cols-[1fr_26ch] gap-4">
-					<MemoryGraph systemStats={statsQuery.data} />
-					<Show when={statsQuery.data} fallback={<>loading...</>} keyed>
-						{(info) => (
-							<InfoList.Root>
-								<InfoList.Entry>
-									<InfoList.Label>total memory</InfoList.Label>
-									<InfoList.Value>{formatMem(info.memTotal)}</InfoList.Value>
-								</InfoList.Entry>
-								<InfoList.Entry>
-									<InfoList.Label>used memory</InfoList.Label>
-									<InfoList.Value>{formatMem(info.memUsed)}</InfoList.Value>
-								</InfoList.Entry>
-							</InfoList.Root>
-						)}
-					</Show>
+				<div className="grid grid-cols-[1fr_26ch] gap-4">
+					<MemoryGraph systemStats={stats} />
+					{stats ? (
+						<InfoList.Root>
+							<InfoList.Entry>
+								<InfoList.Label>total memory</InfoList.Label>
+								<InfoList.Value>{formatMem(stats.memTotal)}</InfoList.Value>
+							</InfoList.Entry>
+							<InfoList.Entry>
+								<InfoList.Label>used memory</InfoList.Label>
+								<InfoList.Value>{formatMem(stats.memUsed)}</InfoList.Value>
+							</InfoList.Entry>
+						</InfoList.Root>
+					) : (
+						<>loading...</>
+					)}
 				</div>
 			</Card.Content>
 		</Card.Root>
@@ -44,24 +41,21 @@ export default function SystemStatsCard() {
 }
 
 function MemoryGraph(props: { systemStats: SystemStats | undefined }) {
-	const sample = createMemo<Sample | undefined>(() => {
-		const value = props.systemStats?.memUsed;
+	const memUsed = props.systemStats?.memUsed;
+	const memTotal = props.systemStats?.memTotal;
 
-		return value ? { value: tryOr(() => BigInt(value), 0n) } : undefined;
-	});
+	const sample = memUsed
+		? { value: tryOr(() => BigInt(memUsed), 0n) }
+		: undefined;
 
-	const maxValue = createMemo<bigint>(() => {
-		const value = props.systemStats?.memTotal;
-
-		return value ? tryOr(() => BigInt(value), 0n) : 0n;
-	});
+	const maxValue = memTotal ? tryOr(() => BigInt(memTotal), 0n) : 0n;
 
 	return (
 		<ChronoGraph
 			sampleSource={sample}
 			minValue={0n}
-			maxValue={maxValue()}
-			class="h-24 w-full rounded-lg"
+			maxValue={maxValue}
+			className="h-24 w-full rounded-lg"
 		/>
 	);
 }
