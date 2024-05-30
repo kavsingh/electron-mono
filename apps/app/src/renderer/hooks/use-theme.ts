@@ -1,21 +1,23 @@
-import { createSignal, onCleanup } from "solid-js";
+import { useEffect, useState } from "react";
 
 import type { ThemeSource } from "#common/lib/theme";
 
 export default function useTheme() {
-	const [theme, setTheme] = createSignal<UiTheme | undefined>(getQueryTheme());
+	const [theme, setTheme] = useState<UiTheme | undefined>(getQueryTheme());
 
-	function handleQuery() {
-		setTheme(getQueryTheme());
-	}
+	useEffect(() => {
+		function handleQuery() {
+			setTheme(getQueryTheme());
+		}
 
-	lightSchemeQuery.addEventListener("change", handleQuery);
-	darkSchemeQuery.addEventListener("change", handleQuery);
+		lightSchemeQuery.addEventListener("change", handleQuery);
+		darkSchemeQuery.addEventListener("change", handleQuery);
 
-	onCleanup(() => {
-		lightSchemeQuery.removeEventListener("change", handleQuery);
-		darkSchemeQuery.removeEventListener("change", handleQuery);
-	});
+		return function cleanup() {
+			lightSchemeQuery.removeEventListener("change", handleQuery);
+			darkSchemeQuery.removeEventListener("change", handleQuery);
+		};
+	}, []);
 
 	return theme;
 }

@@ -1,31 +1,22 @@
 // https://ui.shadcn.com/docs/components/button
 
-import { splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
-import type { ComponentProps } from "solid-js";
+import type { ComponentPropsWithRef } from "react";
 import type { VariantProps } from "tailwind-variants";
 
-export default function Button(
-	props: Omit<ComponentProps<"button">, "classList"> &
-		VariantProps<typeof buttonVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, [
-		"class",
-		"type",
-		"variant",
-		"size",
-	]);
-
+export default function Button({
+	className,
+	type,
+	variant,
+	size,
+	...passProps
+}: ComponentPropsWithRef<"button"> & VariantProps<typeof buttonVariants>) {
 	return (
 		<button
 			{...passProps}
-			type={localProps.type ?? "button"}
-			class={buttonVariants({
-				variant: localProps.variant,
-				size: localProps.size,
-				class: localProps.class,
-			})}
+			type={type ?? "button"}
+			className={buttonVariants({ variant, size, className })}
 		/>
 	);
 }

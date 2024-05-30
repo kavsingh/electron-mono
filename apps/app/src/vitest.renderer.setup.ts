@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import "vitest-canvas-mock";
 
-import { cleanup } from "@solidjs/testing-library";
+import { cleanup } from "@testing-library/react";
 import { vi, afterEach } from "vitest";
 
 vi.stubGlobal(

@@ -17,13 +17,11 @@ export default defineWorkspace([
 	mergeConfig(
 		await rendererConfig({ mode: "test", command: "build" }),
 		defineProject({
-			resolve: { conditions: ["development", "browser"] },
 			test: {
 				name: "renderer",
 				environment: "jsdom",
 				include: ["src/renderer/**/*.{test,spec}.?(m|c)[tj]s?(x)"],
 				setupFiles: ["./src/vitest.renderer.setup.ts"],
-				server: { deps: { inline: [/solid-js/] } },
 			},
 		}),
 	),

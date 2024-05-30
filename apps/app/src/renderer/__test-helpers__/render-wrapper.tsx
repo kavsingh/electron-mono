@@ -1,19 +1,21 @@
-import { Route, Router } from "@solidjs/router";
 import { userEvent } from "@testing-library/user-event";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 
 import { AppQueryClientProvider } from "#renderer/contexts/app-query-client";
 
-import type { ParentProps } from "solid-js";
+import type { PropsWithChildren } from "react";
 
 export function setupRenderWrapper() {
 	const user = userEvent.setup();
 
-	function Wrapper(props: ParentProps) {
+	function Wrapper(props: PropsWithChildren) {
 		return (
 			<AppQueryClientProvider>
-				<Router>
-					<Route path="/" component={() => props.children} />
-				</Router>
+				<MemoryRouter>
+					<Routes>
+						<Route path="/" element={props.children} />
+					</Routes>
+				</MemoryRouter>
 			</AppQueryClientProvider>
 		);
 	}

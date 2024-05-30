@@ -1,22 +1,17 @@
-import { useQuery, useQueryClient } from "@tanstack/solid-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { trpc } from "#renderer/trpc";
 
 // eslint-disable-next-line import-x/no-restricted-paths
 import type { SystemStats } from "#main/services/system-stats";
-import type { QueryClient } from "@tanstack/solid-query";
+import type { QueryClient } from "@tanstack/react-query";
 
 export default function useSystemStats() {
 	const queryClient = useQueryClient();
-	const query = useQuery(() => ({
+	const query = useQuery({
 		queryKey,
 		queryFn: () => trpc.systemStats.query(),
-		reconcile: (oldData, newData) => {
-			return oldData && BigInt(oldData.sampledAt) >= BigInt(newData.sampledAt)
-				? oldData
-				: newData;
-		},
-	}));
+	});
 
 	startSubscription(queryClient);
 

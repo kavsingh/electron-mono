@@ -1,15 +1,15 @@
-import type { ParentProps } from "solid-js";
+import type { PropsWithChildren } from "react";
 
-export function PageHeader(props: ParentProps) {
+export function PageHeader(props: PropsWithChildren) {
 	return (
-		<header class="sticky top-0 bg-background/50 p-4 pt-8 backdrop-blur-md">
-			<h2 class="text-3xl font-semibold leading-none">{props.children}</h2>
+		<header className="sticky top-0 bg-background/50 p-4 pt-8 backdrop-blur-md">
+			<h2 className="text-3xl font-semibold leading-none">{props.children}</h2>
 		</header>
 	);
 }
 
-export function PageContent(props: ParentProps) {
-	return <main class="p-4">{props.children}</main>;
+export function PageContent(props: PropsWithChildren) {
+	return <main className="p-4">{props.children}</main>;
 }
 
 export default {

@@ -8,7 +8,7 @@ export default function Home() {
 		<>
 			<Page.Header>Home</Page.Header>
 			<Page.Content>
-				<div class="space-y-6">
+				<div className="space-y-6">
 					<SystemInfoCard />
 					<SystemStatsCard />
 				</div>

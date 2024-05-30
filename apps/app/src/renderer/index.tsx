@@ -1,4 +1,5 @@
-import { render } from "solid-js/web";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 
 import "./index.css";
 import App from "./app";
@@ -7,6 +8,10 @@ const appRoot = document.getElementById("app-root");
 
 if (!appRoot) throw new Error("#app-root not found");
 
-const dispose = render(() => <App />, appRoot);
+const root = createRoot(appRoot);
 
-if (import.meta.hot) import.meta.hot.dispose(dispose);
+root.render(
+	<StrictMode>
+		<App />
+	</StrictMode>,
+);
