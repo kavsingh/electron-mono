@@ -82,7 +82,7 @@ importers:
         version: 5.1.5
       electron-trpc:
         specifier: 0.6.1
-        version: 0.6.1(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(electron@30.0.8)
+        version: 0.6.1(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(electron@30.0.9)
       eventemitter3:
         specifier: 5.0.1
         version: 5.0.1
@@ -106,11 +106,11 @@ importers:
         specifier: 1.44.1
         version: 1.44.1
       '@solidjs/router':
-        specifier: 0.13.3
-        version: 0.13.3(solid-js@1.8.17)
+        specifier: 0.13.4
+        version: 0.13.4(solid-js@1.8.17)
       '@solidjs/testing-library':
         specifier: 0.8.8
-        version: 0.8.8(@solidjs/router@0.13.3(solid-js@1.8.17))(solid-js@1.8.17)
+        version: 0.8.8(@solidjs/router@0.13.4(solid-js@1.8.17))(solid-js@1.8.17)
       '@tailwindcss/container-queries':
         specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.4.3)
@@ -136,8 +136,8 @@ importers:
         specifier: 10.4.19
         version: 10.4.19(postcss@8.4.38)
       electron:
-        specifier: 30.0.8
-        version: 30.0.8
+        specifier: 30.0.9
+        version: 30.0.9
       electron-builder:
         specifier: 24.13.3
         version: 24.13.3(electron-builder-squirrel-windows@24.13.3(dmg-builder@24.13.3))
@@ -202,11 +202,11 @@ importers:
         specifier: 0.29.4
         version: 0.29.4(solid-js@1.8.17)
       '@solidjs/router':
-        specifier: 0.13.3
-        version: 0.13.3(solid-js@1.8.17)
+        specifier: 0.13.4
+        version: 0.13.4(solid-js@1.8.17)
       '@solidjs/start':
-        specifier: 1.0.0
-        version: 1.0.0(@testing-library/jest-dom@6.4.5(vitest@1.6.0(@types/node@20.12.13)(terser@5.31.0)))(rollup@4.18.0)(solid-js@1.8.17)(vinxi@0.3.11(@opentelemetry/api@1.8.0)(@types/node@20.12.13)(ioredis@5.4.1)(terser@5.31.0))(vite@5.2.12(@types/node@20.12.13)(terser@5.31.0))
+        specifier: 1.0.1
+        version: 1.0.1(@testing-library/jest-dom@6.4.5(vitest@1.6.0(@types/node@20.12.13)(terser@5.31.0)))(rollup@4.18.0)(solid-js@1.8.17)(vinxi@0.3.11(@opentelemetry/api@1.8.0)(@types/node@20.12.13)(ioredis@5.4.1)(terser@5.31.0))(vite@5.2.12(@types/node@20.12.13)(terser@5.31.0))
       '@trpc/client':
         specifier: 10.45.2
         version: 10.45.2(@trpc/server@10.45.2)
@@ -1359,13 +1359,13 @@ packages:
     peerDependencies:
       solid-js: '>=1.8.4'
 
-  '@solidjs/router@0.13.3':
-    resolution: {integrity: sha512-p8zznlvnN3KySMXqT8irhubgDNTETNa/guaGHU/cZl7kuiPO3PmkWNYfoNCygtEpoxLmLpf62/ZKeyhFdZexsw==}
+  '@solidjs/router@0.13.4':
+    resolution: {integrity: sha512-UvL/8TkP3ExE/Z5KDs0wdqesWasISsRTrrredcTbxQx/eNdRXr8BXFsa3GV2f6VSQVjbukWG5cRAcIzV76nl/g==}
     peerDependencies:
       solid-js: ^1.8.6
 
-  '@solidjs/start@1.0.0':
-    resolution: {integrity: sha512-N+Zlb5hrYkOcYecBfKOtJ3jW1DRVNRJnHDsiljSbWefgdncJTvmcnVBr8rjqp898bDHyDo0c7iFdGrhKFEv06A==}
+  '@solidjs/start@1.0.1':
+    resolution: {integrity: sha512-W29OlcJewXUehvDu5Lf+w8hQRiRMdMGaNUwMhnR3neqPxwdZf0LPPPVGyHxZHk4375HdcdBXHuvrOI+xv8Xrcg==}
 
   '@solidjs/testing-library@0.8.8':
     resolution: {integrity: sha512-47J9Aw+iG45Fs5Kxu/IJmkaaucpF7qhDazW+iXeNssAYI0FH+4MeM/SfYRhPbIMH/hBpMh/XjbK1Wpyu9PcSwg==}
@@ -2560,8 +2560,8 @@ packages:
       '@swc/core':
         optional: true
 
-  electron@30.0.8:
-    resolution: {integrity: sha512-ivzXJJ/9gdb4oOw+5SDuaZpSInz8C+Z021dKZfFLMltKbDa4sSqt5cRBiUg7J36Z2kdus+Jai0bdHWutYE9wAA==}
+  electron@30.0.9:
+    resolution: {integrity: sha512-ArxgdGHVu3o5uaP+Tqj8cJDvU03R6vrGrOqiMs7JXLnvQHMqXJIIxmFKQAIdJW8VoT3ac3hD21tA7cPO10RLow==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -6332,11 +6332,11 @@ snapshots:
     dependencies:
       solid-js: 1.8.17
 
-  '@solidjs/router@0.13.3(solid-js@1.8.17)':
+  '@solidjs/router@0.13.4(solid-js@1.8.17)':
     dependencies:
       solid-js: 1.8.17
 
-  '@solidjs/start@1.0.0(@testing-library/jest-dom@6.4.5(vitest@1.6.0(@types/node@20.12.13)(terser@5.31.0)))(rollup@4.18.0)(solid-js@1.8.17)(vinxi@0.3.11(@opentelemetry/api@1.8.0)(@types/node@20.12.13)(ioredis@5.4.1)(terser@5.31.0))(vite@5.2.12(@types/node@20.12.13)(terser@5.31.0))':
+  '@solidjs/start@1.0.1(@testing-library/jest-dom@6.4.5(vitest@1.6.0(@types/node@20.12.13)(terser@5.31.0)))(rollup@4.18.0)(solid-js@1.8.17)(vinxi@0.3.11(@opentelemetry/api@1.8.0)(@types/node@20.12.13)(ioredis@5.4.1)(terser@5.31.0))(vite@5.2.12(@types/node@20.12.13)(terser@5.31.0))':
     dependencies:
       '@vinxi/plugin-directives': 0.3.1(vinxi@0.3.11(@opentelemetry/api@1.8.0)(@types/node@20.12.13)(ioredis@5.4.1)(terser@5.31.0))
       '@vinxi/server-components': 0.3.3(vinxi@0.3.11(@opentelemetry/api@1.8.0)(@types/node@20.12.13)(ioredis@5.4.1)(terser@5.31.0))
@@ -6362,12 +6362,12 @@ snapshots:
       - vinxi
       - vite
 
-  '@solidjs/testing-library@0.8.8(@solidjs/router@0.13.3(solid-js@1.8.17))(solid-js@1.8.17)':
+  '@solidjs/testing-library@0.8.8(@solidjs/router@0.13.4(solid-js@1.8.17))(solid-js@1.8.17)':
     dependencies:
       '@testing-library/dom': 10.1.0
       solid-js: 1.8.17
     optionalDependencies:
-      '@solidjs/router': 0.13.3(solid-js@1.8.17)
+      '@solidjs/router': 0.13.4(solid-js@1.8.17)
 
   '@szmarczak/http-timer@4.0.6':
     dependencies:
@@ -7777,12 +7777,12 @@ snapshots:
 
   electron-to-chromium@1.4.783: {}
 
-  electron-trpc@0.6.1(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(electron@30.0.8):
+  electron-trpc@0.6.1(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(electron@30.0.9):
     dependencies:
       '@trpc/client': 10.45.2(@trpc/server@10.45.2)
       '@trpc/server': 10.45.2
       debug: 4.3.4(supports-color@8.1.1)
-      electron: 30.0.8
+      electron: 30.0.9
     transitivePeerDependencies:
       - supports-color
 
@@ -7798,7 +7798,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@30.0.8:
+  electron@30.0.9:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 20.12.13
