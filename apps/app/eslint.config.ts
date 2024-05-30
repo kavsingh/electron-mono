@@ -5,7 +5,11 @@ import { fixupPluginRules } from "@eslint/compat";
 // @ts-expect-error no types available
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
-import solid from "eslint-plugin-solid";
+import { default as react } from "eslint-plugin-react";
+// @ts-expect-error no types available
+import * as reactCompiler from "eslint-plugin-react-compiler";
+// @ts-expect-error no types available
+import reactHooks from "eslint-plugin-react-hooks";
 import tailwindcss from "eslint-plugin-tailwindcss";
 // @ts-expect-error no types available
 import testingLibrary from "eslint-plugin-testing-library";
@@ -70,12 +74,33 @@ export default tsEslint.config(
 				config: path.join(dirname, "tailwind.config.ts"),
 				callees: ["tv", "classList"],
 			},
+			react: { version: "detect" },
 		},
-
 		extends: [
+			// @ts-expect-error upstream types
 			...tailwindcss.configs["flat/recommended"],
-			solid.configs["flat/recommended"],
+			// @ts-expect-error upstream types
+			react.configs.flat.recommended,
+			// @ts-expect-error upstream types
+			react.configs.flat["jsx-runtime"],
 		],
+		plugins: {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			"react-hooks": reactHooks,
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			"react-compiler": reactCompiler,
+		},
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		rules: {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+			...reactHooks.configs.recommended.rules,
+			"react/jsx-filename-extension": [
+				"error",
+				{ extensions: [".tsx", ".jsx"] },
+			],
+			"react/prop-types": "off",
+			"react-compiler/react-compiler": "warn",
+		},
 	},
 
 	{
@@ -115,7 +140,7 @@ export default tsEslint.config(
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		rules: {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-			...testingLibrary.configs["flat/dom"].rules,
+			...testingLibrary.configs["flat/react"].rules,
 		},
 	},
 
