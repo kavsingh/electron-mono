@@ -9,8 +9,7 @@ import type { VariantProps } from "tailwind-variants";
 //
 
 export function CardRoot(
-	props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
-		VariantProps<typeof cardRootVariants>,
+	props: Props<HTMLDivElement, typeof cardRootVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -26,8 +25,7 @@ const cardRootVariants = tv({
 //
 
 export function CardHeader(
-	props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
-		VariantProps<typeof cardHeaderVariants>,
+	props: Props<HTMLDivElement, typeof cardHeaderVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -46,8 +44,7 @@ const cardHeaderVariants = tv({
 //
 
 export function CardTitle(
-	props: Omit<JSX.HTMLAttributes<HTMLHeadingElement>, "classList"> &
-		VariantProps<typeof cardTitleVariants>,
+	props: Props<HTMLHeadingElement, typeof cardTitleVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -63,8 +60,7 @@ const cardTitleVariants = tv({
 //
 
 export function CardDescription(
-	props: Omit<JSX.HTMLAttributes<HTMLParagraphElement>, "classList"> &
-		VariantProps<typeof cardDescriptionVariants>,
+	props: Props<HTMLParagraphElement, typeof cardDescriptionVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -83,8 +79,7 @@ const cardDescriptionVariants = tv({
 //
 
 export function CardContent(
-	props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
-		VariantProps<typeof cardContentVariants>,
+	props: Props<HTMLDivElement, typeof cardContentVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -103,8 +98,7 @@ const cardContentVariants = tv({
 //
 
 export function CardFooter(
-	props: Omit<JSX.HTMLAttributes<HTMLDivElement>, "classList"> &
-		VariantProps<typeof cardFooterVariants>,
+	props: Props<HTMLDivElement, typeof cardFooterVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -130,3 +124,8 @@ export default {
 	Content: CardContent,
 	Footer: CardFooter,
 };
+
+type Props<
+	TElement extends HTMLElement,
+	TVariants extends ReturnType<typeof tv>,
+> = Omit<JSX.HTMLAttributes<TElement>, "classList"> & VariantProps<TVariants>;
