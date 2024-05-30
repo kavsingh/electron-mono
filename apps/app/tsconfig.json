@@ -1,8 +1,7 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"jsx": "preserve",
-		"jsxImportSource": "solid-js",
+		"jsx": "react-jsx",
 		"lib": ["esnext", "dom"],
 		"paths": { "#*": ["./src/*"] },
 		"sourceMap": true

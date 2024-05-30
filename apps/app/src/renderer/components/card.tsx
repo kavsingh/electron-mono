@@ -1,20 +1,19 @@
 // https://ui.shadcn.com/docs/components/card
 
-import { splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
-import type { JSX } from "solid-js";
+import type { HTMLAttributes, RefAttributes } from "react";
 import type { VariantProps } from "tailwind-variants";
 
 //
 
-export function CardRoot(
-	props: Props<HTMLDivElement, typeof cardRootVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardRoot({
+	className,
+	ref,
+	...passProps
+}: Props<HTMLDivElement, typeof cardRootVariants>) {
 	return (
-		<div {...passProps} class={cardRootVariants({ class: localProps.class })} />
+		<div {...passProps} ref={ref} className={cardRootVariants({ className })} />
 	);
 }
 
@@ -24,15 +23,16 @@ const cardRootVariants = tv({
 
 //
 
-export function CardHeader(
-	props: Props<HTMLDivElement, typeof cardHeaderVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardHeader({
+	className,
+	ref,
+	...passProps
+}: Props<HTMLDivElement, typeof cardHeaderVariants>) {
 	return (
 		<div
 			{...passProps}
-			class={cardHeaderVariants({ class: localProps.class })}
+			ref={ref}
+			className={cardHeaderVariants({ className })}
 		/>
 	);
 }
@@ -43,13 +43,13 @@ const cardHeaderVariants = tv({
 
 //
 
-export function CardTitle(
-	props: Props<HTMLHeadingElement, typeof cardTitleVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardTitle({
+	className,
+	ref,
+	...passProps
+}: Props<HTMLHeadingElement, typeof cardTitleVariants>) {
 	return (
-		<h3 {...passProps} class={cardTitleVariants({ class: localProps.class })} />
+		<h3 {...passProps} ref={ref} className={cardTitleVariants({ className })} />
 	);
 }
 
@@ -59,15 +59,16 @@ const cardTitleVariants = tv({
 
 //
 
-export function CardDescription(
-	props: Props<HTMLParagraphElement, typeof cardDescriptionVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardDescription({
+	className,
+	ref,
+	...passProps
+}: Props<HTMLParagraphElement, typeof cardDescriptionVariants>) {
 	return (
 		<p
 			{...passProps}
-			class={cardDescriptionVariants({ class: localProps.class })}
+			ref={ref}
+			className={cardDescriptionVariants({ className })}
 		/>
 	);
 }
@@ -78,15 +79,16 @@ const cardDescriptionVariants = tv({
 
 //
 
-export function CardContent(
-	props: Props<HTMLDivElement, typeof cardContentVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardContent({
+	className,
+	ref,
+	...passProps
+}: Props<HTMLDivElement, typeof cardContentVariants>) {
 	return (
 		<div
 			{...passProps}
-			class={cardContentVariants({ class: localProps.class })}
+			ref={ref}
+			className={cardContentVariants({ className })}
 		/>
 	);
 }
@@ -97,15 +99,16 @@ const cardContentVariants = tv({
 
 //
 
-export function CardFooter(
-	props: Props<HTMLDivElement, typeof cardFooterVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardFooter({
+	className,
+	ref,
+	...passProps
+}: Props<HTMLDivElement, typeof cardFooterVariants>) {
 	return (
 		<div
 			{...passProps}
-			class={cardFooterVariants({ class: localProps.class })}
+			ref={ref}
+			className={cardFooterVariants({ className })}
 		/>
 	);
 }
@@ -130,4 +133,7 @@ export default {
 type Props<
 	TElement extends HTMLElement,
 	TVariants extends ReturnType<typeof tv>,
-> = Omit<JSX.HTMLAttributes<TElement>, "classList"> & VariantProps<TVariants>;
+> = HTMLAttributes<TElement> &
+	VariantProps<TVariants> &
+	// TODO: remove this when react types updated for v19
+	RefAttributes<TElement>;

@@ -23,10 +23,16 @@ const restrictFromBrowser = {
 };
 
 const restrictFromNode = {
-	paths: [{ name: "solid-js" }, { name: "@trpc/client" }],
+	paths: [{ name: "react" }, { name: "@trpc/client" }],
 	patterns: [
 		{
-			group: ["solid-*", "@solidjs/-*", "tailwind-*", "electron-log/renderer"],
+			group: [
+				"react-*",
+				"@react/-*",
+				"*/react",
+				"tailwind-*",
+				"electron-log/renderer",
+			],
 		},
 	],
 };
