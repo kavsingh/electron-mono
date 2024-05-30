@@ -23,7 +23,6 @@
 	"eslint.options": { "flags": ["unstable_ts_config"] },
 	"eslint.workingDirectories": [{ "mode": "auto" }],
 	"tailwindCSS.validate": true,
-	"tailwindCSS.classAttributes": ["class", "classList"],
 	"tailwindCSS.experimental.classRegex": [
 		["tv\\((([^()]*|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
 	],

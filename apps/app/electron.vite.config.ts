@@ -1,11 +1,11 @@
 /// <reference types="vitest" />
 import path from "node:path";
 
+import reactPlugin from "@vitejs/plugin-react";
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
-import solidPlugin from "vite-plugin-solid";
 import tsconfigPathsPlugin from "vite-tsconfig-paths";
 
-import type { PluginOption, UserConfig } from "vite";
+import type { UserConfig } from "vite";
 
 const isE2E = process.env["E2E"] === "true";
 
@@ -34,7 +34,12 @@ export const rendererConfig: UserConfig = {
 	define,
 	build,
 	resolve: { conditions: ["browser"] },
-	plugins: [tsconfigPathsPlugin(), solidPlugin() as unknown as PluginOption],
+	plugins: [
+		reactPlugin({
+			babel: { plugins: [["babel-plugin-react-compiler", {}]] },
+		}),
+		tsconfigPathsPlugin(),
+	],
 };
 
 const preloadConfig: UserConfig = {
