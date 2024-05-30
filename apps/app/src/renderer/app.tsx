@@ -1,6 +1,6 @@
-import { Route, HashRouter } from "@solidjs/router";
 import log from "electron-log/renderer";
-import { createEffect } from "solid-js";
+import { useEffect } from "react";
+import { HashRouter, Route, Routes } from "react-router-dom";
 
 import { AppQueryClientProvider } from "./contexts/app-query-client";
 import useTheme from "./hooks/use-theme";
@@ -14,16 +14,20 @@ export default function App() {
 
 	log.info("App mounted");
 
-	createEffect(() => {
-		document.documentElement.classList.toggle("dark", theme() === "dark");
-	});
+	useEffect(() => {
+		document.documentElement.classList.toggle("dark", theme === "dark");
+	}, [theme]);
 
 	return (
 		<AppQueryClientProvider>
-			<HashRouter root={AppLayout}>
-				<Route path="/" component={Home} />
-				<Route path="/files" component={Files} />
-				<Route path="/settings" component={Settings} />
+			<HashRouter>
+				<Routes>
+					<Route element={<AppLayout />}>
+						<Route path="/" element={<Home />} />
+						<Route path="/files" element={<Files />} />
+						<Route path="/settings" element={<Settings />} />
+					</Route>
+				</Routes>
 			</HashRouter>
 		</AppQueryClientProvider>
 	);

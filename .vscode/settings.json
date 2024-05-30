@@ -22,7 +22,6 @@
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"eslint.workingDirectories": [{ "mode": "auto" }],
 	"tailwindCSS.validate": true,
-	"tailwindCSS.classAttributes": ["class", "classList"],
 	"tailwindCSS.experimental.classRegex": [
 		["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
 	],
