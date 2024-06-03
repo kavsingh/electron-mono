@@ -125,6 +125,8 @@ export default {
 	Footer: CardFooter,
 };
 
+//
+
 type Props<
 	TElement extends HTMLElement,
 	TVariants extends ReturnType<typeof tv>,

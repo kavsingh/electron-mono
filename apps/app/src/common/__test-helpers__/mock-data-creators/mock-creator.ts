@@ -1,9 +1,9 @@
-export default function mockCreator<T extends object>(
-	defaults: T | ((partialMock: Partial<T>) => T),
-) {
-	return function mock(partial: Partial<T> = {}): T {
-		if (typeof defaults === "function") return defaults(partial);
-
-		return { ...defaults, ...partial };
+export default function mockCreator<TData>(defaults: TData) {
+	return function createMockData(
+		custom?: Partial<TData> | ((defaults: TData) => TData) | undefined,
+	): TData {
+		return typeof custom === "function"
+			? custom(defaults)
+			: { ...defaults, ...custom };
 	};
 }

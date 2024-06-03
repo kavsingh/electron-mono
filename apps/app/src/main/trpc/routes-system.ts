@@ -1,6 +1,7 @@
 import { observable } from "@trpc/server/observable";
 
 import { getSystemInfo } from "#main/services/system-info";
+import { getSystemStats } from "#main/services/system-stats";
 
 import { publicProcedure } from "./trpc-server";
 
@@ -10,18 +11,20 @@ export default function routesSystem(eventBus: AppEventBus) {
 	return {
 		systemInfo: publicProcedure.query(() => getSystemInfo()),
 
-		systemInfoEvent: publicProcedure.subscription(() => {
-			type Payload = AppEvent<"systemInfo">;
+		systemStats: publicProcedure.query(() => getSystemStats()),
+
+		systemStatsEvent: publicProcedure.subscription(() => {
+			type Payload = AppEvent<"systemStats">;
 
 			return observable<Payload>((emit) => {
 				function handler(payload: Payload) {
 					emit.next(payload);
 				}
 
-				eventBus.on("systemInfo", handler);
+				eventBus.on("systemStats", handler);
 
 				return function unsubscribe() {
-					eventBus.off("systemInfo", handler);
+					eventBus.off("systemStats", handler);
 				};
 			});
 		}),

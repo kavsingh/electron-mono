@@ -1,18 +1,18 @@
 import { trpc } from "#renderer/trpc";
 
 // eslint-disable-next-line import/no-restricted-paths
-import type { SystemInfo } from "#main/services/system-info";
+import type { SystemStats } from "#main/services/system-stats";
 import type { Mock } from "vitest";
 
-export function publishSystemInfoEvent(payload: SystemInfo) {
-	publishTrpcSubscriberEvent(trpc.systemInfoEvent.subscribe, payload);
+export function publishSystemStatsEvent(payload: SystemStats) {
+	publishTrpcSubscriberEvent(trpc.systemStatsEvent.subscribe as Mock, payload);
 }
 
-function publishTrpcSubscriberEvent<TFunc extends (...args: any[]) => any>(
-	mockedTrpcSubscribe: TFunc,
+function publishTrpcSubscriberEvent(
+	mockedTrpcSubscribe: Mock,
 	payload: unknown,
 ) {
-	const calls: unknown[] = (mockedTrpcSubscribe as unknown as Mock).mock.calls;
+	const calls: unknown[] = mockedTrpcSubscribe.mock.calls;
 
 	for (const call of calls) {
 		if (!Array.isArray(call)) continue;

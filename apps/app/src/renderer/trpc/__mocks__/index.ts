@@ -1,7 +1,10 @@
 import { vi } from "vitest";
 
 import { createMockOpenDialogReturnValue } from "#common/__test-helpers__/mock-data-creators/electron";
-import { createMockSystemInfo } from "#common/__test-helpers__/mock-data-creators/system-info";
+import {
+	createMockSystemInfo,
+	createMockSystemStats,
+} from "#common/__test-helpers__/mock-data-creators/system";
 
 import type { trpc as trpcActual } from "..";
 
@@ -15,6 +18,9 @@ export const trpc: typeof trpcActual = {
 	systemInfo: {
 		query: vi.fn(() => Promise.resolve(createMockSystemInfo())),
 	},
+	systemStats: {
+		query: vi.fn(() => Promise.resolve(createMockSystemStats())),
+	},
 	showOpenDialog: {
 		query: vi.fn(() => Promise.resolve(createMockOpenDialogReturnValue())),
 	},
@@ -27,5 +33,5 @@ export const trpc: typeof trpcActual = {
 	removeEmbeddedWebView: {
 		mutate: vi.fn(() => Promise.resolve()),
 	},
-	systemInfoEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
+	systemStatsEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
 };

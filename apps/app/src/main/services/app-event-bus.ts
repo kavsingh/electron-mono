@@ -1,6 +1,6 @@
 import { EventEmitter } from "eventemitter3";
 
-import type { SystemInfo } from "./system-info";
+import type { SystemStats } from "./system-stats";
 
 export function createAppEventBus() {
 	return new EventEmitter<AppEventMap, never>();
@@ -13,5 +13,5 @@ export type AppEventName = keyof AppEventMap;
 export type AppEvent<K extends AppEventName> = AppEventMap[K][0];
 
 type AppEventMap = {
-	systemInfo: [SystemInfo];
+	systemStats: [SystemStats];
 };

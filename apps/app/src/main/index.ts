@@ -6,15 +6,15 @@ import { createMainWindow } from "./app-windows/main-window";
 import initLogging from "./lib/init-logging";
 import restrictNavigation from "./lib/restrict-navigation";
 import { createAppEventBus } from "./services/app-event-bus";
-import { startSystemInfoUpdates } from "./services/system-info";
+import { startSystemStatsUpdates } from "./services/system-stats";
 import { createAppRouter } from "./trpc/router";
 
 initLogging();
 
 const appEventBus = createAppEventBus();
 let trpcIpcHandler: ReturnType<typeof createIPCHandler> | undefined = undefined;
-let stopSystemInfoUpdates:
-	| ReturnType<typeof startSystemInfoUpdates>
+let stopSystemStatsUpdates:
+	| ReturnType<typeof startSystemStatsUpdates>
 	| undefined = undefined;
 
 app.on("activate", () => {
@@ -36,7 +36,7 @@ app.on("window-all-closed", () => {
 app.on("quit", () => {
 	log.info("App quitting");
 
-	stopSystemInfoUpdates?.();
+	stopSystemStatsUpdates?.();
 });
 
 app.enableSandbox();
@@ -44,7 +44,7 @@ void app.whenReady().then(() => {
 	log.info("App ready");
 
 	trpcIpcHandler = createIPCHandler({ router: createAppRouter(appEventBus) });
-	stopSystemInfoUpdates = startSystemInfoUpdates(appEventBus);
+	stopSystemStatsUpdates = startSystemStatsUpdates(appEventBus);
 	showMainWindow();
 });
 
