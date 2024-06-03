@@ -16,7 +16,7 @@
 		"@trpc/client": "10.45.2",
 		"@trpc/server": "10.45.2",
 		"@solidjs/meta": "0.29.4",
-		"@solidjs/router": "0.13.4",
+		"@solidjs/router": "0.13.5",
 		"@solidjs/start": "1.0.1",
 		"autoprefixer": "10.4.19",
 		"eslint-plugin-jest-dom": "5.4.0",
