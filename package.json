@@ -11,7 +11,7 @@
 	"license": "MIT",
 	"private": true,
 	"type": "module",
-	"packageManager": "pnpm@9.3.0+sha512.ee7b93e0c2bd11409c6424f92b866f31d3ea1bef5fbe47d3c7500cdc3c9668833d2e55681ad66df5b640c61fa9dc25d546efa54d76d7f8bf54b13614ac293631",
+	"packageManager": "pnpm@9.4.0+sha512.f549b8a52c9d2b8536762f99c0722205efc5af913e77835dbccc3b0b0b2ca9e7dc8022b78062c17291c48e88749c70ce88eb5a74f1fa8c4bf5e18bb46c8bd83a",
 	"engines": {
 		"node": ">=20"
 	},
@@ -29,9 +29,9 @@
 	"devDependencies": {
 		"@tsconfig/strictest": "2.0.5",
 		"@types/eslint": "8.56.10",
-		"@types/node": "20.14.2",
-		"@typescript-eslint/eslint-plugin": "7.13.0",
-		"@typescript-eslint/parser": "7.13.0",
+		"@types/node": "20.14.9",
+		"@typescript-eslint/eslint-plugin": "7.14.1",
+		"@typescript-eslint/parser": "7.14.1",
 		"cross-env": "7.0.3",
 		"eslint": "8.57.0",
 		"eslint-config-prettier": "9.1.0",
@@ -43,9 +43,9 @@
 		"npm-run-all": "4.1.5",
 		"prettier": "3.3.2",
 		"rimraf": "5.0.7",
-		"tsx": "4.15.4",
-		"turbo": "2.0.4",
-		"typescript": "5.4.5"
+		"tsx": "4.15.7",
+		"turbo": "2.0.5",
+		"typescript": "5.5.2"
 	},
 	"resolutions": {
 		"tsconfig-paths": ">=4.0.0"
