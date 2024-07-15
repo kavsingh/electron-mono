@@ -8,7 +8,7 @@ import useSystemStats from "#renderer/hooks/use-system-stats";
 
 import InfoList from "../../components/info-list";
 
-// eslint-disable-next-line import/no-restricted-paths
+// eslint-disable-next-line import-x/no-restricted-paths
 import type { SystemStats } from "#main/services/system-stats";
 import type { Sample } from "#renderer/components/chrono-graph";
 

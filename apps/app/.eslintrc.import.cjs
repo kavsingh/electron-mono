@@ -1,7 +1,6 @@
 /** @type {import("node:path")} */
 const path = require("node:path");
 
-/** @type {import("../../.eslint.helpers.cjs")} */
 const { importOrderConfig } = require("../../.eslint.helpers.cjs");
 
 /** @param {Parameters<typeof path.resolve>} args */
@@ -35,20 +34,20 @@ const restrictFromNode = {
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
 	settings: {
-		"import/parsers": {
+		"import-x/parsers": {
 			"@typescript-eslint/parser": [".ts", ".tsx"],
 		},
-		"import/resolver": {
+		"import-x/resolver": {
 			"eslint-import-resolver-typescript": {
 				project: fromDirname("./tsconfig.json"),
 			},
 		},
 	},
 	rules: {
-		"import/order": importOrderConfig("tsconfig.json"),
+		"import-x/order": importOrderConfig("tsconfig.json"),
 
 		// enforce context isolation
-		"import/no-restricted-paths": [
+		"import-x/no-restricted-paths": [
 			"error",
 			{
 				zones: [

@@ -11,8 +11,8 @@ module.exports = {
 		"eslint:recommended",
 		"plugin:@typescript-eslint/strict-type-checked",
 		"plugin:@typescript-eslint/stylistic-type-checked",
-		"plugin:import/recommended",
-		"plugin:import/typescript",
+		"plugin:import-x/recommended",
+		"plugin:import-x/typescript",
 		"plugin:prettier/recommended",
 	],
 	plugins: ["filenames", "deprecation"],
@@ -48,12 +48,12 @@ module.exports = {
 			{ argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
 		],
 
-		"import/consistent-type-specifier-style": ["error", "prefer-top-level"],
-		"import/no-cycle": "error",
-		"import/no-self-import": "error",
-		"import/no-unused-modules": "error",
-		"import/no-useless-path-segments": "error",
-		"import/order": [
+		"import-x/consistent-type-specifier-style": ["error", "prefer-top-level"],
+		"import-x/no-cycle": "error",
+		"import-x/no-self-import": "error",
+		"import-x/no-unused-modules": "error",
+		"import-x/no-useless-path-segments": "error",
+		"import-x/order": [
 			"warn",
 			{
 				"groups": [

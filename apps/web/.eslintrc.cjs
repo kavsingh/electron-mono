@@ -1,9 +1,9 @@
 /** @type {import("path")} */
 const path = require("node:path");
 
+/** @type {import("eslint-plugin-vitest")} */
 const vitest = require("eslint-plugin-vitest");
 
-/** @type {import("../../.eslint.helpers.cjs")} */
 const {
 	importOrderConfig,
 	testFilePatterns,
@@ -14,7 +14,7 @@ module.exports = {
 	root: true,
 	parserOptions: { project: path.resolve(__dirname, "./tsconfig.json") },
 	settings: {
-		"import/resolver": {
+		"import-x/resolver": {
 			"eslint-import-resolver-typescript": {
 				project: path.resolve(__dirname, "./tsconfig.json"),
 			},
@@ -22,7 +22,7 @@ module.exports = {
 	},
 	extends: [require.resolve("../../.eslintrc.cjs")],
 	rules: {
-		"import/order": importOrderConfig("tsconfig.json"),
+		"import-x/order": importOrderConfig("tsconfig.json"),
 	},
 	overrides: [
 		{
@@ -35,7 +35,7 @@ module.exports = {
 			files: ["src/**/*"],
 			env: { node: false, browser: true },
 			settings: {
-				"import/parsers": { "@typescript-eslint/parser": [".ts", ".tsx"] },
+				"import-x/parsers": { "@typescript-eslint/parser": [".ts", ".tsx"] },
 				"tailwindcss": { callees: ["twMerge", "twJoin"] },
 			},
 			extends: ["plugin:tailwindcss/recommended", "plugin:solid/typescript"],

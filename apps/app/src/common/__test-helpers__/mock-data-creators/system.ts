@@ -1,8 +1,8 @@
 import mockCreator from "./mock-creator";
 
-// eslint-disable-next-line import/no-restricted-paths
+// eslint-disable-next-line import-x/no-restricted-paths
 import type { SystemInfo } from "#main/services/system-info";
-// eslint-disable-next-line import/no-restricted-paths
+// eslint-disable-next-line import-x/no-restricted-paths
 import type { SystemStats } from "#main/services/system-stats";
 
 export const createMockSystemInfo = mockCreator<SystemInfo>({

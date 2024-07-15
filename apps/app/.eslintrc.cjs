@@ -1,9 +1,9 @@
 /** @type {import("node:path")} */
 const path = require("node:path");
 
+/** @type {import("eslint-plugin-vitest")} */
 const vitest = require("eslint-plugin-vitest");
 
-/** @type {import("../../.eslint.helpers.cjs")} */
 const { testFilePatterns } = require("../../.eslint.helpers.cjs");
 
 /** @type {import('eslint').ESLint.ConfigData} */

@@ -1,7 +1,6 @@
 /** @type {import("path")} */
 const path = require("node:path");
 
-/** @type {import("../../.eslint.helpers.cjs")} */
 const { importOrderConfig } = require("../../.eslint.helpers.cjs");
 
 /** @type {import("eslint").ESLint.ConfigData} */
@@ -9,7 +8,7 @@ module.exports = {
 	root: true,
 	parserOptions: { project: path.resolve(__dirname, "./tsconfig.json") },
 	settings: {
-		"import/resolver": {
+		"import-x/resolver": {
 			"eslint-import-resolver-typescript": {
 				project: path.resolve(__dirname, "./tsconfig.json"),
 			},
@@ -17,7 +16,7 @@ module.exports = {
 	},
 	extends: [require.resolve("../../.eslintrc.cjs")],
 	rules: {
-		"import/order": importOrderConfig("tsconfig.json"),
+		"import-x/order": importOrderConfig("tsconfig.json"),
 	},
 	overrides: [
 		{
