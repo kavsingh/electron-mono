@@ -5,12 +5,15 @@ import {
 	createMockSystemInfo,
 	createMockSystemStats,
 } from "#common/__test-helpers__/mock-data-creators/system";
+import { themeSourceSchema } from "#common/lib/theme";
 
-import type { trpc as trpcActual } from "..";
+import type { trpc as trpcActual } from "../index";
+
+const defaultThemeSource = themeSourceSchema.parse("dark");
 
 export const trpc: typeof trpcActual = {
 	themeSource: {
-		query: vi.fn(() => Promise.resolve("dark")),
+		query: vi.fn(() => Promise.resolve(defaultThemeSource)),
 	},
 	setThemeSource: {
 		mutate: vi.fn((source) => Promise.resolve(source)),
