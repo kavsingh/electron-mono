@@ -2,7 +2,7 @@ import { defineConfig, mergeConfig } from "vitest/config";
 
 import { rendererConfig } from "./electron.vite.config";
 
-import type { UserWorkspaceConfig } from "vitest";
+import type { UserWorkspaceConfig } from "vitest/node";
 
 export default defineConfig(
 	mergeConfig(rendererConfig, {

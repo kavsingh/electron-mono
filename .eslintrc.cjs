@@ -39,13 +39,18 @@ module.exports = {
 			},
 		],
 
-		"no-throw-literal": "off",
-		"@typescript-eslint/no-throw-literal": "error",
-
 		"no-unused-vars": "off",
 		"@typescript-eslint/no-unused-vars": [
 			"error",
-			{ argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+			{
+				args: "all",
+				argsIgnorePattern: "^_",
+				caughtErrors: "all",
+				caughtErrorsIgnorePattern: "^_",
+				destructuredArrayIgnorePattern: "^_",
+				varsIgnorePattern: "^_",
+				ignoreRestSiblings: true,
+			},
 		],
 
 		"import-x/consistent-type-specifier-style": ["error", "prefer-top-level"],
@@ -91,6 +96,7 @@ module.exports = {
 		{
 			files: ["*.c[jt]s"],
 			rules: {
+				"@typescript-eslint/no-require-imports": "off",
 				"@typescript-eslint/no-var-requires": "off",
 			},
 		},
