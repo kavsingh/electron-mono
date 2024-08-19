@@ -6,12 +6,9 @@ import log from "electron-log";
 export function createMainWindow() {
 	const mainWindow = new BrowserWindow({
 		titleBarStyle: "hiddenInset",
-		// TODO: These seem to break loading WebContentsView into BrowserWindow
-		// backgroundMaterial: "acrylic",
-		// vibrancy: "sidebar",
-		// TODO: Re-enable transparent and remove backgroundColor when above is fixed
-		// transparent: true,
-		backgroundColor: "#00000000",
+		backgroundMaterial: "acrylic",
+		vibrancy: "sidebar",
+		transparent: true,
 		width: 800,
 		height: 600,
 		webPreferences: { preload: join(__dirname, "../preload/renderer.cjs") },
