@@ -50,7 +50,7 @@ function DialogFileSelect({
 	const [files, selectFiles] = useFileSelectDialog();
 
 	function handleClick() {
-		void selectFiles();
+		selectFiles();
 	}
 
 	useEffect(() => {
