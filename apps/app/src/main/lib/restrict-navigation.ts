@@ -1,4 +1,5 @@
 import { shell } from "electron";
+
 import log from "electron-log";
 
 import type { WebContents } from "electron";

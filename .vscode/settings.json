@@ -19,12 +19,14 @@
 		"**/out": true,
 		"**/dist": true
 	},
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"eslint.options": { "flags": ["unstable_ts_config"] },
+	"eslint.workingDirectories": [{ "mode": "auto" }],
 	"tailwindCSS.validate": true,
 	"tailwindCSS.classAttributes": ["class", "classList"],
 	"tailwindCSS.experimental.classRegex": [
 		["tv\\((([^()]*|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
 	],
-	"typescript.tsdk": "node_modules/typescript/lib",
 	"[javascript]": {
 		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
 	},

@@ -1,6 +1,6 @@
+import { BrowserWindow, WebContentsView } from "electron";
 import { join } from "node:path";
 
-import { BrowserWindow, WebContentsView } from "electron";
 import { z } from "zod";
 
 import { publicProcedure } from "./trpc-server";

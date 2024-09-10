@@ -1,5 +1,6 @@
-import { BRIDGE_NAME } from "@electron-mono/shared/web-bridge-api";
 import { contextBridge } from "electron";
+
+import { BRIDGE_NAME } from "@electron-mono/shared/web-bridge-api";
 
 import type { WebBridgeApi } from "@electron-mono/shared/web-bridge-api";
 

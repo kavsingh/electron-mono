@@ -1,6 +1,6 @@
+import { app, BrowserWindow } from "electron";
 import { join } from "node:path";
 
-import { app, BrowserWindow } from "electron";
 import log from "electron-log";
 
 export function createMainWindow() {

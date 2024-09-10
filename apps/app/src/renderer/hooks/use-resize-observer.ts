@@ -10,7 +10,7 @@ export function useResizeObserver() {
 	function observe(
 		el: Element,
 		callback: UseResizeObserverEntryCallback,
-		options?: ResizeObserverOptions | undefined,
+		options?: ResizeObserverOptions,
 	): UseResizeObserverUnobserveFn {
 		elementCallbacks.set(el, callback);
 		resizeObserver.observe(el, options);
