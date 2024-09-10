@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 import { trpc } from "#renderer/trpc";
 
@@ -8,6 +8,16 @@ export default function Web() {
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const viewIdRef = useRef<number | undefined>(undefined);
 	const showRequestedRef = useRef(false);
+	const { mutate: showEmbeddedWebView, data: viewIdResult } =
+		trpc.showEmbeddedWebView.useMutation();
+	const { mutate: updateEmbeddedWebView } =
+		trpc.updateEmbeddedWebView.useMutation();
+	const { mutate: removeEmbeddedWebView } =
+		trpc.removeEmbeddedWebView.useMutation();
+
+	useEffect(() => {
+		viewIdRef.current = viewIdResult;
+	}, [viewIdResult]);
 
 	useLayoutEffect(() => {
 		function updateBounds() {
@@ -16,7 +26,7 @@ export default function Web() {
 
 			if (!(container && typeof viewId === "number")) return;
 
-			void trpc.updateEmbeddedWebView.mutate({
+			updateEmbeddedWebView({
 				viewId,
 				bounds: domRectToBounds(container.getBoundingClientRect()),
 			});
@@ -26,7 +36,7 @@ export default function Web() {
 			window.removeEventListener("resize", updateBounds);
 
 			if (typeof viewIdRef.current === "number") {
-				void trpc.removeEmbeddedWebView.mutate(viewIdRef.current);
+				removeEmbeddedWebView(viewIdRef.current);
 			}
 		}
 
@@ -41,17 +51,15 @@ export default function Web() {
 		}
 
 		showRequestedRef.current = true;
-		void trpc.showEmbeddedWebView
-			.mutate({
-				url: "http://localhost:3000",
-				bounds: domRectToBounds(containerRef.current.getBoundingClientRect()),
-			})
-			.then((id) => (viewIdRef.current = id));
+		showEmbeddedWebView({
+			url: "http://localhost:3000",
+			bounds: domRectToBounds(containerRef.current.getBoundingClientRect()),
+		});
 
 		window.addEventListener("resize", updateBounds);
 
 		return cleanup;
-	}, []);
+	}, [removeEmbeddedWebView, showEmbeddedWebView, updateEmbeddedWebView]);
 
 	return <div className="size-full" ref={containerRef} />;
 }
@@ -64,3 +72,9 @@ function domRectToBounds(rect: DOMRect): Rectangle {
 		height: Math.round(rect.height),
 	};
 }
+
+/*
+{
+		
+	}
+	*/
