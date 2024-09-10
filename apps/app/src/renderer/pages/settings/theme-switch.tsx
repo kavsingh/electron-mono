@@ -1,5 +1,3 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-
 import { THEME_SOURCES, themeSourceSchema } from "#common/lib/theme";
 import Card from "#renderer/components/card";
 import { trpc } from "#renderer/trpc";
@@ -8,12 +6,8 @@ import type { ThemeSource } from "#common/lib/theme";
 import type { ChangeEventHandler, FormEventHandler } from "react";
 
 export default function ThemeSwitch() {
-	const { data: themeSource, refetch } = useQuery({
-		queryKey: ["ThemeSource"],
-		queryFn: () => trpc.themeSource.query(),
-	});
-	const { mutate: saveThemeSource } = useMutation({
-		mutationFn: (source: ThemeSource) => trpc.setThemeSource.mutate(source),
+	const { data: themeSource, refetch } = trpc.themeSource.useQuery();
+	const { mutate: saveThemeSource } = trpc.setThemeSource.useMutation({
 		onSuccess: () => void refetch(),
 	});
 

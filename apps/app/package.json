@@ -44,6 +44,7 @@
 		"@testing-library/react": "16.3.0",
 		"@testing-library/user-event": "14.6.1",
 		"@trpc/client": "11.1.0",
+		"@trpc/react-query": "11.1.0",
 		"@tsconfig/node20": "20.1.5",
 		"@types/eslint-plugin-tailwindcss": "3.17.0",
 		"@types/react": "19.1.2",

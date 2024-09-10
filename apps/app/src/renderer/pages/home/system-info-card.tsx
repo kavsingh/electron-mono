@@ -1,14 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-
 import Card from "#renderer/components/card";
 import InfoList from "#renderer/components/info-list";
 import { trpc } from "#renderer/trpc";
 
 export default function SystemInfoCard() {
-	const { data: info } = useQuery({
-		queryKey: ["systemInfo"],
-		queryFn: () => trpc.systemInfo.query(),
-	});
+	const { data: info } = trpc.systemInfo.useQuery();
 
 	return (
 		<Card.Root>
