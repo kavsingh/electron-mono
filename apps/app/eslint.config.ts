@@ -1,17 +1,17 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { fixupPluginRules } from "@eslint/compat";
 // @ts-expect-error no types available
-import jestDomPlugin from "eslint-plugin-jest-dom";
-import playwrightPlugin from "eslint-plugin-playwright";
-import solidPlugin from "eslint-plugin-solid";
+import jestDom from "eslint-plugin-jest-dom";
+import playwright from "eslint-plugin-playwright";
+import solid from "eslint-plugin-solid";
+import tailwind from "eslint-plugin-tailwindcss";
 // @ts-expect-error no types available
-import tailwindPlugin from "eslint-plugin-tailwindcss";
-// @ts-expect-error no types available
-import testingPlugin from "eslint-plugin-testing-library";
-import vitestPlugin from "eslint-plugin-vitest";
+import testingLibrary from "eslint-plugin-testing-library";
+import vitest from "eslint-plugin-vitest";
 import globals from "globals";
-import * as tsEslintPlugin from "typescript-eslint";
+import * as tsEslint from "typescript-eslint";
 
 import baseConfig from "../../eslint.config";
 import { testFilePatterns } from "../../eslint.helpers";
@@ -20,7 +20,7 @@ import importsConfig from "./eslint.imports";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default tsEslintPlugin.config(
+export default tsEslint.config(
 	{
 		ignores: [
 			"out/*",
@@ -71,11 +71,10 @@ export default tsEslintPlugin.config(
 				callees: ["tv", "classList"],
 			},
 		},
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
 		extends: [
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-			...tailwindPlugin.configs["flat/recommended"],
-			solidPlugin.configs["flat/recommended"],
+			...tailwind.configs["flat/recommended"],
+			solid.configs["flat/recommended"],
 		],
 	},
 
@@ -91,7 +90,7 @@ export default tsEslintPlugin.config(
 		languageOptions: {
 			globals: { ...globals.node },
 		},
-		extends: [vitestPlugin.configs.all],
+		extends: [vitest.configs.all],
 		rules: {
 			"vitest/no-hooks": "off",
 		},
@@ -105,14 +104,23 @@ export default tsEslintPlugin.config(
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		extends: [
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-			testingPlugin.configs.recommended,
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-			jestDomPlugin.configs["flat/recommended"],
+			jestDom.configs["flat/recommended"],
 		],
+		plugins: {
+			"testing-library": fixupPluginRules({
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+				rules: testingLibrary.rules,
+			}),
+		},
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		rules: {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+			...testingLibrary.configs["flat/dom"].rules,
+		},
 	},
 
 	{
 		files: testFilePatterns({ root: "e2e" }),
-		extends: [playwrightPlugin.configs["flat/recommended"]],
+		extends: [playwright.configs["flat/recommended"]],
 	},
 );

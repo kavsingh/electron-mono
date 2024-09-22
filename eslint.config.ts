@@ -1,13 +1,13 @@
-import jsPlugin from "@eslint/js";
-import filenamesPlugin from "@kavsingh/eslint-plugin-filenames";
-import importPlugin from "eslint-plugin-import-x";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import js from "@eslint/js";
+import filenames from "@kavsingh/eslint-plugin-filenames";
+import importX from "eslint-plugin-import-x";
+import prettierRecommended from "eslint-plugin-prettier/recommended";
 import globals from "globals";
-import * as tsEslintPlugin from "typescript-eslint";
+import * as tsEslint from "typescript-eslint";
 
 import { testFileSuffixes, testFilePatterns } from "./eslint.helpers";
 
-export default tsEslintPlugin.config(
+export default tsEslint.config(
 	{
 		ignores: [".vscode/*", ".turbo/*", ".temp/*"],
 	},
@@ -20,12 +20,12 @@ export default tsEslintPlugin.config(
 		},
 	},
 
-	jsPlugin.configs.recommended,
-	...tsEslintPlugin.configs.strictTypeChecked,
-	...tsEslintPlugin.configs.stylisticTypeChecked,
-	importPlugin.flatConfigs.recommended,
-	importPlugin.flatConfigs.typescript,
-	filenamesPlugin.configs.kebab,
+	js.configs.recommended,
+	...tsEslint.configs.strictTypeChecked,
+	...tsEslint.configs.stylisticTypeChecked,
+	importX.flatConfigs.recommended,
+	importX.flatConfigs.typescript,
+	filenames.configs.kebab,
 
 	{
 		rules: {
@@ -103,7 +103,7 @@ export default tsEslintPlugin.config(
 
 	{
 		files: ["**/*.?([mc])js?(x)"],
-		extends: [tsEslintPlugin.configs.disableTypeChecked],
+		extends: [tsEslint.configs.disableTypeChecked],
 	},
 
 	{
@@ -135,5 +135,11 @@ export default tsEslintPlugin.config(
 		},
 	},
 
-	eslintPluginPrettierRecommended,
+	prettierRecommended,
+
+	{
+		rules: {
+			"prettier/prettier": "warn",
+		},
+	},
 );
