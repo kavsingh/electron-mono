@@ -6,7 +6,7 @@ import { fixupPluginRules } from "@eslint/compat";
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
 import solid from "eslint-plugin-solid";
-import tailwind from "eslint-plugin-tailwindcss";
+import tailwindcss from "eslint-plugin-tailwindcss";
 // @ts-expect-error no types available
 import testingLibrary from "eslint-plugin-testing-library";
 import vitest from "eslint-plugin-vitest";
@@ -52,7 +52,7 @@ export default tsEslint.config(
 			},
 		},
 		extends: [
-			...tailwind.configs["flat/recommended"],
+			...tailwindcss.configs["flat/recommended"],
 			solid.configs["flat/recommended"],
 		],
 		rules: {
