@@ -9,25 +9,34 @@ inputs:
 outputs:
   product_name:
     description: Product name
-    value: ${{ steps.read-name.outputs.result }}
+    value: ${{ steps.read.outputs.product_name }}
   version:
     description: Version
-    value: ${{ steps.read-version.outputs.result }}
+    value: ${{ steps.read.outputs.version }}
 
 runs:
   using: composite
   # https://gist.github.com/DarrenN/8c6a5b969481725a4413?permalink_comment_id=4167453#gistcomment-4167453
   steps:
-    - name: Read name
-      id: read-name
+    - name: Read app properties
+      id: read
       shell: bash
       run: |
-        PRODUCT_NAME=$(awk -F'"' '/"productName": ".+"/{ print $4; exit; }' ${{ inputs.app_path }}/electron-builder.config.ts)
-        echo "result=${PRODUCT_NAME}" >> $GITHUB_OUTPUT
+        product_name=$(awk -F'"' '/productName: ".+"/{ print $2; exit; }' ${{ inputs.app_path }}/electron-builder.config.ts)
+        version=$(awk -F'"' '/"version": ".+"/{ print $4; exit; }' ${{ inputs.app_path }}/package.json)
 
-    - name: Read version
-      id: read-version
+        {
+          echo "product_name=$product_name"
+          echo "version=$version"
+        } >> $GITHUB_OUTPUT
+
+    - name: Print summary
       shell: bash
       run: |
-        VERSION=$(awk -F'"' '/"version": ".+"/{ print $4; exit; }' ${{ inputs.app_path }}/package.json)
-        echo "result=${VERSION}" >> $GITHUB_OUTPUT
+        {
+          echo "### App properties: ${{ inputs.app_path }}"
+          echo "| Prop | Value |"
+          echo "| ---- | ----- |"
+          echo "| product_name | ${{ steps.read.outputs.product_name }} |"
+          echo "| version | ${{ steps.read.outputs.version }} |"
+        } >> $GITHUB_STEP_SUMMARY

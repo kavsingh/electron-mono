@@ -12,6 +12,8 @@ jobs:
   build:
     name: Build
     needs: test-lint
+    permissions:
+      contents: write
     defaults:
       run:
         shell: bash
