@@ -32,10 +32,6 @@ jobs:
         with:
           app_path: apps/app
 
-      - id: prefix
-        run: |
-          echo "result=${{ steps.get-app-properties.outputs.product_name }}_${{ steps.get-app-properties.outputs.version }}" >> $GITHUB_OUTPUT
-
       - name: Build
         run: pnpm build:${{ matrix.os == 'windows-latest' && 'win' || 'mac' }} --cache-dir=${{ steps.setup.outputs.turbo_cache_dir }}
 
@@ -43,7 +39,9 @@ jobs:
         if: ${{ success() }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.prefix.outputs.result }}-${{ matrix.os == 'windows-latest' && 'windows' || 'macos' }}
-          path: apps/app/dist/*
+          name: ${{ steps.get-app-properties.outputs.product_name }}_${{ steps.get-app-properties.outputs.version }}_${{ matrix.os == 'windows-latest' && 'windows' || 'macos' }}
+          path: |
+            apps/app/dist
+            !apps/app/dist/macos-universal/*
           if-no-files-found: error
           overwrite: true
