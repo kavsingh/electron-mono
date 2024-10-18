@@ -42,6 +42,7 @@ jobs:
           name: ${{ steps.get-app-properties.outputs.product_name }}_${{ steps.get-app-properties.outputs.version }}_${{ matrix.os == 'windows-latest' && 'windows' || 'macos' }}
           path: |
             apps/app/dist
-            !apps/app/dist/macos-universal/*
+            !apps/app/dist/mac-universal
+            !apps/app/dist/win-unpacked
           if-no-files-found: error
           overwrite: true
