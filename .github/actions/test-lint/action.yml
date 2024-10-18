@@ -1,0 +1,14 @@
+name: Test and lint
+description: Run linters and unit / integration tests
+
+runs:
+  using: composite
+  steps:
+    - run: pnpm test:ci
+      shell: bash
+
+    - run: pnpm typecheck
+      shell: bash
+
+    - run: pnpm lint
+      shell: bash

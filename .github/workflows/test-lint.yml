@@ -1,0 +1,17 @@
+name: Test and lint
+
+on:
+  push:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  test-lint:
+    name: Test and lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - uses: ./.github/actions/test-lint
