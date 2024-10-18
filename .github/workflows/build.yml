@@ -43,7 +43,7 @@ jobs:
         if: ${{ success() }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.prefix.outputs.result }}-${{ matrix.os == 'windows-latest' && 'win' || 'macos' }}
+          name: ${{ steps.prefix.outputs.result }}-${{ matrix.os == 'windows-latest' && 'windows' || 'macos' }}
           path: apps/app/dist/*
           if-no-files-found: error
           overwrite: true
