@@ -21,6 +21,7 @@
 		"build:mac": "turbo build:mac",
 		"build:linux": "turbo build:linux",
 		"test": "turbo test",
+		"test:ci": "turbo test:ci",
 		"test:e2e": "turbo test:e2e",
 		"typecheck": "turbo typecheck",
 		"lint": "turbo lint",

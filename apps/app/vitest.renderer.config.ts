@@ -2,7 +2,7 @@ import { defineConfig, mergeConfig } from "vitest/config";
 
 import { rendererConfig } from "./electron.vite.config";
 
-import type { UserWorkspaceConfig } from "vitest/node";
+import type { ViteUserConfig } from "vitest/config";
 
 export default defineConfig(
 	mergeConfig(rendererConfig, {
@@ -16,6 +16,16 @@ export default defineConfig(
 			clearMocks: true,
 			testTransformMode: { web: ["/.[jt]sx?$/"] },
 			server: { deps: { inline: [/solidjs/, /@solidjs/] } },
+			coverage: {
+				include: [
+					"src/renderer",
+					"!**/__generated__",
+					"!**/__mocks__",
+					"!**/__test*__",
+					"!**/*.test.*",
+				],
+				reportsDirectory: "./coverage/renderer",
+			},
 		},
-	} satisfies UserWorkspaceConfig),
+	} satisfies ViteUserConfig),
 );
