@@ -7,9 +7,7 @@ import type { ViteUserConfig } from "vitest/config";
 export default defineConfig(
 	mergeConfig(nodeConfig, {
 		test: {
-			include: [
-				"src/{main,common,preload}/**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
-			],
+			include: ["src/{main,common,preload}/**/*.{test,spec}.?(m|c)[jt]s?(x)"],
 			environment: "node",
 			setupFiles: ["./vitest.node.setup.ts"],
 			clearMocks: true,
@@ -21,7 +19,7 @@ export default defineConfig(
 					"!**/__generated__",
 					"!**/__mocks__",
 					"!**/__test*__",
-					"!**/*.test.*",
+					"!**/*.{test,spec}.*",
 				],
 				reportsDirectory: "./coverage/node",
 			},

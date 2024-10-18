@@ -35,33 +35,33 @@ export default tsEslint.config(
 	...importsConfig,
 
 	{
-		files: ["src/**/*.?([mc])[tj]s?(x)"],
+		files: ["src/**/*.?(m|c)[tj]s?(x)"],
 		rules: {
 			"no-console": "error",
 		},
 	},
 
 	{
-		files: ["src/common/**/*.?([mc])[tj]s?(x)"],
+		files: ["src/common/**/*.?(m|c)[tj]s?(x)"],
 		languageOptions: { globals: {} },
 	},
 
 	{
-		files: ["src/preload/**/*.?([mc])[tj]s?(x)"],
+		files: ["src/preload/**/*.?(m|c)[tj]s?(x)"],
 		languageOptions: {
 			globals: { ...globals.browser },
 		},
 	},
 
 	{
-		files: ["src/main/**/*.?([mc])[tj]s?(x)"],
+		files: ["src/main/**/*.?(m|c)[tj]s?(x)"],
 		languageOptions: {
 			globals: { ...globals.node },
 		},
 	},
 
 	{
-		files: ["src/renderer/**/*.?([mc])[tj]s?(x)"],
+		files: ["src/renderer/**/*.?(m|c)[tj]s?(x)"],
 		languageOptions: {
 			globals: { ...globals.browser },
 		},

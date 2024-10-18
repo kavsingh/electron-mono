@@ -102,12 +102,12 @@ export default tsEslint.config(
 	},
 
 	{
-		files: ["**/*.?([mc])js?(x)"],
+		files: ["**/*.?(m|c)js?(x)"],
 		extends: [tsEslint.configs.disableTypeChecked],
 	},
 
 	{
-		files: ["*.?([mc])[tj]s?(x)"],
+		files: ["*.?(m|c)[tj]s?(x)"],
 		rules: {
 			"filenames/match-exported": "off",
 		},

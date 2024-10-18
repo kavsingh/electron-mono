@@ -8,9 +8,7 @@ export default defineConfig(
 	mergeConfig(rendererConfig, {
 		// https://dev.to/mbarzeev/testing-a-solidjs-component-using-vitest-2h35
 		test: {
-			include: [
-				"src/renderer/**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
-			],
+			include: ["src/renderer/**/*.{test,spec}.?(m|c)[jt]s?(x)"],
 			environment: "jsdom",
 			setupFiles: ["./vitest.renderer.setup.ts"],
 			clearMocks: true,
@@ -22,7 +20,7 @@ export default defineConfig(
 					"!**/__generated__",
 					"!**/__mocks__",
 					"!**/__test*__",
-					"!**/*.test.*",
+					"!**/*.{test,spec}.*",
 				],
 				reportsDirectory: "./coverage/renderer",
 			},
