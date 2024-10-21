@@ -14,8 +14,8 @@
 	"dependencies": {
 		"@decs/typeschema": "0.12.2",
 		"@solidjs/meta": "0.29.4",
-		"@solidjs/router": "0.14.9",
-		"@solidjs/start": "1.0.8",
+		"@solidjs/router": "0.14.10",
+		"@solidjs/start": "1.0.9",
 		"@trpc/client": "10.45.2",
 		"@trpc/server": "10.45.2",
 		"autoprefixer": "10.4.20",
@@ -34,7 +34,7 @@
 	},
 	"devDependencies": {
 		"@electron-mono/shared": "workspace:*",
-		"@eslint/compat": "1.2.0",
+		"@eslint/compat": "1.2.1",
 		"@types/eslint-plugin-tailwindcss": "3.17.0",
 		"electron-mono": "workspace:*"
 	}
