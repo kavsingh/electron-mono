@@ -5,7 +5,7 @@ import prettierRecommended from "eslint-plugin-prettier/recommended";
 import globals from "globals";
 import * as tsEslint from "typescript-eslint";
 
-import { testFileSuffixes, testFilePatterns } from "./eslint.helpers";
+import { testFileSuffixes, testFilePatterns } from "./eslint.helpers.js";
 
 export default tsEslint.config(
 	{
@@ -99,11 +99,6 @@ export default tsEslint.config(
 			"@typescript-eslint/no-require-imports": "off",
 			"@typescript-eslint/no-var-requires": "off",
 		},
-	},
-
-	{
-		files: ["**/*.?(m|c)js?(x)"],
-		extends: [tsEslint.configs.disableTypeChecked],
 	},
 
 	{

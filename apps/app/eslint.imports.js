@@ -7,7 +7,7 @@ import * as tsEslint from "typescript-eslint";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-function fromDirname(...args: Parameters<typeof path.resolve>) {
+function fromDirname(/** @type {Parameters<typeof path.resolve>} */ ...args) {
 	return path.resolve(dirname, ...args);
 }
 

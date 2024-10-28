@@ -9,7 +9,7 @@
 		"build": "vinxi build",
 		"start": "vinxi start",
 		"typecheck": "tsc",
-		"lint": "eslint --flag unstable_ts_config ."
+		"lint": "eslint ."
 	},
 	"dependencies": {
 		"@decs/typeschema": "0.12.2",
@@ -34,7 +34,7 @@
 	},
 	"devDependencies": {
 		"@electron-mono/shared": "workspace:*",
-		"@eslint/compat": "1.2.1",
+		"@eslint/compat": "1.2.2",
 		"@types/eslint-plugin-tailwindcss": "3.17.0",
 		"electron-mono": "workspace:*"
 	}
