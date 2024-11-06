@@ -30,7 +30,6 @@ export default tsEslint.config(
 	{
 		rules: {
 			"camelcase": "off",
-			"curly": ["warn", "multi-line", "consistent"],
 			"no-console": "off",
 			"no-restricted-syntax": [
 				"warn",
@@ -134,6 +133,7 @@ export default tsEslint.config(
 
 	{
 		rules: {
+			"curly": ["warn", "multi-line", "consistent"],
 			"prettier/prettier": "warn",
 		},
 	},
