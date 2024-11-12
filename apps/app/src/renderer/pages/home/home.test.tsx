@@ -1,4 +1,4 @@
-import { render, waitFor, screen, cleanup } from "@solidjs/testing-library";
+import { render, waitFor, screen } from "@solidjs/testing-library";
 import { describe, it, expect, vi, afterEach } from "vitest";
 
 import { createMockSystemStats } from "#common/__test-helpers__/mock-data-creators/system";
@@ -10,7 +10,6 @@ import Home from "./index";
 describe("<Home />", () => {
 	afterEach(() => {
 		vi.clearAllMocks();
-		cleanup();
 	});
 
 	it("should load and render home page", async () => {

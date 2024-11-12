@@ -1,6 +1,8 @@
 import "@testing-library/jest-dom/vitest";
 import "vitest-canvas-mock";
-import { vi } from "vitest";
+
+import { cleanup } from "@solidjs/testing-library";
+import { vi, afterEach } from "vitest";
 
 vi.mock("./src/renderer/trpc");
 
@@ -13,3 +15,7 @@ vi.stubGlobal(
 	"matchMedia",
 	vi.fn(() => ({ addEventListener: vi.fn(), removeEventListener: vi.fn() })),
 );
+
+afterEach(() => {
+	cleanup();
+});
