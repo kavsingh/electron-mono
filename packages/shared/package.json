@@ -6,5 +6,9 @@
 	},
 	"files": [
 		"./*.ts"
-	]
+	],
+	"scripts": {
+		"typecheck": "tsc",
+		"lint": "eslint ."
+	}
 }
