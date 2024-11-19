@@ -14,7 +14,7 @@
 		"lint": "eslint .",
 		"typecheck": "tsc",
 		"codecheck": "pnpm run test && pnpm typecheck && pnpm lint",
-		"tdd": "vitest",
+		"tdd": "vitest --reporter=verbose",
 		"test": "vitest run",
 		"test:ci": "vitest run --silent --reporter=dot --coverage --coverage.reporter=lcov --coverage.include=src --coverage.include=!**/__generated__ --coverage.include=!**/__mocks__ --coverage.include=!**/__test*__ --coverage.include=!*.test.* --coverage.include=!types.*",
 		"test:e2e": "cross-env E2E=true pnpm run build && playwright test",
