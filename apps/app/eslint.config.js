@@ -2,7 +2,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { fixupPluginRules } from "@eslint/compat";
-// @ts-expect-error no types available
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
 import solid from "eslint-plugin-solid";
@@ -101,11 +100,7 @@ export default tsEslint.config(
 		languageOptions: {
 			globals: { ...globals.node, ...globals.browser },
 		},
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-		extends: [
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-			jestDom.configs["flat/recommended"],
-		],
+		extends: [jestDom.configs["flat/recommended"]],
 		plugins: {
 			"testing-library": fixupPluginRules({
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
