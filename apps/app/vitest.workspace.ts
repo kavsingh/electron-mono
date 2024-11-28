@@ -9,7 +9,7 @@ export default defineWorkspace([
 			test: {
 				name: "node",
 				environment: "node",
-				include: ["src/{main,common,preload}/**/*.{test,spec}.?(m|c)[jt]s?(x)"],
+				include: ["src/{main,common,preload}/**/*.{test,spec}.?(m|c)[tj]s?(x)"],
 				setupFiles: ["./vitest.node.setup.ts"],
 			},
 		}),
@@ -17,14 +17,13 @@ export default defineWorkspace([
 	mergeConfig(
 		rendererConfig,
 		defineProject({
-			// https://dev.to/mbarzeev/testing-a-solidjs-component-using-vitest-2h35
+			resolve: { conditions: ["development", "browser"] },
 			test: {
 				name: "renderer",
 				environment: "jsdom",
-				include: ["src/renderer/**/*.{test,spec}.?(m|c)[jt]s?(x)"],
+				include: ["src/renderer/**/*.{test,spec}.?(m|c)[tj]s?(x)"],
 				setupFiles: ["./vitest.renderer.setup.ts"],
-				testTransformMode: { web: ["/.[jt]sx?$/"] },
-				server: { deps: { inline: [/solid-js/, /@solidjs/] } },
+				server: { deps: { inline: [/solid-js/] } },
 			},
 		}),
 	),

@@ -1,6 +1,11 @@
 name: Setup
 description: Setup and install dependencies
 
+inputs:
+  install_flags:
+    description: pnpm install flags
+    default: ""
+
 outputs:
   turbo_cache_dir:
     description: Turbo cache directory
@@ -29,5 +34,5 @@ runs:
         node-version-file: .node-version
         cache: pnpm
 
-    - run: pnpm install --frozen-lockfile
+    - run: pnpm install --frozen-lockfile ${{ inputs.install_flags }}
       shell: bash

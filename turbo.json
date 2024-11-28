@@ -21,10 +21,6 @@
 			"cache": false,
 			"persistent": true
 		},
-		"codecheck": {
-			"cache": false,
-			"persistent": true
-		},
 		"test": {
 			"cache": false,
 			"persistent": true
@@ -34,10 +30,6 @@
 			"persistent": true
 		},
 		"test:e2e": {
-			"cache": false,
-			"persistent": true
-		},
-		"typecheck": {
 			"cache": false,
 			"persistent": true
 		},

@@ -8,7 +8,6 @@
 		"./*.ts"
 	],
 	"scripts": {
-		"typecheck": "tsc",
-		"lint": "eslint ."
+		"lint": "tsc && eslint ."
 	}
 }

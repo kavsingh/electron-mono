@@ -1,12 +1,10 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { fixupPluginRules } from "@eslint/compat";
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
 import solid from "eslint-plugin-solid";
 import tailwindcss from "eslint-plugin-tailwindcss";
-// @ts-expect-error no types available
 import testingLibrary from "eslint-plugin-testing-library";
 import vitest from "eslint-plugin-vitest";
 import globals from "globals";
@@ -76,17 +74,12 @@ export default tsEslint.config(
 		languageOptions: {
 			globals: { ...globals.node },
 		},
-		extends: [vitest.configs.all, jestDom.configs["flat/recommended"]],
-		plugins: {
-			"testing-library": fixupPluginRules({
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-				rules: testingLibrary.rules,
-			}),
-		},
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		extends: [
+			vitest.configs.all,
+			testingLibrary.configs["flat/dom"],
+			jestDom.configs["flat/recommended"],
+		],
 		rules: {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-			...testingLibrary.configs["flat/dom"].rules,
 			"vitest/no-hooks": "off",
 		},
 	},
