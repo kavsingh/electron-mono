@@ -8,6 +8,7 @@ import initLogging from "./lib/init-logging";
 import restrictNavigation from "./lib/restrict-navigation";
 import { createAppEventBus } from "./services/app-event-bus";
 import { startSystemStatsUpdates } from "./services/system-stats";
+import { tipcMain } from "./tipc";
 import { createAppRouter } from "./trpc/router";
 
 initLogging();
@@ -46,6 +47,9 @@ void app.whenReady().then(() => {
 
 	trpcIpcHandler = createIPCHandler({ router: createAppRouter(appEventBus) });
 	stopSystemStatsUpdates = startSystemStatsUpdates(appEventBus);
+
+	tipcMain.handle("ping", () => "pong");
+
 	showMainWindow();
 });
 

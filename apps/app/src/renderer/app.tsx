@@ -8,6 +8,7 @@ import AppLayout from "./layouts/app";
 import Files from "./pages/files";
 import Home from "./pages/home";
 import Settings from "./pages/settings";
+import { tipc } from "./tipc";
 
 export default function App() {
 	const theme = useTheme();
@@ -16,6 +17,15 @@ export default function App() {
 
 	createEffect(() => {
 		document.documentElement.classList.toggle("dark", theme() === "dark");
+
+		tipc
+			.invoke("ping", undefined)
+			.then((response) => {
+				log.info(response);
+			})
+			.catch((reason: unknown) => {
+				log.error(reason);
+			});
 	});
 
 	return (
