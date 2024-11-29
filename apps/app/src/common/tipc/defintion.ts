@@ -4,4 +4,5 @@ export type AppTIPCDefinitions = TIPCDefinitions<TIPCInvoke>;
 
 type TIPCInvoke = {
 	ping: [undefined, string];
+	pingMessage: [string, string];
 };
