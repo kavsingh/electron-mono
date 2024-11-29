@@ -27,14 +27,5 @@ export const trpc: typeof trpcActual = {
 	showOpenDialog: {
 		query: vi.fn(() => Promise.resolve(createMockOpenDialogReturnValue())),
 	},
-	showEmbeddedWebView: {
-		mutate: vi.fn(() => Promise.resolve(1)),
-	},
-	updateEmbeddedWebView: {
-		mutate: vi.fn(() => Promise.resolve()),
-	},
-	removeEmbeddedWebView: {
-		mutate: vi.fn(() => Promise.resolve()),
-	},
 	systemStatsEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
 };

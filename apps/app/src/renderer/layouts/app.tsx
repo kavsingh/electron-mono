@@ -11,7 +11,6 @@ export default function App(props: ParentProps) {
 						<NavLink href="/">Home</NavLink>
 						<NavLink href="/files">Files</NavLink>
 						<NavLink href="/settings">Settings</NavLink>
-						<NavLink href="/web">Web</NavLink>
 					</nav>
 				</div>
 				<div class="h-full overflow-y-auto overflow-x-hidden bg-background">

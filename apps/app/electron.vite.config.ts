@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import solidPlugin from "vite-plugin-solid";
@@ -7,6 +8,7 @@ import tsconfigPathsPlugin from "vite-tsconfig-paths";
 
 import type { UserConfig } from "vite";
 
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 const isE2E = process.env["E2E"] === "true";
 
 const define = {
@@ -43,8 +45,7 @@ const preloadConfig: UserConfig = {
 		...nodeConfig.build,
 		rollupOptions: {
 			input: {
-				renderer: path.resolve(__dirname, "src/preload/renderer.ts"),
-				web: path.resolve(__dirname, "src/preload/web.ts"),
+				renderer: path.resolve(dirname, "src/preload/renderer.ts"),
 			},
 			output: {
 				format: "cjs",

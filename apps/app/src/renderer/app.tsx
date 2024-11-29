@@ -8,7 +8,6 @@ import AppLayout from "./layouts/app";
 import Files from "./pages/files";
 import Home from "./pages/home";
 import Settings from "./pages/settings";
-import Web from "./pages/web";
 
 export default function App() {
 	const theme = useTheme();
@@ -25,7 +24,6 @@ export default function App() {
 				<Route path="/" component={Home} />
 				<Route path="/files" component={Files} />
 				<Route path="/settings" component={Settings} />
-				<Route path="/web" component={Web} />
 			</HashRouter>
 		</AppQueryClientProvider>
 	);

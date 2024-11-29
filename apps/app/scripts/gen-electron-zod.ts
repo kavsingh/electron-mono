@@ -6,11 +6,11 @@ import { generate } from "ts-to-zod";
 
 import { formatTypescriptContent } from "./format";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 if (fileURLToPath(import.meta.url) === process.argv[1]) {
 	await genElectronZod(
-		path.resolve(__dirname, "../src/common/schema/electron.ts"),
+		path.resolve(dirname, "../src/common/schema/electron.ts"),
 	);
 }
 
@@ -32,7 +32,7 @@ export default async function genElectronZod(outFile: string) {
 }
 
 function getElectronTypesPath() {
-	return path.resolve(__dirname, "../node_modules/electron/electron.d.ts");
+	return path.resolve(dirname, "../node_modules/electron/electron.d.ts");
 }
 
 function nameFilter(name: string) {
