@@ -49,6 +49,7 @@ void app.whenReady().then(() => {
 	stopSystemStatsUpdates = startSystemStatsUpdates(appEventBus);
 
 	tipcMain.handle("ping", () => "pong");
+	tipcMain.handle("pingMessage", (_, message) => `pong ${message}`);
 
 	showMainWindow();
 });
