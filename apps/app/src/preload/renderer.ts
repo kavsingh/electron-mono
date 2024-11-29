@@ -1,3 +1,3 @@
-import { exposeElectronTRPC } from "trpc-electron/main";
+import { exposeTIPC } from "tipc/preload";
 
-process.once("loaded", exposeElectronTRPC);
+process.once("loaded", exposeTIPC);
