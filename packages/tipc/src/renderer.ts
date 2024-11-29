@@ -14,9 +14,14 @@ export function createTIPCRenderer<TDefinitions extends TIPCDefinitions>(
 
 	async function invoke<TChannel extends string & keyof Invoke>(
 		channel: TChannel,
-		args: Invoke[TChannel][0],
+		...[arg]: keyof Invoke[TChannel][0] extends never
+			? []
+			: [Invoke[TChannel][0]]
 	): Promise<Invoke[TChannel][1]> {
-		const result = await api.invoke(channel, serializer.serialize(args));
+		const result = await api.invoke(
+			channel,
+			arg ? serializer.serialize(arg) : undefined,
+		);
 
 		return serializer.deserialize(result);
 	}
