@@ -10,97 +10,119 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 		logger?: Logger | undefined;
 	},
 ) {
+	const proxyObj = {};
+	const proxyFn = () => undefined;
 	const serializer = options?.serializer ?? defaultSerializer;
 	const logger = options?.logger;
+	let currentChannel = "__";
 
-	const handleProxy = new Proxy(
-		{},
-		{
-			get: (_, channel) => {
-				const scoped = scopeChannel(`invoke/${channel as string}`);
+	const handleProxy = new Proxy(proxyFn, {
+		apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
+			const scopedChannel = scopeChannel(`${currentChannel}/invoke`);
 
-				return new Proxy(() => undefined, {
-					apply: (__, ___, [handler]: [(...args: unknown[]) => unknown]) => {
-						logger?.debug("add handler", { scoped, handler });
+			logger?.debug("add handler", { scopedChannel, handler });
 
-						ipcMain.handle(scoped, async (event, arg: unknown) => {
-							logger?.debug("handle", { scoped, arg });
+			ipcMain.handle(scopedChannel, async (event, arg: unknown) => {
+				logger?.debug("handle", { scopedChannel, arg });
 
-							const result = await handler(event, serializer.deserialize(arg));
+				const result = await handler(event, serializer.deserialize(arg));
 
-							return serializer.serialize(result);
-						});
+				return serializer.serialize(result);
+			});
 
-						return function removeHandler() {
-							ipcMain.removeHandler(scoped);
-						};
-					},
-				});
-			},
+			return function removeHandler() {
+				ipcMain.removeHandler(scopedChannel);
+			};
 		},
-	);
+	});
 
-	const publishProxy = new Proxy(
-		{},
-		{
-			get: (_, channel) => {
-				const scoped = scopeChannel(`eventsMain/${channel as string}`);
+	const sendProxy = new Proxy(proxyFn, {
+		apply: (_, __, [windows, payload]: [BrowserWindow[], unknown]) => {
+			const scoped = scopeChannel(`${currentChannel}/sendMain`);
+			const serialized = serializer.serialize(payload);
 
-				return new Proxy(() => undefined, {
-					apply: (__, ___, [windows, payload]: [BrowserWindow[], unknown]) => {
-						const serialized = serializer.serialize(payload);
+			logger?.debug("publish", { scoped, windows, serialized });
 
-						logger?.debug("publish", { scoped, windows, serialized });
-
-						for (const win of windows) {
-							if (!win.isDestroyed()) {
-								win.webContents.send(scoped, serialized);
-							}
-						}
-					},
-				});
-			},
+			for (const win of windows) {
+				if (!win.isDestroyed()) {
+					win.webContents.send(scoped, serialized);
+				}
+			}
 		},
-	);
+	});
 
-	const subscribeProxy = new Proxy(
-		{},
-		{
-			get: (_, channel) => {
-				const scoped = scopeChannel(`eventsRenderer/${channel as string}`);
+	const sendToFrameProxy = new Proxy(proxyFn, {
+		apply: (
+			_,
+			__,
+			[windows, frame, payload]: [
+				BrowserWindow[],
+				number | [number, number],
+				unknown,
+			],
+		) => {
+			const scoped = scopeChannel(`${currentChannel}/sendMain`);
+			const serialized = serializer.serialize(payload);
 
-				return new Proxy(() => undefined, {
-					apply: (__, ___, [handler]: [(...args: unknown[]) => unknown]) => {
-						function eventHandler(event: unknown, payload: unknown) {
-							logger?.debug("subscribe handler", { scoped, payload });
-							void handler(event, serializer.deserialize(payload));
-						}
+			logger?.debug("publish", { scoped, windows, serialized });
 
-						logger?.debug("subscribe", { scoped, handler });
-						ipcMain.addListener(scoped, eventHandler);
-
-						return function unsubscribe() {
-							logger?.debug("unsubscribe", { scoped, handler });
-							ipcMain.removeListener(scoped, eventHandler);
-						};
-					},
-				});
-			},
+			for (const win of windows) {
+				if (!win.isDestroyed()) {
+					win.webContents.sendToFrame(frame, scoped, serialized);
+				}
+			}
 		},
-	);
+	});
 
-	return new Proxy({} as unknown as TIPCMain<TDefinitions>, {
+	const subscribeProxy = new Proxy(proxyFn, {
+		apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
+			const scopedChannel = scopeChannel(`${currentChannel}/sendRenderer`);
+
+			function eventHandler(event: unknown, payload: unknown) {
+				logger?.debug("subscribe handler", { scopedChannel, payload });
+				void handler(event, serializer.deserialize(payload));
+			}
+
+			logger?.debug("subscribe", { scopedChannel, handler });
+			ipcMain.addListener(scopedChannel, eventHandler);
+
+			return function unsubscribe() {
+				logger?.debug("unsubscribe", { scopedChannel, handler });
+				ipcMain.removeListener(scopedChannel, eventHandler);
+			};
+		},
+	});
+
+	const operationsProxy = new Proxy(proxyObj, {
 		get: (_, operation) => {
-			switch (operation as keyof TIPCMain<TDefinitions>) {
+			if (typeof operation !== "string") return undefined;
+
+			switch (operation) {
 				case "handle":
 					return handleProxy;
 
-				case "publish":
-					return publishProxy;
+				case "send":
+					return sendProxy;
+
+				case "sendToFrame":
+					return sendToFrameProxy;
 
 				case "subscribe":
 					return subscribeProxy;
+
+				default:
+					return undefined;
 			}
+		},
+	});
+
+	return new Proxy(proxyObj as unknown as TIPCMain<TDefinitions>, {
+		get: (_, channel) => {
+			if (typeof channel !== "string") return undefined;
+
+			currentChannel = channel;
+
+			return operationsProxy;
 		},
 	});
 }

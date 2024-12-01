@@ -10,32 +10,39 @@ function createTIPCApi(options?: { logger?: Logger | undefined }) {
 
 	return {
 		invoke: (channel: string, payload: unknown) => {
-			const scoped = scopeChannel(`invoke/${channel}`);
+			const scopedChannel = scopeChannel(`${channel}/invoke`);
 
-			logger?.debug("invoke", { scoped, payload });
+			logger?.debug("invoke", { scopedChannel, payload });
 
-			return ipcRenderer.invoke(scoped, payload);
+			return ipcRenderer.invoke(scopedChannel, payload);
 		},
 
 		send: (channel: string, payload: unknown) => {
-			const scoped = scopeChannel(`eventsRenderer/${channel}`);
+			const scopedChannel = scopeChannel(`${channel}/sendRenderer`);
 
-			logger?.debug("send", { scoped, payload });
-			ipcRenderer.send(scoped, payload);
+			logger?.debug("send", { scopedChannel, payload });
+			ipcRenderer.send(scopedChannel, payload);
+		},
+
+		sendToHost: (channel: string, payload: unknown) => {
+			const scopedChannel = scopeChannel(`${channel}/sendRenderer`);
+
+			logger?.debug("sendToHost", { scopedChannel, payload });
+			ipcRenderer.sendToHost(scopedChannel, payload);
 		},
 
 		subscribe: (
 			channel: string,
 			handler: (event: IpcRendererEvent, payload: unknown) => void,
 		) => {
-			const scoped = scopeChannel(`eventsMain/${channel}`);
+			const scopedChannel = scopeChannel(`${channel}/sendMain`);
 
-			logger?.debug("subscribe", { scoped, handler });
-			ipcRenderer.addListener(scoped, handler);
+			logger?.debug("subscribe", { scopedChannel, handler });
+			ipcRenderer.addListener(scopedChannel, handler);
 
 			return function unsubscribe() {
-				logger?.debug("unsubscribe", { scoped, handler });
-				ipcRenderer.removeListener(scoped, handler);
+				logger?.debug("unsubscribe", { scopedChannel, handler });
+				ipcRenderer.removeListener(scopedChannel, handler);
 			};
 		},
 	} as const;
