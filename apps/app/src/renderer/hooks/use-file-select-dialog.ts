@@ -6,7 +6,7 @@ export default function useFileSelectDialog() {
 	const [files, setFiles] = createSignal<string[]>([]);
 
 	async function showDialog(options?: Options) {
-		const selectResult = await tipc.invoke.showOpenDialog({
+		const selectResult = await tipc.showOpenDialog.invoke({
 			properties: ["openFile", "multiSelections"],
 			...options,
 		});
@@ -17,4 +17,4 @@ export default function useFileSelectDialog() {
 	return [files, showDialog] as const;
 }
 
-type Options = Parameters<typeof tipc.invoke.showOpenDialog>[0];
+type Options = Parameters<typeof tipc.showOpenDialog.invoke>[0];

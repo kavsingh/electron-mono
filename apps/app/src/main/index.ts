@@ -12,6 +12,7 @@ import { setupIpc } from "./tipc";
 initLogging();
 
 const appEventBus = createAppEventBus();
+let ipcCleanup: ReturnType<typeof setupIpc> | undefined = undefined;
 let stopSystemStatsUpdates:
 	| ReturnType<typeof startSystemStatsUpdates>
 	| undefined = undefined;
@@ -35,6 +36,7 @@ app.on("window-all-closed", () => {
 app.on("quit", () => {
 	log.info("App quitting");
 
+	ipcCleanup?.();
 	stopSystemStatsUpdates?.();
 });
 
@@ -42,8 +44,7 @@ app.enableSandbox();
 void app.whenReady().then(() => {
 	log.info("App ready");
 
-	setupIpc(appEventBus);
-
+	ipcCleanup = setupIpc(appEventBus);
 	stopSystemStatsUpdates = startSystemStatsUpdates(appEventBus);
 
 	showMainWindow();
