@@ -2,39 +2,53 @@ import { contextBridge, ipcRenderer } from "electron";
 
 import { scopedChannel, TIPC_GLOBAL_NAMESPACE } from "./common";
 
+import type { Logger } from "./common";
 import type { IpcRendererEvent } from "electron";
 
-const tipcApi = {
-	invoke: (channel: string, payload: unknown) => {
-		return ipcRenderer.invoke(
-			scopedChannel(`invoke/${channel}`),
-			payload,
-		) as Promise<unknown>;
-	},
+function createTIPCApi(options?: { logger?: Logger | undefined }) {
+	const logger = options?.logger;
 
-	send: (channel: string, payload: unknown) => {
-		ipcRenderer.send(scopedChannel(`eventsRenderer/${channel}`), payload);
-	},
+	return {
+		invoke: (channel: string, payload: unknown) => {
+			const scoped = scopedChannel(`invoke/${channel}`);
 
-	subscribe: (
-		channel: string,
-		handler: (event: IpcRendererEvent, payload: unknown) => void,
-	) => {
-		const scoped = scopedChannel(`eventsMain/${channel}`);
+			logger?.debug("invoke", { scoped, payload });
 
-		ipcRenderer.addListener(scoped, handler);
+			return ipcRenderer.invoke(scoped, payload);
+		},
 
-		return function unsubscribe() {
-			ipcRenderer.removeListener(scoped, handler);
-		};
-	},
-} as const;
+		send: (channel: string, payload: unknown) => {
+			const scoped = scopedChannel(`eventsRenderer/${channel}`);
 
-export function exposeTIPC() {
-	contextBridge.exposeInMainWorld(TIPC_GLOBAL_NAMESPACE, tipcApi);
+			logger?.debug("send", { scoped, payload });
+			ipcRenderer.send(scoped, payload);
+		},
+
+		subscribe: (
+			channel: string,
+			handler: (event: IpcRendererEvent, payload: unknown) => void,
+		) => {
+			const scoped = scopedChannel(`eventsMain/${channel}`);
+
+			logger?.debug("subscribe", { scoped, handler });
+			ipcRenderer.addListener(scoped, handler);
+
+			return function unsubscribe() {
+				logger?.debug("unsubscribe", { scoped, handler });
+				ipcRenderer.removeListener(scoped, handler);
+			};
+		},
+	} as const;
 }
 
-export type TIPCApi = typeof tipcApi;
+export function exposeTIPC(options?: { logger?: Logger | undefined }) {
+	contextBridge.exposeInMainWorld(
+		TIPC_GLOBAL_NAMESPACE,
+		createTIPCApi(options),
+	);
+}
+
+export type TIPCApi = ReturnType<typeof createTIPCApi>;
 
 declare global {
 	// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
