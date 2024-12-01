@@ -8,7 +8,7 @@ import { tipc } from "#renderer/tipc";
 export default function SystemInfoCard() {
 	const infoQuery = createQuery(() => ({
 		queryKey: ["systemInfo"],
-		queryFn: () => tipc.invoke.getSystemInfo(),
+		queryFn: () => tipc.getSystemInfo.invoke(),
 	}));
 
 	return (

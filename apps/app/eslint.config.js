@@ -80,6 +80,9 @@ export default tsEslint.config(
 		languageOptions: {
 			globals: { ...globals.node },
 		},
+		rules: {
+			"no-console": "off",
+		},
 	},
 
 	{
