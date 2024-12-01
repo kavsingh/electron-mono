@@ -8,11 +8,11 @@ import type { ThemeSource } from "#common/lib/theme";
 
 export default function ThemeSwitch() {
 	const [themeSource, { mutate }] = createResource(() => {
-		return tipc.invoke.getThemeSource();
+		return tipc.getThemeSource.invoke();
 	});
 
 	async function saveThemeSource(theme: ThemeSource) {
-		mutate(await tipc.invoke.setThemeSource(theme));
+		mutate(await tipc.setThemeSource.invoke(theme));
 	}
 
 	return (
