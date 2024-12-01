@@ -1,14 +1,16 @@
 import type {
 	BrowserWindow,
-	IpcMainEvent,
-	IpcMainInvokeEvent,
-	IpcRendererEvent,
+	IpcMain,
+	IpcRenderer,
+	WebContents,
 } from "electron";
 
 export const TIPC_GLOBAL_NAMESPACE = "__TIPC_API__";
 
-export function scopeChannel(channel: `${keyof TIPCDefinitions}/${string}`) {
-	return `__tipc__/${channel}`;
+export function scopeChannel(
+	channel: `${string}/${TIPCOperation["operation"]}`,
+) {
+	return `__tipc__/${channel}` as const;
 }
 
 export const defaultSerializer: Serializer = {
@@ -16,76 +18,80 @@ export const defaultSerializer: Serializer = {
 	deserialize: (val) => val,
 };
 
-export type TIPCDefinitions<
-	TInvoke extends Record<string, [unknown, unknown]> = Record<
-		string,
-		[unknown, unknown]
-	>,
-	TEventsMain extends Record<string, unknown> = Record<string, unknown>,
-	TEventsRenderer extends Record<string, unknown> = Record<string, unknown>,
-> = {
-	invoke: TInvoke;
-	eventsMain: TEventsMain;
-	eventsRenderer: TEventsRenderer;
+export type DefineTIPC<TDefinitions extends TIPCDefinitions> = TDefinitions;
+
+export type TIPCInvoke<TResponse = unknown, TArg = unknown> = {
+	operation: "invoke";
+	arg: TArg;
+	response: TResponse;
 };
 
+export type TIPCSendMain<TPayload = unknown> = {
+	operation: "sendMain";
+	payload: TPayload;
+};
+
+export type TIPCSendRenderer<TPayload = unknown> = {
+	operation: "sendRenderer";
+	payload: TPayload;
+};
+
+export type TIPCDefinitions = Record<string, TIPCOperation>;
+
 export type TIPCMain<TDefinitions extends TIPCDefinitions> = {
-	handle: {
-		[TChannel in keyof TDefinitions["invoke"]]: (
-			handler: (
-				event: IpcMainInvokeEvent,
-				...args: keyof TDefinitions["invoke"][TChannel][0] extends never
-					? []
-					: [TDefinitions["invoke"][TChannel][0]]
-			) =>
-				| TDefinitions["invoke"][TChannel][1]
-				| Promise<TDefinitions["invoke"][TChannel][1]>,
-		) => void;
-	};
-
-	publish: {
-		[TChannel in keyof TDefinitions["eventsMain"]]: (
-			...args: keyof TDefinitions["eventsMain"][TChannel] extends never
-				? [BrowserWindow[]]
-				: [BrowserWindow[], TDefinitions["eventsMain"][TChannel]]
-		) => void;
-	};
-
-	subscribe: {
-		[TChannel in keyof TDefinitions["eventsRenderer"]]: (
-			handler: (
-				event: IpcMainEvent,
-				payload: TDefinitions["eventsRenderer"][TChannel],
-			) => void | PromiseLike<void>,
-		) => UnsubscribeFn;
-	};
+	[TName in keyof TDefinitions]: TDefinitions[TName] extends TIPCInvoke
+		? {
+				handle: (
+					handler: (
+						event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
+						...args: keyof TDefinitions[TName]["arg"] extends never
+							? []
+							: [arg: TDefinitions[TName]["arg"]]
+					) =>
+						| TDefinitions[TName]["response"]
+						| Promise<TDefinitions[TName]["response"]>,
+				) => TIPCRemoveHandlerFn;
+			}
+		: TDefinitions[TName] extends TIPCSendMain
+			? {
+					send: (
+						browserWindows: BrowserWindow[],
+						payload: TDefinitions[TName]["payload"],
+					) => void;
+					sendToFrame: (
+						browserWindows: BrowserWindow[],
+						frame: Parameters<WebContents["sendToFrame"]>[0],
+						payload: TDefinitions[TName]["payload"],
+					) => void;
+				}
+			: TDefinitions[TName] extends TIPCSendRenderer
+				? TIPCListener<
+						Parameters<Parameters<IpcMain["addListener"]>[1]>[0],
+						TDefinitions[TName]["payload"]
+					>
+				: never;
 };
 
 export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = {
-	invoke: {
-		[TChannel in keyof TDefinitions["invoke"]]: (
-			...args: keyof TDefinitions["invoke"][TChannel][0] extends never
-				? []
-				: [TDefinitions["invoke"][TChannel][0]]
-		) => Promise<TDefinitions["invoke"][TChannel][1]>;
-	};
-
-	publish: {
-		[TChannel in keyof TDefinitions["eventsRenderer"]]: (
-			...args: keyof TDefinitions["eventsRenderer"][TChannel] extends never
-				? []
-				: [TDefinitions["eventsRenderer"][TChannel]]
-		) => void;
-	};
-
-	subscribe: {
-		[TChannel in keyof TDefinitions["eventsMain"]]: (
-			handler: (
-				event: IpcRendererEvent,
-				payload: TDefinitions["eventsMain"][TChannel],
-			) => void | PromiseLike<void>,
-		) => UnsubscribeFn;
-	};
+	[TName in keyof TDefinitions]: TDefinitions[TName] extends TIPCInvoke
+		? {
+				invoke: (
+					...args: keyof TDefinitions[TName]["arg"] extends never
+						? []
+						: [arg: TDefinitions[TName]["arg"]]
+				) => Promise<TDefinitions[TName]["response"]>;
+			}
+		: TDefinitions[TName] extends TIPCSendRenderer
+			? {
+					send: (payload: TDefinitions[TName]["payload"]) => void;
+					sendToHost: (payload: TDefinitions[TName]["payload"]) => void;
+				}
+			: TDefinitions[TName] extends TIPCSendMain
+				? TIPCListener<
+						Parameters<Parameters<IpcRenderer["addListener"]>[1]>[0],
+						TDefinitions[TName]["payload"]
+					>
+				: never;
 };
 
 export type Serializer = {
@@ -103,4 +109,17 @@ export type Logger = {
 	error: (...args: unknown[]) => unknown;
 };
 
-type UnsubscribeFn = () => void;
+type TIPCListener<TEvent, TPayload> = {
+	subscribe: (listener: TIPCHandler<TEvent, TPayload>) => TIPCUnsubscribeFn;
+};
+
+type TIPCOperation = TIPCInvoke | TIPCSendMain | TIPCSendRenderer;
+
+type TIPCHandler<TEvent, TPayload> = (
+	event: TEvent,
+	payload: TPayload,
+) => void | Promise<void>;
+
+type TIPCRemoveHandlerFn = () => void;
+
+type TIPCUnsubscribeFn = () => void;

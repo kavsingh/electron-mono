@@ -1,5 +1,5 @@
 import { createTIPCRenderer } from "tipc/renderer";
 
-import type { AppTIPCDefinitions } from "#common/tipc/defintion";
+import type { AppTIPC } from "#common/tipc/defintion";
 
-export const tipc = createTIPCRenderer<AppTIPCDefinitions>();
+export const tipc = createTIPCRenderer<AppTIPC>();
