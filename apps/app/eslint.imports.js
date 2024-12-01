@@ -2,7 +2,7 @@ import { builtinModules } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import importsPlugin from "eslint-plugin-import-x";
+import { flatConfigs as importX } from "eslint-plugin-import-x";
 import * as tsEslint from "typescript-eslint";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -15,14 +15,14 @@ const restrictFromBrowser = {
 	paths: [
 		{ name: "electron", allowTypeImports: true },
 		{ name: "systeminformation", allowTypeImports: true },
-		{ name: "@trpc/server", allowTypeImports: true },
+		{ name: "eventemitter3", allowTypeImports: true },
 		...builtinModules.map((mod) => ({ name: mod, allowTypeImports: true })),
 	],
 	patterns: [{ group: ["electron-log/main"] }],
 };
 
 const restrictFromNode = {
-	paths: [{ name: "solid-js" }, { name: "@trpc/client" }],
+	paths: [{ name: "solid-js" }],
 	patterns: [
 		{
 			group: ["solid-*", "@solidjs/-*", "tailwind-*", "electron-log/renderer"],
@@ -31,7 +31,7 @@ const restrictFromNode = {
 };
 
 export default tsEslint.config(
-	importsPlugin.flatConfigs.electron,
+	importX.electron,
 
 	{
 		settings: {
