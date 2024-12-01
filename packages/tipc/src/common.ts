@@ -7,7 +7,7 @@ import type {
 
 export const TIPC_GLOBAL_NAMESPACE = "__TIPC_API__";
 
-export function scopedChannel(channel: `${keyof TIPCDefinitions}/${string}`) {
+export function scopeChannel(channel: `${keyof TIPCDefinitions}/${string}`) {
 	return `__tipc__/${channel}`;
 }
 
@@ -57,7 +57,7 @@ export type TIPCMain<TDefinitions extends TIPCDefinitions> = {
 				event: IpcMainEvent,
 				payload: TDefinitions["eventsRenderer"][TChannel],
 			) => void | PromiseLike<void>,
-		) => () => void;
+		) => UnsubscribeFn;
 	};
 };
 
@@ -84,7 +84,7 @@ export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = {
 				event: IpcRendererEvent,
 				payload: TDefinitions["eventsMain"][TChannel],
 			) => void | PromiseLike<void>,
-		) => () => void;
+		) => UnsubscribeFn;
 	};
 };
 
@@ -102,3 +102,5 @@ export type Logger = {
 	warn: (...args: unknown[]) => unknown;
 	error: (...args: unknown[]) => unknown;
 };
+
+type UnsubscribeFn = () => void;
