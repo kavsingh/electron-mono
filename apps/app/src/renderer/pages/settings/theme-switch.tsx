@@ -2,17 +2,17 @@ import { For, Match, Switch, createResource } from "solid-js";
 
 import { THEME_SOURCES } from "#common/lib/theme";
 import Card from "#renderer/components/card";
-import { trpc } from "#renderer/trpc";
+import { tipc } from "#renderer/tipc";
 
 import type { ThemeSource } from "#common/lib/theme";
 
 export default function ThemeSwitch() {
 	const [themeSource, { mutate }] = createResource(() => {
-		return trpc.themeSource.query();
+		return tipc.invoke.getThemeSource();
 	});
 
 	async function saveThemeSource(theme: ThemeSource) {
-		mutate(await trpc.setThemeSource.mutate(theme));
+		mutate(await tipc.invoke.setThemeSource(theme));
 	}
 
 	return (

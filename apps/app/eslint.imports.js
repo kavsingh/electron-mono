@@ -15,7 +15,6 @@ const restrictFromBrowser = {
 	paths: [
 		{ name: "electron", allowTypeImports: true },
 		{ name: "systeminformation", allowTypeImports: true },
-		{ name: "@trpc/server", allowTypeImports: true },
 		{ name: "eventemitter3", allowTypeImports: true },
 		...builtinModules.map((mod) => ({ name: mod, allowTypeImports: true })),
 	],
@@ -23,7 +22,7 @@ const restrictFromBrowser = {
 };
 
 const restrictFromNode = {
-	paths: [{ name: "solid-js" }, { name: "@trpc/client" }],
+	paths: [{ name: "solid-js" }],
 	patterns: [
 		{
 			group: ["solid-*", "@solidjs/-*", "tailwind-*", "electron-log/renderer"],
