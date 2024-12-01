@@ -9,11 +9,11 @@ import type { TIPCDefinitions } from "tipc";
 export type AppTIPCDefinitions = TIPCDefinitions<TIPCInvoke, TIPCEventsMain>;
 
 type TIPCInvoke = {
-	showOpenDialog: [OpenDialogOptions, OpenDialogReturnValue];
-	getThemeSource: [undefined, ThemeSource];
-	setThemeSource: [ThemeSource, ThemeSource];
-	getSystemInfo: [undefined, SystemInfo];
-	getSystemStats: [undefined, SystemStats];
+	showOpenDialog: [arg: OpenDialogOptions, result: OpenDialogReturnValue];
+	getThemeSource: [arg: undefined, result: ThemeSource];
+	setThemeSource: [arg: ThemeSource, result: ThemeSource];
+	getSystemInfo: [arg: undefined, result: SystemInfo];
+	getSystemStats: [arg: undefined, result: SystemStats];
 };
 
 type TIPCEventsMain = {
