@@ -3,12 +3,12 @@ import { Show } from "solid-js";
 
 import Card from "#renderer/components/card";
 import InfoList from "#renderer/components/info-list";
-import { trpc } from "#renderer/trpc";
+import { tipc } from "#renderer/tipc";
 
 export default function SystemInfoCard() {
 	const infoQuery = useQuery(() => ({
 		queryKey: ["systemInfo"],
-		queryFn: () => trpc.systemInfo.query(),
+		queryFn: () => tipc.invoke.getSystemInfo(),
 	}));
 
 	return (

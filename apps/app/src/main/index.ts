@@ -1,20 +1,17 @@
 import { app, BrowserWindow } from "electron";
 
 import log from "electron-log";
-import { createIPCHandler } from "trpc-electron/main";
 
 import { createMainWindow } from "./app-windows/main-window";
 import initLogging from "./lib/init-logging";
 import restrictNavigation from "./lib/restrict-navigation";
 import { createAppEventBus } from "./services/app-event-bus";
 import { startSystemStatsUpdates } from "./services/system-stats";
-import { tipcMain } from "./tipc";
-import { createAppRouter } from "./trpc/router";
+import { setupIpc } from "./tipc";
 
 initLogging();
 
 const appEventBus = createAppEventBus();
-let trpcIpcHandler: ReturnType<typeof createIPCHandler> | undefined = undefined;
 let stopSystemStatsUpdates:
 	| ReturnType<typeof startSystemStatsUpdates>
 	| undefined = undefined;
@@ -45,11 +42,9 @@ app.enableSandbox();
 void app.whenReady().then(() => {
 	log.info("App ready");
 
-	trpcIpcHandler = createIPCHandler({ router: createAppRouter(appEventBus) });
-	stopSystemStatsUpdates = startSystemStatsUpdates(appEventBus);
+	setupIpc(appEventBus);
 
-	tipcMain.handle("ping", () => "pong");
-	tipcMain.handle("pingMessage", (_, message) => `pong ${message}`);
+	stopSystemStatsUpdates = startSystemStatsUpdates(appEventBus);
 
 	showMainWindow();
 });
@@ -60,11 +55,6 @@ function showMainWindow() {
 	const mainWindow = createMainWindow();
 
 	mainWindow.on("ready-to-show", () => {
-		trpcIpcHandler?.attachWindow(mainWindow);
 		mainWindow.show();
-	});
-
-	mainWindow.on("close", () => {
-		trpcIpcHandler?.detachWindow(mainWindow);
 	});
 }

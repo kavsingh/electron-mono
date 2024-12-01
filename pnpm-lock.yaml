@@ -65,9 +65,6 @@ importers:
 
   apps/app:
     dependencies:
-      '@trpc/server':
-        specifier: 11.0.2
-        version: 11.0.2(typescript@5.8.3)
       chalk:
         specifier: 5.4.1
         version: 5.4.1
@@ -80,9 +77,6 @@ importers:
       systeminformation:
         specifier: 5.25.11
         version: 5.25.11
-      trpc-electron:
-        specifier: 0.1.2
-        version: 0.1.2(@trpc/client@11.0.2(@trpc/server@11.0.2(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.0.2(typescript@5.8.3))(electron@35.1.4)
       zod:
         specifier: 3.24.2
         version: 3.24.2
@@ -114,9 +108,6 @@ importers:
       '@testing-library/user-event':
         specifier: 14.6.1
         version: 14.6.1(@testing-library/dom@10.4.0)
-      '@trpc/client':
-        specifier: 11.0.2
-        version: 11.0.2(@trpc/server@11.0.2(typescript@5.8.3))(typescript@5.8.3)
       '@tsconfig/node20':
         specifier: 20.1.5
         version: 20.1.5
@@ -1039,17 +1030,6 @@ packages:
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
-
-  '@trpc/client@11.0.2':
-    resolution: {integrity: sha512-GlPEedbMTerkUfAJBsrwU6dg8N65lt3LBwrCoqR3MTZ64lRU/DQqyLjzpz5nRkEN0x4S2JmX0hASV9vc2KlSHA==}
-    peerDependencies:
-      '@trpc/server': 11.0.2
-      typescript: '>=5.7.2'
-
-  '@trpc/server@11.0.2':
-    resolution: {integrity: sha512-PIcm8UWFyE0AnIYjxsyc1zfVa6X10m9Opm1SJ2ou9Vu8dlXO6rMtmafLUXJsMeQk/3ecxObFtEiZIX8TvB3eCg==}
-    peerDependencies:
-      typescript: '>=5.7.2'
 
   '@tsconfig/node20@20.1.5':
     resolution: {integrity: sha512-Vm8e3WxDTqMGPU4GATF9keQAIy1Drd7bPwlgzKJnZtoOsTm1tduUTbDjg0W5qERvGuxPI2h9RbMufH0YdfBylA==}
@@ -3581,13 +3561,6 @@ packages:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
     hasBin: true
 
-  trpc-electron@0.1.2:
-    resolution: {integrity: sha512-sQpWBwQWzsgrERugjzUpPqY/+/n8NxkUq6YssQ5+5rALkvGCWq45T5Dreiwm2kh91dZMFlALTyMd8PhB0vgbIg==}
-    peerDependencies:
-      '@trpc/client': '>=11.0.0'
-      '@trpc/server': '>=11.0.0'
-      electron: '>19.0.0'
-
   truncate-utf8-bytes@1.0.2:
     resolution: {integrity: sha512-95Pu1QXQvruGEhv62XCMO3Mm90GscOCClvrIUwCM0PYOXK3kaF3l3sIHxx71ThJfcbM2O5Au6SO3AWCSEfW4mQ==}
 
@@ -4771,15 +4744,6 @@ snapshots:
       '@testing-library/dom': 10.4.0
 
   '@tootallnate/once@2.0.0': {}
-
-  '@trpc/client@11.0.2(@trpc/server@11.0.2(typescript@5.8.3))(typescript@5.8.3)':
-    dependencies:
-      '@trpc/server': 11.0.2(typescript@5.8.3)
-      typescript: 5.8.3
-
-  '@trpc/server@11.0.2(typescript@5.8.3)':
-    dependencies:
-      typescript: 5.8.3
 
   '@tsconfig/node20@20.1.5': {}
 
@@ -7571,12 +7535,6 @@ snapshots:
       tslib: 2.8.1
 
   tree-kill@1.2.2: {}
-
-  trpc-electron@0.1.2(@trpc/client@11.0.2(@trpc/server@11.0.2(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.0.2(typescript@5.8.3))(electron@35.1.4):
-    dependencies:
-      '@trpc/client': 11.0.2(@trpc/server@11.0.2(typescript@5.8.3))(typescript@5.8.3)
-      '@trpc/server': 11.0.2(typescript@5.8.3)
-      electron: 35.1.4
 
   truncate-utf8-bytes@1.0.2:
     dependencies:
