@@ -44,7 +44,7 @@ const startSubscription = (() => {
 				: true;
 
 			if (shouldUpdate) {
-				cachedClient.setQueryData(queryKey, () => event);
+				cachedClient.setQueryData(queryKey, () => stats);
 			}
 		});
 	};
