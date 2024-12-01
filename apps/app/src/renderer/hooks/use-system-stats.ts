@@ -10,7 +10,7 @@ export default function useSystemStats() {
 	const queryClient = useQueryClient();
 	const query = useQuery(() => ({
 		queryKey,
-		queryFn: () => tipc.invoke.getSystemStats(),
+		queryFn: () => tipc.getSystemStats.invoke(),
 		reconcile: (oldData, newData) => {
 			return oldData && BigInt(oldData.sampledAt) >= BigInt(newData.sampledAt)
 				? oldData
@@ -28,7 +28,7 @@ const queryKey = ["systemStats"];
 const startSubscription = (() => {
 	let cachedClient: QueryClient;
 	let unsubscribe:
-		| ReturnType<typeof tipc.subscribe.systemStatsEvent>
+		| ReturnType<typeof tipc.systemStatsEvent.subscribe>
 		| undefined = undefined;
 
 	return function start(queryClient: QueryClient) {
@@ -37,7 +37,7 @@ const startSubscription = (() => {
 		unsubscribe?.();
 		cachedClient = queryClient;
 
-		unsubscribe = tipc.subscribe.systemStatsEvent((_, stats) => {
+		unsubscribe = tipc.systemStatsEvent.subscribe((_, stats) => {
 			const current = cachedClient.getQueryData<SystemStats>(queryKey);
 			const shouldUpdate = current
 				? BigInt(stats.sampledAt) > BigInt(current.sampledAt)

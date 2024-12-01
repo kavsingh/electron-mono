@@ -1,24 +1,29 @@
+import { vi } from "vitest";
+
 import { tipc } from "#renderer/tipc";
 
 // eslint-disable-next-line import-x/no-restricted-paths
 import type { SystemStats } from "#main/services/system-stats";
-import type { Mock } from "vitest";
 
 export function publishSystemStatsEvent(payload: SystemStats) {
-	publishTipcSubscriberEvent(tipc.subscribe.systemStatsEvent as Mock, payload);
+	publishTipcSubscriberEvent(tipc.systemStatsEvent.subscribe, payload);
 }
 
 function publishTipcSubscriberEvent(
-	mockedTipcSubscribe: Mock,
+	fn: (...args: any[]) => any,
 	payload: unknown,
 ) {
-	const calls: unknown[] = mockedTipcSubscribe.mock.calls;
+	if (!vi.isMockFunction(fn)) {
+		console.warn("Expected a mock function");
 
-	for (const call of calls) {
+		return;
+	}
+
+	for (const call of fn.mock.calls) {
 		if (!Array.isArray(call)) continue;
 
-		const maybeHandler: unknown = call[1];
+		const maybeHandler: unknown = call[0];
 
-		if (typeof maybeHandler === "function") maybeHandler(payload);
+		if (typeof maybeHandler === "function") maybeHandler({}, payload);
 	}
 }
