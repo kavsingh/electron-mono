@@ -12,19 +12,16 @@ import type { tipc as tipcActual } from "../index";
 const defaultThemeSource = themeSourceSchema.parse("dark");
 
 export const tipc: typeof tipcActual = {
-	invoke: {
-		getThemeSource: vi.fn(() => Promise.resolve(defaultThemeSource)),
-		setThemeSource: vi.fn((source) => Promise.resolve(source)),
-		getSystemInfo: vi.fn(() => Promise.resolve(createMockSystemInfo())),
-		getSystemStats: vi.fn(() => Promise.resolve(createMockSystemStats())),
-		showOpenDialog: vi.fn(() =>
-			Promise.resolve(createMockOpenDialogReturnValue()),
-		),
+	getThemeSource: { invoke: vi.fn(() => Promise.resolve(defaultThemeSource)) },
+	setThemeSource: { invoke: vi.fn((source) => Promise.resolve(source)) },
+	getSystemInfo: {
+		invoke: vi.fn(() => Promise.resolve(createMockSystemInfo())),
 	},
-
-	subscribe: {
-		systemStatsEvent: vi.fn(() => () => undefined),
+	getSystemStats: {
+		invoke: vi.fn(() => Promise.resolve(createMockSystemStats())),
 	},
-
-	publish: {},
+	showOpenDialog: {
+		invoke: vi.fn(() => Promise.resolve(createMockOpenDialogReturnValue())),
+	},
+	systemStatsEvent: { subscribe: vi.fn(() => () => undefined) },
 };
