@@ -1,4 +1,4 @@
-import { defaultSerializer, scopedChannel } from "./common";
+import { defaultSerializer, scopeChannel } from "./common";
 
 import type { Logger, Serializer, TIPCDefinitions, TIPCMain } from "./common";
 import type { BrowserWindow, IpcMain } from "electron";
@@ -17,7 +17,7 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 		{},
 		{
 			get: (_, channel) => {
-				const scoped = scopedChannel(`invoke/${channel as string}`);
+				const scoped = scopeChannel(`invoke/${channel as string}`);
 
 				return new Proxy(() => undefined, {
 					apply: (__, ___, [handler]: [(...args: unknown[]) => unknown]) => {
@@ -44,7 +44,7 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 		{},
 		{
 			get: (_, channel) => {
-				const scoped = scopedChannel(`eventsMain/${channel as string}`);
+				const scoped = scopeChannel(`eventsMain/${channel as string}`);
 
 				return new Proxy(() => undefined, {
 					apply: (__, ___, [windows, payload]: [BrowserWindow[], unknown]) => {
@@ -67,7 +67,7 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 		{},
 		{
 			get: (_, channel) => {
-				const scoped = scopedChannel(`eventsRenderer/${channel as string}`);
+				const scoped = scopeChannel(`eventsRenderer/${channel as string}`);
 
 				return new Proxy(() => undefined, {
 					apply: (__, ___, [handler]: [(...args: unknown[]) => unknown]) => {
