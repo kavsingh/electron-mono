@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-import { scopedChannel, TIPC_GLOBAL_NAMESPACE } from "./common";
+import { scopeChannel, TIPC_GLOBAL_NAMESPACE } from "./common";
 
 import type { Logger } from "./common";
 import type { IpcRendererEvent } from "electron";
@@ -10,7 +10,7 @@ function createTIPCApi(options?: { logger?: Logger | undefined }) {
 
 	return {
 		invoke: (channel: string, payload: unknown) => {
-			const scoped = scopedChannel(`invoke/${channel}`);
+			const scoped = scopeChannel(`invoke/${channel}`);
 
 			logger?.debug("invoke", { scoped, payload });
 
@@ -18,7 +18,7 @@ function createTIPCApi(options?: { logger?: Logger | undefined }) {
 		},
 
 		send: (channel: string, payload: unknown) => {
-			const scoped = scopedChannel(`eventsRenderer/${channel}`);
+			const scoped = scopeChannel(`eventsRenderer/${channel}`);
 
 			logger?.debug("send", { scoped, payload });
 			ipcRenderer.send(scoped, payload);
@@ -28,7 +28,7 @@ function createTIPCApi(options?: { logger?: Logger | undefined }) {
 			channel: string,
 			handler: (event: IpcRendererEvent, payload: unknown) => void,
 		) => {
-			const scoped = scopedChannel(`eventsMain/${channel}`);
+			const scoped = scopeChannel(`eventsMain/${channel}`);
 
 			logger?.debug("subscribe", { scoped, handler });
 			ipcRenderer.addListener(scoped, handler);
