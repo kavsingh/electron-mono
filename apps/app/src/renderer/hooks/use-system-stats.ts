@@ -1,6 +1,6 @@
 import { createQuery, useQueryClient } from "@tanstack/solid-query";
 
-import { trpc } from "#renderer/trpc";
+import { tipc } from "#renderer/tipc";
 
 // eslint-disable-next-line import-x/no-restricted-paths
 import type { SystemStats } from "#main/services/system-stats";
@@ -10,7 +10,7 @@ export default function useSystemStats() {
 	const queryClient = useQueryClient();
 	const query = createQuery(() => ({
 		queryKey,
-		queryFn: () => trpc.systemStats.query(),
+		queryFn: () => tipc.invoke.getSystemStats(),
 		reconcile: (oldData, newData) => {
 			return oldData && BigInt(oldData.sampledAt) >= BigInt(newData.sampledAt)
 				? oldData
@@ -27,27 +27,25 @@ const queryKey = ["systemStats"];
 
 const startSubscription = (() => {
 	let cachedClient: QueryClient;
-	let unsubscribable:
-		| Awaited<ReturnType<typeof trpc.systemStatsEvent.subscribe>>
+	let unsubscribe:
+		| ReturnType<typeof tipc.subscribe.systemStatsEvent>
 		| undefined = undefined;
 
 	return function start(queryClient: QueryClient) {
 		if (cachedClient === queryClient) return;
 
-		unsubscribable?.unsubscribe();
+		unsubscribe?.();
 		cachedClient = queryClient;
 
-		unsubscribable = trpc.systemStatsEvent.subscribe(undefined, {
-			onData(event) {
-				const current = cachedClient.getQueryData<SystemStats>(queryKey);
-				const shouldUpdate = current
-					? BigInt(event.sampledAt) > BigInt(current.sampledAt)
-					: true;
+		unsubscribe = tipc.subscribe.systemStatsEvent((_, stats) => {
+			const current = cachedClient.getQueryData<SystemStats>(queryKey);
+			const shouldUpdate = current
+				? BigInt(stats.sampledAt) > BigInt(current.sampledAt)
+				: true;
 
-				if (shouldUpdate) {
-					cachedClient.setQueryData(queryKey, () => event);
-				}
-			},
+			if (shouldUpdate) {
+				cachedClient.setQueryData(queryKey, () => event);
+			}
 		});
 	};
 })();

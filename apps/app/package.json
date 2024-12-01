@@ -25,10 +25,8 @@
 	"author": "<author>",
 	"license": "MIT",
 	"dependencies": {
-		"@trpc/server": "10.45.2",
 		"chalk": "5.4.1",
 		"electron-log": "5.2.4",
-		"electron-trpc": "0.7.1",
 		"eventemitter3": "5.0.1",
 		"superjson": "2.2.2",
 		"systeminformation": "5.23.17",
@@ -44,7 +42,6 @@
 		"@testing-library/dom": "10.4.0",
 		"@testing-library/jest-dom": "6.6.3",
 		"@testing-library/user-event": "14.5.2",
-		"@trpc/client": "10.45.2",
 		"@types/eslint-plugin-tailwindcss": "3.17.0",
 		"@vitest/coverage-v8": "2.1.8",
 		"autoprefixer": "10.4.20",
