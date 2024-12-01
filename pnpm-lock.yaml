@@ -68,18 +68,12 @@ importers:
 
   apps/app:
     dependencies:
-      '@trpc/server':
-        specifier: 10.45.2
-        version: 10.45.2
       chalk:
         specifier: 5.4.1
         version: 5.4.1
       electron-log:
         specifier: 5.2.4
         version: 5.2.4
-      electron-trpc:
-        specifier: 0.7.1
-        version: 0.7.1(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(electron@33.2.1)
       eventemitter3:
         specifier: 5.0.1
         version: 5.0.1
@@ -120,9 +114,6 @@ importers:
       '@testing-library/user-event':
         specifier: 14.5.2
         version: 14.5.2(@testing-library/dom@10.4.0)
-      '@trpc/client':
-        specifier: 10.45.2
-        version: 10.45.2(@trpc/server@10.45.2)
       '@types/eslint-plugin-tailwindcss':
         specifier: 3.17.0
         version: 3.17.0
@@ -203,13 +194,13 @@ importers:
     devDependencies:
       '@vitest/coverage-v8':
         specifier: 2.1.8
-        version: 2.1.8(vitest@2.1.8(@types/node@22.10.2)(jsdom@25.0.1))
+        version: 2.1.8(vitest@2.1.8(@types/node@22.10.3)(jsdom@25.0.1))
       electron:
         specifier: 33.2.1
         version: 33.2.1
       eslint-plugin-vitest:
         specifier: 0.5.4
-        version: 0.5.4(eslint@9.17.0(jiti@2.4.2))(typescript@5.7.2)(vitest@2.1.8(@types/node@22.10.2)(jsdom@25.0.1))
+        version: 0.5.4(eslint@9.17.0(jiti@2.4.2))(typescript@5.7.2)(vitest@2.1.8(@types/node@22.10.3)(jsdom@25.0.1))
       superjson:
         specifier: 2.2.2
         version: 2.2.2
@@ -218,7 +209,7 @@ importers:
         version: 8.3.5(jiti@2.4.2)(postcss@8.4.49)(typescript@5.7.2)(yaml@2.6.1)
       vitest:
         specifier: 2.1.8
-        version: 2.1.8(@types/node@22.10.2)(jsdom@25.0.1)
+        version: 2.1.8(@types/node@22.10.3)(jsdom@25.0.1)
       zod:
         specifier: 3.24.1
         version: 3.24.1
@@ -952,14 +943,6 @@ packages:
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
-
-  '@trpc/client@10.45.2':
-    resolution: {integrity: sha512-ykALM5kYWTLn1zYuUOZ2cPWlVfrXhc18HzBDyRhoPYN0jey4iQHEFSEowfnhg1RvYnrAVjNBgHNeSAXjrDbGwg==}
-    peerDependencies:
-      '@trpc/server': 10.45.2
-
-  '@trpc/server@10.45.2':
-    resolution: {integrity: sha512-wOrSThNNE4HUnuhJG6PfDRp4L2009KDVxsd+2VYH8ro6o/7/jwYZ8Uu5j+VaW+mOmc8EHerHzGcdbGNQSAUPgg==}
 
   '@tsconfig/strictest@2.0.5':
     resolution: {integrity: sha512-ec4tjL2Rr0pkZ5hww65c+EEPYwxOi4Ryv+0MtjeaSQRJyq322Q27eOQiFbuNgw2hpL4hB1/W/HBGk3VKS43osg==}
@@ -1738,13 +1721,6 @@ packages:
 
   electron-to-chromium@1.5.76:
     resolution: {integrity: sha512-CjVQyG7n7Sr+eBXE86HIulnL5N8xZY1sgmOPGuq/F0Rr0FJq63lg0kEtOIDfZBk44FnDLf6FUJ+dsJcuiUDdDQ==}
-
-  electron-trpc@0.7.1:
-    resolution: {integrity: sha512-aWjZ5pLeVhrX9A9d8O8YgR8N+q4IXXzc76CJT1PwtDijIw+y5I+c75IAAtZ4JayYLeR3ll95PNGl5RTBu2qePw==}
-    peerDependencies:
-      '@trpc/client': '>10.0.0'
-      '@trpc/server': '>10.0.0'
-      electron: '>19.0.0'
 
   electron-vite@2.3.0:
     resolution: {integrity: sha512-lsN2FymgJlp4k6MrcsphGqZQ9fKRdJKasoaiwIrAewN1tapYI/KINLdfEL7n10LuF0pPSNf/IqjzZbB5VINctg==}
@@ -4514,12 +4490,6 @@ snapshots:
 
   '@tootallnate/once@2.0.0': {}
 
-  '@trpc/client@10.45.2(@trpc/server@10.45.2)':
-    dependencies:
-      '@trpc/server': 10.45.2
-
-  '@trpc/server@10.45.2': {}
-
   '@tsconfig/strictest@2.0.5': {}
 
   '@types/aria-query@5.0.4': {}
@@ -5109,9 +5079,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  bundle-require@5.0.0(esbuild@0.24.0):
+  bundle-require@5.0.0(esbuild@0.24.2):
     dependencies:
-      esbuild: 0.24.0
+      esbuild: 0.24.2
       load-tsconfig: 0.2.5
 
   cac@6.7.14: {}
@@ -5477,15 +5447,6 @@ snapshots:
       - supports-color
 
   electron-to-chromium@1.5.76: {}
-
-  electron-trpc@0.7.1(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(electron@33.2.1):
-    dependencies:
-      '@trpc/client': 10.45.2(@trpc/server@10.45.2)
-      '@trpc/server': 10.45.2
-      debug: 4.4.0(supports-color@8.1.1)
-      electron: 33.2.1
-    transitivePeerDependencies:
-      - supports-color
 
   electron-vite@2.3.0(vite@6.0.6(@types/node@22.10.3)(jiti@2.4.2)(yaml@2.6.1)):
     dependencies:
@@ -7338,20 +7299,20 @@ snapshots:
 
   tsup@8.3.5(jiti@2.4.2)(postcss@8.4.49)(typescript@5.7.2)(yaml@2.6.1):
     dependencies:
-      bundle-require: 5.0.0(esbuild@0.24.0)
+      bundle-require: 5.0.0(esbuild@0.24.2)
       cac: 6.7.14
       chokidar: 4.0.1
       consola: 3.2.3
       debug: 4.4.0(supports-color@8.1.1)
-      esbuild: 0.24.0
+      esbuild: 0.24.2
       joycon: 3.1.1
       picocolors: 1.1.1
       postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.4.49)(yaml@2.6.1)
       resolve-from: 5.0.0
-      rollup: 4.28.1
+      rollup: 4.29.1
       source-map: 0.8.0-beta.0
       sucrase: 3.35.0
-      tinyexec: 0.3.1
+      tinyexec: 0.3.2
       tinyglobby: 0.2.10
       tree-kill: 1.2.2
     optionalDependencies:
