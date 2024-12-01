@@ -10,5 +10,4 @@ export default defineConfig({
 		"./src/renderer.ts",
 	],
 	format: ["cjs", "esm"],
-	splitting: true,
 });

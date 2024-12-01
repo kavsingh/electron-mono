@@ -1,26 +1,31 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-import { TIPC_GLOBAL_NAMESPACE } from "./common";
+import { scopedChannel, TIPC_GLOBAL_NAMESPACE } from "./common";
 
 import type { IpcRendererEvent } from "electron";
 
 const tipcApi = {
 	invoke: (channel: string, payload: unknown) => {
-		return ipcRenderer.invoke(channel, payload) as Promise<unknown>;
+		return ipcRenderer.invoke(
+			scopedChannel(`invoke/${channel}`),
+			payload,
+		) as Promise<unknown>;
 	},
 
 	send: (channel: string, payload: unknown) => {
-		ipcRenderer.send(channel, payload);
+		ipcRenderer.send(scopedChannel(`eventsRenderer/${channel}`), payload);
 	},
 
 	subscribe: (
 		channel: string,
 		handler: (event: IpcRendererEvent, payload: unknown) => void,
 	) => {
-		ipcRenderer.addListener(channel, handler);
+		const scoped = scopedChannel(`eventsMain/${channel}`);
+
+		ipcRenderer.addListener(scoped, handler);
 
 		return function unsubscribe() {
-			ipcRenderer.removeListener(channel, handler);
+			ipcRenderer.removeListener(scoped, handler);
 		};
 	},
 } as const;
