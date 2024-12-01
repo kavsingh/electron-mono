@@ -3,7 +3,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 
 import { createMockSystemStats } from "#common/__test-helpers__/mock-data-creators/system";
 import { setupRenderWrapper } from "#renderer/__test-helpers__/render-wrapper";
-import { publishSystemStatsEvent } from "#renderer/__test-helpers__/trpc/events";
+import { publishSystemStatsEvent } from "#renderer/__test-helpers__/tipc/events";
 
 import Home from "./index";
 
