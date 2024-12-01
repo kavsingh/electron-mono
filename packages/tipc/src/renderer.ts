@@ -1,23 +1,36 @@
 import { defaultSerializer, TIPC_GLOBAL_NAMESPACE } from "./common";
 
-import type { Serializer, TIPCDefinitions, TIPCRenderer } from "./common";
+import type {
+	Logger,
+	Serializer,
+	TIPCDefinitions,
+	TIPCRenderer,
+} from "./common";
 
 export function createTIPCRenderer<
 	TDefinitions extends TIPCDefinitions,
->(options?: { serializer?: Serializer | undefined }) {
-	const serializer = options?.serializer ?? defaultSerializer;
+>(options?: {
+	serializer?: Serializer | undefined;
+	logger?: Logger | undefined;
+}) {
 	const api = globalThis.window[TIPC_GLOBAL_NAMESPACE];
+	const serializer = options?.serializer ?? defaultSerializer;
+	const logger = options?.logger;
 
 	const invokeProxy = new Proxy(
 		{},
 		{
 			get: (_, channel) => {
 				return new Proxy(() => undefined, {
-					apply: async (__, ___, [arg]) => {
-						const result = await api.invoke(
+					apply: async (__, ___, [arg]: [unknown]) => {
+						logger?.debug("invoke", { channel, arg });
+
+						const result = (await api.invoke(
 							channel as string,
 							arg ? serializer.serialize(arg) : undefined,
-						);
+						)) as unknown;
+
+						logger?.debug("invoke result", { channel, result });
 
 						return serializer.deserialize(result);
 					},
@@ -31,8 +44,9 @@ export function createTIPCRenderer<
 		{
 			get: (_, channel) => {
 				return new Proxy(() => undefined, {
-					apply: (__, ___, [arg]) => {
-						api.send(channel as string, serializer.serialize(arg));
+					apply: (__, ___, [payload]: [unknown]) => {
+						logger?.debug("publish", { channel, payload });
+						api.send(channel as string, serializer.serialize(payload));
 					},
 				});
 			},
@@ -46,6 +60,8 @@ export function createTIPCRenderer<
 				return new Proxy(() => undefined, {
 					apply: (__, ___, [handler]: [(...args: unknown[]) => unknown]) => {
 						return api.subscribe(channel as string, (event, payload) => {
+							logger?.debug("subscribe receive", { channel, payload, handler });
+
 							void handler(event, serializer.deserialize(payload));
 						});
 					},
