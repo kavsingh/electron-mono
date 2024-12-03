@@ -9,12 +9,16 @@ function createTIPCApi(options?: { logger?: Logger | undefined }) {
 	const logger = options?.logger;
 
 	return {
-		invoke: (channel: string, payload: unknown) => {
+		invoke: async (channel: string, payload: unknown) => {
 			const scopedChannel = scopeChannel(`${channel}/invoke`);
 
 			logger?.debug("invoke", { scopedChannel, payload });
 
-			return ipcRenderer.invoke(scopedChannel, payload);
+			const result: unknown = await ipcRenderer.invoke(scopedChannel, payload);
+
+			logger?.debug("invoke result", { scopedChannel, result });
+
+			return result;
 		},
 
 		send: (channel: string, payload: unknown) => {
