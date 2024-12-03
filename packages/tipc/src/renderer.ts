@@ -5,8 +5,9 @@ import type {
 	Serializer,
 	TIPCDefinitions,
 	TIPCRenderer,
-	TIPCResult,
 } from "./common";
+import type { TIPCResult } from "./internal";
+import type { TIPCApi } from "./preload";
 
 export function createTIPCRenderer<
 	TDefinitions extends TIPCDefinitions,
@@ -14,7 +15,17 @@ export function createTIPCRenderer<
 	serializer?: Serializer | undefined;
 	logger?: Logger | undefined;
 }) {
-	const api = globalThis.window[TIPC_GLOBAL_NAMESPACE];
+	const api =
+		TIPC_GLOBAL_NAMESPACE in globalThis.window
+			? (globalThis.window[TIPC_GLOBAL_NAMESPACE] as TIPCApi)
+			: undefined;
+
+	if (!api) {
+		throw new Error(
+			`tipc object named ${TIPC_GLOBAL_NAMESPACE} not found on window`,
+		);
+	}
+
 	const serializer = options?.serializer ?? defaultSerializer;
 	const logger = options?.logger;
 	const proxyObj = {};
@@ -32,11 +43,11 @@ export function createTIPCRenderer<
 
 			logger?.debug("invoke result", { channel: currentChannel, response });
 
-			if (response.result === "error") {
+			if (response.__r === "error") {
 				throw serializer.deserialize(response.error);
 			}
 
-			return serializer.deserialize(response.value);
+			return serializer.deserialize(response.data);
 		},
 	});
 
