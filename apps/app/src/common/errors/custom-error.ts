@@ -1,4 +1,4 @@
-export const CUSTOM_ERROR_CODES = ["CODE_A", "CODE_B"] as const;
+export const CUSTOM_ERROR_CODES = ["CODE_UNKNOWN", "CODE_A", "CODE_B"] as const;
 
 export default class CustomError extends Error {
 	override name = "CustomError";
