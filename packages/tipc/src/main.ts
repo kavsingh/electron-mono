@@ -1,6 +1,7 @@
 import { defaultSerializer, scopeChannel } from "./common";
 
 import type { Logger, Serializer, TIPCDefinitions, TIPCMain } from "./common";
+import type { TIPCResult } from "./internal";
 import type { BrowserWindow, IpcMain } from "electron";
 
 export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
@@ -22,13 +23,34 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 
 			logger?.debug("add handler", { scopedChannel, handler });
 
-			ipcMain.handle(scopedChannel, async (event, arg: unknown) => {
-				logger?.debug("handle", { scopedChannel, arg });
+			ipcMain.handle(
+				scopedChannel,
+				async (event, arg: unknown): Promise<TIPCResult> => {
+					logger?.debug("handle", { scopedChannel, arg });
 
-				const result = await handler(event, serializer.deserialize(arg));
+					try {
+						const result: TIPCResult = {
+							__r: "ok",
+							data: await handler(event, serializer.deserialize(arg)),
+						};
 
-				return serializer.serialize(result);
-			});
+						logger?.debug("handle result", { scopedChannel, result });
+
+						return result;
+					} catch (reason) {
+						const error =
+							reason instanceof Error ? reason : new Error(String(reason));
+						const result: TIPCResult = {
+							__r: "error",
+							error: serializer.serialize(error),
+						};
+
+						logger?.debug("handle result", { scopedChannel, result });
+
+						return result;
+					}
+				},
+			);
 
 			return function removeHandler() {
 				ipcMain.removeHandler(scopedChannel);

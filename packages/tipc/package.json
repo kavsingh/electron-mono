@@ -52,16 +52,6 @@
 				"types": "./dist/renderer.d.cts",
 				"default": "./dist/renderer.cjs"
 			}
-		},
-		"./test": {
-			"import": {
-				"types": "./dist/test.d.ts",
-				"default": "./dist/test.js"
-			},
-			"require": {
-				"types": "./dist/test.d.cts",
-				"default": "./dist/test.cjs"
-			}
 		}
 	},
 	"scripts": {
