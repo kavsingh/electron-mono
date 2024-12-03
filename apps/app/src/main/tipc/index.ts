@@ -15,55 +15,39 @@ const tipc = createTIPCMain<AppTIPC>(ipcMain, { serializer });
 
 export function setupIpc(eventBus: AppEventBus) {
 	const remove = [
-		tipc.showOpenDialog.handle(async (_, input) => {
+		tipc.showOpenDialog.handle((_, input) => {
 			const focusedWindow = BrowserWindow.getAllWindows().find((win) =>
 				win.isFocused(),
 			);
 
 			if (!focusedWindow) {
-				return { result: "error", error: new Error("No focused window") };
+				throw new Error("No focused window");
 			}
 
-			try {
-				return {
-					result: "ok",
-					value: await dialog.showOpenDialog(
-						focusedWindow,
-						// circumvent exactOptionalPropertyTypes conflict with
-						// upstream types
-						input,
-					),
-				};
-			} catch (reason) {
-				return { result: "error", error: new Error(String(reason)) };
+			return dialog.showOpenDialog(
+				focusedWindow,
+				// circumvent exactOptionalPropertyTypes conflict with
+				// upstream types
+				input,
+			);
+		}),
+
+		tipc.getSystemInfo.handle(() => {
+			if (Math.random() > 0.1) {
+				throw new CustomError("CODE_A", "something happened");
 			}
+
+			return getSystemInfo();
 		}),
 
-		tipc.getSystemInfo.handle(async () => {
-			return Math.random() > 0.8
-				? { result: "ok", value: await getSystemInfo() }
-				: {
-						result: "error",
-						error: new CustomError("CODE_A", "something happened"),
-					};
-		}),
+		tipc.getSystemStats.handle(() => getSystemStats()),
 
-		tipc.getSystemStats.handle(async () => {
-			try {
-				return { result: "ok", value: await getSystemStats() };
-			} catch (reason) {
-				return { result: "error", error: new Error(String(reason)) };
-			}
-		}),
-
-		tipc.getThemeSource.handle(() => {
-			return { result: "ok", value: nativeTheme.themeSource };
-		}),
+		tipc.getThemeSource.handle(() => nativeTheme.themeSource),
 
 		tipc.setThemeSource.handle((_, themeSource) => {
 			nativeTheme.themeSource = themeSource;
 
-			return { result: "ok", value: nativeTheme.themeSource };
+			return nativeTheme.themeSource;
 		}),
 	];
 
