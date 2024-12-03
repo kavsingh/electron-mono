@@ -40,7 +40,7 @@ export function setupIpc(eventBus: AppEventBus) {
 		}),
 
 		tipc.getSystemInfo.handle(async () => {
-			return Math.random() > 0.5
+			return Math.random() > 0.8
 				? { result: "ok", value: await getSystemInfo() }
 				: {
 						result: "error",
