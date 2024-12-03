@@ -1,4 +1,9 @@
-import { For, Match, Switch, createResource } from "solid-js";
+import {
+	createMutation,
+	createQuery,
+	useQueryClient,
+} from "@tanstack/solid-query";
+import { For, Match, Switch } from "solid-js";
 
 import { THEME_SOURCES } from "#common/lib/theme";
 import Card from "#renderer/components/card";
@@ -7,13 +12,30 @@ import { tipc } from "#renderer/tipc";
 import type { ThemeSource } from "#common/lib/theme";
 
 export default function ThemeSwitch() {
-	const [themeSource, { mutate }] = createResource(() => {
-		return tipc.getThemeSource.invoke();
-	});
+	const queryClient = useQueryClient();
+	const { data: themeSource } = createQuery(() => ({
+		queryKey: ["themeSource"],
+		queryFn: async () => {
+			const response = await tipc.getThemeSource.invoke();
 
-	async function saveThemeSource(theme: ThemeSource) {
-		mutate(await tipc.setThemeSource.invoke(theme));
-	}
+			if (response.result === "error") throw response.error;
+
+			return response.value;
+		},
+	}));
+
+	const { mutate: setThemeSource } = createMutation(() => ({
+		mutationFn: async (source: ThemeSource) => {
+			const response = await tipc.setThemeSource.invoke(source);
+
+			if (response.result === "error") throw response.error;
+
+			return response.result;
+		},
+		onSuccess: () => {
+			void queryClient.invalidateQueries({ queryKey: ["themeSource"] });
+		},
+	}));
 
 	return (
 		<Card.Root>
@@ -38,8 +60,10 @@ export default function ThemeSwitch() {
 											id={option}
 											name={option}
 											value={option}
-											checked={themeSource() === option}
-											onChange={[saveThemeSource, option]}
+											checked={themeSource === option}
+											onChange={() => {
+												setThemeSource(option);
+											}}
 											class="peer size-4 cursor-pointer"
 										/>
 										<label
