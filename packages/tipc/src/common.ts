@@ -36,10 +36,6 @@ export type TIPCSendRenderer<TPayload = unknown> = {
 	payload: TPayload;
 };
 
-export type TIPCResult<TValue = unknown> =
-	| { result: "ok"; value: TValue }
-	| { result: "error"; error: Error };
-
 export type TIPCDefinitions = Record<string, TIPCOperation>;
 
 export type TIPCMain<TDefinitions extends TIPCDefinitions> = {
@@ -52,8 +48,8 @@ export type TIPCMain<TDefinitions extends TIPCDefinitions> = {
 							? []
 							: [arg: TDefinitions[TName]["arg"]]
 					) =>
-						| TIPCResult<TDefinitions[TName]["response"]>
-						| Promise<TIPCResult<TDefinitions[TName]["response"]>>,
+						| TDefinitions[TName]["response"]
+						| Promise<TDefinitions[TName]["response"]>,
 				) => TIPCRemoveHandlerFn;
 			}
 		: TDefinitions[TName] extends TIPCSendMain
@@ -115,7 +111,7 @@ type TIPCListener<TEvent, TPayload> = {
 	subscribe: (listener: TIPCHandler<TEvent, TPayload>) => TIPCUnsubscribeFn;
 };
 
-type TIPCOperation = TIPCInvoke | TIPCSendMain | TIPCSendRenderer;
+export type TIPCOperation = TIPCInvoke | TIPCSendMain | TIPCSendRenderer;
 
 type TIPCHandler<TEvent, TPayload> = (
 	event: TEvent,
