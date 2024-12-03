@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/solid-query";
-import { Show } from "solid-js";
+import { createMemo, Show } from "solid-js";
 
+import CustomError from "#common/errors/custom-error";
 import Card from "#renderer/components/card";
 import InfoList from "#renderer/components/info-list";
 import { tipc } from "#renderer/tipc";
@@ -8,8 +9,22 @@ import { tipc } from "#renderer/tipc";
 export default function SystemInfoCard() {
 	const infoQuery = useQuery(() => ({
 		queryKey: ["systemInfo"],
-		queryFn: () => tipc.getSystemInfo.invoke(),
+		queryFn: async () => {
+			const response = await tipc.getSystemInfo.invoke();
+
+			if (response.result === "error") throw response.error;
+
+			return response.value;
+		},
 	}));
+
+	const errorMessage = createMemo(() => {
+		if (!infoQuery.error) return undefined;
+
+		return infoQuery.error instanceof CustomError
+			? `${infoQuery.error.code}: ${infoQuery.error.message}`
+			: "unknown error";
+	});
 
 	return (
 		<Card.Root>
@@ -32,6 +47,13 @@ export default function SystemInfoCard() {
 							</InfoList.Entry>
 						</InfoList.Root>
 					)}
+				</Show>
+				<Show when={errorMessage()} keyed>
+					{(message) => {
+						return (
+							<div class="rounded-sm bg-red-600 p-4 text-white">{message}</div>
+						);
+					}}
 				</Show>
 			</Card.Content>
 		</Card.Root>
