@@ -15,7 +15,7 @@ export default defineWorkspace([
 		}),
 	),
 	mergeConfig(
-		rendererConfig,
+		await rendererConfig({ mode: "production", command: "build" }),
 		defineProject({
 			resolve: { conditions: ["development", "browser"] },
 			test: {

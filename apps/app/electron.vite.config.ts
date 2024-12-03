@@ -6,7 +6,7 @@ import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import solidPlugin from "vite-plugin-solid";
 import tsconfigPathsPlugin from "vite-tsconfig-paths";
 
-import type { UserConfig } from "vite";
+import type { UserConfig, UserConfigFn } from "vite";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const isE2E = process.env["E2E"] === "true";
@@ -32,11 +32,13 @@ export const nodeConfig: UserConfig = {
 	],
 };
 
-export const rendererConfig: UserConfig = {
-	define,
-	build,
-	resolve: { conditions: ["browser"] },
-	plugins: [tsconfigPathsPlugin(), solidPlugin()],
+export const rendererConfig: UserConfigFn = ({ mode }) => {
+	return {
+		define,
+		build,
+		resolve: { conditions: ["browser", mode] },
+		plugins: [tsconfigPathsPlugin(), solidPlugin()],
+	};
 };
 
 const preloadConfig: UserConfig = {

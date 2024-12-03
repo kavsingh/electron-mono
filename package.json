@@ -11,7 +11,7 @@
 	"license": "MIT",
 	"private": true,
 	"type": "module",
-	"packageManager": "pnpm@9.14.3+sha512.c0f53ee99477ed969b82b289ad011a5d16bf1623c957e7f29eabe8d0c00b574c29b8c7f54f6c67ee710c73f285c8154d07ce44b46fe2c0eeb476a90441bac371",
+	"packageManager": "pnpm@9.14.4+sha512.c8180b3fbe4e4bca02c94234717896b5529740a6cbadf19fa78254270403ea2f27d4e1d46a08a0f56c89b63dc8ebfd3ee53326da720273794e6200fcf0d184ab",
 	"engines": {
 		"node": ">=22"
 	},
@@ -26,24 +26,24 @@
 		"lint": "turbo lint"
 	},
 	"devDependencies": {
-		"@eslint/js": "9.15.0",
+		"@eslint/js": "9.16.0",
 		"@kavsingh/eslint-plugin-filenames": "2.0.0-rc.0",
 		"@tsconfig/strictest": "2.0.5",
 		"@types/eslint": "9.6.1",
 		"@types/eslint__js": "8.42.3",
 		"@types/node": "22.10.1",
 		"cross-env": "7.0.3",
-		"eslint": "9.15.0",
+		"eslint": "9.16.0",
 		"eslint-config-prettier": "9.1.0",
-		"eslint-import-resolver-typescript": "3.6.3",
-		"eslint-plugin-import-x": "4.4.3",
+		"eslint-import-resolver-typescript": "3.7.0",
+		"eslint-plugin-import-x": "4.5.0",
 		"eslint-plugin-prettier": "5.2.1",
-		"globals": "15.12.0",
-		"jiti": "2.4.0",
+		"globals": "15.13.0",
+		"jiti": "2.4.1",
 		"prettier": "3.4.1",
 		"rimraf": "6.0.1",
 		"turbo": "2.3.3",
 		"typescript": "5.7.2",
-		"typescript-eslint": "8.16.0"
+		"typescript-eslint": "8.17.0"
 	}
 }
