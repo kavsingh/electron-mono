@@ -36,6 +36,10 @@ export type TIPCSendRenderer<TPayload = unknown> = {
 	payload: TPayload;
 };
 
+export type TIPCResult<TValue = unknown> =
+	| { result: "ok"; value: TValue }
+	| { result: "error"; error: Error };
+
 export type TIPCDefinitions = Record<string, TIPCOperation>;
 
 export type TIPCMain<TDefinitions extends TIPCDefinitions> = {
@@ -48,8 +52,8 @@ export type TIPCMain<TDefinitions extends TIPCDefinitions> = {
 							? []
 							: [arg: TDefinitions[TName]["arg"]]
 					) =>
-						| TDefinitions[TName]["response"]
-						| Promise<TDefinitions[TName]["response"]>,
+						| TIPCResult<TDefinitions[TName]["response"]>
+						| Promise<TIPCResult<TDefinitions[TName]["response"]>>,
 				) => TIPCRemoveHandlerFn;
 			}
 		: TDefinitions[TName] extends TIPCSendMain
@@ -79,7 +83,7 @@ export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = {
 					...args: keyof TDefinitions[TName]["arg"] extends never
 						? []
 						: [arg: TDefinitions[TName]["arg"]]
-				) => Promise<TDefinitions[TName]["response"]>;
+				) => Promise<TIPCResult<TDefinitions[TName]["response"]>>;
 			}
 		: TDefinitions[TName] extends TIPCSendRenderer
 			? {
@@ -95,11 +99,9 @@ export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = {
 };
 
 export type Serializer = {
-	serialize: <T>(val: T) => Serialized<T>;
-	deserialize: <T>(val: Serialized<T>) => T;
+	serialize: (val: unknown) => unknown;
+	deserialize: (val: unknown) => unknown;
 };
-
-export type Serialized<T> = T;
 
 export type Logger = {
 	debug: (...args: unknown[]) => unknown;
