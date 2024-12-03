@@ -11,7 +11,7 @@ export default function useFileSelectDialog() {
 			...options,
 		});
 
-		if (response.result === "ok") setFiles(response.value.filePaths);
+		setFiles(response.filePaths);
 	}
 
 	return [files, showDialog] as const;
