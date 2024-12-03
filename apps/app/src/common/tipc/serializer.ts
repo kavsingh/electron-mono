@@ -11,6 +11,8 @@ function serialize(value: unknown): unknown {
 
 	if (value instanceof CustomError) return serializeCustomError(value);
 
+	if (value instanceof Error) return Error;
+
 	if (Array.isArray(value)) return value.map((val: unknown) => serialize(val));
 
 	if (typeof value === "object") {

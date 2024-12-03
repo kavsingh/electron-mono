@@ -83,7 +83,7 @@ export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = {
 					...args: keyof TDefinitions[TName]["arg"] extends never
 						? []
 						: [arg: TDefinitions[TName]["arg"]]
-				) => Promise<TIPCResult<TDefinitions[TName]["response"]>>;
+				) => Promise<TDefinitions[TName]["response"]>;
 			}
 		: TDefinitions[TName] extends TIPCSendRenderer
 			? {
