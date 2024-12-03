@@ -15,23 +15,11 @@ export default function ThemeSwitch() {
 	const queryClient = useQueryClient();
 	const { data: themeSource } = createQuery(() => ({
 		queryKey: ["themeSource"],
-		queryFn: async () => {
-			const response = await tipc.getThemeSource.invoke();
-
-			if (response.result === "error") throw response.error;
-
-			return response.value;
-		},
+		queryFn: () => tipc.getThemeSource.invoke(),
 	}));
 
 	const { mutate: setThemeSource } = createMutation(() => ({
-		mutationFn: async (source: ThemeSource) => {
-			const response = await tipc.setThemeSource.invoke(source);
-
-			if (response.result === "error") throw response.error;
-
-			return response.result;
-		},
+		mutationFn: (source: ThemeSource) => tipc.setThemeSource.invoke(source),
 		onSuccess: () => {
 			void queryClient.invalidateQueries({ queryKey: ["themeSource"] });
 		},
