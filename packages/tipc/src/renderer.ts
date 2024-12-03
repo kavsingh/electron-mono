@@ -5,6 +5,7 @@ import type {
 	Serializer,
 	TIPCDefinitions,
 	TIPCRenderer,
+	TIPCResult,
 } from "./common";
 
 export function createTIPCRenderer<
@@ -24,14 +25,18 @@ export function createTIPCRenderer<
 		apply: async (_, __, [arg]: [unknown]) => {
 			logger?.debug("invoke", { channel: currentChannel, arg });
 
-			const result = (await api.invoke(
+			const response = (await api.invoke(
 				currentChannel,
 				arg ? serializer.serialize(arg) : undefined,
-			)) as unknown;
+			)) as TIPCResult;
 
-			logger?.debug("invoke result", { channel: currentChannel, result });
+			logger?.debug("invoke result", { channel: currentChannel, response });
 
-			return serializer.deserialize(result);
+			if (response.result === "error") {
+				throw serializer.deserialize(response.error);
+			}
+
+			return serializer.deserialize(response.value);
 		},
 	});
 
