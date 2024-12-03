@@ -8,7 +8,6 @@ export default defineConfig({
 		"./src/main.ts",
 		"./src/preload.ts",
 		"./src/renderer.ts",
-		"./src/test.ts",
 	],
 	format: ["cjs", "esm"],
 });
