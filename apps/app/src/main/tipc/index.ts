@@ -3,7 +3,7 @@ import { BrowserWindow, dialog, ipcMain, nativeTheme } from "electron";
 import { createTIPCMain } from "tipc/main";
 
 import CustomError from "#common/errors/custom-error";
-import { serializer } from "#common/tipc/serializer";
+import { serializer } from "#common/tipc/serializer-json";
 import { getSystemInfo } from "#main/services/system-info";
 import { getSystemStats } from "#main/services/system-stats";
 
