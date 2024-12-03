@@ -42,4 +42,4 @@ function deserialize(value: unknown): unknown {
 	return value;
 }
 
-export const serializer = { serialize, deserialize } as Serializer;
+export const serializer: Serializer = { serialize, deserialize };
