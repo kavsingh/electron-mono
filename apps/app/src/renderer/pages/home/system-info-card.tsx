@@ -9,13 +9,7 @@ import { tipc } from "#renderer/tipc";
 export default function SystemInfoCard() {
 	const infoQuery = useQuery(() => ({
 		queryKey: ["systemInfo"],
-		queryFn: async () => {
-			const response = await tipc.getSystemInfo.invoke();
-
-			if (response.result === "error") throw response.error;
-
-			return response.value;
-		},
+		queryFn: () => tipc.getSystemInfo.invoke(),
 	}));
 
 	const errorMessage = createMemo(() => {

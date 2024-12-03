@@ -10,13 +10,7 @@ export default function useSystemStats() {
 	const queryClient = useQueryClient();
 	const query = useQuery(() => ({
 		queryKey,
-		queryFn: async () => {
-			const response = await tipc.getSystemStats.invoke();
-
-			if (response.result === "error") throw response.error;
-
-			return response.value;
-		},
+		queryFn: () => tipc.getSystemStats.invoke(),
 		reconcile: (oldData, newData) => {
 			return oldData && BigInt(oldData.sampledAt) >= BigInt(newData.sampledAt)
 				? oldData
