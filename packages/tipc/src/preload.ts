@@ -56,10 +56,3 @@ export function exposeTIPC(options?: { logger?: Logger | undefined }) {
 }
 
 export type TIPCApi = ReturnType<typeof createTIPCApi>;
-
-declare global {
-	// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-	interface Window {
-		[TIPC_GLOBAL_NAMESPACE]: TIPCApi;
-	}
-}
