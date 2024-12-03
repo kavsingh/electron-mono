@@ -1,3 +1,4 @@
+import { createMockTIPCOkResult } from "tipc/test";
 import { vi } from "vitest";
 
 import { createMockOpenDialogReturnValue } from "#common/__test-helpers__/mock-data-creators/electron";
@@ -12,16 +13,28 @@ import type { tipc as tipcActual } from "../index";
 const defaultThemeSource = themeSourceSchema.parse("dark");
 
 export const tipc: typeof tipcActual = {
-	getThemeSource: { invoke: vi.fn(() => Promise.resolve(defaultThemeSource)) },
+	getThemeSource: {
+		invoke: vi.fn(() =>
+			Promise.resolve(createMockTIPCOkResult(defaultThemeSource)),
+		),
+	},
 	setThemeSource: { invoke: vi.fn((source) => Promise.resolve(source)) },
 	getSystemInfo: {
-		invoke: vi.fn(() => Promise.resolve(createMockSystemInfo())),
+		invoke: vi.fn(() =>
+			Promise.resolve(createMockTIPCOkResult(createMockSystemInfo())),
+		),
 	},
 	getSystemStats: {
-		invoke: vi.fn(() => Promise.resolve(createMockSystemStats())),
+		invoke: vi.fn(() =>
+			Promise.resolve(createMockTIPCOkResult(createMockSystemStats())),
+		),
 	},
 	showOpenDialog: {
-		invoke: vi.fn(() => Promise.resolve(createMockOpenDialogReturnValue())),
+		invoke: vi.fn(() =>
+			Promise.resolve(
+				createMockTIPCOkResult(createMockOpenDialogReturnValue()),
+			),
+		),
 	},
 	systemStatsEvent: { subscribe: vi.fn(() => () => undefined) },
 };
