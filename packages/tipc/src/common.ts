@@ -18,6 +18,69 @@ export const defaultSerializer: Serializer = {
 	deserialize: (val) => val,
 };
 
+export function createValueSerializer<TValue, TSerialized = unknown>(
+	serializer: ValueSerializer<TValue, TSerialized>,
+) {
+	return serializer;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createSerializer<T extends ValueSerializer<any, any>>(
+	serializers: T[],
+): Serializer {
+	if (!serializers.length) return defaultSerializer;
+
+	function serialize(value: unknown): unknown {
+		for (const serializer of serializers) {
+			if (serializer.isDeserialized(value)) {
+				return serializer.serialize(value);
+			}
+		}
+
+		if (!value) return value;
+
+		if (Array.isArray(value)) {
+			return value.map((val: unknown) => serialize(val));
+		}
+
+		if (value instanceof Error) return Error;
+
+		if (typeof value === "object") {
+			return Object.fromEntries(
+				Object.entries(value).map(([key, val]) => [key, serialize(val)]),
+			);
+		}
+
+		return value;
+	}
+
+	function deserialize(value: unknown): unknown {
+		for (const serializer of serializers) {
+			if (serializer.isSerialized(value)) {
+				return serializer.deserialize(value);
+			}
+		}
+
+		if (!value) return value;
+
+		if (Array.isArray(value)) {
+			return value.map((val: unknown) => deserialize(val));
+		}
+
+		if (value instanceof Error) return Error;
+
+		if (typeof value === "object") {
+			return Object.fromEntries(
+				Object.entries(value).map(([key, val]) => [key, deserialize(val)]),
+			);
+		}
+
+		return value;
+	}
+
+	return { serialize, deserialize };
+}
+
 export type DefineTIPC<TDefinitions extends TIPCDefinitions> = TDefinitions;
 
 export type TIPCInvoke<TResponse = unknown, TArg = unknown> = {
@@ -97,6 +160,13 @@ export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = {
 export type Serializer = {
 	serialize: (val: unknown) => unknown;
 	deserialize: (val: unknown) => unknown;
+};
+
+export type ValueSerializer<TValue, TSerialized> = {
+	isDeserialized: (value: unknown) => value is TValue;
+	isSerialized: (value: unknown) => value is TSerialized;
+	serialize: (value: TValue) => TSerialized;
+	deserialize: (value: TSerialized) => TValue;
 };
 
 export type Logger = {
