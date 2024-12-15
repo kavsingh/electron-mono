@@ -47,24 +47,9 @@ export default tsEslint.config(
 			"import-x/no-restricted-paths": [
 				"error",
 				{
+					// [target] cannot import [from]
 					zones: [
-						// [target] cannot import [from]
-						{
-							target: fromDirname("./src/main"),
-							from: fromDirname("./src/renderer"),
-						},
-						{
-							target: fromDirname("./src/main"),
-							from: fromDirname("./src/preload"),
-						},
-						{
-							target: fromDirname("./src/renderer"),
-							from: fromDirname("./src/main"),
-						},
-						{
-							target: fromDirname("./src/renderer"),
-							from: fromDirname("./src/preload"),
-						},
+						// common
 						{
 							target: fromDirname("./src/common"),
 							from: fromDirname("./src/main"),
@@ -77,6 +62,25 @@ export default tsEslint.config(
 							target: fromDirname("./src/common"),
 							from: fromDirname("./src/preload"),
 						},
+						// main
+						{
+							target: fromDirname("./src/main"),
+							from: fromDirname("./src/renderer"),
+						},
+						{
+							target: fromDirname("./src/main"),
+							from: fromDirname("./src/preload"),
+						},
+						// renderer
+						{
+							target: fromDirname("./src/renderer"),
+							from: fromDirname("./src/main"),
+						},
+						{
+							target: fromDirname("./src/renderer"),
+							from: fromDirname("./src/preload"),
+						},
+						// preload
 						{
 							target: fromDirname("./src/preload"),
 							from: fromDirname("./src/main"),
