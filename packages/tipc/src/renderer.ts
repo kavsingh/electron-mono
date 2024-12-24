@@ -32,16 +32,41 @@ export function createTIPCRenderer<
 	const proxyFn = () => undefined;
 	let currentChannel = "__";
 
-	const invokeProxy = new Proxy(proxyFn, {
+	const queryProxy = new Proxy(proxyFn, {
 		apply: async (_, __, [arg]: [unknown]) => {
-			logger?.debug("invoke", { channel: currentChannel, arg });
+			logger?.debug("invoke query", { channel: currentChannel, arg });
 
-			const response = (await api.invoke(
+			const response = (await api.invokeQuery(
 				currentChannel,
 				arg ? serializer.serialize(arg) : undefined,
 			)) as TIPCResult;
 
-			logger?.debug("invoke result", { channel: currentChannel, response });
+			logger?.debug("invoke query result", {
+				channel: currentChannel,
+				response,
+			});
+
+			if (response.__r === "error") {
+				throw serializer.deserialize(response.error);
+			}
+
+			return serializer.deserialize(response.data);
+		},
+	});
+
+	const mutationProxy = new Proxy(proxyFn, {
+		apply: async (_, __, [arg]: [unknown]) => {
+			logger?.debug("invoke mutation", { channel: currentChannel, arg });
+
+			const response = (await api.invokeMutation(
+				currentChannel,
+				arg ? serializer.serialize(arg) : undefined,
+			)) as TIPCResult;
+
+			logger?.debug("invoke mutation result", {
+				channel: currentChannel,
+				response,
+			});
 
 			if (response.__r === "error") {
 				throw serializer.deserialize(response.error);
@@ -84,8 +109,11 @@ export function createTIPCRenderer<
 			if (typeof operation !== "string") return undefined;
 
 			switch (operation) {
-				case "invoke":
-					return invokeProxy;
+				case "query":
+					return queryProxy;
+
+				case "mutate":
+					return mutationProxy;
 
 				case "send":
 					return sendProxy;

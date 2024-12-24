@@ -9,7 +9,7 @@ import { tipc } from "#renderer/tipc";
 export default function SystemInfoCard() {
 	const infoQuery = createQuery(() => ({
 		queryKey: ["systemInfo"],
-		queryFn: () => tipc.getSystemInfo.invoke(),
+		queryFn: () => tipc.getSystemInfo.query(),
 	}));
 
 	const errorMessage = createMemo(() => {
