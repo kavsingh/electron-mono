@@ -1,6 +1,12 @@
-import { defaultSerializer, scopeChannel } from "./common";
+import { defaultSerializer, exhaustive, scopeChannel } from "./common";
 
-import type { Logger, Serializer, TIPCDefinitions, TIPCMain } from "./common";
+import type {
+	Logger,
+	Serializer,
+	TIPCDefinitions,
+	TIPCMain,
+	TIPCMainMethod,
+} from "./common";
 import type { TIPCResult } from "./internal";
 import type { BrowserWindow, IpcMain } from "electron";
 
@@ -160,7 +166,9 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 		get: (_, operation) => {
 			if (typeof operation !== "string") return undefined;
 
-			switch (operation) {
+			const op = operation as TIPCMainMethod;
+
+			switch (op) {
 				case "handleQuery":
 					return handleQueryProxy;
 
@@ -176,8 +184,11 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 				case "subscribe":
 					return subscribeProxy;
 
-				default:
+				default: {
+					exhaustive(op, logger);
+
 					return undefined;
+				}
 			}
 		},
 	});
