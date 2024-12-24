@@ -110,9 +110,9 @@ export type TIPCSendRenderer<TPayload = unknown> = {
 	payload: TPayload;
 };
 
-export type TIPCDefinitions = Record<string, TIPCOperation>;
+export type TIPCDefinitions = Readonly<Record<string, TIPCOperation>>;
 
-export type TIPCMain<TDefinitions extends TIPCDefinitions> = {
+export type TIPCMain<TDefinitions extends TIPCDefinitions> = Readonly<{
 	[TName in keyof TDefinitions]: TDefinitions[TName] extends TIPCInvokeQuery
 		? {
 				handleQuery: (
@@ -161,9 +161,9 @@ export type TIPCMain<TDefinitions extends TIPCDefinitions> = {
 							) => TIPCUnsubscribeFn;
 						}
 					: never;
-};
+}>;
 
-export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = {
+export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = Readonly<{
 	[TName in keyof TDefinitions]: TDefinitions[TName] extends TIPCInvokeQuery
 		? {
 				query: (
@@ -195,7 +195,7 @@ export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = {
 							) => TIPCUnsubscribeFn;
 						}
 					: never;
-};
+}>;
 
 export type Serializer = {
 	serialize: (val: unknown) => unknown;
