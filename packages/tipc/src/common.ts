@@ -83,8 +83,14 @@ export function createSerializer<T extends ValueSerializer<any, any>>(
 
 export type DefineTIPC<TDefinitions extends TIPCDefinitions> = TDefinitions;
 
-export type TIPCInvoke<TResponse = unknown, TArg = unknown> = {
-	operation: "invoke";
+export type TIPCInvokeQuery<TResponse = unknown, TArg = unknown> = {
+	operation: "invokeQuery";
+	arg: TArg;
+	response: TResponse;
+};
+
+export type TIPCInvokeMutation<TResponse = unknown, TArg = unknown> = {
+	operation: "invokeMutation";
 	arg: TArg;
 	response: TResponse;
 };
@@ -102,9 +108,9 @@ export type TIPCSendRenderer<TPayload = unknown> = {
 export type TIPCDefinitions = Record<string, TIPCOperation>;
 
 export type TIPCMain<TDefinitions extends TIPCDefinitions> = {
-	[TName in keyof TDefinitions]: TDefinitions[TName] extends TIPCInvoke
+	[TName in keyof TDefinitions]: TDefinitions[TName] extends TIPCInvokeQuery
 		? {
-				handle: (
+				handleQuery: (
 					handler: (
 						event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
 						...args: keyof TDefinitions[TName]["arg"] extends never
@@ -115,46 +121,67 @@ export type TIPCMain<TDefinitions extends TIPCDefinitions> = {
 						| Promise<TDefinitions[TName]["response"]>,
 				) => TIPCRemoveHandlerFn;
 			}
-		: TDefinitions[TName] extends TIPCSendMain
+		: TDefinitions[TName] extends TIPCInvokeMutation
 			? {
-					send: (
-						browserWindows: BrowserWindow[],
-						payload: TDefinitions[TName]["payload"],
-					) => void;
-					sendToFrame: (
-						browserWindows: BrowserWindow[],
-						frame: Parameters<WebContents["sendToFrame"]>[0],
-						payload: TDefinitions[TName]["payload"],
-					) => void;
+					handleMutation: (
+						handler: (
+							event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
+							...args: keyof TDefinitions[TName]["arg"] extends never
+								? []
+								: [arg: TDefinitions[TName]["arg"]]
+						) =>
+							| TDefinitions[TName]["response"]
+							| Promise<TDefinitions[TName]["response"]>,
+					) => TIPCRemoveHandlerFn;
 				}
-			: TDefinitions[TName] extends TIPCSendRenderer
-				? TIPCListener<
-						Parameters<Parameters<IpcMain["addListener"]>[1]>[0],
-						TDefinitions[TName]["payload"]
-					>
-				: never;
+			: TDefinitions[TName] extends TIPCSendMain
+				? {
+						send: (
+							browserWindows: BrowserWindow[],
+							payload: TDefinitions[TName]["payload"],
+						) => void;
+						sendToFrame: (
+							browserWindows: BrowserWindow[],
+							frame: Parameters<WebContents["sendToFrame"]>[0],
+							payload: TDefinitions[TName]["payload"],
+						) => void;
+					}
+				: TDefinitions[TName] extends TIPCSendRenderer
+					? TIPCListener<
+							Parameters<Parameters<IpcMain["addListener"]>[1]>[0],
+							TDefinitions[TName]["payload"]
+						>
+					: never;
 };
 
 export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = {
-	[TName in keyof TDefinitions]: TDefinitions[TName] extends TIPCInvoke
+	[TName in keyof TDefinitions]: TDefinitions[TName] extends TIPCInvokeQuery
 		? {
-				invoke: (
+				query: (
 					...args: keyof TDefinitions[TName]["arg"] extends never
 						? []
 						: [arg: TDefinitions[TName]["arg"]]
 				) => Promise<TDefinitions[TName]["response"]>;
 			}
-		: TDefinitions[TName] extends TIPCSendRenderer
+		: TDefinitions[TName] extends TIPCInvokeMutation
 			? {
-					send: (payload: TDefinitions[TName]["payload"]) => void;
-					sendToHost: (payload: TDefinitions[TName]["payload"]) => void;
+					mutate: (
+						...args: keyof TDefinitions[TName]["arg"] extends never
+							? []
+							: [arg: TDefinitions[TName]["arg"]]
+					) => Promise<TDefinitions[TName]["response"]>;
 				}
-			: TDefinitions[TName] extends TIPCSendMain
-				? TIPCListener<
-						Parameters<Parameters<IpcRenderer["addListener"]>[1]>[0],
-						TDefinitions[TName]["payload"]
-					>
-				: never;
+			: TDefinitions[TName] extends TIPCSendRenderer
+				? {
+						send: (payload: TDefinitions[TName]["payload"]) => void;
+						sendToHost: (payload: TDefinitions[TName]["payload"]) => void;
+					}
+				: TDefinitions[TName] extends TIPCSendMain
+					? TIPCListener<
+							Parameters<Parameters<IpcRenderer["addListener"]>[1]>[0],
+							TDefinitions[TName]["payload"]
+						>
+					: never;
 };
 
 export type Serializer = {
@@ -181,7 +208,11 @@ type TIPCListener<TEvent, TPayload> = {
 	subscribe: (listener: TIPCHandler<TEvent, TPayload>) => TIPCUnsubscribeFn;
 };
 
-export type TIPCOperation = TIPCInvoke | TIPCSendMain | TIPCSendRenderer;
+export type TIPCOperation =
+	| TIPCInvokeQuery
+	| TIPCInvokeMutation
+	| TIPCSendMain
+	| TIPCSendRenderer;
 
 type TIPCHandler<TEvent, TPayload> = (
 	event: TEvent,
