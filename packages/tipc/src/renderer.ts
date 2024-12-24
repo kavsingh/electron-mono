@@ -1,10 +1,11 @@
-import { defaultSerializer, TIPC_GLOBAL_NAMESPACE } from "./common";
+import { defaultSerializer, exhaustive, TIPC_GLOBAL_NAMESPACE } from "./common";
 
 import type {
 	Logger,
 	Serializer,
 	TIPCDefinitions,
 	TIPCRenderer,
+	TIPCRendererMethod,
 } from "./common";
 import type { TIPCResult } from "./internal";
 import type { TIPCApi } from "./preload";
@@ -108,7 +109,9 @@ export function createTIPCRenderer<
 		get: (_, operation) => {
 			if (typeof operation !== "string") return undefined;
 
-			switch (operation) {
+			const op = operation as TIPCRendererMethod;
+
+			switch (op) {
 				case "query":
 					return queryProxy;
 
@@ -124,8 +127,11 @@ export function createTIPCRenderer<
 				case "subscribe":
 					return subscribeProxy;
 
-				default:
+				default: {
+					exhaustive(op, logger);
+
 					return undefined;
+				}
 			}
 		},
 	});
