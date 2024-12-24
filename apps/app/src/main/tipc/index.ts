@@ -14,8 +14,8 @@ import type { SystemStats } from "#main/services/system-stats";
 const tipc = createTIPCMain<AppTIPC>(ipcMain, { serializer });
 
 export function setupIpc(eventBus: AppEventBus) {
-	const remove = [
-		tipc.showOpenDialog.handle((_, input) => {
+	const handlers = [
+		tipc.showOpenDialog.handleMutation((_, input) => {
 			const focusedWindow = BrowserWindow.getAllWindows().find((win) =>
 				win.isFocused(),
 			);
@@ -32,7 +32,7 @@ export function setupIpc(eventBus: AppEventBus) {
 			);
 		}),
 
-		tipc.getSystemInfo.handle(() => {
+		tipc.getSystemInfo.handleQuery(() => {
 			if (Math.random() > 0.1) {
 				throw new CustomError("CODE_A", "something happened");
 			}
@@ -40,11 +40,11 @@ export function setupIpc(eventBus: AppEventBus) {
 			return getSystemInfo();
 		}),
 
-		tipc.getSystemStats.handle(() => getSystemStats()),
+		tipc.getSystemStats.handleQuery(() => getSystemStats()),
 
-		tipc.getThemeSource.handle(() => nativeTheme.themeSource),
+		tipc.getThemeSource.handleQuery(() => nativeTheme.themeSource),
 
-		tipc.setThemeSource.handle((_, themeSource) => {
+		tipc.setThemeSource.handleMutation((_, themeSource) => {
 			nativeTheme.themeSource = themeSource;
 
 			return nativeTheme.themeSource;
@@ -57,11 +57,11 @@ export function setupIpc(eventBus: AppEventBus) {
 
 	eventBus.addListener("systemStats", handleStats);
 
-	remove.push(() => {
-		eventBus.removeListener("systemStats", handleStats);
-	});
-
 	return function cleanup() {
-		for (const item of remove) item();
+		handlers.forEach((remove) => {
+			remove();
+		});
+
+		eventBus.removeListener("systemStats", handleStats);
 	};
 }
