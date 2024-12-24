@@ -17,16 +17,16 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 	const logger = options?.logger;
 	let currentChannel = "__";
 
-	const handleProxy = new Proxy(proxyFn, {
+	const handleQueryProxy = new Proxy(proxyFn, {
 		apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
-			const scopedChannel = scopeChannel(`${currentChannel}/invoke`);
+			const scopedChannel = scopeChannel(`${currentChannel}/invokeQuery`);
 
-			logger?.debug("add handler", { scopedChannel, handler });
+			logger?.debug("add query handler", { scopedChannel, handler });
 
 			ipcMain.handle(
 				scopedChannel,
 				async (event, arg: unknown): Promise<TIPCResult> => {
-					logger?.debug("handle", { scopedChannel, arg });
+					logger?.debug("handle query", { scopedChannel, arg });
 
 					try {
 						const result: TIPCResult = {
@@ -34,7 +34,7 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 							data: await handler(event, serializer.deserialize(arg)),
 						};
 
-						logger?.debug("handle result", { scopedChannel, result });
+						logger?.debug("handle query result", { scopedChannel, result });
 
 						return result;
 					} catch (reason) {
@@ -45,7 +45,48 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 							error: serializer.serialize(error),
 						};
 
-						logger?.debug("handle result", { scopedChannel, result });
+						logger?.debug("handle query result", { scopedChannel, result });
+
+						return result;
+					}
+				},
+			);
+
+			return function removeHandler() {
+				ipcMain.removeHandler(scopedChannel);
+			};
+		},
+	});
+
+	const handleMutationProxy = new Proxy(proxyFn, {
+		apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
+			const scopedChannel = scopeChannel(`${currentChannel}/invokeMutation`);
+
+			logger?.debug("add mutation handler", { scopedChannel, handler });
+
+			ipcMain.handle(
+				scopedChannel,
+				async (event, arg: unknown): Promise<TIPCResult> => {
+					logger?.debug("handle mutation", { scopedChannel, arg });
+
+					try {
+						const result: TIPCResult = {
+							__r: "ok",
+							data: await handler(event, serializer.deserialize(arg)),
+						};
+
+						logger?.debug("handle mutation result", { scopedChannel, result });
+
+						return result;
+					} catch (reason) {
+						const error =
+							reason instanceof Error ? reason : new Error(String(reason));
+						const result: TIPCResult = {
+							__r: "error",
+							error: serializer.serialize(error),
+						};
+
+						logger?.debug("handle mutation result", { scopedChannel, result });
 
 						return result;
 					}
@@ -63,7 +104,7 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 			const scoped = scopeChannel(`${currentChannel}/sendMain`);
 			const serialized = serializer.serialize(payload);
 
-			logger?.debug("publish", { scoped, windows, serialized });
+			logger?.debug("send main", { scoped, windows, serialized });
 
 			for (const win of windows) {
 				if (!win.isDestroyed()) {
@@ -86,7 +127,7 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 			const scoped = scopeChannel(`${currentChannel}/sendMain`);
 			const serialized = serializer.serialize(payload);
 
-			logger?.debug("publish", { scoped, windows, serialized });
+			logger?.debug("send to frame main", { scoped, windows, serialized });
 
 			for (const win of windows) {
 				if (!win.isDestroyed()) {
@@ -120,8 +161,11 @@ export function createTIPCMain<TDefinitions extends TIPCDefinitions>(
 			if (typeof operation !== "string") return undefined;
 
 			switch (operation) {
-				case "handle":
-					return handleProxy;
+				case "handleQuery":
+					return handleQueryProxy;
+
+				case "handleMutation":
+					return handleMutationProxy;
 
 				case "send":
 					return sendProxy;
