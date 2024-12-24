@@ -81,6 +81,11 @@ export function createSerializer<T extends ValueSerializer<any, any>>(
 	return { serialize, deserialize };
 }
 
+export function exhaustive(param: never, logger?: Logger) {
+	// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+	logger?.warn(`unknown value ${param}`);
+}
+
 export type DefineTIPC<TDefinitions extends TIPCDefinitions> = TDefinitions;
 
 export type TIPCInvokeQuery<TResponse = unknown, TArg = unknown> = {
@@ -147,10 +152,14 @@ export type TIPCMain<TDefinitions extends TIPCDefinitions> = {
 						) => void;
 					}
 				: TDefinitions[TName] extends TIPCSendRenderer
-					? TIPCListener<
-							Parameters<Parameters<IpcMain["addListener"]>[1]>[0],
-							TDefinitions[TName]["payload"]
-						>
+					? {
+							subscribe: (
+								listener: TIPCHandler<
+									Parameters<Parameters<IpcMain["addListener"]>[1]>[0],
+									TDefinitions[TName]["payload"]
+								>,
+							) => TIPCUnsubscribeFn;
+						}
 					: never;
 };
 
@@ -177,10 +186,14 @@ export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = {
 						sendToHost: (payload: TDefinitions[TName]["payload"]) => void;
 					}
 				: TDefinitions[TName] extends TIPCSendMain
-					? TIPCListener<
-							Parameters<Parameters<IpcRenderer["addListener"]>[1]>[0],
-							TDefinitions[TName]["payload"]
-						>
+					? {
+							subscribe: (
+								listener: TIPCHandler<
+									Parameters<Parameters<IpcRenderer["addListener"]>[1]>[0],
+									TDefinitions[TName]["payload"]
+								>,
+							) => TIPCUnsubscribeFn;
+						}
 					: never;
 };
 
@@ -204,15 +217,19 @@ export type Logger = {
 	error: (...args: unknown[]) => unknown;
 };
 
-type TIPCListener<TEvent, TPayload> = {
-	subscribe: (listener: TIPCHandler<TEvent, TPayload>) => TIPCUnsubscribeFn;
-};
-
 export type TIPCOperation =
 	| TIPCInvokeQuery
 	| TIPCInvokeMutation
 	| TIPCSendMain
 	| TIPCSendRenderer;
+
+export type TIPCMainMethod = KeysOfUnion<
+	TIPCMain<AnyDef>[keyof TIPCRenderer<AnyDef>]
+>;
+
+export type TIPCRendererMethod = KeysOfUnion<
+	TIPCRenderer<AnyDef>[keyof TIPCRenderer<AnyDef>]
+>;
 
 type TIPCHandler<TEvent, TPayload> = (
 	event: TEvent,
@@ -222,3 +239,12 @@ type TIPCHandler<TEvent, TPayload> = (
 type TIPCRemoveHandlerFn = () => void;
 
 type TIPCUnsubscribeFn = () => void;
+
+type AnyDef = {
+	query: TIPCInvokeQuery;
+	mutation: TIPCInvokeMutation;
+	sendMain: TIPCSendMain;
+	sendRender: TIPCSendRenderer;
+};
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
