@@ -7,7 +7,7 @@ import { serializer } from "#common/tipc/serializer-json";
 import { getSystemInfo } from "#main/services/system-info";
 import { getSystemStats } from "#main/services/system-stats";
 
-import type { AppTIPC } from "#common/tipc/defintion";
+import type { AppTIPC } from "#common/tipc/definition";
 import type { AppEventBus } from "#main/services/app-event-bus";
 import type { SystemStats } from "#main/services/system-stats";
 
