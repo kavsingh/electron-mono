@@ -1,23 +1,63 @@
-import type { ParentProps } from "solid-js";
+import { splitProps } from "solid-js";
+import { tv } from "tailwind-variants";
 
-export function InfoListRoot(props: ParentProps) {
-	return <ul class="m-0 list-none p-0">{props.children}</ul>;
-}
+import type { ComponentProps } from "solid-js";
+import type { VariantProps } from "tailwind-variants";
 
-export function InfoListEntry(props: ParentProps) {
+export function InfoListRoot(
+	props: Omit<ComponentProps<"ul">, "classList"> &
+		VariantProps<typeof infoListRootVariants>,
+) {
+	const [localProps, passProps] = splitProps(props, ["class"]);
+
 	return (
-		<li class="flex gap-2 border-b border-b-border py-2 last:border-b-0">
-			{props.children}
-		</li>
+		<ul
+			{...passProps}
+			class={infoListRootVariants({ class: localProps.class })}
+		/>
 	);
 }
 
-export function InfoListLabel(props: ParentProps) {
-	return <span class="text-muted-foreground">{props.children}</span>;
+const infoListRootVariants = tv({ base: "m-0 list-none p-0" });
+
+export function InfoListEntry(
+	props: Omit<ComponentProps<"li">, "classList"> &
+		VariantProps<typeof infoListEntryVariants>,
+) {
+	const [localProps, passProps] = splitProps(props, ["class"]);
+
+	return (
+		<li
+			{...passProps}
+			class={infoListEntryVariants({ class: localProps.class })}
+		/>
+	);
 }
 
-export function InfoListValue(props: ParentProps) {
-	return <span>{props.children}</span>;
+const infoListEntryVariants = tv({
+	base: "flex gap-2 border-b border-b-border py-2 last:border-b-0",
+});
+
+export function InfoListLabel(
+	props: Omit<ComponentProps<"span">, "classList"> &
+		VariantProps<typeof infoListLabelVariants>,
+) {
+	const [localProps, passProps] = splitProps(props, ["class"]);
+
+	return (
+		<span
+			{...passProps}
+			class={infoListLabelVariants({ class: localProps.class })}
+		/>
+	);
+}
+
+const infoListLabelVariants = tv({ base: "text-muted-foreground" });
+
+export function InfoListValue(
+	props: Omit<ComponentProps<"span">, "classList">,
+) {
+	return <span {...props} />;
 }
 
 export default {
