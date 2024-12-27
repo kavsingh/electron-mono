@@ -10,6 +10,7 @@ import {
 	createMockSystemInfo,
 	createMockSystemStats,
 } from "#common/__test-helpers__/mock-data-creators/system";
+import CustomError from "#common/errors/custom-error";
 
 import type { AppTIPC } from "#common/tipc/definition";
 
@@ -19,6 +20,9 @@ export const { namespace: tipcNamespace, api: tipcApi } =
 		setThemeSource: vi.fn((source) => Promise.resolve(source)),
 		getSystemInfo: vi.fn(() => Promise.resolve(createMockSystemInfo())),
 		getSystemStats: vi.fn(() => Promise.resolve(createMockSystemStats())),
+		throwCustomError: vi.fn(() => {
+			return Promise.reject(new CustomError("CODE_A", "something happened"));
+		}),
 		showOpenDialog: vi.fn(() => {
 			return Promise.resolve(createMockOpenDialogReturnValue());
 		}),
