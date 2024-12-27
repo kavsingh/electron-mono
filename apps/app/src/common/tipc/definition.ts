@@ -17,5 +17,6 @@ export type AppTIPC = DefineTIPC<{
 	setThemeSource: TIPCInvokeMutation<ThemeSource, ThemeSource>;
 	getSystemInfo: TIPCInvokeQuery<SystemInfo>;
 	getSystemStats: TIPCInvokeQuery<SystemStats>;
+	throwCustomError: TIPCInvokeMutation<void>;
 	systemStatsEvent: TIPCSendMain<SystemStats>;
 }>;
