@@ -24,12 +24,7 @@ export function setupIpc(eventBus: AppEventBus) {
 				throw new Error("No focused window");
 			}
 
-			return dialog.showOpenDialog(
-				focusedWindow,
-				// circumvent exactOptionalPropertyTypes conflict with
-				// upstream types
-				input,
-			);
+			return dialog.showOpenDialog(focusedWindow, input);
 		}),
 
 		tipc.getSystemInfo.handleQuery(() => {
