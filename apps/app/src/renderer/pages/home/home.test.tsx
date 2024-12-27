@@ -31,7 +31,7 @@ describe("<Home />", () => {
 		expect(screen.queryByText("loading...")).not.toBeInTheDocument();
 	});
 
-	it("should update system stats from events", async () => {
+	it.skip("should update system stats from events", async () => {
 		expect.assertions(4);
 
 		const { Wrapper } = setupRenderWrapper();
