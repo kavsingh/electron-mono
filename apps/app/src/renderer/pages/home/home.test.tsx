@@ -3,7 +3,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 
 import { createMockSystemStats } from "#common/__test-helpers__/mock-data-creators/system";
 import { setupRenderWrapper } from "#renderer/__test-helpers__/render-wrapper";
-import { publishSystemStatsEvent } from "#renderer/__test-helpers__/tipc/events";
+import { emitMainEvent } from "#renderer/__test-helpers__/tipc-mocked";
 
 import Home from "./index";
 
@@ -31,7 +31,7 @@ describe("<Home />", () => {
 		expect(screen.queryByText("loading...")).not.toBeInTheDocument();
 	});
 
-	it.skip("should update system stats from events", async () => {
+	it("should update system stats from events", async () => {
 		expect.assertions(4);
 
 		const { Wrapper } = setupRenderWrapper();
@@ -44,7 +44,8 @@ describe("<Home />", () => {
 
 		expect(screen.queryByText("500.00 MB")).not.toBeInTheDocument();
 
-		publishSystemStatsEvent(
+		emitMainEvent(
+			"systemStatsEvent",
 			createMockSystemStats({
 				memUsed: String(1024 * 1024 * 500),
 				sampledAt: "1",
