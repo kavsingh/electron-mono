@@ -1,5 +1,6 @@
 import Page from "#renderer/layouts/page";
 
+import SerializerCheck from "./serializer-check";
 import SystemInfoCard from "./system-info-card";
 import SystemStatsCard from "./system-stats-card";
 
@@ -11,6 +12,7 @@ export default function Home() {
 				<div class="space-y-6">
 					<SystemInfoCard />
 					<SystemStatsCard />
+					<SerializerCheck />
 				</div>
 			</Page.Content>
 		</>

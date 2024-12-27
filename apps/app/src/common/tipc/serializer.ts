@@ -6,11 +6,11 @@ import CustomError, {
 	isSerialized as isSerializedCustomError,
 } from "#common/errors/custom-error";
 
-const customErrorSerialzer = createValueSerializer({
+const customErrorSerializer = createValueSerializer({
 	isDeserialized: (val) => val instanceof CustomError,
 	isSerialized: isSerializedCustomError,
 	serialize: serializeCustomError,
 	deserialize: deserializeCustomError,
 });
 
-export const serializer = createSerializer([customErrorSerialzer]);
+export const serializer = createSerializer([customErrorSerializer]);

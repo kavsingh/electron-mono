@@ -3,7 +3,7 @@ import { BrowserWindow, dialog, ipcMain, nativeTheme } from "electron";
 import { createTIPCMain } from "tipc/main";
 
 import CustomError from "#common/errors/custom-error";
-import { serializer } from "#common/tipc/serializer-json";
+import { serializer } from "#common/tipc/serializer";
 import { getSystemInfo } from "#main/services/system-info";
 import { getSystemStats } from "#main/services/system-stats";
 
@@ -27,13 +27,7 @@ export function setupIpc(eventBus: AppEventBus) {
 			return dialog.showOpenDialog(focusedWindow, input);
 		}),
 
-		tipc.getSystemInfo.handleQuery(() => {
-			if (Math.random() > 0.1) {
-				throw new CustomError("CODE_A", "something happened");
-			}
-
-			return getSystemInfo();
-		}),
+		tipc.getSystemInfo.handleQuery(() => getSystemInfo()),
 
 		tipc.getSystemStats.handleQuery(() => getSystemStats()),
 
@@ -43,6 +37,10 @@ export function setupIpc(eventBus: AppEventBus) {
 			nativeTheme.themeSource = themeSource;
 
 			return nativeTheme.themeSource;
+		}),
+
+		tipc.throwCustomError.handleMutation(() => {
+			throw new CustomError("CODE_A", "something happened");
 		}),
 	];
 
