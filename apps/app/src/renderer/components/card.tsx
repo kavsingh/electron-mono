@@ -3,13 +3,12 @@
 import { splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
-import type { JSX } from "solid-js";
+import type { ComponentProps } from "solid-js";
 import type { VariantProps } from "tailwind-variants";
 
-//
-
 export function CardRoot(
-	props: Props<HTMLDivElement, typeof cardRootVariants>,
+	props: Omit<ComponentProps<"div">, "classList"> &
+		VariantProps<typeof cardRootVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -25,7 +24,8 @@ const cardRootVariants = tv({
 //
 
 export function CardHeader(
-	props: Props<HTMLDivElement, typeof cardHeaderVariants>,
+	props: Omit<ComponentProps<"div">, "classList"> &
+		VariantProps<typeof cardHeaderVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -44,7 +44,8 @@ const cardHeaderVariants = tv({
 //
 
 export function CardTitle(
-	props: Props<HTMLHeadingElement, typeof cardTitleVariants>,
+	props: Omit<ComponentProps<"h3">, "classList"> &
+		VariantProps<typeof cardTitleVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -60,7 +61,8 @@ const cardTitleVariants = tv({
 //
 
 export function CardDescription(
-	props: Props<HTMLParagraphElement, typeof cardDescriptionVariants>,
+	props: Omit<ComponentProps<"p">, "classList"> &
+		VariantProps<typeof cardDescriptionVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -79,7 +81,8 @@ const cardDescriptionVariants = tv({
 //
 
 export function CardContent(
-	props: Props<HTMLDivElement, typeof cardContentVariants>,
+	props: Omit<ComponentProps<"div">, "classList"> &
+		VariantProps<typeof cardContentVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -98,7 +101,8 @@ const cardContentVariants = tv({
 //
 
 export function CardFooter(
-	props: Props<HTMLDivElement, typeof cardFooterVariants>,
+	props: Omit<ComponentProps<"div">, "classList"> &
+		VariantProps<typeof cardFooterVariants>,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
@@ -124,10 +128,3 @@ export default {
 	Content: CardContent,
 	Footer: CardFooter,
 };
-
-//
-
-type Props<
-	TElement extends HTMLElement,
-	TVariants extends ReturnType<typeof tv>,
-> = Omit<JSX.HTMLAttributes<TElement>, "classList"> & VariantProps<TVariants>;
