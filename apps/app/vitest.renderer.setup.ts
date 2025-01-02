@@ -3,7 +3,7 @@ import "vitest-canvas-mock";
 import { cleanup } from "@solidjs/testing-library";
 import { vi, afterEach } from "vitest";
 
-import { tipcApi, tipcNamespace } from "#renderer/__test-helpers__/tipc-mocked";
+import { typedIpcApi, typedIpcNamespace } from "#renderer/__test-helpers__/ipc-mocks";
 
 vi.stubGlobal(
 	"ResizeObserver",
@@ -15,7 +15,7 @@ vi.stubGlobal(
 	vi.fn(() => ({ addEventListener: vi.fn(), removeEventListener: vi.fn() })),
 );
 
-vi.stubGlobal(tipcNamespace, tipcApi);
+vi.stubGlobal(typedIpcNamespace, typedIpcApi);
 
 afterEach(() => {
 	cleanup();

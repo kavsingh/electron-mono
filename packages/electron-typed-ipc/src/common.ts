@@ -5,10 +5,10 @@ import type {
 	WebContents,
 } from "electron";
 
-export const TIPC_GLOBAL_NAMESPACE = "__TIPC_API__";
+export const ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE = "__ELECTRON_TYPED_IPC__";
 
 export function scopeChannel(
-	channel: `${string}/${TIPCOperation["operation"]}`,
+	channel: `${string}/${TypedIpcOperation["operation"]}`,
 ) {
 	return `__tipc__/${channel}` as const;
 }
@@ -81,39 +81,35 @@ export function createSerializer<T extends ValueSerializer<any, any>>(
 	return { serialize, deserialize };
 }
 
-export function exhaustive(param: never, logger?: Logger) {
-	// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-	logger?.warn(`unknown value ${param}`);
-}
+export type DefineTypedIpc<TDefinitions extends TypedIpcDefinitions> =
+	TDefinitions;
 
-export type DefineTIPC<TDefinitions extends TIPCDefinitions> = TDefinitions;
-
-export type TIPCInvokeQuery<TResponse = unknown, TArg = unknown> = {
-	operation: "invokeQuery";
+export type TypedIpcQuery<TResponse = unknown, TArg = unknown> = {
+	operation: "query";
 	arg: TArg;
 	response: TResponse;
 };
 
-export type TIPCInvokeMutation<TResponse = unknown, TArg = unknown> = {
-	operation: "invokeMutation";
+export type TypedIpcMutation<TResponse = unknown, TArg = unknown> = {
+	operation: "mutation";
 	arg: TArg;
 	response: TResponse;
 };
 
-export type TIPCSendMain<TPayload = unknown> = {
-	operation: "sendMain";
+export type TypedIpcSendFromMain<TPayload = unknown> = {
+	operation: "sendFromMain";
 	payload: TPayload;
 };
 
-export type TIPCSendRenderer<TPayload = unknown> = {
-	operation: "sendRenderer";
+export type TypedIpcSendFromRenderer<TPayload = unknown> = {
+	operation: "sendFromRenderer";
 	payload: TPayload;
 };
 
-export type TIPCDefinitions = Readonly<Record<string, TIPCOperation>>;
+export type TypedIpcDefinitions = Readonly<Record<string, TypedIpcOperation>>;
 
-export type TIPCMain<TDefinitions extends TIPCDefinitions> = Readonly<{
-	[TName in keyof TDefinitions]: TDefinitions[TName] extends TIPCInvokeQuery
+export type TypedIpcMain<TDefinitions extends TypedIpcDefinitions> = Readonly<{
+	[TName in keyof TDefinitions]: TDefinitions[TName] extends TypedIpcQuery
 		? {
 				handleQuery: (
 					handler: (
@@ -124,9 +120,9 @@ export type TIPCMain<TDefinitions extends TIPCDefinitions> = Readonly<{
 					) =>
 						| TDefinitions[TName]["response"]
 						| Promise<TDefinitions[TName]["response"]>,
-				) => TIPCRemoveHandlerFn;
+				) => TypedIpcRemoveHandlerFn;
 			}
-		: TDefinitions[TName] extends TIPCInvokeMutation
+		: TDefinitions[TName] extends TypedIpcMutation
 			? {
 					handleMutation: (
 						handler: (
@@ -137,9 +133,9 @@ export type TIPCMain<TDefinitions extends TIPCDefinitions> = Readonly<{
 						) =>
 							| TDefinitions[TName]["response"]
 							| Promise<TDefinitions[TName]["response"]>,
-					) => TIPCRemoveHandlerFn;
+					) => TypedIpcRemoveHandlerFn;
 				}
-			: TDefinitions[TName] extends TIPCSendMain
+			: TDefinitions[TName] extends TypedIpcSendFromMain
 				? {
 						send: (
 							browserWindows: BrowserWindow[],
@@ -151,51 +147,52 @@ export type TIPCMain<TDefinitions extends TIPCDefinitions> = Readonly<{
 							payload: TDefinitions[TName]["payload"],
 						) => void;
 					}
-				: TDefinitions[TName] extends TIPCSendRenderer
+				: TDefinitions[TName] extends TypedIpcSendFromRenderer
 					? {
 							subscribe: (
-								listener: TIPCHandler<
+								listener: TypedIpcListener<
 									Parameters<Parameters<IpcMain["addListener"]>[1]>[0],
 									TDefinitions[TName]["payload"]
 								>,
-							) => TIPCUnsubscribeFn;
+							) => TypedIpcUnsubscribeFn;
 						}
 					: never;
 }>;
 
-export type TIPCRenderer<TDefinitions extends TIPCDefinitions> = Readonly<{
-	[TName in keyof TDefinitions]: TDefinitions[TName] extends TIPCInvokeQuery
-		? {
-				query: (
-					...args: keyof TDefinitions[TName]["arg"] extends never
-						? []
-						: [arg: TDefinitions[TName]["arg"]]
-				) => Promise<TDefinitions[TName]["response"]>;
-			}
-		: TDefinitions[TName] extends TIPCInvokeMutation
+export type TypedIpcRenderer<TDefinitions extends TypedIpcDefinitions> =
+	Readonly<{
+		[TName in keyof TDefinitions]: TDefinitions[TName] extends TypedIpcQuery
 			? {
-					mutate: (
+					query: (
 						...args: keyof TDefinitions[TName]["arg"] extends never
 							? []
 							: [arg: TDefinitions[TName]["arg"]]
 					) => Promise<TDefinitions[TName]["response"]>;
 				}
-			: TDefinitions[TName] extends TIPCSendRenderer
+			: TDefinitions[TName] extends TypedIpcMutation
 				? {
-						send: (payload: TDefinitions[TName]["payload"]) => void;
-						sendToHost: (payload: TDefinitions[TName]["payload"]) => void;
+						mutate: (
+							...args: keyof TDefinitions[TName]["arg"] extends never
+								? []
+								: [arg: TDefinitions[TName]["arg"]]
+						) => Promise<TDefinitions[TName]["response"]>;
 					}
-				: TDefinitions[TName] extends TIPCSendMain
+				: TDefinitions[TName] extends TypedIpcSendFromRenderer
 					? {
-							subscribe: (
-								listener: TIPCHandler<
-									Parameters<Parameters<IpcRenderer["addListener"]>[1]>[0],
-									TDefinitions[TName]["payload"]
-								>,
-							) => TIPCUnsubscribeFn;
+							send: (payload: TDefinitions[TName]["payload"]) => void;
+							sendToHost: (payload: TDefinitions[TName]["payload"]) => void;
 						}
-					: never;
-}>;
+					: TDefinitions[TName] extends TypedIpcSendFromMain
+						? {
+								subscribe: (
+									listener: TypedIpcListener<
+										Parameters<Parameters<IpcRenderer["addListener"]>[1]>[0],
+										TDefinitions[TName]["payload"]
+									>,
+								) => TypedIpcUnsubscribeFn;
+							}
+						: never;
+	}>;
 
 export type Serializer = {
 	serialize: (val: unknown) => unknown;
@@ -217,34 +214,34 @@ export type Logger = {
 	error: (...args: unknown[]) => unknown;
 };
 
-export type TIPCOperation =
-	| TIPCInvokeQuery
-	| TIPCInvokeMutation
-	| TIPCSendMain
-	| TIPCSendRenderer;
+export type TypedIpcOperation =
+	| TypedIpcQuery
+	| TypedIpcMutation
+	| TypedIpcSendFromMain
+	| TypedIpcSendFromRenderer;
 
-export type TIPCMainMethod = KeysOfUnion<
-	TIPCMain<AnyDef>[keyof TIPCRenderer<AnyDef>]
+export type TypedIpcMainMethod = KeysOfUnion<
+	TypedIpcMain<AnyDef>[keyof TypedIpcRenderer<AnyDef>]
 >;
 
-export type TIPCRendererMethod = KeysOfUnion<
-	TIPCRenderer<AnyDef>[keyof TIPCRenderer<AnyDef>]
+export type TypedIpcRendererMethod = KeysOfUnion<
+	TypedIpcRenderer<AnyDef>[keyof TypedIpcRenderer<AnyDef>]
 >;
 
-type TIPCHandler<TEvent, TPayload> = (
+type TypedIpcListener<TEvent, TPayload> = (
 	event: TEvent,
 	payload: TPayload,
 ) => void | Promise<void>;
 
-type TIPCRemoveHandlerFn = () => void;
+type TypedIpcRemoveHandlerFn = () => void;
 
-type TIPCUnsubscribeFn = () => void;
+type TypedIpcUnsubscribeFn = () => void;
 
 type AnyDef = {
-	query: TIPCInvokeQuery;
-	mutation: TIPCInvokeMutation;
-	sendMain: TIPCSendMain;
-	sendRender: TIPCSendRenderer;
+	query: TypedIpcQuery;
+	mutation: TypedIpcMutation;
+	sendMain: TypedIpcSendFromMain;
+	sendRender: TypedIpcSendFromRenderer;
 };
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
