@@ -1,29 +1,35 @@
-import { defaultSerializer, exhaustive, TIPC_GLOBAL_NAMESPACE } from "./common";
+import {
+	defaultSerializer,
+	ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE,
+} from "./common";
+import { exhaustive } from "./internal";
 
 import type {
 	Logger,
 	Serializer,
-	TIPCDefinitions,
-	TIPCRenderer,
-	TIPCRendererMethod,
+	TypedIpcDefinitions,
+	TypedIpcRenderer,
+	TypedIpcRendererMethod,
 } from "./common";
-import type { TIPCResult } from "./internal";
-import type { TIPCApi } from "./preload";
+import type { TypedIpcResult } from "./internal";
+import type { TypedIpcPreload } from "./preload";
 
-export function createTIPCRenderer<
-	TDefinitions extends TIPCDefinitions,
+export function createTypedIpcRenderer<
+	TDefinitions extends TypedIpcDefinitions,
 >(options?: {
 	serializer?: Serializer | undefined;
 	logger?: Logger | undefined;
 }) {
 	const api =
-		TIPC_GLOBAL_NAMESPACE in globalThis.window
-			? (globalThis.window[TIPC_GLOBAL_NAMESPACE] as TIPCApi)
+		ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE in globalThis.window
+			? (globalThis.window[
+					ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE
+				] as TypedIpcPreload)
 			: undefined;
 
 	if (!api) {
 		throw new Error(
-			`tipc object named ${TIPC_GLOBAL_NAMESPACE} not found on window`,
+			`object named ${ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE} not found on window`,
 		);
 	}
 
@@ -40,7 +46,7 @@ export function createTIPCRenderer<
 			const response = (await api.invokeQuery(
 				currentChannel,
 				arg ? serializer.serialize(arg) : undefined,
-			)) as TIPCResult;
+			)) as TypedIpcResult;
 
 			logger?.debug("invoke query result", {
 				channel: currentChannel,
@@ -62,7 +68,7 @@ export function createTIPCRenderer<
 			const response = (await api.invokeMutation(
 				currentChannel,
 				arg ? serializer.serialize(arg) : undefined,
-			)) as TIPCResult;
+			)) as TypedIpcResult;
 
 			logger?.debug("invoke mutation result", {
 				channel: currentChannel,
@@ -109,7 +115,7 @@ export function createTIPCRenderer<
 		get: (_, operation) => {
 			if (typeof operation !== "string") return undefined;
 
-			const op = operation as TIPCRendererMethod;
+			const op = operation as TypedIpcRendererMethod;
 
 			switch (op) {
 				case "query":
@@ -136,7 +142,7 @@ export function createTIPCRenderer<
 		},
 	});
 
-	return new Proxy(proxyObj as TIPCRenderer<TDefinitions>, {
+	return new Proxy(proxyObj as TypedIpcRenderer<TDefinitions>, {
 		get: (_, channel) => {
 			if (typeof channel !== "string") return undefined;
 

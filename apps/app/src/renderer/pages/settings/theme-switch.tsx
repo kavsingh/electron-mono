@@ -7,7 +7,7 @@ import { For, Match, Switch } from "solid-js";
 
 import { THEME_SOURCES } from "#common/lib/theme";
 import Card from "#renderer/components/card";
-import { tipc } from "#renderer/tipc";
+import { ipc } from "#renderer/ipc";
 
 import type { ThemeSource } from "#common/lib/theme";
 
@@ -15,11 +15,11 @@ export default function ThemeSwitch() {
 	const queryClient = useQueryClient();
 	const { data: themeSource } = createQuery(() => ({
 		queryKey: ["themeSource"],
-		queryFn: () => tipc.getThemeSource.query(),
+		queryFn: () => ipc.getThemeSource.query(),
 	}));
 
 	const { mutate: setThemeSource } = createMutation(() => ({
-		mutationFn: (source: ThemeSource) => tipc.setThemeSource.mutate(source),
+		mutationFn: (source: ThemeSource) => ipc.setThemeSource.mutate(source),
 		onSuccess: () => {
 			void queryClient.invalidateQueries({ queryKey: ["themeSource"] });
 		},

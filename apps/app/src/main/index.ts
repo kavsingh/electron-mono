@@ -3,11 +3,11 @@ import { app, BrowserWindow } from "electron";
 import log from "electron-log";
 
 import { createMainWindow } from "./app-windows/main-window";
+import { setupIpc } from "./ipc";
 import initLogging from "./lib/init-logging";
 import restrictNavigation from "./lib/restrict-navigation";
 import { createAppEventBus } from "./services/app-event-bus";
 import { startSystemStatsUpdates } from "./services/system-stats";
-import { setupIpc } from "./tipc";
 
 initLogging();
 

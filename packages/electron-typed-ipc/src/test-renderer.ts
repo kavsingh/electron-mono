@@ -1,8 +1,8 @@
-import { TIPC_GLOBAL_NAMESPACE } from "./common";
+import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./common";
 
-import type { TIPCDefinitions, TIPCOperation } from "./common";
-import type { TIPCResult } from "./internal";
-import type { TIPCApi } from "./preload";
+import type { TypedIpcDefinitions, TypedIpcOperation } from "./common";
+import type { TypedIpcResult } from "./internal";
+import type { TypedIpcPreload } from "./preload";
 import type { IpcRenderer, IpcRendererEvent } from "electron";
 
 const fnMocks: Record<string, (...args: unknown[]) => unknown> = {};
@@ -14,7 +14,7 @@ const eventHandlers: Record<
 async function mockInvoke(
 	channel: string,
 	payload: unknown,
-): Promise<TIPCResult> {
+): Promise<TypedIpcResult> {
 	const mock = fnMocks[channel];
 
 	if (typeof mock !== "function") {
@@ -38,14 +38,14 @@ function mockSend(channel: string, payload: unknown) {
 	mock(payload);
 }
 
-export function getTipcRendererMocks() {
+export function getTypedIpcRendererMocks() {
 	return { fnMocks, eventHandlers } as const;
 }
 
-export function mockTipcRenderer<TDefs extends TIPCDefinitions>(
-	mocks: TIPCMockRenderer<TDefs>,
+export function mockTypedIpcRenderer<TDefs extends TypedIpcDefinitions>(
+	mocks: TypedIpcMockRenderer<TDefs>,
 ) {
-	const api: TIPCApi = {
+	const api: TypedIpcPreload = {
 		invokeQuery: mockInvoke,
 		invokeMutation: mockInvoke,
 		send: mockSend,
@@ -63,13 +63,13 @@ export function mockTipcRenderer<TDefs extends TIPCDefinitions>(
 		},
 	};
 
-	applyTipcMocks(mocks);
+	applyTypedIpcMocks(mocks);
 
-	return { api, namespace: TIPC_GLOBAL_NAMESPACE };
+	return { api, namespace: ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE };
 }
 
-export function applyTipcMocks<TDefs extends TIPCDefinitions>(
-	mocks: Partial<TIPCMockRenderer<TDefs>>,
+export function applyTypedIpcMocks<TDefs extends TypedIpcDefinitions>(
+	mocks: Partial<TypedIpcMockRenderer<TDefs>>,
 ) {
 	for (const [channel, fn] of Object.entries(mocks)) {
 		if (typeof fn !== "function") {
@@ -83,12 +83,12 @@ export function applyTipcMocks<TDefs extends TIPCDefinitions>(
 	}
 }
 
-export function emitTipcMainEvent<
-	TDefs extends TIPCDefinitions,
+export function emitTypedIpcMainEvent<
+	TDefs extends TypedIpcDefinitions,
 	TChannel extends string = EmitableChannel<TDefs>,
 >(
 	channel: TChannel,
-	payload: TDefs[TChannel] extends { operation: "sendMain" }
+	payload: TDefs[TChannel] extends { operation: "sendFromMain" }
 		? keyof TDefs[TChannel]["payload"] extends never
 			? // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 				void | undefined
@@ -116,32 +116,32 @@ export function createMockIpcRendererEvent(
 		: { ...mockIpcRendererEventDefaults };
 }
 
-export type TIPCMockRenderer<
-	TDefs extends TIPCDefinitions,
+export type TypedIpcMockRenderer<
+	TDefs extends TypedIpcDefinitions,
 	TMockableKey extends keyof TDefs = MockableChannel<TDefs>,
 > = {
 	[TKey in TMockableKey]: TDefs[TKey] extends {
-		operation: "invokeQuery" | "invokeMutation";
+		operation: "query" | "mutation";
 	}
 		? (arg: TDefs[TKey]["arg"]) => Promise<Awaited<TDefs[TKey]["response"]>>
-		: TDefs[TKey] extends { operation: "sendRenderer" }
+		: TDefs[TKey] extends { operation: "sendFromRenderer" }
 			? (arg: TDefs[TKey]["payload"]) => void | Promise<void>
 			: never;
 };
 
-type MockableChannel<TDefs extends TIPCDefinitions> = ChannelForOperation<
+type MockableChannel<TDefs extends TypedIpcDefinitions> = ChannelForOperation<
 	TDefs,
-	"invokeQuery" | "invokeMutation" | "sendRenderer"
+	"query" | "mutation" | "sendFromRenderer"
 >;
 
-type EmitableChannel<TDefs extends TIPCDefinitions> = ChannelForOperation<
+type EmitableChannel<TDefs extends TypedIpcDefinitions> = ChannelForOperation<
 	TDefs,
-	"sendMain"
+	"sendFromMain"
 >;
 
 type ChannelForOperation<
-	TDefs extends TIPCDefinitions,
-	TOperation extends TIPCOperation["operation"],
+	TDefs extends TypedIpcDefinitions,
+	TOperation extends TypedIpcOperation["operation"],
 > = string &
 	Extract<
 		{
