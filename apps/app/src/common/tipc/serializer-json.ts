@@ -6,7 +6,7 @@ import CustomError, {
 	isSerialized as isSerializedCustomError,
 } from "#common/errors/custom-error";
 
-import type { Serializer } from "tipc";
+import type { Serializer } from "electron-typed-ipc";
 
 SuperJSON.registerCustom(
 	{

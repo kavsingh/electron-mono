@@ -1,5 +1,5 @@
 {
-	"name": "tipc",
+	"name": "electron-typed-ipc",
 	"version": "1.0.0-dev.0",
 	"description": "typed electron ipc",
 	"keywords": [],
@@ -71,16 +71,16 @@
 		"build": "tsup"
 	},
 	"devDependencies": {
-		"@vitest/coverage-v8": "3.0.4",
-		"electron": "34.0.1",
+		"@vitest/coverage-v8": "3.1.1",
+		"electron": "35.1.2",
 		"eslint-plugin-vitest": "0.5.4",
 		"superjson": "2.2.2",
-		"tsup": "8.3.5",
-		"vitest": "3.0.4",
-		"zod": "3.24.1"
+		"tsup": "8.4.0",
+		"vitest": "3.1.1",
+		"zod": "3.24.2"
 	},
 	"peerDependencies": {
-		"electron": ">=30",
+		"electron": ">=35",
 		"superjson": ">=2"
 	}
 }
