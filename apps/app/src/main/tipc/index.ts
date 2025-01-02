@@ -1,6 +1,6 @@
 import { BrowserWindow, dialog, ipcMain, nativeTheme } from "electron";
 
-import { createTIPCMain } from "tipc/main";
+import { createTIPCMain } from "electron-typed-ipc/main";
 
 import CustomError from "#common/errors/custom-error";
 import { serializer } from "#common/tipc/serializer";

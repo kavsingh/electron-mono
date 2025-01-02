@@ -9,7 +9,7 @@ import type {
 	TIPCInvokeQuery,
 	TIPCInvokeMutation,
 	TIPCSendMain,
-} from "tipc";
+} from "electron-typed-ipc";
 
 export type AppTIPC = DefineTIPC<{
 	showOpenDialog: TIPCInvokeMutation<OpenDialogReturnValue, OpenDialogOptions>;
