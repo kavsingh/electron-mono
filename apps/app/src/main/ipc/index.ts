@@ -1,21 +1,21 @@
 import { BrowserWindow, dialog, ipcMain, nativeTheme } from "electron";
 
-import { createTIPCMain } from "electron-typed-ipc/main";
+import { createTypedIpcMain } from "electron-typed-ipc/main";
 
 import CustomError from "#common/errors/custom-error";
-import { serializer } from "#common/tipc/serializer";
+import { serializer } from "#common/ipc/serializer";
 import { getSystemInfo } from "#main/services/system-info";
 import { getSystemStats } from "#main/services/system-stats";
 
-import type { AppTIPC } from "#common/tipc/definition";
+import type { AppIpcDefinition } from "#common/ipc/definition";
 import type { AppEventBus } from "#main/services/app-event-bus";
 import type { SystemStats } from "#main/services/system-stats";
 
-const tipc = createTIPCMain<AppTIPC>(ipcMain, { serializer });
+const appIpc = createTypedIpcMain<AppIpcDefinition>(ipcMain, { serializer });
 
 export function setupIpc(eventBus: AppEventBus) {
 	const handlers = [
-		tipc.showOpenDialog.handleMutation((_, input) => {
+		appIpc.showOpenDialog.handleMutation((_, input) => {
 			const focusedWindow = BrowserWindow.getAllWindows().find((win) =>
 				win.isFocused(),
 			);
@@ -27,25 +27,25 @@ export function setupIpc(eventBus: AppEventBus) {
 			return dialog.showOpenDialog(focusedWindow, input);
 		}),
 
-		tipc.getSystemInfo.handleQuery(() => getSystemInfo()),
+		appIpc.getSystemInfo.handleQuery(() => getSystemInfo()),
 
-		tipc.getSystemStats.handleQuery(() => getSystemStats()),
+		appIpc.getSystemStats.handleQuery(() => getSystemStats()),
 
-		tipc.getThemeSource.handleQuery(() => nativeTheme.themeSource),
+		appIpc.getThemeSource.handleQuery(() => nativeTheme.themeSource),
 
-		tipc.setThemeSource.handleMutation((_, themeSource) => {
+		appIpc.setThemeSource.handleMutation((_, themeSource) => {
 			nativeTheme.themeSource = themeSource;
 
 			return nativeTheme.themeSource;
 		}),
 
-		tipc.throwCustomError.handleMutation(() => {
+		appIpc.throwCustomError.handleMutation(() => {
 			throw new CustomError("CODE_A", "something happened");
 		}),
 	];
 
 	function handleStats(stats: SystemStats) {
-		tipc.systemStatsEvent.send(BrowserWindow.getAllWindows(), stats);
+		appIpc.systemStatsEvent.send(BrowserWindow.getAllWindows(), stats);
 	}
 
 	eventBus.addListener("systemStats", handleStats);
