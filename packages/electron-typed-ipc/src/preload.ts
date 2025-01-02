@@ -1,16 +1,16 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-import { scopeChannel, TIPC_GLOBAL_NAMESPACE } from "./common";
+import { scopeChannel, ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./common";
 
 import type { Logger } from "./common";
 import type { IpcRendererEvent } from "electron";
 
-function createTIPCApi(options?: { logger?: Logger | undefined }) {
+function createTypedIpcPreload(options?: { logger?: Logger | undefined }) {
 	const logger = options?.logger;
 
 	return {
 		invokeQuery: async (channel: string, payload: unknown) => {
-			const scopedChannel = scopeChannel(`${channel}/invokeQuery`);
+			const scopedChannel = scopeChannel(`${channel}/query`);
 
 			logger?.debug("invoke query", { scopedChannel, payload });
 
@@ -22,7 +22,7 @@ function createTIPCApi(options?: { logger?: Logger | undefined }) {
 		},
 
 		invokeMutation: async (channel: string, payload: unknown) => {
-			const scopedChannel = scopeChannel(`${channel}/invokeMutation`);
+			const scopedChannel = scopeChannel(`${channel}/mutation`);
 
 			logger?.debug("invoke mutation", { scopedChannel, payload });
 
@@ -34,14 +34,14 @@ function createTIPCApi(options?: { logger?: Logger | undefined }) {
 		},
 
 		send: (channel: string, payload: unknown) => {
-			const scopedChannel = scopeChannel(`${channel}/sendRenderer`);
+			const scopedChannel = scopeChannel(`${channel}/sendFromRenderer`);
 
 			logger?.debug("send", { scopedChannel, payload });
 			ipcRenderer.send(scopedChannel, payload);
 		},
 
 		sendToHost: (channel: string, payload: unknown) => {
-			const scopedChannel = scopeChannel(`${channel}/sendRenderer`);
+			const scopedChannel = scopeChannel(`${channel}/sendFromRenderer`);
 
 			logger?.debug("sendToHost", { scopedChannel, payload });
 			ipcRenderer.sendToHost(scopedChannel, payload);
@@ -51,7 +51,7 @@ function createTIPCApi(options?: { logger?: Logger | undefined }) {
 			channel: string,
 			handler: (event: IpcRendererEvent, payload: unknown) => void,
 		) => {
-			const scopedChannel = scopeChannel(`${channel}/sendMain`);
+			const scopedChannel = scopeChannel(`${channel}/sendFromMain`);
 
 			logger?.debug("subscribe", { scopedChannel, handler });
 			ipcRenderer.addListener(scopedChannel, handler);
@@ -64,11 +64,11 @@ function createTIPCApi(options?: { logger?: Logger | undefined }) {
 	} as const;
 }
 
-export function exposeTIPC(options?: { logger?: Logger | undefined }) {
+export function exposeTypedIpc(options?: { logger?: Logger | undefined }) {
 	contextBridge.exposeInMainWorld(
-		TIPC_GLOBAL_NAMESPACE,
-		createTIPCApi(options),
+		ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE,
+		createTypedIpcPreload(options),
 	);
 }
 
-export type TIPCApi = ReturnType<typeof createTIPCApi>;
+export type TypedIpcPreload = ReturnType<typeof createTypedIpcPreload>;

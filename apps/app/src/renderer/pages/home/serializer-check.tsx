@@ -4,11 +4,11 @@ import { createMemo, Show } from "solid-js";
 import CustomError from "#common/errors/custom-error";
 import Button from "#renderer/components/button";
 import Card from "#renderer/components/card";
-import { tipc } from "#renderer/tipc";
+import { ipc } from "#renderer/ipc";
 
 export default function SerializerCheck() {
 	const customErrorMutation = createMutation(() => ({
-		mutationFn: () => tipc.throwCustomError.mutate(),
+		mutationFn: () => ipc.throwCustomError.mutate(),
 	}));
 
 	const customErrorMessage = createMemo(() => {

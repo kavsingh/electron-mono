@@ -1,12 +1,12 @@
 import { createSignal } from "solid-js";
 
-import { tipc } from "#renderer/tipc";
+import { ipc } from "#renderer/ipc";
 
 export default function useFileSelectDialog() {
 	const [files, setFiles] = createSignal<string[]>([]);
 
 	async function showDialog(options?: Options) {
-		const response = await tipc.showOpenDialog.mutate({
+		const response = await ipc.showOpenDialog.mutate({
 			properties: ["openFile", "multiSelections"],
 			...options,
 		});
@@ -17,4 +17,4 @@ export default function useFileSelectDialog() {
 	return [files, showDialog] as const;
 }
 
-type Options = Parameters<typeof tipc.showOpenDialog.mutate>[0];
+type Options = Parameters<typeof ipc.showOpenDialog.mutate>[0];
