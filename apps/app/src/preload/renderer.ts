@@ -1,3 +1,3 @@
-import { exposeTIPC } from "electron-typed-ipc/preload";
+import { exposeTypedIpc } from "electron-typed-ipc/preload";
 
-process.once("loaded", exposeTIPC);
+process.once("loaded", exposeTypedIpc);

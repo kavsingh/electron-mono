@@ -1,7 +1,7 @@
 import {
-	applyTipcMocks,
-	emitTipcMainEvent,
-	mockTipcRenderer,
+	applyTypedIpcMocks,
+	emitTypedIpcMainEvent,
+	mockTypedIpcRenderer,
 } from "electron-typed-ipc/test/renderer";
 import { vi } from "vitest";
 
@@ -12,10 +12,10 @@ import {
 } from "#common/__test-helpers__/mock-data-creators/system";
 import CustomError from "#common/errors/custom-error";
 
-import type { AppTIPC } from "#common/tipc/definition";
+import type { AppIpcDefinition } from "#common/ipc/definition";
 
-export const { namespace: tipcNamespace, api: tipcApi } =
-	mockTipcRenderer<AppTIPC>({
+export const { namespace: typedIpcNamespace, api: typedIpcApi } =
+	mockTypedIpcRenderer<AppIpcDefinition>({
 		getThemeSource: vi.fn(() => Promise.resolve("dark" as const)),
 		setThemeSource: vi.fn((source) => Promise.resolve(source)),
 		getSystemInfo: vi.fn(() => Promise.resolve(createMockSystemInfo())),
@@ -28,6 +28,6 @@ export const { namespace: tipcNamespace, api: tipcApi } =
 		}),
 	});
 
-export const applyMocks = applyTipcMocks<AppTIPC>;
+export const applyMocks = applyTypedIpcMocks<AppIpcDefinition>;
 
-export const emitMainEvent = emitTipcMainEvent<AppTIPC>;
+export const emitMainEvent = emitTypedIpcMainEvent<AppIpcDefinition>;

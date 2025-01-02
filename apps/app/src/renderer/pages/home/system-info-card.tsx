@@ -4,12 +4,12 @@ import { createMemo, Show } from "solid-js";
 import CustomError from "#common/errors/custom-error";
 import Card from "#renderer/components/card";
 import InfoList from "#renderer/components/info-list";
-import { tipc } from "#renderer/tipc";
+import { ipc } from "#renderer/ipc";
 
 export default function SystemInfoCard() {
 	const infoQuery = useQuery(() => ({
 		queryKey: ["systemInfo"],
-		queryFn: () => tipc.getSystemInfo.query(),
+		queryFn: () => ipc.getSystemInfo.query(),
 	}));
 
 	const errorMessage = createMemo(() => {
