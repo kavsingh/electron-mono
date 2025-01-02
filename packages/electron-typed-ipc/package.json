@@ -1,5 +1,5 @@
 {
-	"name": "tipc",
+	"name": "electron-typed-ipc",
 	"version": "1.0.0-dev.0",
 	"description": "typed electron ipc",
 	"keywords": [],
