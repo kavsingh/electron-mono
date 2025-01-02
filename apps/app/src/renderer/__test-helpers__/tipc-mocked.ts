@@ -2,7 +2,7 @@ import {
 	applyTipcMocks,
 	emitTipcMainEvent,
 	mockTipcRenderer,
-} from "tipc/test/renderer";
+} from "electron-typed-ipc/test/renderer";
 import { vi } from "vitest";
 
 import { createMockOpenDialogReturnValue } from "#common/__test-helpers__/mock-data-creators/electron";
