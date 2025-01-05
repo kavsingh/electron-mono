@@ -138,13 +138,24 @@ export type TypedIpcMain<TDefinitions extends TypedIpcDefinitions> = Readonly<{
 			: TDefinitions[TName] extends TypedIpcSendFromMain
 				? {
 						send: (
-							browserWindows: BrowserWindow[],
-							payload: TDefinitions[TName]["payload"],
+							...args: keyof TDefinitions[TName]["payload"] extends never
+								? [browserWindows?: BrowserWindow[]]
+								: [
+										payload: TDefinitions[TName]["payload"],
+										browserWindows?: BrowserWindow[],
+									]
 						) => void;
 						sendToFrame: (
-							browserWindows: BrowserWindow[],
-							frame: Parameters<WebContents["sendToFrame"]>[0],
-							payload: TDefinitions[TName]["payload"],
+							...args: keyof TDefinitions[TName]["payload"] extends never
+								? [
+										frames: Parameters<WebContents["sendToFrame"]>[0],
+										browserWindows?: BrowserWindow[],
+									]
+								: [
+										payload: TDefinitions[TName]["payload"],
+										frames: Parameters<WebContents["sendToFrame"]>[0],
+										browserWindows?: BrowserWindow[],
+									]
 						) => void;
 					}
 				: TDefinitions[TName] extends TypedIpcSendFromRenderer
@@ -179,8 +190,16 @@ export type TypedIpcRenderer<TDefinitions extends TypedIpcDefinitions> =
 					}
 				: TDefinitions[TName] extends TypedIpcSendFromRenderer
 					? {
-							send: (payload: TDefinitions[TName]["payload"]) => void;
-							sendToHost: (payload: TDefinitions[TName]["payload"]) => void;
+							send: (
+								...args: keyof TDefinitions[TName]["payload"] extends never
+									? []
+									: [TDefinitions[TName]["payload"]]
+							) => void;
+							sendToHost: (
+								...args: keyof TDefinitions[TName]["payload"] extends never
+									? []
+									: [TDefinitions[TName]["payload"]]
+							) => void;
 						}
 					: TDefinitions[TName] extends TypedIpcSendFromMain
 						? {
@@ -229,8 +248,9 @@ export type TypedIpcRendererMethod = KeysOfUnion<
 >;
 
 type TypedIpcListener<TEvent, TPayload> = (
-	event: TEvent,
-	payload: TPayload,
+	...args: keyof TPayload extends never
+		? [event: TEvent]
+		: [event: TEvent, payload: TPayload]
 ) => void | Promise<void>;
 
 type TypedIpcRemoveHandlerFn = () => void;
