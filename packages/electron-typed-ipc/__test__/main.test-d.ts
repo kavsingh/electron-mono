@@ -10,12 +10,8 @@ import type {
 	SendFromRendererPayload,
 	TypedIpcApi,
 } from "./fixtures";
-import type {
-	BrowserWindow,
-	IpcMainEvent,
-	IpcMainInvokeEvent,
-	WebContents,
-} from "electron";
+import type { TypedIpcSendFromMainOptions } from "../src/common";
+import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
 
 const tipcMain = createTypedIpcMain<TypedIpcApi>(createMockIpcMain());
 
@@ -135,7 +131,7 @@ describe("main types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.sendVoidFromMain.send).parameters.toMatchTypeOf<
-				[BrowserWindow[] | undefined]
+				[undefined, TypedIpcSendFromMainOptions | undefined]
 			>;
 			expectTypeOf(tipcMain.sendVoidFromMain.send).returns.toBeVoid();
 		});
@@ -144,35 +140,9 @@ describe("main types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.sendPayloadFromMain.send).parameters.toMatchTypeOf<
-				[SendFromMainPayload, BrowserWindow[] | undefined]
+				[SendFromMainPayload, TypedIpcSendFromMainOptions | undefined]
 			>;
 			expectTypeOf(tipcMain.sendPayloadFromMain.send).returns.toBeVoid();
-		});
-	});
-
-	describe("sendToFrame", () => {
-		it("should correctly type sendToFrame from main without payload", () => {
-			expect.assertions(2);
-
-			expectTypeOf(tipcMain.sendVoidFromMain.sendToFrame).parameters
-				.toMatchTypeOf<
-				[Parameters<WebContents["sendToFrame"]>[0], BrowserWindow[] | undefined]
-			>;
-			expectTypeOf(tipcMain.sendVoidFromMain.sendToFrame).returns.toBeVoid();
-		});
-
-		it("should correctly type sendToHost from renderer with payload", () => {
-			expect.assertions(2);
-
-			expectTypeOf(tipcMain.sendPayloadFromMain.sendToFrame).parameters
-				.toMatchTypeOf<
-				[
-					SendFromMainPayload,
-					Parameters<WebContents["sendToFrame"]>[0],
-					BrowserWindow[] | undefined,
-				]
-			>;
-			expectTypeOf(tipcMain.sendPayloadFromMain.sendToFrame).returns.toBeVoid();
 		});
 	});
 });

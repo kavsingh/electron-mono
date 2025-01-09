@@ -83,15 +83,14 @@ export function applyTypedIpcMocks<TDefs extends TypedIpcDefinitions>(
 	}
 }
 
-export function emitTypedIpcMainEvent<
+export function typedIpcSendFromMain<
 	TDefs extends TypedIpcDefinitions,
-	TChannel extends string = EmitableChannel<TDefs>,
+	TChannel extends string = SendableChannel<TDefs>,
 >(
 	channel: TChannel,
 	payload: TDefs[TChannel] extends { operation: "sendFromMain" }
 		? keyof TDefs[TChannel]["payload"] extends never
-			? // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-				void | undefined
+			? undefined
 			: TDefs[TChannel]["payload"]
 		: never,
 	event?: IpcRendererEvent,
@@ -134,7 +133,7 @@ type MockableChannel<TDefs extends TypedIpcDefinitions> = ChannelForOperation<
 	"query" | "mutation" | "sendFromRenderer"
 >;
 
-type EmitableChannel<TDefs extends TypedIpcDefinitions> = ChannelForOperation<
+type SendableChannel<TDefs extends TypedIpcDefinitions> = ChannelForOperation<
 	TDefs,
 	"sendFromMain"
 >;

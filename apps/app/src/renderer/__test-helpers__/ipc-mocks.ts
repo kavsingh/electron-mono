@@ -1,6 +1,6 @@
 import {
 	applyTypedIpcMocks,
-	emitTypedIpcMainEvent,
+	typedIpcSendFromMain,
 	mockTypedIpcRenderer,
 } from "electron-typed-ipc/test/renderer";
 import { vi } from "vitest";
@@ -30,4 +30,4 @@ export const { namespace: typedIpcNamespace, api: typedIpcApi } =
 
 export const applyMocks = applyTypedIpcMocks<AppIpcDefinition>;
 
-export const emitMainEvent = emitTypedIpcMainEvent<AppIpcDefinition>;
+export const sendFromMain = typedIpcSendFromMain<AppIpcDefinition>;
