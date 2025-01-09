@@ -1,3 +1,5 @@
+import { BrowserWindow } from "electron";
+
 import { defaultSerializer, scopeChannel } from "./common";
 import { exhaustive } from "./internal";
 
@@ -7,9 +9,10 @@ import type {
 	TypedIpcDefinitions,
 	TypedIpcMain,
 	TypedIpcMainMethod,
+	TypedIpcSendFromMainOptions,
 } from "./common";
 import type { TypedIpcResult } from "./internal";
-import type { BrowserWindow, IpcMain } from "electron";
+import type { IpcMain } from "electron";
 
 export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
 	ipcMain: IpcMain,
@@ -107,38 +110,28 @@ export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
 	});
 
 	const sendProxy = new Proxy(proxyFn, {
-		apply: (_, __, [windows, payload]: [BrowserWindow[], unknown]) => {
-			const scoped = scopeChannel(`${currentChannel}/sendFromMain`);
-			const serialized = serializer.serialize(payload);
-
-			logger?.debug("send main", { scoped, windows, serialized });
-
-			for (const win of windows) {
-				if (!win.isDestroyed()) {
-					win.webContents.send(scoped, serialized);
-				}
-			}
-		},
-	});
-
-	const sendToFrameProxy = new Proxy(proxyFn, {
 		apply: (
 			_,
 			__,
-			[windows, frame, payload]: [
-				BrowserWindow[],
-				number | [number, number],
+			[payload, sendOptions]: [
 				unknown,
+				TypedIpcSendFromMainOptions | undefined,
 			],
 		) => {
 			const scoped = scopeChannel(`${currentChannel}/sendFromMain`);
 			const serialized = serializer.serialize(payload);
+			const targetWindows =
+				sendOptions?.getTargetWindows?.() ?? BrowserWindow.getAllWindows();
 
-			logger?.debug("send to frame main", { scoped, windows, serialized });
+			logger?.debug("send main", { scoped, targetWindows, serialized });
 
-			for (const win of windows) {
-				if (!win.isDestroyed()) {
-					win.webContents.sendToFrame(frame, scoped, serialized);
+			for (const win of targetWindows) {
+				if (win.isDestroyed()) continue;
+
+				if (sendOptions?.frames !== undefined) {
+					win.webContents.sendToFrame(sendOptions.frames, scoped, serialized);
+				} else {
+					win.webContents.send(scoped, serialized);
 				}
 			}
 		},
@@ -178,9 +171,6 @@ export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
 
 				case "send":
 					return sendProxy;
-
-				case "sendToFrame":
-					return sendToFrameProxy;
 
 				case "subscribe":
 					return subscribeProxy;

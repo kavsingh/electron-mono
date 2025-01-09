@@ -7,15 +7,15 @@ import Card from "#renderer/components/card";
 import { ipc } from "#renderer/ipc";
 
 export default function SerializerCheck() {
-	const customErrorMutation = createMutation(() => ({
-		mutationFn: () => ipc.throwCustomError.mutate(),
+	const mutation = createMutation(() => ({
+		mutationFn: ipc.throwCustomError.mutate,
 	}));
 
-	const customErrorMessage = createMemo(() => {
-		if (!customErrorMutation.error) return undefined;
+	const errorMessage = createMemo(() => {
+		if (!mutation.error) return undefined;
 
-		return customErrorMutation.error instanceof CustomError
-			? `${customErrorMutation.error.code}: ${customErrorMutation.error.message}`
+		return mutation.error instanceof CustomError
+			? `${mutation.error.code}: ${mutation.error.message}`
 			: "unknown error";
 	});
 
@@ -27,12 +27,12 @@ export default function SerializerCheck() {
 			<Card.Content>
 				<Button
 					onClick={() => {
-						customErrorMutation.mutate();
+						mutation.mutate();
 					}}
 				>
 					Throw custom error
 				</Button>
-				<Show when={customErrorMessage()} keyed>
+				<Show when={errorMessage()} keyed>
 					{(message) => {
 						return (
 							<div class="rounded-sm bg-red-600 p-4 text-white">{message}</div>

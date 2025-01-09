@@ -45,7 +45,7 @@ export function setupIpc(eventBus: AppEventBus) {
 	];
 
 	function handleStats(stats: SystemStats) {
-		appIpc.systemStatsEvent.send(BrowserWindow.getAllWindows(), stats);
+		appIpc.systemStatsEvent.send(stats);
 	}
 
 	eventBus.addListener("systemStats", handleStats);
