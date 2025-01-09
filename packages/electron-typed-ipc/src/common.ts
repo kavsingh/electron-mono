@@ -106,6 +106,15 @@ export type TypedIpcSendFromRenderer<TPayload = unknown> = {
 	payload: TPayload;
 };
 
+export type TypedIpcSendFromMainOptions = {
+	frames?: Parameters<WebContents["sendToFrame"]>[0] | undefined;
+	getTargetWindows?: (() => BrowserWindow[]) | undefined;
+};
+
+export type TypedIpcSendFromRendererOptions = {
+	toHost?: boolean | undefined;
+};
+
 export type TypedIpcDefinitions = Readonly<Record<string, TypedIpcOperation>>;
 
 export type TypedIpcMain<TDefinitions extends TypedIpcDefinitions> = Readonly<{
@@ -138,24 +147,10 @@ export type TypedIpcMain<TDefinitions extends TypedIpcDefinitions> = Readonly<{
 			: TDefinitions[TName] extends TypedIpcSendFromMain
 				? {
 						send: (
-							...args: keyof TDefinitions[TName]["payload"] extends never
-								? [browserWindows?: BrowserWindow[]]
-								: [
-										payload: TDefinitions[TName]["payload"],
-										browserWindows?: BrowserWindow[],
-									]
-						) => void;
-						sendToFrame: (
-							...args: keyof TDefinitions[TName]["payload"] extends never
-								? [
-										frames: Parameters<WebContents["sendToFrame"]>[0],
-										browserWindows?: BrowserWindow[],
-									]
-								: [
-										payload: TDefinitions[TName]["payload"],
-										frames: Parameters<WebContents["sendToFrame"]>[0],
-										browserWindows?: BrowserWindow[],
-									]
+							payload: keyof TDefinitions[TName]["payload"] extends never
+								? undefined
+								: TDefinitions[TName]["payload"],
+							options?: TypedIpcSendFromMainOptions,
 						) => void;
 					}
 				: TDefinitions[TName] extends TypedIpcSendFromRenderer
@@ -192,13 +187,11 @@ export type TypedIpcRenderer<TDefinitions extends TypedIpcDefinitions> =
 					? {
 							send: (
 								...args: keyof TDefinitions[TName]["payload"] extends never
-									? []
-									: [TDefinitions[TName]["payload"]]
-							) => void;
-							sendToHost: (
-								...args: keyof TDefinitions[TName]["payload"] extends never
-									? []
-									: [TDefinitions[TName]["payload"]]
+									? [undefined, TypedIpcSendFromRendererOptions]
+									: [
+											TDefinitions[TName]["payload"],
+											TypedIpcSendFromRendererOptions,
+										]
 							) => void;
 						}
 					: TDefinitions[TName] extends TypedIpcSendFromMain

@@ -13,13 +13,13 @@ import type { ThemeSource } from "#common/lib/theme";
 
 export default function ThemeSwitch() {
 	const queryClient = useQueryClient();
-	const { data: themeSource } = createQuery(() => ({
+	const query = createQuery(() => ({
 		queryKey: ["themeSource"],
-		queryFn: () => ipc.getThemeSource.query(),
+		queryFn: ipc.getThemeSource.query,
 	}));
 
 	const { mutate: setThemeSource } = createMutation(() => ({
-		mutationFn: (source: ThemeSource) => ipc.setThemeSource.mutate(source),
+		mutationFn: ipc.setThemeSource.mutate,
 		onSuccess: () => {
 			void queryClient.invalidateQueries({ queryKey: ["themeSource"] });
 		},
@@ -48,7 +48,7 @@ export default function ThemeSwitch() {
 											id={option}
 											name={option}
 											value={option}
-											checked={themeSource === option}
+											checked={query.data === option}
 											onChange={() => {
 												setThemeSource(option);
 											}}

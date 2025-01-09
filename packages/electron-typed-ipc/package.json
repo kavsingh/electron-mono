@@ -66,8 +66,8 @@
 	},
 	"scripts": {
 		"lint": "tsc && eslint .",
-		"tdd": "vitest --reporter=verbose",
-		"test": "echo 'coming...'",
+		"tdd": "vitest --typecheck --reporter=verbose",
+		"test": "vitest run --typecheck --coverage",
 		"build": "tsup"
 	},
 	"devDependencies": {
