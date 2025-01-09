@@ -9,7 +9,7 @@ import { ipc } from "#renderer/ipc";
 export default function SystemInfoCard() {
 	const infoQuery = useQuery(() => ({
 		queryKey: ["systemInfo"],
-		queryFn: () => ipc.getSystemInfo.query(),
+		queryFn: ipc.getSystemInfo.query,
 	}));
 
 	const errorMessage = createMemo(() => {

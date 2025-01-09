@@ -13,7 +13,7 @@
 		"start": "electron-vite preview",
 		"lint": "tsc && eslint .",
 		"tdd": "vitest --reporter=verbose",
-		"test": "vitest run",
+		"test": "vitest run --coverage",
 		"test:ci": "vitest run --silent --coverage --reporter=dot",
 		"test:e2e": "cross-env E2E=true pnpm run build && playwright test",
 		"build:mac": "pnpm run build && electron-builder --mac --config electron-builder.config.ts",

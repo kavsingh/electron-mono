@@ -4,9 +4,8 @@ import { tryOr } from "#common/lib/error";
 import { formatMem } from "#common/lib/format";
 import Card from "#renderer/components/card";
 import ChronoGraph from "#renderer/components/chrono-graph";
+import InfoList from "#renderer/components/info-list";
 import useSystemStats from "#renderer/hooks/use-system-stats";
-
-import InfoList from "../../components/info-list";
 
 // eslint-disable-next-line import-x/no-restricted-paths
 import type { SystemStats } from "#main/services/system-stats";

@@ -2,8 +2,8 @@ import { render, waitFor, screen } from "@solidjs/testing-library";
 import { describe, it, expect, vi, afterEach } from "vitest";
 
 import { createMockSystemStats } from "#common/__test-helpers__/mock-data-creators/system";
+import { sendFromMain } from "#renderer/__test-helpers__/ipc-mocks";
 import { setupRenderWrapper } from "#renderer/__test-helpers__/render-wrapper";
-import { emitMainEvent } from "#renderer/__test-helpers__/ipc-mocks";
 
 import Home from "./index";
 
@@ -44,7 +44,7 @@ describe("<Home />", () => {
 
 		expect(screen.queryByText("500.00 MB")).not.toBeInTheDocument();
 
-		emitMainEvent(
+		sendFromMain(
 			"systemStatsEvent",
 			createMockSystemStats({
 				memUsed: String(1024 * 1024 * 500),

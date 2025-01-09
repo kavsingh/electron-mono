@@ -10,6 +10,7 @@ import type {
 	TypedIpcDefinitions,
 	TypedIpcRenderer,
 	TypedIpcRendererMethod,
+	TypedIpcSendFromRendererOptions,
 } from "./common";
 import type { TypedIpcResult } from "./internal";
 import type { TypedIpcPreload } from "./preload";
@@ -84,16 +85,24 @@ export function createTypedIpcRenderer<
 	});
 
 	const sendProxy = new Proxy(proxyFn, {
-		apply: (_, __, [payload]: [unknown]) => {
-			logger?.debug("publish", { channel: currentChannel, payload });
-			api.send(currentChannel, serializer.serialize(payload));
-		},
-	});
+		apply: (
+			_,
+			__,
+			[payload, sendOptions]: [
+				unknown,
+				TypedIpcSendFromRendererOptions | undefined,
+			],
+		) => {
+			const serialized = serializer.serialize(payload);
 
-	const sendToHostProxy = new Proxy(proxyFn, {
-		apply: (_, __, [payload]: [unknown]) => {
-			logger?.debug("publish", { channel: currentChannel, payload });
-			api.sendToHost(currentChannel, serializer.serialize(payload));
+			logger?.debug("send", {
+				channel: currentChannel,
+				payload: serialized,
+				sendOptions,
+			});
+
+			if (sendOptions?.toHost) api.sendToHost(currentChannel, serialized);
+			else api.send(currentChannel, serialized);
 		},
 	});
 
@@ -126,9 +135,6 @@ export function createTypedIpcRenderer<
 
 				case "send":
 					return sendProxy;
-
-				case "sendToHost":
-					return sendToHostProxy;
 
 				case "subscribe":
 					return subscribeProxy;

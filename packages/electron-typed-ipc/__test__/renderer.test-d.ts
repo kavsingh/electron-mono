@@ -8,6 +8,7 @@ import type {
 	SendFromRendererPayload,
 	TypedIpcApi,
 } from "./fixtures";
+import type { TypedIpcSendFromRendererOptions } from "../src/common";
 import type { IpcRendererEvent } from "electron";
 
 const tipcRenderer = createTypedIpcRenderer<TypedIpcApi>();
@@ -120,7 +121,9 @@ describe("renderer types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.sendVoidFromRenderer.send).parameters
-				.toMatchTypeOf<[]>;
+				.toMatchTypeOf<
+				[undefined, TypedIpcSendFromRendererOptions | undefined]
+			>;
 			expectTypeOf(tipcRenderer.sendVoidFromRenderer.send).returns.toBeVoid();
 		});
 
@@ -128,31 +131,11 @@ describe("renderer types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.sendPayloadFromRenderer.send).parameters
-				.toMatchTypeOf<[SendFromRendererPayload]>;
+				.toMatchTypeOf<
+				[SendFromRendererPayload, TypedIpcSendFromRendererOptions | undefined]
+			>;
 			expectTypeOf(
 				tipcRenderer.sendPayloadFromRenderer.send,
-			).returns.toBeVoid();
-		});
-	});
-
-	describe("sendToHost", () => {
-		it("should correctly type sendToHost from renderer without payload", () => {
-			expect.assertions(2);
-
-			expectTypeOf(tipcRenderer.sendVoidFromRenderer.sendToHost).parameters
-				.toMatchTypeOf<[]>;
-			expectTypeOf(
-				tipcRenderer.sendVoidFromRenderer.sendToHost,
-			).returns.toBeVoid();
-		});
-
-		it("should correctly type sendToHost from renderer with payload", () => {
-			expect.assertions(2);
-
-			expectTypeOf(tipcRenderer.sendPayloadFromRenderer.sendToHost).parameters
-				.toMatchTypeOf<[SendFromRendererPayload]>;
-			expectTypeOf(
-				tipcRenderer.sendPayloadFromRenderer.sendToHost,
 			).returns.toBeVoid();
 		});
 	});
