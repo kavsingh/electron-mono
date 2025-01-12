@@ -1,7 +1,10 @@
 import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./common";
 
-import type { TypedIpcDefinitions, TypedIpcOperation } from "./common";
-import type { TypedIpcResult } from "./internal";
+import type {
+	ElectronTypedIpcSchema,
+	ElectronTypedIpcOperation,
+} from "./common";
+import type { IpcPreloadResult } from "./internal";
 import type { TypedIpcPreload } from "./preload";
 import type { IpcRenderer, IpcRendererEvent } from "electron";
 
@@ -14,7 +17,7 @@ const eventHandlers: Record<
 async function mockInvoke(
 	channel: string,
 	payload: unknown,
-): Promise<TypedIpcResult> {
+): Promise<IpcPreloadResult> {
 	const mock = fnMocks[channel];
 
 	if (typeof mock !== "function") {
@@ -42,7 +45,7 @@ export function getTypedIpcRendererMocks() {
 	return { fnMocks, eventHandlers } as const;
 }
 
-export function mockTypedIpcRenderer<TDefs extends TypedIpcDefinitions>(
+export function mockTypedIpcRenderer<TDefs extends ElectronTypedIpcSchema>(
 	mocks: TypedIpcMockRenderer<TDefs>,
 ) {
 	const api: TypedIpcPreload = {
@@ -68,7 +71,7 @@ export function mockTypedIpcRenderer<TDefs extends TypedIpcDefinitions>(
 	return { api, namespace: ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE };
 }
 
-export function applyTypedIpcMocks<TDefs extends TypedIpcDefinitions>(
+export function applyTypedIpcMocks<TDefs extends ElectronTypedIpcSchema>(
 	mocks: Partial<TypedIpcMockRenderer<TDefs>>,
 ) {
 	for (const [channel, fn] of Object.entries(mocks)) {
@@ -84,7 +87,7 @@ export function applyTypedIpcMocks<TDefs extends TypedIpcDefinitions>(
 }
 
 export function typedIpcSendFromMain<
-	TDefs extends TypedIpcDefinitions,
+	TDefs extends ElectronTypedIpcSchema,
 	TChannel extends string = SendableChannel<TDefs>,
 >(
 	channel: TChannel,
@@ -116,7 +119,7 @@ export function createMockIpcRendererEvent(
 }
 
 export type TypedIpcMockRenderer<
-	TDefs extends TypedIpcDefinitions,
+	TDefs extends ElectronTypedIpcSchema,
 	TMockableKey extends keyof TDefs = MockableChannel<TDefs>,
 > = {
 	[TKey in TMockableKey]: TDefs[TKey] extends {
@@ -128,19 +131,15 @@ export type TypedIpcMockRenderer<
 			: never;
 };
 
-type MockableChannel<TDefs extends TypedIpcDefinitions> = ChannelForOperation<
-	TDefs,
-	"query" | "mutation" | "sendFromRenderer"
->;
+type MockableChannel<TDefs extends ElectronTypedIpcSchema> =
+	ChannelForOperation<TDefs, "query" | "mutation" | "sendFromRenderer">;
 
-type SendableChannel<TDefs extends TypedIpcDefinitions> = ChannelForOperation<
-	TDefs,
-	"sendFromMain"
->;
+type SendableChannel<TDefs extends ElectronTypedIpcSchema> =
+	ChannelForOperation<TDefs, "sendFromMain">;
 
 type ChannelForOperation<
-	TDefs extends TypedIpcDefinitions,
-	TOperation extends TypedIpcOperation["operation"],
+	TDefs extends ElectronTypedIpcSchema,
+	TOperation extends ElectronTypedIpcOperation["operation"],
 > = string &
 	Extract<
 		{

@@ -1,11 +1,14 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-import { scopeChannel, ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./common";
+import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./common";
+import { scopeChannel } from "./internal";
 
-import type { Logger } from "./common";
+import type { ElectronTypedIpcLogger } from "./common";
 import type { IpcRendererEvent } from "electron";
 
-function createTypedIpcPreload(options?: { logger?: Logger | undefined }) {
+function createTypedIpcPreload(options?: {
+	logger?: ElectronTypedIpcLogger | undefined;
+}) {
 	const logger = options?.logger;
 
 	return {
@@ -64,7 +67,9 @@ function createTypedIpcPreload(options?: { logger?: Logger | undefined }) {
 	} as const;
 }
 
-export function exposeTypedIpc(options?: { logger?: Logger | undefined }) {
+export function exposeTypedIpc(options?: {
+	logger?: ElectronTypedIpcLogger | undefined;
+}) {
 	contextBridge.exposeInMainWorld(
 		ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE,
 		createTypedIpcPreload(options),
