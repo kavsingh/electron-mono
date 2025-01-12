@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { describe, it, expectTypeOf, expect } from "vitest";
 
-import { createTypedIpcRenderer } from "../src/renderer";
+import { createElectronTypedIpcRenderer } from "../src/renderer";
 
 import type {
 	SendFromMainPayload,
 	SendFromRendererPayload,
 	TypedIpcApi,
 } from "./fixtures";
-import type { TypedIpcSendFromRendererOptions } from "../src/common";
+import type { ElectronTypedIpcSendFromRendererOptions } from "../src/renderer";
 import type { IpcRendererEvent } from "electron";
 
-const tipcRenderer = createTypedIpcRenderer<TypedIpcApi>();
+const tipcRenderer = createElectronTypedIpcRenderer<TypedIpcApi>();
 
 describe("renderer types", () => {
 	describe("query", () => {
@@ -122,7 +122,7 @@ describe("renderer types", () => {
 
 			expectTypeOf(tipcRenderer.sendVoidFromRenderer.send).parameters
 				.toMatchTypeOf<
-				[undefined, TypedIpcSendFromRendererOptions | undefined]
+				[undefined, ElectronTypedIpcSendFromRendererOptions | undefined]
 			>;
 			expectTypeOf(tipcRenderer.sendVoidFromRenderer.send).returns.toBeVoid();
 		});
@@ -132,7 +132,10 @@ describe("renderer types", () => {
 
 			expectTypeOf(tipcRenderer.sendPayloadFromRenderer.send).parameters
 				.toMatchTypeOf<
-				[SendFromRendererPayload, TypedIpcSendFromRendererOptions | undefined]
+				[
+					SendFromRendererPayload,
+					ElectronTypedIpcSendFromRendererOptions | undefined,
+				]
 			>;
 			expectTypeOf(
 				tipcRenderer.sendPayloadFromRenderer.send,
