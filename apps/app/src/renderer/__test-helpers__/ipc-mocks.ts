@@ -12,7 +12,7 @@ import {
 } from "#common/__test-helpers__/mock-data-creators/system";
 import CustomError from "#common/errors/custom-error";
 
-import type { AppIpcDefinition } from "#common/ipc/definition";
+import type { AppIpcDefinition } from "#common/ipc/schema";
 
 export const { namespace: typedIpcNamespace, api: typedIpcApi } =
 	mockTypedIpcRenderer<AppIpcDefinition>({

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { describe, it, expectTypeOf, expect } from "vitest";
 
-import { createTypedIpcMain } from "../src/main";
+import { createElectronTypedIpcMain } from "../src/main";
 
 import { createMockIpcMain } from "./mocks";
 
@@ -10,10 +10,10 @@ import type {
 	SendFromRendererPayload,
 	TypedIpcApi,
 } from "./fixtures";
-import type { TypedIpcSendFromMainOptions } from "../src/common";
+import type { ElectronTypedIpcSendFromMainOptions } from "../src/main";
 import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
 
-const tipcMain = createTypedIpcMain<TypedIpcApi>(createMockIpcMain());
+const tipcMain = createElectronTypedIpcMain<TypedIpcApi>(createMockIpcMain());
 
 describe("main types", () => {
 	describe("handleQuery", () => {
@@ -131,7 +131,7 @@ describe("main types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.sendVoidFromMain.send).parameters.toMatchTypeOf<
-				[undefined, TypedIpcSendFromMainOptions | undefined]
+				[undefined, ElectronTypedIpcSendFromMainOptions | undefined]
 			>;
 			expectTypeOf(tipcMain.sendVoidFromMain.send).returns.toBeVoid();
 		});
@@ -140,7 +140,7 @@ describe("main types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.sendPayloadFromMain.send).parameters.toMatchTypeOf<
-				[SendFromMainPayload, TypedIpcSendFromMainOptions | undefined]
+				[SendFromMainPayload, ElectronTypedIpcSendFromMainOptions | undefined]
 			>;
 			expectTypeOf(tipcMain.sendPayloadFromMain.send).returns.toBeVoid();
 		});

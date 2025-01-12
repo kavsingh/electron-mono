@@ -17,6 +17,7 @@
 	},
 	"scripts": {
 		"dev": "turbo dev",
+		"build": "turbo build",
 		"build:win": "turbo build:win",
 		"build:mac": "turbo build:mac",
 		"build:linux": "turbo build:linux",

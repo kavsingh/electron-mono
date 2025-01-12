@@ -1,24 +1,29 @@
 import { BrowserWindow } from "electron";
 
-import { defaultSerializer, scopeChannel } from "./common";
-import { exhaustive } from "./internal";
+import { defaultSerializer } from "./common";
+import { exhaustive, scopeChannel } from "./internal";
 
 import type {
-	Logger,
-	Serializer,
-	TypedIpcDefinitions,
-	TypedIpcMain,
-	TypedIpcMainMethod,
-	TypedIpcSendFromMainOptions,
+	ElectronTypedIpcLogger,
+	ElectronTypedIpcSerializer,
+	ElectronTypedIpcSchema,
+	ElectronTypedIpcQuery,
+	ElectronTypedIpcRemoveHandlerFn,
+	ElectronTypedIpcMutation,
+	ElectronTypedIpcSendFromMain,
+	ElectronTypedIpcSendFromRenderer,
+	ElectronTypedIpcUnsubscribeFn,
 } from "./common";
-import type { TypedIpcResult } from "./internal";
-import type { IpcMain } from "electron";
+import type { AnySchema, IpcPreloadResult, KeysOfUnion } from "./internal";
+import type { IpcMain, IpcMainEvent, WebContents } from "electron";
 
-export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
+export function createElectronTypedIpcMain<
+	TDefinitions extends ElectronTypedIpcSchema,
+>(
 	ipcMain: IpcMain,
 	options?: {
-		serializer?: Serializer | undefined;
-		logger?: Logger | undefined;
+		serializer?: ElectronTypedIpcSerializer | undefined;
+		logger?: ElectronTypedIpcLogger | undefined;
 	},
 ) {
 	const proxyObj = {};
@@ -35,11 +40,11 @@ export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
 
 			ipcMain.handle(
 				scopedChannel,
-				async (event, arg: unknown): Promise<TypedIpcResult> => {
+				async (event, arg: unknown): Promise<IpcPreloadResult> => {
 					logger?.debug("handle query", { scopedChannel, arg });
 
 					try {
-						const result: TypedIpcResult = {
+						const result: IpcPreloadResult = {
 							__r: "ok",
 							data: await handler(event, serializer.deserialize(arg)),
 						};
@@ -50,7 +55,7 @@ export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
 					} catch (reason) {
 						const error =
 							reason instanceof Error ? reason : new Error(String(reason));
-						const result: TypedIpcResult = {
+						const result: IpcPreloadResult = {
 							__r: "error",
 							error: serializer.serialize(error),
 						};
@@ -76,11 +81,11 @@ export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
 
 			ipcMain.handle(
 				scopedChannel,
-				async (event, arg: unknown): Promise<TypedIpcResult> => {
+				async (event, arg: unknown): Promise<IpcPreloadResult> => {
 					logger?.debug("handle mutation", { scopedChannel, arg });
 
 					try {
-						const result: TypedIpcResult = {
+						const result: IpcPreloadResult = {
 							__r: "ok",
 							data: await handler(event, serializer.deserialize(arg)),
 						};
@@ -91,7 +96,7 @@ export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
 					} catch (reason) {
 						const error =
 							reason instanceof Error ? reason : new Error(String(reason));
-						const result: TypedIpcResult = {
+						const result: IpcPreloadResult = {
 							__r: "error",
 							error: serializer.serialize(error),
 						};
@@ -115,7 +120,7 @@ export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
 			__,
 			[payload, sendOptions]: [
 				unknown,
-				TypedIpcSendFromMainOptions | undefined,
+				ElectronTypedIpcSendFromMainOptions | undefined,
 			],
 		) => {
 			const scoped = scopeChannel(`${currentChannel}/sendFromMain`);
@@ -160,7 +165,7 @@ export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
 		get: (_, operation) => {
 			if (typeof operation !== "string") return undefined;
 
-			const op = operation as TypedIpcMainMethod;
+			const op = operation as MainProxyMethod;
 
 			switch (op) {
 				case "handleQuery":
@@ -184,7 +189,7 @@ export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
 		},
 	});
 
-	return new Proxy(proxyObj as unknown as TypedIpcMain<TDefinitions>, {
+	return new Proxy(proxyObj as unknown as ElectronTypedIpcMain<TDefinitions>, {
 		get: (_, channel) => {
 			if (typeof channel !== "string") return undefined;
 
@@ -194,3 +199,65 @@ export function createTypedIpcMain<TDefinitions extends TypedIpcDefinitions>(
 		},
 	});
 }
+
+export type ElectronTypedIpcMain<TDefinitions extends ElectronTypedIpcSchema> =
+	Readonly<{
+		[TName in keyof TDefinitions]: TDefinitions[TName] extends ElectronTypedIpcQuery
+			? {
+					handleQuery: (
+						handler: (
+							event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
+							...args: keyof TDefinitions[TName]["arg"] extends never
+								? []
+								: [arg: TDefinitions[TName]["arg"]]
+						) =>
+							| TDefinitions[TName]["response"]
+							| Promise<TDefinitions[TName]["response"]>,
+					) => ElectronTypedIpcRemoveHandlerFn;
+				}
+			: TDefinitions[TName] extends ElectronTypedIpcMutation
+				? {
+						handleMutation: (
+							handler: (
+								event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
+								...args: keyof TDefinitions[TName]["arg"] extends never
+									? []
+									: [arg: TDefinitions[TName]["arg"]]
+							) =>
+								| TDefinitions[TName]["response"]
+								| Promise<TDefinitions[TName]["response"]>,
+						) => ElectronTypedIpcRemoveHandlerFn;
+					}
+				: TDefinitions[TName] extends ElectronTypedIpcSendFromMain
+					? {
+							send: (
+								payload: keyof TDefinitions[TName]["payload"] extends never
+									? undefined
+									: TDefinitions[TName]["payload"],
+								options?: ElectronTypedIpcSendFromMainOptions,
+							) => void;
+						}
+					: TDefinitions[TName] extends ElectronTypedIpcSendFromRenderer
+						? {
+								subscribe: (
+									listener: (
+										...args: keyof TDefinitions[TName]["payload"] extends never
+											? [event: IpcMainEvent]
+											: [
+													event: IpcMainEvent,
+													payload: TDefinitions[TName]["payload"],
+												]
+									) => void | Promise<void>,
+								) => ElectronTypedIpcUnsubscribeFn;
+							}
+						: never;
+	}>;
+
+export type ElectronTypedIpcSendFromMainOptions = {
+	frames?: Parameters<WebContents["sendToFrame"]>[0] | undefined;
+	getTargetWindows?: (() => BrowserWindow[]) | undefined;
+};
+
+type MainProxyMethod = KeysOfUnion<
+	ElectronTypedIpcMain<AnySchema>[keyof ElectronTypedIpcMain<AnySchema>]
+>;

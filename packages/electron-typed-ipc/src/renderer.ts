@@ -5,21 +5,24 @@ import {
 import { exhaustive } from "./internal";
 
 import type {
-	Logger,
-	Serializer,
-	TypedIpcDefinitions,
-	TypedIpcRenderer,
-	TypedIpcRendererMethod,
-	TypedIpcSendFromRendererOptions,
+	ElectronTypedIpcLogger,
+	ElectronTypedIpcSerializer,
+	ElectronTypedIpcSchema,
+	ElectronTypedIpcQuery,
+	ElectronTypedIpcMutation,
+	ElectronTypedIpcSendFromRenderer,
+	ElectronTypedIpcSendFromMain,
+	ElectronTypedIpcUnsubscribeFn,
 } from "./common";
-import type { TypedIpcResult } from "./internal";
+import type { AnySchema, IpcPreloadResult, KeysOfUnion } from "./internal";
 import type { TypedIpcPreload } from "./preload";
+import type { IpcRendererEvent } from "electron";
 
-export function createTypedIpcRenderer<
-	TDefinitions extends TypedIpcDefinitions,
+export function createElectronTypedIpcRenderer<
+	TDefinitions extends ElectronTypedIpcSchema,
 >(options?: {
-	serializer?: Serializer | undefined;
-	logger?: Logger | undefined;
+	serializer?: ElectronTypedIpcSerializer | undefined;
+	logger?: ElectronTypedIpcLogger | undefined;
 }) {
 	const api =
 		ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE in globalThis.window
@@ -47,7 +50,7 @@ export function createTypedIpcRenderer<
 			const response = (await api.invokeQuery(
 				currentChannel,
 				arg ? serializer.serialize(arg) : undefined,
-			)) as TypedIpcResult;
+			)) as IpcPreloadResult;
 
 			logger?.debug("invoke query result", {
 				channel: currentChannel,
@@ -69,7 +72,7 @@ export function createTypedIpcRenderer<
 			const response = (await api.invokeMutation(
 				currentChannel,
 				arg ? serializer.serialize(arg) : undefined,
-			)) as TypedIpcResult;
+			)) as IpcPreloadResult;
 
 			logger?.debug("invoke mutation result", {
 				channel: currentChannel,
@@ -90,7 +93,7 @@ export function createTypedIpcRenderer<
 			__,
 			[payload, sendOptions]: [
 				unknown,
-				TypedIpcSendFromRendererOptions | undefined,
+				ElectronTypedIpcSendFromRendererOptions | undefined,
 			],
 		) => {
 			const serialized = serializer.serialize(payload);
@@ -124,7 +127,7 @@ export function createTypedIpcRenderer<
 		get: (_, operation) => {
 			if (typeof operation !== "string") return undefined;
 
-			const op = operation as TypedIpcRendererMethod;
+			const op = operation as RendererProxyMethod;
 
 			switch (op) {
 				case "query":
@@ -148,7 +151,7 @@ export function createTypedIpcRenderer<
 		},
 	});
 
-	return new Proxy(proxyObj as TypedIpcRenderer<TDefinitions>, {
+	return new Proxy(proxyObj as ElectronTypedIpcRenderer<TDefinitions>, {
 		get: (_, channel) => {
 			if (typeof channel !== "string") return undefined;
 
@@ -158,3 +161,57 @@ export function createTypedIpcRenderer<
 		},
 	});
 }
+
+export type ElectronTypedIpcRenderer<
+	TDefinitions extends ElectronTypedIpcSchema,
+> = Readonly<{
+	[TName in keyof TDefinitions]: TDefinitions[TName] extends ElectronTypedIpcQuery
+		? {
+				query: (
+					...args: keyof TDefinitions[TName]["arg"] extends never
+						? []
+						: [arg: TDefinitions[TName]["arg"]]
+				) => Promise<TDefinitions[TName]["response"]>;
+			}
+		: TDefinitions[TName] extends ElectronTypedIpcMutation
+			? {
+					mutate: (
+						...args: keyof TDefinitions[TName]["arg"] extends never
+							? []
+							: [arg: TDefinitions[TName]["arg"]]
+					) => Promise<TDefinitions[TName]["response"]>;
+				}
+			: TDefinitions[TName] extends ElectronTypedIpcSendFromRenderer
+				? {
+						send: (
+							...args: keyof TDefinitions[TName]["payload"] extends never
+								? [undefined, ElectronTypedIpcSendFromRendererOptions]
+								: [
+										TDefinitions[TName]["payload"],
+										ElectronTypedIpcSendFromRendererOptions,
+									]
+						) => void;
+					}
+				: TDefinitions[TName] extends ElectronTypedIpcSendFromMain
+					? {
+							subscribe: (
+								listener: (
+									...args: keyof TDefinitions[TName]["payload"] extends never
+										? [event: IpcRendererEvent]
+										: [
+												event: IpcRendererEvent,
+												payload: TDefinitions[TName]["payload"],
+											]
+								) => void | Promise<void>,
+							) => ElectronTypedIpcUnsubscribeFn;
+						}
+					: never;
+}>;
+
+export type ElectronTypedIpcSendFromRendererOptions = {
+	toHost?: boolean | undefined;
+};
+
+type RendererProxyMethod = KeysOfUnion<
+	ElectronTypedIpcRenderer<AnySchema>[keyof ElectronTypedIpcRenderer<AnySchema>]
+>;
