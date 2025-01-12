@@ -1,10 +1,32 @@
-import type { Logger } from "./common";
+import type {
+	ElectronTypedIpcMutation,
+	ElectronTypedIpcQuery,
+	ElectronTypedIpcSendFromMain,
+	ElectronTypedIpcSendFromRenderer,
+	ElectronTypedIpcLogger,
+	ElectronTypedIpcOperation,
+} from "./common";
 
-export function exhaustive(param: never, logger?: Logger) {
+export function scopeChannel(
+	channel: `${string}/${ElectronTypedIpcOperation["operation"]}`,
+) {
+	return `__tipc__/${channel}` as const;
+}
+
+export function exhaustive(param: never, logger?: ElectronTypedIpcLogger) {
 	// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 	logger?.warn(`unknown value ${param}`);
 }
 
-export type TypedIpcResult<TValue = unknown> =
+export type IpcPreloadResult<TValue = unknown> =
 	| { __r: "ok"; data: TValue }
 	| { __r: "error"; error: unknown };
+
+export type AnySchema = {
+	query: ElectronTypedIpcQuery;
+	mutation: ElectronTypedIpcMutation;
+	sendMain: ElectronTypedIpcSendFromMain;
+	sendRender: ElectronTypedIpcSendFromRenderer;
+};
+
+export type KeysOfUnion<T> = T extends T ? keyof T : never;

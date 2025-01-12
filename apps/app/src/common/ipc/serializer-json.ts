@@ -6,7 +6,7 @@ import CustomError, {
 	isSerialized as isSerializedCustomError,
 } from "#common/errors/custom-error";
 
-import type { Serializer } from "electron-typed-ipc";
+import type { ElectronTypedIpcSerializer } from "electron-typed-ipc";
 
 SuperJSON.registerCustom(
 	{
@@ -31,4 +31,7 @@ function deserialize(value: unknown) {
 	return typeof value === "string" ? SuperJSON.parse(value) : value;
 }
 
-export const serializer: Serializer = { serialize, deserialize };
+export const serializer: ElectronTypedIpcSerializer = {
+	serialize,
+	deserialize,
+};
