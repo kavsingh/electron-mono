@@ -31,7 +31,7 @@
 		"electron-trpc": "0.7.1",
 		"eventemitter3": "5.0.1",
 		"superjson": "2.2.2",
-		"systeminformation": "5.25.6",
+		"systeminformation": "5.25.10",
 		"zod": "3.24.1"
 	},
 	"devDependencies": {
@@ -40,7 +40,7 @@
 		"@solidjs/router": "0.15.2",
 		"@solidjs/testing-library": "0.8.10",
 		"@tailwindcss/container-queries": "0.1.1",
-		"@tanstack/solid-query": "5.62.16",
+		"@tanstack/solid-query": "5.64.0",
 		"@testing-library/dom": "10.4.0",
 		"@testing-library/jest-dom": "6.6.3",
 		"@testing-library/user-event": "14.5.2",
@@ -58,7 +58,7 @@
 		"eslint-plugin-testing-library": "7.1.1",
 		"eslint-plugin-vitest": "0.5.4",
 		"jsdom": "26.0.0",
-		"memfs": "4.15.3",
+		"memfs": "4.17.0",
 		"postcss": "8.4.49",
 		"solid-js": "1.9.4",
 		"tailwind-variants": "0.3.0",
