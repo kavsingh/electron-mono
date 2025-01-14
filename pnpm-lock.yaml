@@ -12,8 +12,8 @@ importers:
         specifier: 9.18.0
         version: 9.18.0
       '@kavsingh/eslint-plugin-filenames':
-        specifier: 2.0.0-rc.0
-        version: 2.0.0-rc.0(eslint@9.18.0(jiti@2.4.2))
+        specifier: 2.0.0-rc.1
+        version: 2.0.0-rc.1(eslint@9.18.0(jiti@2.4.2))
       '@tsconfig/strictest':
         specifier: 2.0.5
         version: 2.0.5
@@ -753,8 +753,9 @@ packages:
     peerDependencies:
       tslib: '2'
 
-  '@kavsingh/eslint-plugin-filenames@2.0.0-rc.0':
-    resolution: {integrity: sha512-sGTve6m84gWK30bahPsifcBmTMvSPk3TaiHp9cAwOHg1G06o0/TNBUtAZqlk6D+CZNqMrlg+TuOyrVB+iwbw1Q==}
+  '@kavsingh/eslint-plugin-filenames@2.0.0-rc.1':
+    resolution: {integrity: sha512-SAx7XyOu8uyLB5TFKYr/EUouY/PxiJmSixLLgq0sW2foqKL3oNP0htCkVdYQ0Yf6IkwqN4DzFCq8wwgwOeIE3w==}
+    engines: {node: '>=18'}
     peerDependencies:
       eslint: ^9.0.0
 
@@ -4238,7 +4239,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@kavsingh/eslint-plugin-filenames@2.0.0-rc.0(eslint@9.18.0(jiti@2.4.2))':
+  '@kavsingh/eslint-plugin-filenames@2.0.0-rc.1(eslint@9.18.0(jiti@2.4.2))':
     dependencies:
       eslint: 9.18.0(jiti@2.4.2)
       lodash.camelcase: 4.3.0
