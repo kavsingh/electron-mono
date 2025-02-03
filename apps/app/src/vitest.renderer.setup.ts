@@ -3,7 +3,10 @@ import "vitest-canvas-mock";
 import { cleanup } from "@solidjs/testing-library";
 import { vi, afterEach } from "vitest";
 
-import { typedIpcApi, typedIpcNamespace } from "#renderer/__test-helpers__/ipc-mocks";
+import {
+	typedIpcApi,
+	typedIpcNamespace,
+} from "#renderer/__test-helpers__/ipc-mocks";
 
 vi.stubGlobal(
 	"ResizeObserver",
