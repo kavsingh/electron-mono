@@ -5,5 +5,5 @@
 		"moduleResolution": "bundler",
 		"sourceMap": true
 	},
-	"include": ["./typings"]
+	"include": ["./typings", "./*.ts"]
 }
