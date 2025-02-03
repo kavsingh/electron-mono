@@ -1,6 +1,6 @@
 import { defineProject, defineWorkspace, mergeConfig } from "vitest/config";
 
-import { nodeConfig, rendererConfig } from "./electron.vite.config";
+import { nodeConfig, rendererConfig } from "./electron.vite.config.ts";
 
 export default defineWorkspace([
 	mergeConfig(

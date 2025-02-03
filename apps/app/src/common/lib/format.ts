@@ -1,5 +1,5 @@
-import { tryOr } from "./error";
-import { divBigint } from "./number";
+import { tryOr } from "./error.ts";
+import { divBigint } from "./number.ts";
 
 export function formatMem(value: string | number | bigint) {
 	const mem = tryOr(() => BigInt(value), 0n);

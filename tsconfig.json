@@ -1,5 +1,7 @@
 {
-	"extends": "./tsconfig.base.json",
-	"exclude": ["**/node_modules"],
+	"extends": ["./tsconfig.base.json", "@tsconfig/node23/tsconfig.json"],
+	"compilerOptions": {
+		"allowImportingTsExtensions": true
+	},
 	"include": ["./*.ts", "./*.js", "./*.cjs"]
 }

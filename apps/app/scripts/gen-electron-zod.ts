@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { generate } from "ts-to-zod";
 
-import { formatTypescriptContent } from "./format";
+import { formatTypescriptContent } from "./format.ts";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 

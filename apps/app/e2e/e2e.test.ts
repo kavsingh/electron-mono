@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-import { setupApplication, teardownApplication } from "./lib/application";
+import { setupApplication, teardownApplication } from "./lib/application.ts";
 
 import type { ElectronApplication } from "@playwright/test";
 

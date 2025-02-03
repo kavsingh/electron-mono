@@ -1,4 +1,5 @@
 import containerQueriesPlugin from "@tailwindcss/container-queries";
+// @ts-expect-error upstream export
 import { fontFamily } from "tailwindcss/defaultTheme";
 
 import type { Config } from "tailwindcss";
@@ -51,12 +52,10 @@ export default {
 				sm: "calc(var(--radius) - 4px)",
 			},
 			fontFamily: {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
 				sans: [...fontFamily.sans],
 			},
 		},
 	},
-	plugins: [
-		// work around exactOptionalProperties
-		containerQueriesPlugin as StripUndefined<typeof containerQueriesPlugin>,
-	],
+	plugins: [containerQueriesPlugin],
 } satisfies Config;

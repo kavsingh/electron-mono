@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { _electron as electron } from "@playwright/test";
 
-import { PROJECT_ROOT } from "./constants";
+import { PROJECT_ROOT } from "./constants.ts";
 
 import type { ElectronApplication } from "@playwright/test";
 
