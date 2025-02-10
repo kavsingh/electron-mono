@@ -5,5 +5,5 @@
 		"jsxImportSource": "solid-js",
 		"lib": ["es2023", "dom"]
 	},
-	"include": ["../typings", "./**/*"]
+	"include": ["../typings", "../vitest.renderer.setup.ts", "./**/*"]
 }

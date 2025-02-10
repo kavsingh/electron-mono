@@ -14,7 +14,7 @@ vi.stubGlobal(
 	vi.fn(() => ({ addEventListener: vi.fn(), removeEventListener: vi.fn() })),
 );
 
-vi.mock("./src/renderer/trpc");
+vi.mock("./renderer/trpc");
 
 afterEach(() => {
 	cleanup();

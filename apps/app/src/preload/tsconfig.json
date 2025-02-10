@@ -1,5 +1,5 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": { "lib": ["es2023", "dom"] },
-	"include": ["../typings", "./**/*"]
+	"include": ["../typings", "../vitest.setup.node.ts", "./**/*"]
 }
