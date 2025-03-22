@@ -1,5 +1,4 @@
-/** @type {import("@electron/notarize")} */
-const { notarize: electronNotarize } = require("@electron/notarize");
+import { notarize as electronNotarize } from "@electron/notarize";
 
 /** @param {import("electron-builder").AfterPackContext} context */
 async function afterSign(context) {

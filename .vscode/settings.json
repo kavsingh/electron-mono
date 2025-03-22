@@ -1,14 +1,4 @@
 {
-	"editor.formatOnSave": true,
-	"editor.codeActionsOnSave": {
-		"source.fixAll": "always"
-	},
-	"editor.quickSuggestions": {
-		"strings": true
-	},
-	"files.associations": {
-		"*.css": "tailwindcss"
-	},
 	"files.watcherExclude": {
 		"**/node_modules": true,
 		"**/out": true,
@@ -19,13 +9,26 @@
 		"**/out": true,
 		"**/dist": true
 	},
+
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "always"
+	},
+	"editor.quickSuggestions": {
+		"strings": true
+	},
+
 	"typescript.tsdk": "node_modules/typescript/lib",
+
 	"eslint.workingDirectories": [{ "mode": "auto" }],
+
+	"files.associations": { "*.css": "tailwindcss" },
 	"tailwindCSS.validate": true,
 	"tailwindCSS.classAttributes": ["class", "classList"],
 	"tailwindCSS.experimental.classRegex": [
 		["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
 	],
+
 	"[javascript]": {
 		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
 	},
@@ -52,39 +55,5 @@
 	},
 	"[yaml]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"vsicons.associations.folders": [
-		{
-			"extensions": ["__test-helpers__", "__test-data__"],
-			"icon": "test",
-			"format": "svg"
-		}
-	],
-	"vsicons.associations.files": [
-		{
-			"extensions": ["vite.config.ts"],
-			"icon": "vite",
-			"format": "svg"
-		},
-		{
-			"extensions": [
-				"vitest.node.config.ts",
-				"vitest.node.setup.ts",
-				"vitest.renderer.config.ts",
-				"vitest.renderer.setup.ts"
-			],
-			"icon": "vitest",
-			"filename": true,
-			"format": "svg"
-		},
-		{
-			"extensions": [
-				"electron-builder.config.js",
-				"electron-builder.config.ts"
-			],
-			"icon": "config",
-			"filename": true,
-			"format": "svg"
-		}
-	]
+	}
 }

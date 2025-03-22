@@ -1,17 +1,18 @@
-import { EventEmitter } from "eventemitter3";
+import { EventEmitter } from "node:events";
 
 import type { SystemStats } from "./system-stats";
+import type TypedEmitter from "typed-emitter";
 
 export function createAppEventBus() {
-	return new EventEmitter<AppEventMap, never>();
+	return new EventEmitter() as TypedEmitter<AppEventMap>;
 }
 
 export type AppEventBus = ReturnType<typeof createAppEventBus>;
 
 export type AppEventName = keyof AppEventMap;
 
-export type AppEvent<K extends AppEventName> = AppEventMap[K][0];
+export type AppEvent<K extends AppEventName> = Parameters<AppEventMap[K]>[0];
 
 type AppEventMap = {
-	systemStats: [SystemStats];
+	systemStats: (payload: SystemStats) => void | Promise<void>;
 };

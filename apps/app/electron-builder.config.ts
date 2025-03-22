@@ -9,7 +9,7 @@ const config: Configuration = {
 	files: ["out/**"],
 	asar: true,
 	asarUnpack: "**/*.{node,dll}",
-	afterSign: "build/after-sign.cjs",
+	afterSign: "build/after-sign.js",
 	win: {
 		executableName: "App",
 	},

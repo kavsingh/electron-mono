@@ -1,8 +1,10 @@
 {
-	"extends": ["../tsconfig.base.json", "@tsconfig/node20/tsconfig.json"],
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": ["../../../tsconfig.base.json", "@tsconfig/node20/tsconfig.json"],
 	"compilerOptions": {
 		"module": "esnext",
 		"moduleResolution": "bundler",
+		"paths": { "#*": ["./*"] },
 		"sourceMap": true
 	},
 	"include": ["./typings", "./*.ts"]

@@ -11,7 +11,7 @@ import type { trpc as trpcActual } from "../index";
 
 const defaultThemeSource = themeSourceSchema.parse("dark");
 
-export const trpc: typeof trpcActual = {
+export const trpc: MockTrpc = {
 	themeSource: {
 		query: vi.fn(() => Promise.resolve(defaultThemeSource)),
 	},
@@ -28,4 +28,8 @@ export const trpc: typeof trpcActual = {
 		query: vi.fn(() => Promise.resolve(createMockOpenDialogReturnValue())),
 	},
 	systemStatsEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
+};
+
+type MockTrpc = {
+	[K in Exclude<keyof typeof trpcActual, symbol>]: (typeof trpcActual)[K];
 };

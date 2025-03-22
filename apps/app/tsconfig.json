@@ -1,8 +1,6 @@
 {
-	"extends": ["./tsconfig.base.json", "@tsconfig/node23/tsconfig.json"],
-	"compilerOptions": {
-		"allowImportingTsExtensions": true
-	},
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": ["../../tsconfig.base.json", "@tsconfig/node23/tsconfig.json"],
 	"include": [
 		"./scripts",
 		"./e2e",

@@ -16,7 +16,6 @@ const restrictFromBrowser = {
 		{ name: "electron", allowTypeImports: true },
 		{ name: "systeminformation", allowTypeImports: true },
 		{ name: "@trpc/server", allowTypeImports: true },
-		{ name: "eventemitter3", allowTypeImports: true },
 		...builtinModules.map((mod) => ({ name: mod, allowTypeImports: true })),
 	],
 	patterns: [{ group: ["electron-log/main"] }],
@@ -38,7 +37,7 @@ export default tsEslint.config(
 		settings: {
 			"import-x/resolver": {
 				"eslint-import-resolver-typescript": {
-					project: fromDirname("./tsconfig.json"),
+					project: fromDirname("./src/tsconfig.json"),
 				},
 			},
 		},

@@ -1,4 +1,4 @@
-import { observable } from "@trpc/server/observable";
+import { on } from "node:events";
 
 import { getSystemInfo } from "#main/services/system-info";
 import { getSystemStats } from "#main/services/system-stats";
@@ -13,20 +13,12 @@ export default function routesSystem(eventBus: AppEventBus) {
 
 		systemStats: publicProcedure.query(() => getSystemStats()),
 
-		systemStatsEvent: publicProcedure.subscription(() => {
-			type Payload = AppEvent<"systemStats">;
-
-			return observable<Payload>((emit) => {
-				function handler(payload: Payload) {
-					emit.next(payload);
-				}
-
-				eventBus.on("systemStats", handler);
-
-				return function unsubscribe() {
-					eventBus.off("systemStats", handler);
-				};
-			});
+		systemStatsEvent: publicProcedure.subscription(async function* (opts) {
+			for await (const [event] of on(eventBus, "systemStats", {
+				signal: opts.signal,
+			})) {
+				yield event as AppEvent<"systemStats">;
+			}
 		}),
 	} as const;
 }

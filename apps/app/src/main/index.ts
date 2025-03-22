@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from "electron";
 
 import log from "electron-log";
-import { createIPCHandler } from "electron-trpc/main";
+import { createIPCHandler } from "trpc-electron/main";
 
 import { createMainWindow } from "./app-windows/main-window";
 import initLogging from "./lib/init-logging";

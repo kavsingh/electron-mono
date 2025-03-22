@@ -1,8 +1,7 @@
-/// <reference types="vitest" />
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { defineConfig, externalizeDepsPlugin } from "electron-vite";
+import { defineConfig } from "electron-vite";
 import solidPlugin from "vite-plugin-solid";
 import tsconfigPathsPlugin from "vite-tsconfig-paths";
 
@@ -24,12 +23,7 @@ export const nodeConfig: UserConfig = {
 	define,
 	build,
 	resolve: { conditions: ["node"] },
-	plugins: [
-		tsconfigPathsPlugin(),
-		// workaround after this PR:
-		// https://github.com/alex8088/electron-vite/pull/254
-		externalizeDepsPlugin({ exclude: ["electron-trpc"] }),
-	],
+	plugins: [tsconfigPathsPlugin()],
 };
 
 export const rendererConfig: UserConfigFn = ({ mode }) => {
