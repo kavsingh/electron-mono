@@ -13,9 +13,6 @@ function resolve(to: string) {
 export function createMainWindow() {
 	const mainWindow = new BrowserWindow({
 		titleBarStyle: "hiddenInset",
-		backgroundMaterial: "acrylic",
-		vibrancy: "sidebar",
-		transparent: true,
 		width: 800,
 		height: 600,
 		webPreferences: { preload: resolve("../preload/renderer.cjs") },
