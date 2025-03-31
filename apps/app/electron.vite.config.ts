@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { defineConfig } from "electron-vite";
+import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import solidPlugin from "vite-plugin-solid";
 import tsconfigPathsPlugin from "vite-tsconfig-paths";
 
@@ -26,13 +26,9 @@ export const nodeConfig: UserConfig = {
 	plugins: [tsconfigPathsPlugin()],
 };
 
-export const rendererConfig: UserConfigFn = ({ mode }) => {
-	return {
-		define,
-		build,
-		resolve: { conditions: ["browser", mode] },
-		plugins: [tsconfigPathsPlugin(), solidPlugin()],
-	};
+export const mainConfig = {
+	...nodeConfig,
+	plugins: [...(nodeConfig.plugins ?? []), externalizeDepsPlugin()],
 };
 
 const preloadConfig: UserConfig = {
@@ -53,8 +49,17 @@ const preloadConfig: UserConfig = {
 	},
 };
 
+export const rendererConfig: UserConfigFn = ({ mode }) => {
+	return {
+		define,
+		build,
+		resolve: { conditions: ["browser", mode] },
+		plugins: [tsconfigPathsPlugin(), solidPlugin()],
+	};
+};
+
 export default defineConfig({
-	main: nodeConfig,
+	main: mainConfig,
 	preload: preloadConfig,
 	renderer: rendererConfig,
 });
