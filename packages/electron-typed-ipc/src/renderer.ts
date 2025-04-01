@@ -5,14 +5,14 @@ import {
 import { exhaustive } from "./internal";
 
 import type {
-	ElectronTypedIpcLogger,
-	ElectronTypedIpcSerializer,
+	Logger,
+	Serializer,
 	ElectronTypedIpcSchema,
-	ElectronTypedIpcQuery,
-	ElectronTypedIpcMutation,
-	ElectronTypedIpcSendFromRenderer,
-	ElectronTypedIpcSendFromMain,
-	ElectronTypedIpcUnsubscribeFn,
+	Query,
+	Mutation,
+	SendFromRenderer,
+	SendFromMain,
+	UnsubscribeFn,
 } from "./common";
 import type { AnySchema, IpcPreloadResult, KeysOfUnion } from "./internal";
 import type { TypedIpcPreload } from "./preload";
@@ -21,8 +21,8 @@ import type { IpcRendererEvent } from "electron";
 export function createElectronTypedIpcRenderer<
 	TDefinitions extends ElectronTypedIpcSchema,
 >(options?: {
-	serializer?: ElectronTypedIpcSerializer | undefined;
-	logger?: ElectronTypedIpcLogger | undefined;
+	serializer?: Serializer | undefined;
+	logger?: Logger | undefined;
 }) {
 	const api =
 		ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE in globalThis.window
@@ -45,14 +45,14 @@ export function createElectronTypedIpcRenderer<
 
 	const queryProxy = new Proxy(proxyFn, {
 		apply: async (_, __, [arg]: [unknown]) => {
-			logger?.debug("invoke query", { channel: currentChannel, arg });
+			logger?.debug("query", { channel: currentChannel, arg });
 
-			const response = (await api.invokeQuery(
+			const response = (await api.query(
 				currentChannel,
 				arg ? serializer.serialize(arg) : undefined,
 			)) as IpcPreloadResult;
 
-			logger?.debug("invoke query result", {
+			logger?.debug("query result", {
 				channel: currentChannel,
 				response,
 			});
@@ -67,14 +67,14 @@ export function createElectronTypedIpcRenderer<
 
 	const mutationProxy = new Proxy(proxyFn, {
 		apply: async (_, __, [arg]: [unknown]) => {
-			logger?.debug("invoke mutation", { channel: currentChannel, arg });
+			logger?.debug("mutation", { channel: currentChannel, arg });
 
-			const response = (await api.invokeMutation(
+			const response = (await api.mutate(
 				currentChannel,
 				arg ? serializer.serialize(arg) : undefined,
 			)) as IpcPreloadResult;
 
-			logger?.debug("invoke mutation result", {
+			logger?.debug("mutation result", {
 				channel: currentChannel,
 				response,
 			});
@@ -165,7 +165,7 @@ export function createElectronTypedIpcRenderer<
 export type ElectronTypedIpcRenderer<
 	TDefinitions extends ElectronTypedIpcSchema,
 > = Readonly<{
-	[TName in keyof TDefinitions]: TDefinitions[TName] extends ElectronTypedIpcQuery
+	[TName in keyof TDefinitions]: TDefinitions[TName] extends Query
 		? {
 				query: (
 					...args: keyof TDefinitions[TName]["arg"] extends never
@@ -173,7 +173,7 @@ export type ElectronTypedIpcRenderer<
 						: [arg: TDefinitions[TName]["arg"]]
 				) => Promise<TDefinitions[TName]["response"]>;
 			}
-		: TDefinitions[TName] extends ElectronTypedIpcMutation
+		: TDefinitions[TName] extends Mutation
 			? {
 					mutate: (
 						...args: keyof TDefinitions[TName]["arg"] extends never
@@ -181,7 +181,7 @@ export type ElectronTypedIpcRenderer<
 							: [arg: TDefinitions[TName]["arg"]]
 					) => Promise<TDefinitions[TName]["response"]>;
 				}
-			: TDefinitions[TName] extends ElectronTypedIpcSendFromRenderer
+			: TDefinitions[TName] extends SendFromRenderer
 				? {
 						send: (
 							...args: keyof TDefinitions[TName]["payload"] extends never
@@ -192,7 +192,7 @@ export type ElectronTypedIpcRenderer<
 									]
 						) => void;
 					}
-				: TDefinitions[TName] extends ElectronTypedIpcSendFromMain
+				: TDefinitions[TName] extends SendFromMain
 					? {
 							subscribe: (
 								listener: (
@@ -203,7 +203,7 @@ export type ElectronTypedIpcRenderer<
 												payload: TDefinitions[TName]["payload"],
 											]
 								) => void | Promise<void>,
-							) => ElectronTypedIpcUnsubscribeFn;
+							) => UnsubscribeFn;
 						}
 					: never;
 }>;

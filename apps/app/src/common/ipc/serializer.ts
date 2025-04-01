@@ -4,16 +4,16 @@ import {
 } from "@kavsingh/electron-typed-ipc";
 
 import CustomError, {
-	serialize as serializeCustomError,
-	deserialize as deserializeCustomError,
-	isSerialized as isSerializedCustomError,
+	serialize,
+	deserialize,
+	isSerialized,
 } from "#common/errors/custom-error";
 
 const customErrorSerializer = createValueSerializer({
+	serialize,
+	deserialize,
+	isSerialized,
 	isDeserialized: (val) => val instanceof CustomError,
-	isSerialized: isSerializedCustomError,
-	serialize: serializeCustomError,
-	deserialize: deserializeCustomError,
 });
 
 export const serializer = createSerializer([customErrorSerializer]);

@@ -10,7 +10,7 @@ import type {
 	SendFromRendererPayload,
 	TypedIpcApi,
 } from "./fixtures";
-import type { ElectronTypedIpcSendFromMainOptions } from "../src/main";
+import type { SendFromMainOptions } from "../src/main";
 import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
 
 const tipcMain = createElectronTypedIpcMain<TypedIpcApi>(createMockIpcMain());
@@ -131,7 +131,7 @@ describe("main types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.sendVoidFromMain.send).parameters.toExtend<
-				[undefined, ElectronTypedIpcSendFromMainOptions | undefined]
+				[undefined, SendFromMainOptions | undefined]
 			>;
 			expectTypeOf(tipcMain.sendVoidFromMain.send).returns.toBeVoid();
 		});
@@ -140,7 +140,7 @@ describe("main types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.sendPayloadFromMain.send).parameters.toExtend<
-				[SendFromMainPayload, ElectronTypedIpcSendFromMainOptions | undefined]
+				[SendFromMainPayload, SendFromMainOptions | undefined]
 			>;
 			expectTypeOf(tipcMain.sendPayloadFromMain.send).returns.toBeVoid();
 		});
