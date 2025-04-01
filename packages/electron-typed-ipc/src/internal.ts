@@ -26,7 +26,7 @@ export type AnySchema = {
 	query: ElectronTypedIpcQuery;
 	mutation: ElectronTypedIpcMutation;
 	sendMain: ElectronTypedIpcSendFromMain;
-	sendRender: ElectronTypedIpcSendFromRenderer;
+	sendRenderer: ElectronTypedIpcSendFromRenderer;
 };
 
 export type KeysOfUnion<T> = T extends T ? keyof T : never;

@@ -3,13 +3,13 @@ import type { ThemeSource } from "#common/lib/theme";
 import type { SystemInfo } from "#main/services/system-info";
 // eslint-disable-next-line import-x/no-restricted-paths
 import type { SystemStats } from "#main/services/system-stats";
-import type { OpenDialogOptions, OpenDialogReturnValue } from "electron";
 import type {
 	DefineElectronTypedIpcSchema,
 	ElectronTypedIpcQuery,
 	ElectronTypedIpcMutation,
 	ElectronTypedIpcSendFromMain,
-} from "electron-typed-ipc";
+} from "@kavsingh/electron-typed-ipc";
+import type { OpenDialogOptions, OpenDialogReturnValue } from "electron";
 
 export type AppIpcDefinition = DefineElectronTypedIpcSchema<{
 	showOpenDialog: ElectronTypedIpcMutation<

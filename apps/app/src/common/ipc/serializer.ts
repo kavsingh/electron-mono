@@ -1,4 +1,7 @@
-import { createSerializer, createValueSerializer } from "electron-typed-ipc";
+import {
+	createSerializer,
+	createValueSerializer,
+} from "@kavsingh/electron-typed-ipc";
 
 import CustomError, {
 	serialize as serializeCustomError,

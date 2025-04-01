@@ -11,10 +11,9 @@ export function createValueSerializer<TValue, TSerialized = unknown>(
 	return serializer;
 }
 
-export function createSerializer<
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	T extends ElectronTypedIpcValueSerializer<any, any>,
->(serializers: T[]): ElectronTypedIpcSerializer {
+export function createSerializer(
+	serializers: ElectronTypedIpcValueSerializer<unknown, unknown>[],
+): ElectronTypedIpcSerializer {
 	if (!serializers.length) return defaultSerializer;
 
 	function serialize(value: unknown): unknown {
