@@ -4,15 +4,15 @@ import { defaultSerializer } from "./common";
 import { exhaustive, scopeChannel } from "./internal";
 
 import type {
-	ElectronTypedIpcLogger,
-	ElectronTypedIpcSerializer,
+	Logger,
+	Serializer,
 	ElectronTypedIpcSchema,
-	ElectronTypedIpcQuery,
-	ElectronTypedIpcRemoveHandlerFn,
-	ElectronTypedIpcMutation,
-	ElectronTypedIpcSendFromMain,
-	ElectronTypedIpcSendFromRenderer,
-	ElectronTypedIpcUnsubscribeFn,
+	Query,
+	RemoveHandlerFn,
+	Mutation,
+	SendFromMain,
+	SendFromRenderer,
+	UnsubscribeFn,
 } from "./common";
 import type { AnySchema, IpcPreloadResult, KeysOfUnion } from "./internal";
 import type { IpcMain, IpcMainEvent, WebContents } from "electron";
@@ -22,8 +22,8 @@ export function createElectronTypedIpcMain<
 >(
 	ipcMain: IpcMain,
 	options?: {
-		serializer?: ElectronTypedIpcSerializer | undefined;
-		logger?: ElectronTypedIpcLogger | undefined;
+		serializer?: Serializer | undefined;
+		logger?: Logger | undefined;
 	},
 ) {
 	const proxyObj = {};
@@ -118,10 +118,7 @@ export function createElectronTypedIpcMain<
 		apply: (
 			_,
 			__,
-			[payload, sendOptions]: [
-				unknown,
-				ElectronTypedIpcSendFromMainOptions | undefined,
-			],
+			[payload, sendOptions]: [unknown, SendFromMainOptions | undefined],
 		) => {
 			const scoped = scopeChannel(`${currentChannel}/sendFromMain`);
 			const serialized = serializer.serialize(payload);
@@ -202,7 +199,7 @@ export function createElectronTypedIpcMain<
 
 export type ElectronTypedIpcMain<TDefinitions extends ElectronTypedIpcSchema> =
 	Readonly<{
-		[TName in keyof TDefinitions]: TDefinitions[TName] extends ElectronTypedIpcQuery
+		[TName in keyof TDefinitions]: TDefinitions[TName] extends Query
 			? {
 					handleQuery: (
 						handler: (
@@ -213,9 +210,9 @@ export type ElectronTypedIpcMain<TDefinitions extends ElectronTypedIpcSchema> =
 						) =>
 							| TDefinitions[TName]["response"]
 							| Promise<TDefinitions[TName]["response"]>,
-					) => ElectronTypedIpcRemoveHandlerFn;
+					) => RemoveHandlerFn;
 				}
-			: TDefinitions[TName] extends ElectronTypedIpcMutation
+			: TDefinitions[TName] extends Mutation
 				? {
 						handleMutation: (
 							handler: (
@@ -226,18 +223,18 @@ export type ElectronTypedIpcMain<TDefinitions extends ElectronTypedIpcSchema> =
 							) =>
 								| TDefinitions[TName]["response"]
 								| Promise<TDefinitions[TName]["response"]>,
-						) => ElectronTypedIpcRemoveHandlerFn;
+						) => RemoveHandlerFn;
 					}
-				: TDefinitions[TName] extends ElectronTypedIpcSendFromMain
+				: TDefinitions[TName] extends SendFromMain
 					? {
 							send: (
 								payload: keyof TDefinitions[TName]["payload"] extends never
 									? undefined
 									: TDefinitions[TName]["payload"],
-								options?: ElectronTypedIpcSendFromMainOptions,
+								options?: SendFromMainOptions,
 							) => void;
 						}
-					: TDefinitions[TName] extends ElectronTypedIpcSendFromRenderer
+					: TDefinitions[TName] extends SendFromRenderer
 						? {
 								subscribe: (
 									listener: (
@@ -248,12 +245,12 @@ export type ElectronTypedIpcMain<TDefinitions extends ElectronTypedIpcSchema> =
 													payload: TDefinitions[TName]["payload"],
 												]
 									) => void | Promise<void>,
-								) => ElectronTypedIpcUnsubscribeFn;
+								) => UnsubscribeFn;
 							}
 						: never;
 	}>;
 
-export type ElectronTypedIpcSendFromMainOptions = {
+export type SendFromMainOptions = {
 	frames?: Parameters<WebContents["sendToFrame"]>[0] | undefined;
 	getTargetWindows?: (() => BrowserWindow[]) | undefined;
 };

@@ -3,35 +3,33 @@ import { contextBridge, ipcRenderer } from "electron";
 import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./common";
 import { scopeChannel } from "./internal";
 
-import type { ElectronTypedIpcLogger } from "./common";
+import type { Logger } from "./common";
 import type { IpcRendererEvent } from "electron";
 
-function createTypedIpcPreload(options?: {
-	logger?: ElectronTypedIpcLogger | undefined;
-}) {
+function createTypedIpcPreload(options?: { logger?: Logger | undefined }) {
 	const logger = options?.logger;
 
 	return {
-		invokeQuery: async (channel: string, payload: unknown) => {
+		query: async (channel: string, payload: unknown) => {
 			const scopedChannel = scopeChannel(`${channel}/query`);
 
-			logger?.debug("invoke query", { scopedChannel, payload });
+			logger?.debug("query", { scopedChannel, payload });
 
 			const result: unknown = await ipcRenderer.invoke(scopedChannel, payload);
 
-			logger?.debug("invoke query result", { scopedChannel, result });
+			logger?.debug("query result", { scopedChannel, result });
 
 			return result;
 		},
 
-		invokeMutation: async (channel: string, payload: unknown) => {
+		mutate: async (channel: string, payload: unknown) => {
 			const scopedChannel = scopeChannel(`${channel}/mutation`);
 
-			logger?.debug("invoke mutation", { scopedChannel, payload });
+			logger?.debug("mutation", { scopedChannel, payload });
 
 			const result: unknown = await ipcRenderer.invoke(scopedChannel, payload);
 
-			logger?.debug("invoke mutation result", { scopedChannel, result });
+			logger?.debug("mutation result", { scopedChannel, result });
 
 			return result;
 		},
@@ -67,9 +65,7 @@ function createTypedIpcPreload(options?: {
 	} as const;
 }
 
-export function exposeTypedIpc(options?: {
-	logger?: ElectronTypedIpcLogger | undefined;
-}) {
+export function exposeTypedIpc(options?: { logger?: Logger | undefined }) {
 	contextBridge.exposeInMainWorld(
 		ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE,
 		createTypedIpcPreload(options),

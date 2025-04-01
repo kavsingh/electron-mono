@@ -1,9 +1,6 @@
 import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./common";
 
-import type {
-	ElectronTypedIpcSchema,
-	ElectronTypedIpcOperation,
-} from "./common";
+import type { ElectronTypedIpcSchema, Operation } from "./common";
 import type { IpcPreloadResult } from "./internal";
 import type { TypedIpcPreload } from "./preload";
 import type { IpcRenderer, IpcRendererEvent } from "electron";
@@ -49,8 +46,8 @@ export function mockTypedIpcRenderer<TDefs extends ElectronTypedIpcSchema>(
 	mocks: TypedIpcMockRenderer<TDefs>,
 ) {
 	const api: TypedIpcPreload = {
-		invokeQuery: mockInvoke,
-		invokeMutation: mockInvoke,
+		query: mockInvoke,
+		mutate: mockInvoke,
 		send: mockSend,
 		sendToHost: mockSend,
 		subscribe: (
@@ -139,7 +136,7 @@ type SendableChannel<TDefs extends ElectronTypedIpcSchema> =
 
 type ChannelForOperation<
 	TDefs extends ElectronTypedIpcSchema,
-	TOperation extends ElectronTypedIpcOperation["operation"],
+	TOperation extends Operation["operation"],
 > = string &
 	Extract<
 		{

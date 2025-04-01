@@ -1,27 +1,27 @@
 import type {
 	DefineElectronTypedIpcSchema,
-	ElectronTypedIpcMutation,
-	ElectronTypedIpcQuery,
-	ElectronTypedIpcSendFromMain,
-	ElectronTypedIpcSendFromRenderer,
+	Mutation,
+	Query,
+	SendFromMain,
+	SendFromRenderer,
 } from "../src/common";
 
 export type TypedIpcApi = DefineElectronTypedIpcSchema<{
-	queryVoidArgVoidReturn: ElectronTypedIpcQuery<void, void>;
-	queryVoidArgStringReturn: ElectronTypedIpcQuery<string, void>;
-	queryNumberArgVoidReturn: ElectronTypedIpcQuery<void, number>;
-	queryStringArgNumberReturn: ElectronTypedIpcQuery<number, string>;
+	queryVoidArgVoidReturn: Query<void, void>;
+	queryVoidArgStringReturn: Query<string, void>;
+	queryNumberArgVoidReturn: Query<void, number>;
+	queryStringArgNumberReturn: Query<number, string>;
 
-	mutationVoidArgVoidReturn: ElectronTypedIpcMutation<void, void>;
-	mutationVoidArgStringReturn: ElectronTypedIpcMutation<string, void>;
-	mutationNumberArgVoidReturn: ElectronTypedIpcMutation<void, number>;
-	mutationStringArgNumberReturn: ElectronTypedIpcMutation<number, string>;
+	mutationVoidArgVoidReturn: Mutation<void, void>;
+	mutationVoidArgStringReturn: Mutation<string, void>;
+	mutationNumberArgVoidReturn: Mutation<void, number>;
+	mutationStringArgNumberReturn: Mutation<number, string>;
 
-	sendVoidFromMain: ElectronTypedIpcSendFromMain<void>;
-	sendPayloadFromMain: ElectronTypedIpcSendFromMain<SendFromMainPayload>;
+	sendVoidFromMain: SendFromMain<void>;
+	sendPayloadFromMain: SendFromMain<SendFromMainPayload>;
 
-	sendVoidFromRenderer: ElectronTypedIpcSendFromRenderer<void>;
-	sendPayloadFromRenderer: ElectronTypedIpcSendFromRenderer<SendFromRendererPayload>;
+	sendVoidFromRenderer: SendFromRenderer<void>;
+	sendPayloadFromRenderer: SendFromRenderer<SendFromRendererPayload>;
 }>;
 
 export type SendFromMainPayload = { type: "sendFromMain" };

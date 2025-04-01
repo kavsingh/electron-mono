@@ -5,21 +5,18 @@ import type { SystemInfo } from "#main/services/system-info";
 import type { SystemStats } from "#main/services/system-stats";
 import type {
 	DefineElectronTypedIpcSchema,
-	ElectronTypedIpcQuery,
-	ElectronTypedIpcMutation,
-	ElectronTypedIpcSendFromMain,
+	Query,
+	Mutation,
+	SendFromMain,
 } from "@kavsingh/electron-typed-ipc";
 import type { OpenDialogOptions, OpenDialogReturnValue } from "electron";
 
 export type AppIpcDefinition = DefineElectronTypedIpcSchema<{
-	showOpenDialog: ElectronTypedIpcMutation<
-		OpenDialogReturnValue,
-		OpenDialogOptions
-	>;
-	getThemeSource: ElectronTypedIpcQuery<ThemeSource>;
-	setThemeSource: ElectronTypedIpcMutation<ThemeSource, ThemeSource>;
-	getSystemInfo: ElectronTypedIpcQuery<SystemInfo>;
-	getSystemStats: ElectronTypedIpcQuery<SystemStats>;
-	throwCustomError: ElectronTypedIpcMutation<void>;
-	systemStatsEvent: ElectronTypedIpcSendFromMain<SystemStats>;
+	showOpenDialog: Mutation<OpenDialogReturnValue, OpenDialogOptions>;
+	getThemeSource: Query<ThemeSource>;
+	setThemeSource: Mutation<ThemeSource, ThemeSource>;
+	getSystemInfo: Query<SystemInfo>;
+	getSystemStats: Query<SystemStats>;
+	throwCustomError: Mutation<void>;
+	systemStatsEvent: SendFromMain<SystemStats>;
 }>;

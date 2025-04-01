@@ -1,19 +1,20 @@
 export const ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE = "__ELECTRON_TYPED_IPC__";
 
-export const defaultSerializer: ElectronTypedIpcSerializer = {
+export const defaultSerializer: Serializer = {
 	serialize: (val) => val,
 	deserialize: (val) => val,
 };
 
 export function createValueSerializer<TValue, TSerialized = unknown>(
-	serializer: ElectronTypedIpcValueSerializer<TValue, TSerialized>,
+	serializer: ValueSerializer<TValue, TSerialized>,
 ) {
 	return serializer;
 }
 
 export function createSerializer(
-	serializers: ElectronTypedIpcValueSerializer<unknown, unknown>[],
-): ElectronTypedIpcSerializer {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	serializers: ValueSerializer<any, any>[],
+): Serializer {
 	if (!serializers.length) return defaultSerializer;
 
 	function serialize(value: unknown): unknown {
@@ -71,45 +72,45 @@ export type DefineElectronTypedIpcSchema<
 	TDefinitions extends ElectronTypedIpcSchema,
 > = TDefinitions;
 
-export type ElectronTypedIpcQuery<TResponse = unknown, TArg = unknown> = {
+export type ElectronTypedIpcSchema = Readonly<Record<string, Operation>>;
+
+export type Operation = Query | Mutation | SendFromMain | SendFromRenderer;
+
+export type Query<TResponse = unknown, TArg = unknown> = {
 	operation: "query";
 	arg: TArg;
 	response: TResponse;
 };
 
-export type ElectronTypedIpcMutation<TResponse = unknown, TArg = unknown> = {
+export type Mutation<TResponse = unknown, TArg = unknown> = {
 	operation: "mutation";
 	arg: TArg;
 	response: TResponse;
 };
 
-export type ElectronTypedIpcSendFromMain<TPayload = unknown> = {
+export type SendFromMain<TPayload = unknown> = {
 	operation: "sendFromMain";
 	payload: TPayload;
 };
 
-export type ElectronTypedIpcSendFromRenderer<TPayload = unknown> = {
+export type SendFromRenderer<TPayload = unknown> = {
 	operation: "sendFromRenderer";
 	payload: TPayload;
 };
 
-export type ElectronTypedIpcSchema = Readonly<
-	Record<string, ElectronTypedIpcOperation>
->;
-
-export type ElectronTypedIpcSerializer = {
+export type Serializer = {
 	serialize: (val: unknown) => unknown;
 	deserialize: (val: unknown) => unknown;
 };
 
-export type ElectronTypedIpcValueSerializer<TValue, TSerialized> = {
+export type ValueSerializer<TValue, TSerialized> = {
 	isDeserialized: (value: unknown) => value is TValue;
 	isSerialized: (value: unknown) => value is TSerialized;
 	serialize: (value: TValue) => TSerialized;
 	deserialize: (value: TSerialized) => TValue;
 };
 
-export type ElectronTypedIpcLogger = {
+export type Logger = {
 	debug: (...args: unknown[]) => unknown;
 	verbose: (...args: unknown[]) => unknown;
 	info: (...args: unknown[]) => unknown;
@@ -117,12 +118,6 @@ export type ElectronTypedIpcLogger = {
 	error: (...args: unknown[]) => unknown;
 };
 
-export type ElectronTypedIpcOperation =
-	| ElectronTypedIpcQuery
-	| ElectronTypedIpcMutation
-	| ElectronTypedIpcSendFromMain
-	| ElectronTypedIpcSendFromRenderer;
+export type RemoveHandlerFn = () => void;
 
-export type ElectronTypedIpcRemoveHandlerFn = () => void;
-
-export type ElectronTypedIpcUnsubscribeFn = () => void;
+export type UnsubscribeFn = () => void;
