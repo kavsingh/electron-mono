@@ -39,7 +39,7 @@
 		"@solidjs/router": "0.15.3",
 		"@solidjs/testing-library": "0.8.10",
 		"@tailwindcss/container-queries": "0.1.1",
-		"@tanstack/solid-query": "5.71.1",
+		"@tanstack/solid-query": "5.71.2",
 		"@testing-library/dom": "10.4.0",
 		"@testing-library/jest-dom": "6.6.3",
 		"@testing-library/user-event": "14.6.1",
