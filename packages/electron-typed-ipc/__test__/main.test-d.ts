@@ -21,36 +21,36 @@ describe("main types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.queryVoidArgVoidReturn.handleQuery).parameter(0)
-				.parameters.toMatchTypeOf<[IpcMainInvokeEvent]>;
+				.parameters.toExtend<[IpcMainInvokeEvent]>;
 			expectTypeOf(tipcMain.queryVoidArgVoidReturn.handleQuery).parameter(0)
-				.returns.toMatchTypeOf<void | Promise<void>>;
+				.returns.toExtend<void | Promise<void>>;
 		});
 
 		it("should correctly type handleQuery without arg and string return", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.queryVoidArgStringReturn.handleQuery).parameter(0)
-				.parameters.toMatchTypeOf<[IpcMainInvokeEvent]>;
+				.parameters.toExtend<[IpcMainInvokeEvent]>;
 			expectTypeOf(tipcMain.queryVoidArgStringReturn.handleQuery).parameter(0)
-				.returns.toMatchTypeOf<string | Promise<string>>;
+				.returns.toExtend<string | Promise<string>>;
 		});
 
 		it("should correctly type handleQuery with number arg and void return", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.queryNumberArgVoidReturn.handleQuery).parameter(0)
-				.parameters.toMatchTypeOf<[IpcMainInvokeEvent, number]>;
+				.parameters.toExtend<[IpcMainInvokeEvent, number]>;
 			expectTypeOf(tipcMain.queryNumberArgVoidReturn.handleQuery).parameter(0)
-				.returns.toMatchTypeOf<void | Promise<void>>;
+				.returns.toExtend<void | Promise<void>>;
 		});
 
 		it("should correctly type handleQuery with string arg and number return", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.queryStringArgNumberReturn.handleQuery).parameter(0)
-				.parameters.toMatchTypeOf<[IpcMainInvokeEvent, string]>;
+				.parameters.toExtend<[IpcMainInvokeEvent, string]>;
 			expectTypeOf(tipcMain.queryStringArgNumberReturn.handleQuery).parameter(0)
-				.returns.toMatchTypeOf<number | Promise<number>>;
+				.returns.toExtend<number | Promise<number>>;
 		});
 	});
 
@@ -60,10 +60,10 @@ describe("main types", () => {
 
 			expectTypeOf(tipcMain.mutationVoidArgVoidReturn.handleMutation).parameter(
 				0,
-			).parameters.toMatchTypeOf<[IpcMainInvokeEvent]>;
+			).parameters.toExtend<[IpcMainInvokeEvent]>;
 			expectTypeOf(tipcMain.mutationVoidArgVoidReturn.handleMutation).parameter(
 				0,
-			).returns.toMatchTypeOf<void | Promise<void>>;
+			).returns.toExtend<void | Promise<void>>;
 		});
 
 		it("should correctly type handleMutation without arg and string return", () => {
@@ -71,10 +71,10 @@ describe("main types", () => {
 
 			expectTypeOf(
 				tipcMain.mutationVoidArgStringReturn.handleMutation,
-			).parameter(0).parameters.toMatchTypeOf<[IpcMainInvokeEvent]>;
+			).parameter(0).parameters.toExtend<[IpcMainInvokeEvent]>;
 			expectTypeOf(
 				tipcMain.mutationVoidArgStringReturn.handleMutation,
-			).parameter(0).returns.toMatchTypeOf<string | Promise<string>>;
+			).parameter(0).returns.toExtend<string | Promise<string>>;
 		});
 
 		it("should correctly type handleMutation with number arg and void return", () => {
@@ -82,10 +82,10 @@ describe("main types", () => {
 
 			expectTypeOf(
 				tipcMain.mutationNumberArgVoidReturn.handleMutation,
-			).parameter(0).parameters.toMatchTypeOf<[IpcMainInvokeEvent, number]>;
+			).parameter(0).parameters.toExtend<[IpcMainInvokeEvent, number]>;
 			expectTypeOf(
 				tipcMain.mutationNumberArgVoidReturn.handleMutation,
-			).parameter(0).returns.toMatchTypeOf<void | Promise<void>>;
+			).parameter(0).returns.toExtend<void | Promise<void>>;
 		});
 
 		it("should correctly type handleMutation with string arg and number return", () => {
@@ -93,10 +93,10 @@ describe("main types", () => {
 
 			expectTypeOf(
 				tipcMain.mutationStringArgNumberReturn.handleMutation,
-			).parameter(0).parameters.toMatchTypeOf<[IpcMainInvokeEvent, string]>;
+			).parameter(0).parameters.toExtend<[IpcMainInvokeEvent, string]>;
 			expectTypeOf(
 				tipcMain.mutationStringArgNumberReturn.handleMutation,
-			).parameter(0).returns.toMatchTypeOf<number | Promise<number>>;
+			).parameter(0).returns.toExtend<number | Promise<number>>;
 		});
 	});
 
@@ -105,9 +105,9 @@ describe("main types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.sendVoidFromRenderer.subscribe).parameter(0)
-				.parameters.toMatchTypeOf<[IpcMainEvent]>;
+				.parameters.toExtend<[IpcMainEvent]>;
 			expectTypeOf(tipcMain.sendVoidFromRenderer.subscribe).parameter(0).returns
-				.toMatchTypeOf<void | Promise<void>>;
+				.toExtend<void | Promise<void>>;
 			expectTypeOf(
 				tipcMain.sendVoidFromRenderer.subscribe,
 			).returns.toBeFunction();
@@ -117,9 +117,9 @@ describe("main types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcMain.sendPayloadFromRenderer.subscribe).parameter(0)
-				.parameters.toMatchTypeOf<[IpcMainEvent, SendFromRendererPayload]>;
+				.parameters.toExtend<[IpcMainEvent, SendFromRendererPayload]>;
 			expectTypeOf(tipcMain.sendPayloadFromRenderer.subscribe).parameter(0)
-				.returns.toMatchTypeOf<void | Promise<void>>;
+				.returns.toExtend<void | Promise<void>>;
 			expectTypeOf(
 				tipcMain.sendPayloadFromRenderer.subscribe,
 			).returns.toBeFunction();
@@ -130,7 +130,7 @@ describe("main types", () => {
 		it("should correctly type send from main without payload", () => {
 			expect.assertions(2);
 
-			expectTypeOf(tipcMain.sendVoidFromMain.send).parameters.toMatchTypeOf<
+			expectTypeOf(tipcMain.sendVoidFromMain.send).parameters.toExtend<
 				[undefined, ElectronTypedIpcSendFromMainOptions | undefined]
 			>;
 			expectTypeOf(tipcMain.sendVoidFromMain.send).returns.toBeVoid();
@@ -139,7 +139,7 @@ describe("main types", () => {
 		it("should correctly type send from main with payload", () => {
 			expect.assertions(2);
 
-			expectTypeOf(tipcMain.sendPayloadFromMain.send).parameters.toMatchTypeOf<
+			expectTypeOf(tipcMain.sendPayloadFromMain.send).parameters.toExtend<
 				[SendFromMainPayload, ElectronTypedIpcSendFromMainOptions | undefined]
 			>;
 			expectTypeOf(tipcMain.sendPayloadFromMain.send).returns.toBeVoid();

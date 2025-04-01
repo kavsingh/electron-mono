@@ -19,36 +19,37 @@ describe("renderer types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.queryVoidArgVoidReturn.query).parameters
-				.toMatchTypeOf<[]>;
-			expectTypeOf(tipcRenderer.queryVoidArgVoidReturn.query).returns
-				.toMatchTypeOf<Promise<void>>;
+				.toExtend<[]>;
+			expectTypeOf(tipcRenderer.queryVoidArgVoidReturn.query).returns.toExtend<
+				Promise<void>
+			>;
 		});
 
 		it("should correctly type query without arg and string return", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.queryVoidArgStringReturn.query).parameters
-				.toMatchTypeOf<[]>;
+				.toExtend<[]>;
 			expectTypeOf(tipcRenderer.queryVoidArgStringReturn.query).returns
-				.toMatchTypeOf<Promise<string>>;
+				.toExtend<Promise<string>>;
 		});
 
 		it("should correctly type query with number arg and void return", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.queryNumberArgVoidReturn.query).parameters
-				.toMatchTypeOf<[number]>;
+				.toExtend<[number]>;
 			expectTypeOf(tipcRenderer.queryNumberArgVoidReturn.query).returns
-				.toMatchTypeOf<Promise<void>>;
+				.toExtend<Promise<void>>;
 		});
 
 		it("should correctly type query with string arg and number return", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.queryStringArgNumberReturn.query).parameters
-				.toMatchTypeOf<[string]>;
+				.toExtend<[string]>;
 			expectTypeOf(tipcRenderer.queryStringArgNumberReturn.query).returns
-				.toMatchTypeOf<Promise<number>>;
+				.toExtend<Promise<number>>;
 		});
 	});
 
@@ -57,36 +58,36 @@ describe("renderer types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.mutationVoidArgVoidReturn.mutate).parameters
-				.toMatchTypeOf<[]>;
+				.toExtend<[]>;
 			expectTypeOf(tipcRenderer.mutationVoidArgVoidReturn.mutate).returns
-				.toMatchTypeOf<Promise<void>>;
+				.toExtend<Promise<void>>;
 		});
 
 		it("should correctly type mutation without arg and string return", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.mutationVoidArgStringReturn.mutate).parameters
-				.toMatchTypeOf<[]>;
+				.toExtend<[]>;
 			expectTypeOf(tipcRenderer.mutationVoidArgStringReturn.mutate).returns
-				.toMatchTypeOf<Promise<string>>;
+				.toExtend<Promise<string>>;
 		});
 
 		it("should correctly type mutation with number arg and void return", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.mutationNumberArgVoidReturn.mutate).parameters
-				.toMatchTypeOf<[number]>;
+				.toExtend<[number]>;
 			expectTypeOf(tipcRenderer.mutationNumberArgVoidReturn.mutate).returns
-				.toMatchTypeOf<Promise<void>>;
+				.toExtend<Promise<void>>;
 		});
 
 		it("should correctly type mutation with string arg and number return", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.mutationStringArgNumberReturn.mutate).parameters
-				.toMatchTypeOf<[string]>;
+				.toExtend<[string]>;
 			expectTypeOf(tipcRenderer.mutationStringArgNumberReturn.mutate).returns
-				.toMatchTypeOf<Promise<number>>;
+				.toExtend<Promise<number>>;
 		});
 	});
 
@@ -95,9 +96,9 @@ describe("renderer types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.sendVoidFromMain.subscribe).parameter(0)
-				.parameters.toMatchTypeOf<[IpcRendererEvent]>;
+				.parameters.toExtend<[IpcRendererEvent]>;
 			expectTypeOf(tipcRenderer.sendVoidFromMain.subscribe).parameter(0).returns
-				.toMatchTypeOf<void | Promise<void>>;
+				.toExtend<void | Promise<void>>;
 			expectTypeOf(
 				tipcRenderer.sendVoidFromMain.subscribe,
 			).returns.toBeFunction();
@@ -107,9 +108,9 @@ describe("renderer types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.sendPayloadFromMain.subscribe).parameter(0)
-				.parameters.toMatchTypeOf<[IpcRendererEvent, SendFromMainPayload]>;
+				.parameters.toExtend<[IpcRendererEvent, SendFromMainPayload]>;
 			expectTypeOf(tipcRenderer.sendPayloadFromMain.subscribe).parameter(0)
-				.returns.toMatchTypeOf<void | Promise<void>>;
+				.returns.toExtend<void | Promise<void>>;
 			expectTypeOf(
 				tipcRenderer.sendPayloadFromMain.subscribe,
 			).returns.toBeFunction();
@@ -120,8 +121,7 @@ describe("renderer types", () => {
 		it("should correctly type send from renderer without payload", () => {
 			expect.assertions(2);
 
-			expectTypeOf(tipcRenderer.sendVoidFromRenderer.send).parameters
-				.toMatchTypeOf<
+			expectTypeOf(tipcRenderer.sendVoidFromRenderer.send).parameters.toExtend<
 				[undefined, ElectronTypedIpcSendFromRendererOptions | undefined]
 			>;
 			expectTypeOf(tipcRenderer.sendVoidFromRenderer.send).returns.toBeVoid();
@@ -131,7 +131,7 @@ describe("renderer types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.sendPayloadFromRenderer.send).parameters
-				.toMatchTypeOf<
+				.toExtend<
 				[
 					SendFromRendererPayload,
 					ElectronTypedIpcSendFromRendererOptions | undefined,

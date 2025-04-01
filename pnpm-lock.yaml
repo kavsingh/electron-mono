@@ -84,6 +84,9 @@ importers:
       '@electron/notarize':
         specifier: 3.0.1
         version: 3.0.1
+      '@kavsingh/electron-typed-ipc':
+        specifier: workspace:*
+        version: link:../../packages/electron-typed-ipc
       '@playwright/test':
         specifier: 1.51.1
         version: 1.51.1
@@ -126,9 +129,6 @@ importers:
       electron-builder:
         specifier: 26.0.12
         version: 26.0.12(electron-builder-squirrel-windows@26.0.12)
-      electron-typed-ipc:
-        specifier: workspace:*
-        version: link:../../packages/electron-typed-ipc
       electron-vite:
         specifier: 3.1.0
         version: 3.1.0(vite@6.2.5(@types/node@22.14.0)(jiti@1.21.7)(yaml@2.7.1))

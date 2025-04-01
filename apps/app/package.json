@@ -34,6 +34,7 @@
 	},
 	"devDependencies": {
 		"@electron/notarize": "3.0.1",
+		"@kavsingh/electron-typed-ipc": "workspace:*",
 		"@playwright/test": "1.51.1",
 		"@solidjs/router": "0.15.3",
 		"@solidjs/testing-library": "0.8.10",
@@ -48,7 +49,6 @@
 		"autoprefixer": "10.4.21",
 		"electron": "35.1.4",
 		"electron-builder": "26.0.12",
-		"electron-typed-ipc": "workspace:*",
 		"electron-vite": "3.1.0",
 		"eslint-plugin-jest-dom": "5.5.0",
 		"eslint-plugin-playwright": "2.2.0",

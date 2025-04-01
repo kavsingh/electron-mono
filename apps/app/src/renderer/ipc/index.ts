@@ -1,4 +1,4 @@
-import { createElectronTypedIpcRenderer } from "electron-typed-ipc/renderer";
+import { createElectronTypedIpcRenderer } from "@kavsingh/electron-typed-ipc/renderer";
 
 import { serializer } from "#common/ipc/serializer";
 

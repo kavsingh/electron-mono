@@ -2,7 +2,7 @@ import {
 	applyTypedIpcMocks,
 	typedIpcSendFromMain,
 	mockTypedIpcRenderer,
-} from "electron-typed-ipc/test/renderer";
+} from "@kavsingh/electron-typed-ipc/test/renderer";
 import { vi } from "vitest";
 
 import { createMockOpenDialogReturnValue } from "#common/__test-helpers__/mock-data-creators/electron";

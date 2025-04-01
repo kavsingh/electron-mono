@@ -1,6 +1,6 @@
 import { BrowserWindow, dialog, ipcMain, nativeTheme } from "electron";
 
-import { createElectronTypedIpcMain } from "electron-typed-ipc/main";
+import { createElectronTypedIpcMain } from "@kavsingh/electron-typed-ipc/main";
 
 import CustomError from "#common/errors/custom-error";
 import { serializer } from "#common/ipc/serializer";
