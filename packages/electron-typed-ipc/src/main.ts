@@ -5,25 +5,23 @@ import { defaultSerializer } from "./serializer";
 
 import type {
 	AnySchema,
-	IpcPreloadResult,
+	IpcResult,
 	KeysOfUnion,
 	RemoveHandlerFn,
 	UnsubscribeFn,
-} from "./internal";
-import type { Logger } from "./logger";
-import type {
-	ElectronTypedIpcSchema,
+	Schema,
 	Query,
 	Mutation,
 	SendFromMain,
 	SendFromRenderer,
-} from "./schema";
+	Definition,
+	OperationWithChannel,
+} from "./internal";
+import type { Logger } from "./logger";
 import type { Serializer } from "./serializer";
 import type { IpcMain, IpcMainEvent, WebContents } from "electron";
 
-export function createElectronTypedIpcMain<
-	TDefinitions extends ElectronTypedIpcSchema,
->(
+export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 	ipcMain: IpcMain,
 	options?: {
 		serializer?: Serializer | undefined;
@@ -44,11 +42,11 @@ export function createElectronTypedIpcMain<
 
 			ipcMain.handle(
 				scopedChannel,
-				async (event, arg: unknown): Promise<IpcPreloadResult> => {
+				async (event, arg: unknown): Promise<IpcResult> => {
 					logger?.debug("handle query", { scopedChannel, arg });
 
 					try {
-						const result: IpcPreloadResult = {
+						const result: IpcResult = {
 							__r: "ok",
 							data: await handler(event, serializer.deserialize(arg)),
 						};
@@ -59,7 +57,7 @@ export function createElectronTypedIpcMain<
 					} catch (reason) {
 						const error =
 							reason instanceof Error ? reason : new Error(String(reason));
-						const result: IpcPreloadResult = {
+						const result: IpcResult = {
 							__r: "error",
 							error: serializer.serialize(error),
 						};
@@ -85,11 +83,11 @@ export function createElectronTypedIpcMain<
 
 			ipcMain.handle(
 				scopedChannel,
-				async (event, arg: unknown): Promise<IpcPreloadResult> => {
+				async (event, arg: unknown): Promise<IpcResult> => {
 					logger?.debug("handle mutation", { scopedChannel, arg });
 
 					try {
-						const result: IpcPreloadResult = {
+						const result: IpcResult = {
 							__r: "ok",
 							data: await handler(event, serializer.deserialize(arg)),
 						};
@@ -100,7 +98,7 @@ export function createElectronTypedIpcMain<
 					} catch (reason) {
 						const error =
 							reason instanceof Error ? reason : new Error(String(reason));
-						const result: IpcPreloadResult = {
+						const result: IpcResult = {
 							__r: "error",
 							error: serializer.serialize(error),
 						};
@@ -190,7 +188,7 @@ export function createElectronTypedIpcMain<
 		},
 	});
 
-	return new Proxy(proxyObj as unknown as ElectronTypedIpcMain<TDefinitions>, {
+	return new Proxy(proxyObj as unknown as ElectronTypedIpcMain<TSchema>, {
 		get: (_, channel) => {
 			if (typeof channel !== "string") return undefined;
 
@@ -201,9 +199,9 @@ export function createElectronTypedIpcMain<
 	});
 }
 
-export type ElectronTypedIpcMain<TDefinitions extends ElectronTypedIpcSchema> =
+export type ElectronTypedIpcMain<TDefinitions extends Schema<Definition>> =
 	Readonly<{
-		[TName in keyof TDefinitions]: TDefinitions[TName] extends Query
+		[TName in keyof TDefinitions]: TDefinitions[TName] extends OperationWithChannel<Query>
 			? {
 					handleQuery: (
 						handler: (
@@ -216,7 +214,7 @@ export type ElectronTypedIpcMain<TDefinitions extends ElectronTypedIpcSchema> =
 							| Promise<TDefinitions[TName]["response"]>,
 					) => RemoveHandlerFn;
 				}
-			: TDefinitions[TName] extends Mutation
+			: TDefinitions[TName] extends OperationWithChannel<Mutation>
 				? {
 						handleMutation: (
 							handler: (
@@ -229,7 +227,7 @@ export type ElectronTypedIpcMain<TDefinitions extends ElectronTypedIpcSchema> =
 								| Promise<TDefinitions[TName]["response"]>,
 						) => RemoveHandlerFn;
 					}
-				: TDefinitions[TName] extends SendFromMain
+				: TDefinitions[TName] extends OperationWithChannel<SendFromMain>
 					? {
 							send: (
 								payload: keyof TDefinitions[TName]["payload"] extends never
@@ -238,7 +236,7 @@ export type ElectronTypedIpcMain<TDefinitions extends ElectronTypedIpcSchema> =
 								options?: SendFromMainOptions,
 							) => void;
 						}
-					: TDefinitions[TName] extends SendFromRenderer
+					: TDefinitions[TName] extends OperationWithChannel<SendFromRenderer>
 						? {
 								subscribe: (
 									listener: (

@@ -1,8 +1,7 @@
 import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./internal";
 
-import type { IpcPreloadResult } from "./internal";
+import type { IpcResult, Definition, Schema, Operation } from "./internal";
 import type { TypedIpcPreload } from "./preload";
-import type { ElectronTypedIpcSchema, Operation } from "./schema";
 import type { IpcRenderer, IpcRendererEvent } from "electron";
 
 const fnMocks: Record<string, (...args: unknown[]) => unknown> = {};
@@ -14,7 +13,7 @@ const eventHandlers: Record<
 async function mockInvoke(
 	channel: string,
 	payload: unknown,
-): Promise<IpcPreloadResult> {
+): Promise<IpcResult> {
 	const mock = fnMocks[channel];
 
 	if (typeof mock !== "function") {
@@ -42,8 +41,8 @@ export function getTypedIpcRendererMocks() {
 	return { fnMocks, eventHandlers } as const;
 }
 
-export function mockTypedIpcRenderer<TDefs extends ElectronTypedIpcSchema>(
-	mocks: TypedIpcMockRenderer<TDefs>,
+export function mockTypedIpcRenderer<TSchema extends Schema<Definition>>(
+	mocks: TypedIpcMockRenderer<TSchema>,
 ) {
 	const api: TypedIpcPreload = {
 		query: mockInvoke,
@@ -68,8 +67,8 @@ export function mockTypedIpcRenderer<TDefs extends ElectronTypedIpcSchema>(
 	return { api, namespace: ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE };
 }
 
-export function applyTypedIpcMocks<TDefs extends ElectronTypedIpcSchema>(
-	mocks: Partial<TypedIpcMockRenderer<TDefs>>,
+export function applyTypedIpcMocks<TSchema extends Schema<Definition>>(
+	mocks: Partial<TypedIpcMockRenderer<TSchema>>,
 ) {
 	for (const [channel, fn] of Object.entries(mocks)) {
 		if (typeof fn !== "function") {
@@ -84,14 +83,14 @@ export function applyTypedIpcMocks<TDefs extends ElectronTypedIpcSchema>(
 }
 
 export function typedIpcSendFromMain<
-	TDefs extends ElectronTypedIpcSchema,
-	TChannel extends string = SendableChannel<TDefs>,
+	TSchema extends Schema<Definition>,
+	TChannel extends string = SendableChannel<TSchema>,
 >(
 	channel: TChannel,
-	payload: TDefs[TChannel] extends { operation: "sendFromMain" }
-		? keyof TDefs[TChannel]["payload"] extends never
+	payload: TSchema[TChannel] extends { operation: "sendFromMain" }
+		? keyof TSchema[TChannel]["payload"] extends never
 			? undefined
-			: TDefs[TChannel]["payload"]
+			: TSchema[TChannel]["payload"]
 		: never,
 	event?: IpcRendererEvent,
 ) {
@@ -116,34 +115,38 @@ export function createMockIpcRendererEvent(
 }
 
 export type TypedIpcMockRenderer<
-	TDefs extends ElectronTypedIpcSchema,
-	TMockableKey extends keyof TDefs = MockableChannel<TDefs>,
+	TSchema extends Schema<Definition>,
+	TMockableKey extends keyof TSchema = MockableChannel<TSchema>,
 > = {
-	[TKey in TMockableKey]: TDefs[TKey] extends {
+	[TKey in TMockableKey]: TSchema[TKey] extends {
 		operation: "query" | "mutation";
 	}
-		? (arg: TDefs[TKey]["arg"]) => Promise<Awaited<TDefs[TKey]["response"]>>
-		: TDefs[TKey] extends { operation: "sendFromRenderer" }
-			? (arg: TDefs[TKey]["payload"]) => void | Promise<void>
+		? (arg: TSchema[TKey]["arg"]) => Promise<Awaited<TSchema[TKey]["response"]>>
+		: TSchema[TKey] extends { operation: "sendFromRenderer" }
+			? (arg: TSchema[TKey]["payload"]) => void | Promise<void>
 			: never;
 };
 
-type MockableChannel<TDefs extends ElectronTypedIpcSchema> =
-	ChannelForOperation<TDefs, "query" | "mutation" | "sendFromRenderer">;
+type MockableChannel<TSchema extends Schema<Definition>> = ChannelForOperation<
+	TSchema,
+	"query" | "mutation" | "sendFromRenderer"
+>;
 
-type SendableChannel<TDefs extends ElectronTypedIpcSchema> =
-	ChannelForOperation<TDefs, "sendFromMain">;
+type SendableChannel<TSchema extends Schema<Definition>> = ChannelForOperation<
+	TSchema,
+	"sendFromMain"
+>;
 
 type ChannelForOperation<
-	TDefs extends ElectronTypedIpcSchema,
+	TSchema extends Schema<Definition>,
 	TOperation extends Operation["operation"],
 > = string &
 	Extract<
 		{
-			[TChannel in keyof TDefs]: {
+			[TChannel in keyof TSchema]: {
 				channel: TChannel;
-				operation: TDefs[TChannel]["operation"];
+				operation: TSchema[TChannel]["operation"];
 			};
-		}[keyof TDefs],
+		}[keyof TSchema],
 		{ operation: TOperation }
 	>["channel"];

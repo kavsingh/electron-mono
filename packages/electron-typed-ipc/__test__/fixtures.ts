@@ -1,28 +1,30 @@
-import type {
-	DefineElectronTypedIpcSchema,
-	Mutation,
-	Query,
-	SendFromMain,
-	SendFromRenderer,
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
+import {
+	defineElectronTypedIpcSchema,
+	mutation,
+	query,
+	sendFromMain,
+	sendFromRenderer,
 } from "../src/schema";
 
-export type TypedIpcApi = DefineElectronTypedIpcSchema<{
-	queryVoidArgVoidReturn: Query<void, void>;
-	queryVoidArgStringReturn: Query<string, void>;
-	queryNumberArgVoidReturn: Query<void, number>;
-	queryStringArgNumberReturn: Query<number, string>;
+export const typedIpcApi = defineElectronTypedIpcSchema({
+	queryVoidArgVoidReturn: query<void, void>(),
+	queryVoidArgStringReturn: query<string, void>(),
+	queryNumberArgVoidReturn: query<void, number>(),
+	queryStringArgNumberReturn: query<number, string>(),
 
-	mutationVoidArgVoidReturn: Mutation<void, void>;
-	mutationVoidArgStringReturn: Mutation<string, void>;
-	mutationNumberArgVoidReturn: Mutation<void, number>;
-	mutationStringArgNumberReturn: Mutation<number, string>;
+	mutationVoidArgVoidReturn: mutation<void, void>(),
+	mutationVoidArgStringReturn: mutation<string, void>(),
+	mutationNumberArgVoidReturn: mutation<void, number>(),
+	mutationStringArgNumberReturn: mutation<number, string>(),
 
-	sendVoidFromMain: SendFromMain<void>;
-	sendPayloadFromMain: SendFromMain<SendFromMainPayload>;
+	sendVoidFromMain: sendFromMain<void>(),
+	sendPayloadFromMain: sendFromMain<SendFromMainPayload>(),
 
-	sendVoidFromRenderer: SendFromRenderer<void>;
-	sendPayloadFromRenderer: SendFromRenderer<SendFromRendererPayload>;
-}>;
+	sendVoidFromRenderer: sendFromRenderer<void>(),
+	sendPayloadFromRenderer: sendFromRenderer<SendFromRendererPayload>(),
+} as const);
 
+export type TypedIpcApi = typeof typedIpcApi;
 export type SendFromMainPayload = { type: "sendFromMain" };
 export type SendFromRendererPayload = { type: "sendFromRenderer" };

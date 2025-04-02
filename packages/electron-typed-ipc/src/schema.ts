@@ -1,29 +1,57 @@
-export type DefineElectronTypedIpcSchema<
-	TDefinitions extends ElectronTypedIpcSchema,
-> = TDefinitions;
+import type {
+	Definition,
+	Schema,
+	Mutation,
+	Query,
+	SendFromMain,
+	SendFromRenderer,
+} from "./internal";
 
-export type ElectronTypedIpcSchema = Readonly<Record<string, Operation>>;
+export function query<TResponse = unknown, TInput = unknown>(): Query<
+	TResponse,
+	TInput
+> {
+	return {
+		operation: "query",
+		arg: undefined as TInput,
+		response: undefined as TResponse,
+	};
+}
 
-export type Operation = Query | Mutation | SendFromMain | SendFromRenderer;
+export function mutation<TResponse = unknown, TInput = unknown>(): Mutation<
+	TResponse,
+	TInput
+> {
+	return {
+		operation: "mutation",
+		arg: undefined as TInput,
+		response: undefined as TResponse,
+	};
+}
 
-export type Query<TResponse = unknown, TArg = unknown> = {
-	operation: "query";
-	arg: TArg;
-	response: TResponse;
-};
+export function sendFromMain<TPayload = unknown>(): SendFromMain<TPayload> {
+	return {
+		operation: "sendFromMain",
+		payload: undefined as TPayload,
+	};
+}
 
-export type Mutation<TResponse = unknown, TArg = unknown> = {
-	operation: "mutation";
-	arg: TArg;
-	response: TResponse;
-};
+export function sendFromRenderer<
+	TPayload = unknown,
+>(): SendFromRenderer<TPayload> {
+	return {
+		operation: "sendFromRenderer",
+		payload: undefined as TPayload,
+	};
+}
 
-export type SendFromMain<TPayload = unknown> = {
-	operation: "sendFromMain";
-	payload: TPayload;
-};
-
-export type SendFromRenderer<TPayload = unknown> = {
-	operation: "sendFromRenderer";
-	payload: TPayload;
-};
+export function defineElectronTypedIpcSchema<TDefinition extends Definition>(
+	definition: TDefinition,
+) {
+	return Object.fromEntries(
+		Object.entries(definition).map(([key, def]) => [
+			key,
+			{ ...def, channel: key },
+		]),
+	) as unknown as Schema<TDefinition>;
+}
