@@ -71,4 +71,4 @@ export function exposeTypedIpc(options?: { logger?: Logger | undefined }) {
 	);
 }
 
-export type TypedIpcPreload = ReturnType<typeof createTypedIpcPreload>;
+export type IpcPreloadApi = ReturnType<typeof createTypedIpcPreload>;

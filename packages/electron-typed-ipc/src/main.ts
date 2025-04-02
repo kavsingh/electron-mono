@@ -214,58 +214,57 @@ export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 	});
 }
 
-export type ElectronTypedIpcMain<TDefinitions extends Schema<Definition>> =
-	Readonly<{
-		[TName in keyof TDefinitions]: TDefinitions[TName] extends OperationWithChannel<Query>
+type ElectronTypedIpcMain<TDefinitions extends Schema<Definition>> = Readonly<{
+	[TName in keyof TDefinitions]: TDefinitions[TName] extends OperationWithChannel<Query>
+		? {
+				handleQuery: (
+					handler: (
+						event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
+						...args: keyof TDefinitions[TName]["input"] extends never
+							? []
+							: [input: TDefinitions[TName]["input"]]
+					) =>
+						| TDefinitions[TName]["response"]
+						| Promise<TDefinitions[TName]["response"]>,
+				) => RemoveHandlerFn;
+			}
+		: TDefinitions[TName] extends OperationWithChannel<Mutation>
 			? {
-					handleQuery: (
+					handleMutation: (
 						handler: (
 							event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
-							...args: keyof TDefinitions[TName]["arg"] extends never
+							...args: keyof TDefinitions[TName]["input"] extends never
 								? []
-								: [arg: TDefinitions[TName]["arg"]]
+								: [input: TDefinitions[TName]["input"]]
 						) =>
 							| TDefinitions[TName]["response"]
 							| Promise<TDefinitions[TName]["response"]>,
 					) => RemoveHandlerFn;
 				}
-			: TDefinitions[TName] extends OperationWithChannel<Mutation>
+			: TDefinitions[TName] extends OperationWithChannel<SendFromMain>
 				? {
-						handleMutation: (
-							handler: (
-								event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
-								...args: keyof TDefinitions[TName]["arg"] extends never
-									? []
-									: [arg: TDefinitions[TName]["arg"]]
-							) =>
-								| TDefinitions[TName]["response"]
-								| Promise<TDefinitions[TName]["response"]>,
-						) => RemoveHandlerFn;
+						send: (
+							payload: keyof TDefinitions[TName]["payload"] extends never
+								? undefined
+								: TDefinitions[TName]["payload"],
+							options?: SendFromMainOptions,
+						) => void;
 					}
-				: TDefinitions[TName] extends OperationWithChannel<SendFromMain>
+				: TDefinitions[TName] extends OperationWithChannel<SendFromRenderer>
 					? {
-							send: (
-								payload: keyof TDefinitions[TName]["payload"] extends never
-									? undefined
-									: TDefinitions[TName]["payload"],
-								options?: SendFromMainOptions,
-							) => void;
+							subscribe: (
+								listener: (
+									...args: keyof TDefinitions[TName]["payload"] extends never
+										? [event: IpcMainEvent]
+										: [
+												event: IpcMainEvent,
+												payload: TDefinitions[TName]["payload"],
+											]
+								) => void | Promise<void>,
+							) => UnsubscribeFn;
 						}
-					: TDefinitions[TName] extends OperationWithChannel<SendFromRenderer>
-						? {
-								subscribe: (
-									listener: (
-										...args: keyof TDefinitions[TName]["payload"] extends never
-											? [event: IpcMainEvent]
-											: [
-													event: IpcMainEvent,
-													payload: TDefinitions[TName]["payload"],
-												]
-									) => void | Promise<void>,
-								) => UnsubscribeFn;
-							}
-						: never;
-	}>;
+					: never;
+}>;
 
 export type SendFromMainOptions = {
 	frames?: Parameters<WebContents["sendToFrame"]>[0] | undefined;

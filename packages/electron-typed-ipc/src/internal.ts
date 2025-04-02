@@ -21,13 +21,13 @@ export type Operation = Query | Mutation | SendFromMain | SendFromRenderer;
 
 export type Query<TResponse = unknown, TInput = unknown> = {
 	operation: "query";
-	arg: TInput;
+	input: TInput;
 	response: TResponse;
 };
 
 export type Mutation<TResponse = unknown, TInput = unknown> = {
 	operation: "mutation";
-	arg: TInput;
+	input: TInput;
 	response: TResponse;
 };
 

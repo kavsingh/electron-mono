@@ -8,7 +8,7 @@ import type {
 	SendFromRendererPayload,
 	TypedIpcApi,
 } from "./fixtures";
-import type { ElectronTypedIpcSendFromRendererOptions } from "../src/renderer";
+import type { SendFromRendererOptions } from "../src/renderer";
 import type { IpcRendererEvent } from "electron";
 
 const tipcRenderer = createElectronTypedIpcRenderer<TypedIpcApi>();
@@ -122,7 +122,7 @@ describe("renderer types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.sendVoidFromRenderer.send).parameters.toExtend<
-				[undefined, ElectronTypedIpcSendFromRendererOptions | undefined]
+				[undefined, SendFromRendererOptions | undefined]
 			>;
 			expectTypeOf(tipcRenderer.sendVoidFromRenderer.send).returns.toBeVoid();
 		});
@@ -132,10 +132,7 @@ describe("renderer types", () => {
 
 			expectTypeOf(tipcRenderer.sendPayloadFromRenderer.send).parameters
 				.toExtend<
-				[
-					SendFromRendererPayload,
-					ElectronTypedIpcSendFromRendererOptions | undefined,
-				]
+				[SendFromRendererPayload, SendFromRendererOptions | undefined]
 			>;
 			expectTypeOf(
 				tipcRenderer.sendPayloadFromRenderer.send,

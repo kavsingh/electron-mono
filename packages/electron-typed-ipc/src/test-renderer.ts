@@ -1,7 +1,7 @@
 import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./internal";
 
 import type { IpcResult, Definition, Schema, Operation } from "./internal";
-import type { TypedIpcPreload } from "./preload";
+import type { IpcPreloadApi } from "./preload";
 import type { IpcRenderer, IpcRendererEvent } from "electron";
 
 const fnMocks: Record<string, (...args: unknown[]) => unknown> = {};
@@ -44,7 +44,7 @@ export function getTypedIpcRendererMocks() {
 export function mockTypedIpcRenderer<TSchema extends Schema<Definition>>(
 	mocks: TypedIpcMockRenderer<TSchema>,
 ) {
-	const api: TypedIpcPreload = {
+	const api: IpcPreloadApi = {
 		query: mockInvoke,
 		mutate: mockInvoke,
 		send: mockSend,
@@ -121,7 +121,9 @@ export type TypedIpcMockRenderer<
 	[TKey in TMockableKey]: TSchema[TKey] extends {
 		operation: "query" | "mutation";
 	}
-		? (arg: TSchema[TKey]["arg"]) => Promise<Awaited<TSchema[TKey]["response"]>>
+		? (
+				input: TSchema[TKey]["input"],
+			) => Promise<Awaited<TSchema[TKey]["response"]>>
 		: TSchema[TKey] extends { operation: "sendFromRenderer" }
 			? (arg: TSchema[TKey]["payload"]) => void | Promise<void>
 			: never;
