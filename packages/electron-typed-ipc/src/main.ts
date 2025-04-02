@@ -32,169 +32,184 @@ export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 	const proxyFn = () => undefined;
 	const serializer = options?.serializer ?? defaultSerializer;
 	const logger = options?.logger;
-	let currentChannel = "__";
 
-	const handleQueryProxy = new Proxy(proxyFn, {
-		apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
-			const scopedChannel = scopeChannel(`${currentChannel}/query`);
+	function handleQueryProxy(channel: string) {
+		return new Proxy(proxyFn, {
+			apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
+				const scopedChannel = scopeChannel(`${channel}/query`);
 
-			logger?.debug("add query handler", { scopedChannel, handler });
+				logger?.debug("add query handler", { scopedChannel, handler });
 
-			ipcMain.handle(
-				scopedChannel,
-				async (event, arg: unknown): Promise<IpcResult> => {
-					logger?.debug("handle query", { scopedChannel, arg });
+				ipcMain.handle(
+					scopedChannel,
+					async (event, arg: unknown): Promise<IpcResult> => {
+						logger?.debug("handle query", { scopedChannel, arg });
 
-					try {
-						const result: IpcResult = {
-							__r: "ok",
-							data: await handler(event, serializer.deserialize(arg)),
-						};
+						try {
+							const result: IpcResult = {
+								__r: "ok",
+								data: await handler(event, serializer.deserialize(arg)),
+							};
 
-						logger?.debug("handle query result", { scopedChannel, result });
+							logger?.debug("handle query result", { scopedChannel, result });
 
-						return result;
-					} catch (reason) {
-						const error =
-							reason instanceof Error ? reason : new Error(String(reason));
-						const result: IpcResult = {
-							__r: "error",
-							error: serializer.serialize(error),
-						};
+							return result;
+						} catch (reason) {
+							const error =
+								reason instanceof Error ? reason : new Error(String(reason));
+							const result: IpcResult = {
+								__r: "error",
+								error: serializer.serialize(error),
+							};
 
-						logger?.debug("handle query result", { scopedChannel, result });
+							logger?.debug("handle query result", { scopedChannel, result });
 
-						return result;
+							return result;
+						}
+					},
+				);
+
+				return function removeHandler() {
+					ipcMain.removeHandler(scopedChannel);
+				};
+			},
+		});
+	}
+
+	function handleMutationProxy(channel: string) {
+		return new Proxy(proxyFn, {
+			apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
+				const scopedChannel = scopeChannel(`${channel}/mutation`);
+
+				logger?.debug("add mutation handler", { scopedChannel, handler });
+
+				ipcMain.handle(
+					scopedChannel,
+					async (event, arg: unknown): Promise<IpcResult> => {
+						logger?.debug("handle mutation", { scopedChannel, arg });
+
+						try {
+							const result: IpcResult = {
+								__r: "ok",
+								data: await handler(event, serializer.deserialize(arg)),
+							};
+
+							logger?.debug("handle mutation result", {
+								scopedChannel,
+								result,
+							});
+
+							return result;
+						} catch (reason) {
+							const error =
+								reason instanceof Error ? reason : new Error(String(reason));
+							const result: IpcResult = {
+								__r: "error",
+								error: serializer.serialize(error),
+							};
+
+							logger?.debug("handle mutation result", {
+								scopedChannel,
+								result,
+							});
+
+							return result;
+						}
+					},
+				);
+
+				return function removeHandler() {
+					ipcMain.removeHandler(scopedChannel);
+				};
+			},
+		});
+	}
+
+	function sendProxy(channel: string) {
+		return new Proxy(proxyFn, {
+			apply: (
+				_,
+				__,
+				[payload, sendOptions]: [unknown, SendFromMainOptions | undefined],
+			) => {
+				const scoped = scopeChannel(`${channel}/sendFromMain`);
+				const serialized = serializer.serialize(payload);
+				const targetWindows =
+					sendOptions?.getTargetWindows?.() ?? BrowserWindow.getAllWindows();
+
+				logger?.debug("send main", { scoped, targetWindows, serialized });
+
+				for (const win of targetWindows) {
+					if (win.isDestroyed()) continue;
+
+					if (sendOptions?.frames !== undefined) {
+						win.webContents.sendToFrame(sendOptions.frames, scoped, serialized);
+					} else {
+						win.webContents.send(scoped, serialized);
 					}
-				},
-			);
+				}
+			},
+		});
+	}
 
-			return function removeHandler() {
-				ipcMain.removeHandler(scopedChannel);
-			};
-		},
-	});
+	function subscribeProxy(channel: string) {
+		return new Proxy(proxyFn, {
+			apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
+				const scopedChannel = scopeChannel(`${channel}/sendFromRenderer`);
 
-	const handleMutationProxy = new Proxy(proxyFn, {
-		apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
-			const scopedChannel = scopeChannel(`${currentChannel}/mutation`);
+				function eventHandler(event: unknown, payload: unknown) {
+					logger?.debug("subscribe handler", { scopedChannel, payload });
+					void handler(event, serializer.deserialize(payload));
+				}
 
-			logger?.debug("add mutation handler", { scopedChannel, handler });
+				logger?.debug("subscribe", { scopedChannel, handler });
+				ipcMain.addListener(scopedChannel, eventHandler);
 
-			ipcMain.handle(
-				scopedChannel,
-				async (event, arg: unknown): Promise<IpcResult> => {
-					logger?.debug("handle mutation", { scopedChannel, arg });
+				return function unsubscribe() {
+					logger?.debug("unsubscribe", { scopedChannel, handler });
+					ipcMain.removeListener(scopedChannel, eventHandler);
+				};
+			},
+		});
+	}
 
-					try {
-						const result: IpcResult = {
-							__r: "ok",
-							data: await handler(event, serializer.deserialize(arg)),
-						};
+	function operationsProxy(channel: string) {
+		return new Proxy(proxyObj, {
+			get: (_, operation) => {
+				if (typeof operation !== "string") return undefined;
 
-						logger?.debug("handle mutation result", { scopedChannel, result });
+				const op = operation as MainProxyMethod;
 
-						return result;
-					} catch (reason) {
-						const error =
-							reason instanceof Error ? reason : new Error(String(reason));
-						const result: IpcResult = {
-							__r: "error",
-							error: serializer.serialize(error),
-						};
-
-						logger?.debug("handle mutation result", { scopedChannel, result });
-
-						return result;
+				switch (op) {
+					case "handleQuery": {
+						return handleQueryProxy(channel);
 					}
-				},
-			);
 
-			return function removeHandler() {
-				ipcMain.removeHandler(scopedChannel);
-			};
-		},
-	});
+					case "handleMutation": {
+						return handleMutationProxy(channel);
+					}
 
-	const sendProxy = new Proxy(proxyFn, {
-		apply: (
-			_,
-			__,
-			[payload, sendOptions]: [unknown, SendFromMainOptions | undefined],
-		) => {
-			const scoped = scopeChannel(`${currentChannel}/sendFromMain`);
-			const serialized = serializer.serialize(payload);
-			const targetWindows =
-				sendOptions?.getTargetWindows?.() ?? BrowserWindow.getAllWindows();
+					case "send":
+						return sendProxy(channel);
 
-			logger?.debug("send main", { scoped, targetWindows, serialized });
+					case "subscribe":
+						return subscribeProxy(channel);
 
-			for (const win of targetWindows) {
-				if (win.isDestroyed()) continue;
+					default: {
+						exhaustive(op, logger);
 
-				if (sendOptions?.frames !== undefined) {
-					win.webContents.sendToFrame(sendOptions.frames, scoped, serialized);
-				} else {
-					win.webContents.send(scoped, serialized);
+						return undefined;
+					}
 				}
-			}
-		},
-	});
-
-	const subscribeProxy = new Proxy(proxyFn, {
-		apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
-			const scopedChannel = scopeChannel(`${currentChannel}/sendFromRenderer`);
-
-			function eventHandler(event: unknown, payload: unknown) {
-				logger?.debug("subscribe handler", { scopedChannel, payload });
-				void handler(event, serializer.deserialize(payload));
-			}
-
-			logger?.debug("subscribe", { scopedChannel, handler });
-			ipcMain.addListener(scopedChannel, eventHandler);
-
-			return function unsubscribe() {
-				logger?.debug("unsubscribe", { scopedChannel, handler });
-				ipcMain.removeListener(scopedChannel, eventHandler);
-			};
-		},
-	});
-
-	const operationsProxy = new Proxy(proxyObj, {
-		get: (_, operation) => {
-			if (typeof operation !== "string") return undefined;
-
-			const op = operation as MainProxyMethod;
-
-			switch (op) {
-				case "handleQuery":
-					return handleQueryProxy;
-
-				case "handleMutation":
-					return handleMutationProxy;
-
-				case "send":
-					return sendProxy;
-
-				case "subscribe":
-					return subscribeProxy;
-
-				default: {
-					exhaustive(op, logger);
-
-					return undefined;
-				}
-			}
-		},
-	});
+			},
+		});
+	}
 
 	return new Proxy(proxyObj as unknown as ElectronTypedIpcMain<TSchema>, {
 		get: (_, channel) => {
 			if (typeof channel !== "string") return undefined;
 
-			currentChannel = channel;
-
-			return operationsProxy;
+			return operationsProxy(channel);
 		},
 	});
 }
