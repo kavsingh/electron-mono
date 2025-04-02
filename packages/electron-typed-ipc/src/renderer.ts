@@ -3,24 +3,24 @@ import { defaultSerializer } from "./serializer";
 
 import type {
 	AnySchema,
-	IpcPreloadResult,
+	IpcResult,
 	KeysOfUnion,
 	UnsubscribeFn,
-} from "./internal";
-import type { Logger } from "./logger";
-import type { TypedIpcPreload } from "./preload";
-import type {
-	ElectronTypedIpcSchema,
+	Schema,
 	Query,
 	Mutation,
 	SendFromRenderer,
 	SendFromMain,
-} from "./schema";
+	Definition,
+	OperationWithChannel,
+} from "./internal";
+import type { Logger } from "./logger";
+import type { TypedIpcPreload } from "./preload";
 import type { Serializer } from "./serializer";
 import type { IpcRendererEvent } from "electron";
 
 export function createElectronTypedIpcRenderer<
-	TDefinitions extends ElectronTypedIpcSchema,
+	TSchema extends Schema<Definition>,
 >(options?: {
 	serializer?: Serializer | undefined;
 	logger?: Logger | undefined;
@@ -51,7 +51,7 @@ export function createElectronTypedIpcRenderer<
 			const response = (await api.query(
 				currentChannel,
 				arg ? serializer.serialize(arg) : undefined,
-			)) as IpcPreloadResult;
+			)) as IpcResult;
 
 			logger?.debug("query result", {
 				channel: currentChannel,
@@ -73,7 +73,7 @@ export function createElectronTypedIpcRenderer<
 			const response = (await api.mutate(
 				currentChannel,
 				arg ? serializer.serialize(arg) : undefined,
-			)) as IpcPreloadResult;
+			)) as IpcResult;
 
 			logger?.debug("mutation result", {
 				channel: currentChannel,
@@ -152,7 +152,7 @@ export function createElectronTypedIpcRenderer<
 		},
 	});
 
-	return new Proxy(proxyObj as ElectronTypedIpcRenderer<TDefinitions>, {
+	return new Proxy(proxyObj as ElectronTypedIpcRenderer<TSchema>, {
 		get: (_, channel) => {
 			if (typeof channel !== "string") return undefined;
 
@@ -163,51 +163,50 @@ export function createElectronTypedIpcRenderer<
 	});
 }
 
-export type ElectronTypedIpcRenderer<
-	TDefinitions extends ElectronTypedIpcSchema,
-> = Readonly<{
-	[TName in keyof TDefinitions]: TDefinitions[TName] extends Query
-		? {
-				query: (
-					...args: keyof TDefinitions[TName]["arg"] extends never
-						? []
-						: [arg: TDefinitions[TName]["arg"]]
-				) => Promise<TDefinitions[TName]["response"]>;
-			}
-		: TDefinitions[TName] extends Mutation
+export type ElectronTypedIpcRenderer<TDefinitions extends Schema<Definition>> =
+	Readonly<{
+		[TName in keyof TDefinitions]: TDefinitions[TName] extends OperationWithChannel<Query>
 			? {
-					mutate: (
+					query: (
 						...args: keyof TDefinitions[TName]["arg"] extends never
 							? []
 							: [arg: TDefinitions[TName]["arg"]]
 					) => Promise<TDefinitions[TName]["response"]>;
 				}
-			: TDefinitions[TName] extends SendFromRenderer
+			: TDefinitions[TName] extends OperationWithChannel<Mutation>
 				? {
-						send: (
-							...args: keyof TDefinitions[TName]["payload"] extends never
-								? [undefined, ElectronTypedIpcSendFromRendererOptions]
-								: [
-										TDefinitions[TName]["payload"],
-										ElectronTypedIpcSendFromRendererOptions,
-									]
-						) => void;
+						mutate: (
+							...args: keyof TDefinitions[TName]["arg"] extends never
+								? []
+								: [arg: TDefinitions[TName]["arg"]]
+						) => Promise<TDefinitions[TName]["response"]>;
 					}
-				: TDefinitions[TName] extends SendFromMain
+				: TDefinitions[TName] extends OperationWithChannel<SendFromRenderer>
 					? {
-							subscribe: (
-								listener: (
-									...args: keyof TDefinitions[TName]["payload"] extends never
-										? [event: IpcRendererEvent]
-										: [
-												event: IpcRendererEvent,
-												payload: TDefinitions[TName]["payload"],
-											]
-								) => void | Promise<void>,
-							) => UnsubscribeFn;
+							send: (
+								...args: keyof TDefinitions[TName]["payload"] extends never
+									? [undefined, ElectronTypedIpcSendFromRendererOptions]
+									: [
+											TDefinitions[TName]["payload"],
+											ElectronTypedIpcSendFromRendererOptions,
+										]
+							) => void;
 						}
-					: never;
-}>;
+					: TDefinitions[TName] extends OperationWithChannel<SendFromMain>
+						? {
+								subscribe: (
+									listener: (
+										...args: keyof TDefinitions[TName]["payload"] extends never
+											? [event: IpcRendererEvent]
+											: [
+													event: IpcRendererEvent,
+													payload: TDefinitions[TName]["payload"],
+												]
+									) => void | Promise<void>,
+								) => UnsubscribeFn;
+							}
+						: never;
+	}>;
 
 export type ElectronTypedIpcSendFromRendererOptions = {
 	toHost?: boolean | undefined;

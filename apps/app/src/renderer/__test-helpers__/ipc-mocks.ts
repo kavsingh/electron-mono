@@ -12,10 +12,10 @@ import {
 } from "#common/__test-helpers__/mock-data-creators/system";
 import CustomError from "#common/errors/custom-error";
 
-import type { AppIpcDefinition } from "#common/ipc/schema";
+import type { AppIpcSchema } from "#common/ipc/schema";
 
 export const { namespace: typedIpcNamespace, api: typedIpcApi } =
-	mockTypedIpcRenderer<AppIpcDefinition>({
+	mockTypedIpcRenderer<AppIpcSchema>({
 		getThemeSource: vi.fn(() => Promise.resolve("dark" as const)),
 		setThemeSource: vi.fn((source) => Promise.resolve(source)),
 		getSystemInfo: vi.fn(() => Promise.resolve(createMockSystemInfo())),
@@ -28,6 +28,6 @@ export const { namespace: typedIpcNamespace, api: typedIpcApi } =
 		}),
 	});
 
-export const applyMocks = applyTypedIpcMocks<AppIpcDefinition>;
+export const applyMocks = applyTypedIpcMocks<AppIpcSchema>;
 
-export const sendFromMain = typedIpcSendFromMain<AppIpcDefinition>;
+export const sendFromMain = typedIpcSendFromMain<AppIpcSchema>;

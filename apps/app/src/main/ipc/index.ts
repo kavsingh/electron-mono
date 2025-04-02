@@ -7,11 +7,11 @@ import { serializer } from "#common/ipc/serializer";
 import { getSystemInfo } from "#main/services/system-info";
 import { getSystemStats } from "#main/services/system-stats";
 
-import type { AppIpcDefinition } from "#common/ipc/schema";
+import type { AppIpcSchema } from "#common/ipc/schema";
 import type { AppEventBus } from "#main/services/app-event-bus";
 import type { SystemStats } from "#main/services/system-stats";
 
-const appIpc = createElectronTypedIpcMain<AppIpcDefinition>(ipcMain, {
+const appIpc = createElectronTypedIpcMain<AppIpcSchema>(ipcMain, {
 	serializer,
 });
 

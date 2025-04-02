@@ -2,8 +2,6 @@ import { createElectronTypedIpcRenderer } from "@kavsingh/electron-typed-ipc/ren
 
 import { serializer } from "#common/ipc/serializer";
 
-import type { AppIpcDefinition } from "#common/ipc/schema";
+import type { AppIpcSchema } from "#common/ipc/schema";
 
-export const ipc = createElectronTypedIpcRenderer<AppIpcDefinition>({
-	serializer,
-});
+export const ipc = createElectronTypedIpcRenderer<AppIpcSchema>({ serializer });
