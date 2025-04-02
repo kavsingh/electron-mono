@@ -4,7 +4,7 @@ import type {
 	Query,
 	SendFromMain,
 	SendFromRenderer,
-} from "../src/common";
+} from "../src/schema";
 
 export type TypedIpcApi = DefineElectronTypedIpcSchema<{
 	queryVoidArgVoidReturn: Query<void, void>;

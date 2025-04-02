@@ -1,8 +1,8 @@
-import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./common";
+import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./internal";
 
-import type { ElectronTypedIpcSchema, Operation } from "./common";
 import type { IpcPreloadResult } from "./internal";
 import type { TypedIpcPreload } from "./preload";
+import type { ElectronTypedIpcSchema, Operation } from "./schema";
 import type { IpcRenderer, IpcRendererEvent } from "electron";
 
 const fnMocks: Record<string, (...args: unknown[]) => unknown> = {};
