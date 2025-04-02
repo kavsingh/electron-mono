@@ -7,38 +7,30 @@ import type {
 	SendFromRenderer,
 } from "./internal";
 
-export function query<TResponse = unknown, TInput = unknown>(): Query<
-	TResponse,
-	TInput
-> {
+export function query<TResponse, TInput>(): Query<TResponse, TInput> {
 	return {
 		operation: "query",
-		arg: undefined as TInput,
+		input: undefined as TInput,
 		response: undefined as TResponse,
 	};
 }
 
-export function mutation<TResponse = unknown, TInput = unknown>(): Mutation<
-	TResponse,
-	TInput
-> {
+export function mutation<TResponse, TInput>(): Mutation<TResponse, TInput> {
 	return {
 		operation: "mutation",
-		arg: undefined as TInput,
+		input: undefined as TInput,
 		response: undefined as TResponse,
 	};
 }
 
-export function sendFromMain<TPayload = unknown>(): SendFromMain<TPayload> {
+export function sendFromMain<TPayload>(): SendFromMain<TPayload> {
 	return {
 		operation: "sendFromMain",
 		payload: undefined as TPayload,
 	};
 }
 
-export function sendFromRenderer<
-	TPayload = unknown,
->(): SendFromRenderer<TPayload> {
+export function sendFromRenderer<TPayload>(): SendFromRenderer<TPayload> {
 	return {
 		operation: "sendFromRenderer",
 		payload: undefined as TPayload,

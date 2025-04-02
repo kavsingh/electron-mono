@@ -14,12 +14,11 @@ import type { OpenDialogOptions, OpenDialogReturnValue } from "electron";
 
 export const appIpcSchema = defineElectronTypedIpcSchema({
 	showOpenDialog: mutation<OpenDialogReturnValue, OpenDialogOptions>(),
-	getThemeSource: query<ThemeSource>(),
+	getThemeSource: query<ThemeSource, undefined>(),
 	setThemeSource: mutation<ThemeSource, ThemeSource>(),
-	getSystemInfo: query<SystemInfo>(),
-	getSystemStats: query<SystemStats>(),
-	// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-	throwCustomError: mutation<void>(),
+	getSystemInfo: query<SystemInfo, undefined>(),
+	getSystemStats: query<SystemStats, undefined>(),
+	throwCustomError: mutation<undefined, undefined>(),
 	systemStatsEvent: sendFromMain<SystemStats>(),
 } as const);
 

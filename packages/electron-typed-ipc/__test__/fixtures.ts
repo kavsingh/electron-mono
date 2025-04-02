@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
 import {
 	defineElectronTypedIpcSchema,
 	mutation,
@@ -8,20 +7,20 @@ import {
 } from "../src/schema";
 
 export const typedIpcApi = defineElectronTypedIpcSchema({
-	queryVoidArgVoidReturn: query<void, void>(),
-	queryVoidArgStringReturn: query<string, void>(),
-	queryNumberArgVoidReturn: query<void, number>(),
+	queryVoidArgVoidReturn: query<undefined, undefined>(),
+	queryVoidArgStringReturn: query<string, undefined>(),
+	queryNumberArgVoidReturn: query<undefined, number>(),
 	queryStringArgNumberReturn: query<number, string>(),
 
-	mutationVoidArgVoidReturn: mutation<void, void>(),
-	mutationVoidArgStringReturn: mutation<string, void>(),
-	mutationNumberArgVoidReturn: mutation<void, number>(),
+	mutationVoidArgVoidReturn: mutation<undefined, undefined>(),
+	mutationVoidArgStringReturn: mutation<string, undefined>(),
+	mutationNumberArgVoidReturn: mutation<undefined, number>(),
 	mutationStringArgNumberReturn: mutation<number, string>(),
 
-	sendVoidFromMain: sendFromMain<void>(),
+	sendVoidFromMain: sendFromMain<undefined>(),
 	sendPayloadFromMain: sendFromMain<SendFromMainPayload>(),
 
-	sendVoidFromRenderer: sendFromRenderer<void>(),
+	sendVoidFromRenderer: sendFromRenderer<undefined>(),
 	sendPayloadFromRenderer: sendFromRenderer<SendFromRendererPayload>(),
 } as const);
 
