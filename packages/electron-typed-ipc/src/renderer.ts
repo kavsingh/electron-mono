@@ -25,14 +25,14 @@ export function createElectronTypedIpcRenderer<
 	serializer?: Serializer | undefined;
 	logger?: Logger | undefined;
 }) {
-	const api =
+	const preloadApi =
 		ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE in globalThis.window
 			? (globalThis.window[
 					ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE
 				] as TypedIpcPreload)
 			: undefined;
 
-	if (!api) {
+	if (!preloadApi) {
 		throw new Error(
 			`object named ${ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE} not found on window`,
 		);
@@ -42,123 +42,127 @@ export function createElectronTypedIpcRenderer<
 	const logger = options?.logger;
 	const proxyObj = {};
 	const proxyFn = () => undefined;
-	let currentChannel = "__";
 
-	const queryProxy = new Proxy(proxyFn, {
-		apply: async (_, __, [arg]: [unknown]) => {
-			logger?.debug("query", { channel: currentChannel, arg });
+	function queryProxy(api: TypedIpcPreload, channel: string) {
+		return new Proxy(proxyFn, {
+			apply: async (_, __, [arg]: [unknown]) => {
+				logger?.debug("query", { channel, arg });
 
-			const response = (await api.query(
-				currentChannel,
-				arg ? serializer.serialize(arg) : undefined,
-			)) as IpcResult;
+				const response = (await api.query(
+					channel,
+					arg ? serializer.serialize(arg) : undefined,
+				)) as IpcResult;
 
-			logger?.debug("query result", {
-				channel: currentChannel,
-				response,
-			});
-
-			if (response.__r === "error") {
-				throw serializer.deserialize(response.error);
-			}
-
-			return serializer.deserialize(response.data);
-		},
-	});
-
-	const mutationProxy = new Proxy(proxyFn, {
-		apply: async (_, __, [arg]: [unknown]) => {
-			logger?.debug("mutation", { channel: currentChannel, arg });
-
-			const response = (await api.mutate(
-				currentChannel,
-				arg ? serializer.serialize(arg) : undefined,
-			)) as IpcResult;
-
-			logger?.debug("mutation result", {
-				channel: currentChannel,
-				response,
-			});
-
-			if (response.__r === "error") {
-				throw serializer.deserialize(response.error);
-			}
-
-			return serializer.deserialize(response.data);
-		},
-	});
-
-	const sendProxy = new Proxy(proxyFn, {
-		apply: (
-			_,
-			__,
-			[payload, sendOptions]: [
-				unknown,
-				ElectronTypedIpcSendFromRendererOptions | undefined,
-			],
-		) => {
-			const serialized = serializer.serialize(payload);
-
-			logger?.debug("send", {
-				channel: currentChannel,
-				payload: serialized,
-				sendOptions,
-			});
-
-			if (sendOptions?.toHost) api.sendToHost(currentChannel, serialized);
-			else api.send(currentChannel, serialized);
-		},
-	});
-
-	const subscribeProxy = new Proxy(proxyFn, {
-		apply: (__, ___, [handler]: [(...args: unknown[]) => unknown]) => {
-			return api.subscribe(currentChannel, (event, payload) => {
-				logger?.debug("subscribe receive", {
-					channel: currentChannel,
-					payload,
-					handler,
+				logger?.debug("query result", {
+					channel,
+					response,
 				});
 
-				void handler(event, serializer.deserialize(payload));
-			});
-		},
-	});
-
-	const operationsProxy = new Proxy(proxyObj, {
-		get: (_, operation) => {
-			if (typeof operation !== "string") return undefined;
-
-			const op = operation as RendererProxyMethod;
-
-			switch (op) {
-				case "query":
-					return queryProxy;
-
-				case "mutate":
-					return mutationProxy;
-
-				case "send":
-					return sendProxy;
-
-				case "subscribe":
-					return subscribeProxy;
-
-				default: {
-					exhaustive(op, logger);
-
-					return undefined;
+				if (response.__r === "error") {
+					throw serializer.deserialize(response.error);
 				}
-			}
-		},
-	});
+
+				return serializer.deserialize(response.data);
+			},
+		});
+	}
+
+	function mutationProxy(api: TypedIpcPreload, channel: string) {
+		return new Proxy(proxyFn, {
+			apply: async (_, __, [arg]: [unknown]) => {
+				logger?.debug("mutation", { channel, arg });
+
+				const response = (await api.mutate(
+					channel,
+					arg ? serializer.serialize(arg) : undefined,
+				)) as IpcResult;
+
+				logger?.debug("mutation result", { channel, response });
+
+				if (response.__r === "error") {
+					throw serializer.deserialize(response.error);
+				}
+
+				return serializer.deserialize(response.data);
+			},
+		});
+	}
+
+	function sendProxy(api: TypedIpcPreload, channel: string) {
+		return new Proxy(proxyFn, {
+			apply: (
+				_,
+				__,
+				[payload, sendOptions]: [
+					unknown,
+					ElectronTypedIpcSendFromRendererOptions | undefined,
+				],
+			) => {
+				const serialized = serializer.serialize(payload);
+
+				logger?.debug("send", {
+					channel,
+					payload: serialized,
+					sendOptions,
+				});
+
+				if (sendOptions?.toHost) api.sendToHost(channel, serialized);
+				else api.send(channel, serialized);
+			},
+		});
+	}
+
+	function subscribeProxy(api: TypedIpcPreload, channel: string) {
+		return new Proxy(proxyFn, {
+			apply: (__, ___, [handler]: [(...args: unknown[]) => unknown]) => {
+				return api.subscribe(channel, (event, payload) => {
+					logger?.debug("subscribe receive", {
+						channel,
+						payload,
+						handler,
+					});
+
+					void handler(event, serializer.deserialize(payload));
+				});
+			},
+		});
+	}
+
+	function operationsProxy(api: TypedIpcPreload, channel: string) {
+		return new Proxy(proxyObj, {
+			get: (_, operation) => {
+				if (typeof operation !== "string") return undefined;
+
+				const op = operation as RendererProxyMethod;
+
+				switch (op) {
+					case "query":
+						return queryProxy(api, channel);
+
+					case "mutate":
+						return mutationProxy(api, channel);
+
+					case "send":
+						return sendProxy(api, channel);
+
+					case "subscribe":
+						return subscribeProxy(api, channel);
+
+					default: {
+						exhaustive(op, logger);
+
+						return undefined;
+					}
+				}
+			},
+		});
+	}
 
 	return new Proxy(proxyObj as ElectronTypedIpcRenderer<TSchema>, {
 		get: (_, channel) => {
 			if (typeof channel !== "string") return undefined;
 
-			currentChannel = channel;
-
-			return operationsProxy;
+			return operationsProxy(preloadApi, channel);
 		},
 	});
 }
