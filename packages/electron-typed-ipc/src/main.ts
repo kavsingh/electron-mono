@@ -1,20 +1,24 @@
 import { BrowserWindow } from "electron";
 
-import { defaultSerializer } from "./common";
 import { exhaustive, scopeChannel } from "./internal";
+import { defaultSerializer } from "./serializer";
 
 import type {
-	Logger,
-	Serializer,
+	AnySchema,
+	IpcPreloadResult,
+	KeysOfUnion,
+	RemoveHandlerFn,
+	UnsubscribeFn,
+} from "./internal";
+import type { Logger } from "./logger";
+import type {
 	ElectronTypedIpcSchema,
 	Query,
-	RemoveHandlerFn,
 	Mutation,
 	SendFromMain,
 	SendFromRenderer,
-	UnsubscribeFn,
-} from "./common";
-import type { AnySchema, IpcPreloadResult, KeysOfUnion } from "./internal";
+} from "./schema";
+import type { Serializer } from "./serializer";
 import type { IpcMain, IpcMainEvent, WebContents } from "electron";
 
 export function createElectronTypedIpcMain<

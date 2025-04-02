@@ -1,21 +1,22 @@
-import {
-	defaultSerializer,
-	ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE,
-} from "./common";
-import { exhaustive } from "./internal";
+import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE, exhaustive } from "./internal";
+import { defaultSerializer } from "./serializer";
 
 import type {
-	Logger,
-	Serializer,
+	AnySchema,
+	IpcPreloadResult,
+	KeysOfUnion,
+	UnsubscribeFn,
+} from "./internal";
+import type { Logger } from "./logger";
+import type { TypedIpcPreload } from "./preload";
+import type {
 	ElectronTypedIpcSchema,
 	Query,
 	Mutation,
 	SendFromRenderer,
 	SendFromMain,
-	UnsubscribeFn,
-} from "./common";
-import type { AnySchema, IpcPreloadResult, KeysOfUnion } from "./internal";
-import type { TypedIpcPreload } from "./preload";
+} from "./schema";
+import type { Serializer } from "./serializer";
 import type { IpcRendererEvent } from "electron";
 
 export function createElectronTypedIpcRenderer<
