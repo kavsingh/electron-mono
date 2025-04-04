@@ -3,21 +3,24 @@ import { BrowserWindow, dialog, ipcMain, nativeTheme } from "electron";
 import { createElectronTypedIpcMain } from "@kavsingh/electron-typed-ipc/main";
 
 import CustomError from "#common/errors/custom-error";
+import { appIpcSchema } from "#common/ipc/schema";
 import { serializer } from "#common/ipc/serializer";
 import { getSystemInfo } from "#main/services/system-info";
 import { getSystemStats } from "#main/services/system-stats";
 
-import type { AppIpcSchema } from "#common/ipc/schema";
-import type { AppEventBus } from "#main/services/app-event-bus";
-import type { SystemStats } from "#main/services/system-stats";
+import type { AppEvent, AppEventBus } from "#main/services/app-event-bus";
 
-const appIpc = createElectronTypedIpcMain<AppIpcSchema>(ipcMain, {
+const { ipcHandleAndSend } = createElectronTypedIpcMain(appIpcSchema, ipcMain, {
 	serializer,
 });
 
 export function setupIpc(eventBus: AppEventBus) {
-	const handlers = [
-		appIpc.showOpenDialog.handleMutation((_, input) => {
+	return ipcHandleAndSend({
+		getSystemInfo,
+
+		getSystemStats,
+
+		showOpenDialog: (_, input) => {
 			const focusedWindow = BrowserWindow.getAllWindows().find((win) =>
 				win.isFocused(),
 			);
@@ -27,36 +30,30 @@ export function setupIpc(eventBus: AppEventBus) {
 			}
 
 			return dialog.showOpenDialog(focusedWindow, input);
-		}),
+		},
 
-		appIpc.getSystemInfo.handleQuery(() => getSystemInfo()),
+		getThemeSource: () => nativeTheme.themeSource,
 
-		appIpc.getSystemStats.handleQuery(() => getSystemStats()),
-
-		appIpc.getThemeSource.handleQuery(() => nativeTheme.themeSource),
-
-		appIpc.setThemeSource.handleMutation((_, themeSource) => {
+		setThemeSource: (_, themeSource) => {
 			nativeTheme.themeSource = themeSource;
 
 			return nativeTheme.themeSource;
-		}),
+		},
 
-		appIpc.throwCustomError.handleMutation(() => {
+		throwCustomError: () => {
 			throw new CustomError("CODE_A", "something happened");
-		}),
-	];
+		},
 
-	function handleStats(stats: SystemStats) {
-		appIpc.systemStatsEvent.send(stats);
-	}
+		systemStatsEvent: (send) => {
+			function handleStats(payload: AppEvent<"systemStats">) {
+				send({ payload });
+			}
 
-	eventBus.addListener("systemStats", handleStats);
+			eventBus.addListener("systemStats", handleStats);
 
-	return function cleanup() {
-		handlers.forEach((remove) => {
-			remove();
-		});
-
-		eventBus.removeListener("systemStats", handleStats);
-	};
+			return () => {
+				eventBus.removeListener("systemStats", handleStats);
+			};
+		},
+	});
 }

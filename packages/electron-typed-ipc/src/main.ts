@@ -16,7 +16,7 @@ import type {
 } from "./internal";
 import type { Logger } from "./logger";
 import type { Serializer } from "./serializer";
-import type { IpcMain, WebContents } from "electron";
+import type { IpcMain, IpcMainEvent, WebContents } from "electron";
 
 export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 	schema: TSchema,
@@ -34,12 +34,12 @@ export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 	) {
 		const scopedChannel = scopeChannel(`${channel}/${operation}`);
 
-		logger?.debug("add handler", { operation, channel });
+		logger?.debug("add handler", operation, channel);
 
 		ipcMain.handle(
 			scopedChannel,
 			async (event, input: unknown): Promise<IpcResult> => {
-				logger?.debug("handle", { operation, channel, input });
+				logger?.debug("handle", operation, channel, input);
 
 				try {
 					const result: IpcResult = {
@@ -47,7 +47,7 @@ export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 						data: await handler(event, serializer.deserialize(input)),
 					};
 
-					logger?.debug("handle result", { operation, channel, result });
+					logger?.debug("handle result", operation, channel, result);
 
 					return result;
 				} catch (reason) {
@@ -58,7 +58,7 @@ export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 						error: serializer.serialize(error),
 					};
 
-					logger?.debug("handle result", { operation, channel, result });
+					logger?.debug("handle result", operation, channel, result);
 
 					return result;
 				}
@@ -76,6 +76,9 @@ export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 
 	function sendToChannel(channel: string): SendPayloadToChannel {
 		return function sendPayload({ options: opts, payload } = {}) {
+			logger?.debug("send", channel, payload);
+
+			const scopedChannel = scopeChannel(`${channel}/sendFromMain`);
 			const targets = opts?.targetWindows ?? BrowserWindow.getAllWindows();
 
 			for (const target of targets) {
@@ -84,9 +87,15 @@ export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 				const serialized = serializer.serialize(payload);
 
 				if (opts?.frames) {
-					target.webContents.sendToFrame(opts.frames, channel, serialized);
+					logger?.debug("send to frame", channel, opts.frames, payload);
+					target.webContents.sendToFrame(
+						opts.frames,
+						scopedChannel,
+						serialized,
+					);
 				} else {
-					target.webContents.send(channel, serialized);
+					logger?.debug("send to window", channel, payload);
+					target.webContents.send(scopedChannel, serialized);
 				}
 			}
 		};
@@ -96,9 +105,13 @@ export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 		channel: string,
 		senderFn: (send: SendPayloadToChannel) => DisposeFn,
 	) {
+		logger?.debug("add sender", channel);
+
 		const dispose = senderFn(sendToChannel(channel));
 
 		return function disposeSender() {
+			logger?.debug("remove sender", channel);
+
 			try {
 				dispose();
 			} catch (reason) {
@@ -150,7 +163,57 @@ export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 		};
 	}
 
-	return { ipcHandleAndSend };
+	const proxyObj = {};
+	const proxyFn = () => undefined;
+
+	function subscribeProxy(channel: string) {
+		return new Proxy(proxyFn, {
+			apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
+				logger?.debug("add subscription", channel);
+
+				const scopedChannel = scopeChannel(`${channel}/sendFromRenderer`);
+
+				function eventHandler(event: unknown, payload: unknown) {
+					logger?.debug("subscribe handler", { scopedChannel, payload });
+					void handler(event, serializer.deserialize(payload));
+				}
+
+				logger?.debug("subscribe", { scopedChannel, handler });
+				ipcMain.addListener(scopedChannel, eventHandler);
+
+				return function unsubscribe() {
+					logger?.debug("unsubscribe", { scopedChannel, handler });
+					ipcMain.removeListener(scopedChannel, eventHandler);
+				};
+			},
+		});
+	}
+
+	function operationsProxy(channel: string) {
+		return new Proxy(proxyObj, {
+			get: (_, operation) => {
+				if (operation === "subscribe") return subscribeProxy(channel);
+
+				logger?.warn(
+					`invalid operation, expected 'subscribe', got ${String(operation)}`,
+				);
+
+				return undefined;
+			},
+		});
+	}
+
+	const ipcSubscriptions = new Proxy(proxyObj, {
+		get: (_, channel) => {
+			if (typeof channel !== "string") return undefined;
+
+			return operationsProxy(channel);
+		},
+	}) as Readonly<{
+		[TChannel in keyof SubscribeOps<TSchema>]: Subscribable<TSchema, TChannel>;
+	}>;
+
+	return { ipcHandleAndSend, ipcSubscriptions };
 }
 
 export type CreateTypedIpcMainOptions = {
@@ -199,6 +262,22 @@ type HandleOrSendFn<
 						) => void,
 					) => DisposeFn
 				: never;
+
+type Subscribable<
+	TSchema extends SubscribeOps<Schema<Definition>>,
+	TChannel extends keyof TSchema,
+> =
+	TSchema[TChannel] extends OperationWithChannel<SendFromRenderer>
+		? {
+				subscribe: (
+					listener: (
+						...args: keyof TSchema[TChannel]["payload"] extends never
+							? [event: IpcMainEvent]
+							: [event: IpcMainEvent, payload: TSchema[TChannel]["payload"]]
+					) => void | Promise<void>,
+				) => DisposeFn;
+			}
+		: never;
 
 type DisposeFn = () => void;
 
