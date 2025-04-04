@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { describe, it, expectTypeOf, expect } from "vitest";
 
 import { createElectronTypedIpcRenderer } from "../src/renderer";

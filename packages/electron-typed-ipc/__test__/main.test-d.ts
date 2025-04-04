@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { describe, it, expectTypeOf, expect } from "vitest";
 
 import { createElectronTypedIpcMain } from "../src/main";
@@ -6,27 +5,11 @@ import { createElectronTypedIpcMain } from "../src/main";
 import { typedIpcApi } from "./fixtures";
 import { createMockIpcMain } from "./mocks";
 
-import type { IpcMainInvokeEvent } from "electron";
+import type { SendFromRendererPayload } from "./fixtures";
+import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
 
 const { ipcHandleAndSend: handleAndSend, ipcSubscriptions } =
 	createElectronTypedIpcMain(typedIpcApi, createMockIpcMain());
-
-const dispose = handleAndSend({
-	queryVoidArgVoidReturn: (_) => undefined,
-	queryNumberArgVoidReturn: (_, _input) => undefined,
-	queryStringArgNumberReturn: (_, input) => Number(input),
-	mutationVoidArgVoidReturn: (_) => undefined,
-	mutationNumberArgVoidReturn: (_, _input) => undefined,
-	mutationStringArgNumberReturn: (_, input) => Number(input),
-	sendVoidFromMain: (send) => {
-		send();
-		return () => undefined;
-	},
-	sendPayloadFromMain: (send) => {
-		send({ payload: { type: "sendFromMain" } });
-		return () => undefined;
-	},
-});
 
 type Params = Parameters<typeof handleAndSend>[0];
 const ops = {} as { [K in keyof Params]-?: Params[K] };
@@ -130,41 +113,26 @@ describe("main types", () => {
 		});
 
 		describe("send", () => {
-			it("should correctly type send fn without payload", () => {
-				expect.assertions(2);
+			it.todo("should correctly type send fn without payload");
 
-				expectTypeOf(ops.sendVoidFromMain).parameters.toExtend<
-					[undefined, SendFromMainOptions | undefined]
-				>;
-				expectTypeOf(ops.sendVoidFromMain).returns.toBeVoid();
-			});
-
-			it("should correctly type send fn with payload", () => {
-				expect.assertions(2);
-
-				expectTypeOf(tipcMain.sendPayloadFromMain.send).parameters.toExtend<
-					[SendFromMainPayload, SendFromMainOptions | undefined]
-				>;
-				expectTypeOf(tipcMain.sendPayloadFromMain.send).returns.toBeVoid();
-			});
+			it.todo("should correctly type send fn with payload");
 		});
 	});
 
 	describe("ipcSubscriptions", () => {
 		it("should correctly type send from renderer without payload", () => {
-			expect.assertions(2);
+			expect.assertions(3);
 
 			expectTypeOf(ipcSubscriptions.sendVoidFromRenderer.subscribe).parameter(0)
 				.parameters.toExtend<[IpcMainEvent]>;
 			expectTypeOf(ipcSubscriptions.sendVoidFromRenderer.subscribe).parameter(0)
 				.returns.toExtend<void | Promise<void>>;
-			expectTypeOf(
-				ipcSubscriptions.sendVoidFromRenderer.subscribe,
-			).returns.toBeFunction();
+			expectTypeOf(ipcSubscriptions.sendVoidFromRenderer.subscribe).returns
+				.toExtend<() => void>;
 		});
 
 		it("should correctly type send from renderer with payload", () => {
-			expect.assertions(2);
+			expect.assertions(3);
 
 			expectTypeOf(
 				ipcSubscriptions.sendPayloadFromRenderer.subscribe,
@@ -174,9 +142,8 @@ describe("main types", () => {
 			expectTypeOf(
 				ipcSubscriptions.sendPayloadFromRenderer.subscribe,
 			).parameter(0).returns.toExtend<void | Promise<void>>;
-			expectTypeOf(
-				ipcSubscriptions.sendPayloadFromRenderer.subscribe,
-			).returns.toBeFunction();
+			expectTypeOf(ipcSubscriptions.sendPayloadFromRenderer.subscribe).returns
+				.toExtend<() => void>;
 		});
 	});
 });

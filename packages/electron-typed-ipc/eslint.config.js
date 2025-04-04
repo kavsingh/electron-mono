@@ -50,4 +50,11 @@ export default tsEslint.config(
 			"vitest/no-hooks": "off",
 		},
 	},
+
+	{
+		files: ["**/*.test-d.ts"],
+		rules: {
+			"@typescript-eslint/no-unused-expressions": "off",
+		},
+	},
 );
