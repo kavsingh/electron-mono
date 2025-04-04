@@ -88,7 +88,7 @@ export function typedIpcSendFromMain<
 >(
 	channel: TChannel,
 	payload: TSchema[TChannel] extends { operation: "sendFromMain" }
-		? keyof TSchema[TChannel]["payload"] extends never
+		? TSchema[TChannel]["payload"] extends undefined
 			? undefined
 			: TSchema[TChannel]["payload"]
 		: never,

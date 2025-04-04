@@ -169,7 +169,7 @@ type ElectronTypedIpcRenderer<TDefinitions extends Schema<Definition>> =
 		[TName in keyof TDefinitions]: TDefinitions[TName] extends OperationWithChannel<Query>
 			? {
 					query: (
-						...args: keyof TDefinitions[TName]["input"] extends never
+						...args: TDefinitions[TName]["input"] extends undefined
 							? []
 							: [input: TDefinitions[TName]["input"]]
 					) => Promise<TDefinitions[TName]["response"]>;
@@ -177,7 +177,7 @@ type ElectronTypedIpcRenderer<TDefinitions extends Schema<Definition>> =
 			: TDefinitions[TName] extends OperationWithChannel<Mutation>
 				? {
 						mutate: (
-							...args: keyof TDefinitions[TName]["input"] extends never
+							...args: TDefinitions[TName]["input"] extends undefined
 								? []
 								: [input: TDefinitions[TName]["input"]]
 						) => Promise<TDefinitions[TName]["response"]>;
@@ -185,7 +185,7 @@ type ElectronTypedIpcRenderer<TDefinitions extends Schema<Definition>> =
 				: TDefinitions[TName] extends OperationWithChannel<SendFromRenderer>
 					? {
 							send: (
-								...args: keyof TDefinitions[TName]["payload"] extends never
+								...args: TDefinitions[TName]["payload"] extends undefined
 									? [options?: SendFromRendererOptions]
 									: [
 											payload: TDefinitions[TName]["payload"],
@@ -197,7 +197,7 @@ type ElectronTypedIpcRenderer<TDefinitions extends Schema<Definition>> =
 						? {
 								subscribe: (
 									listener: (
-										...args: keyof TDefinitions[TName]["payload"] extends never
+										...args: TDefinitions[TName]["payload"] extends undefined
 											? [event: IpcRendererEvent]
 											: [
 													event: IpcRendererEvent,

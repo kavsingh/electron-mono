@@ -3,15 +3,14 @@ import { describe, it, expectTypeOf, expect } from "vitest";
 import { createElectronTypedIpcMain } from "../src/main";
 
 import { typedIpcApi } from "./fixtures";
-import { createMockIpcMain } from "./mocks";
 
-import type { SendFromRendererPayload } from "./fixtures";
-import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
+import type { SendFromMainPayload, SendFromRendererPayload } from "./fixtures";
+import type { BrowserWindow, IpcMainEvent, IpcMainInvokeEvent } from "electron";
 
-const { ipcHandleAndSend: handleAndSend, ipcSubscriptions } =
-	createElectronTypedIpcMain(typedIpcApi, createMockIpcMain());
+const { ipcHandleAndSend, ipcSubscriptions } =
+	createElectronTypedIpcMain(typedIpcApi);
 
-type Params = Parameters<typeof handleAndSend>[0];
+type Params = Parameters<typeof ipcHandleAndSend>[0];
 const ops = {} as { [K in keyof Params]-?: Params[K] };
 
 describe("main types", () => {
@@ -20,7 +19,7 @@ describe("main types", () => {
 			it("should return a dispose function", () => {
 				expect.assertions(1);
 
-				expectTypeOf(handleAndSend).returns.toExtend<() => void>;
+				expectTypeOf(ipcHandleAndSend).returns.toExtend<() => void>;
 			});
 		});
 
@@ -113,9 +112,30 @@ describe("main types", () => {
 		});
 
 		describe("send", () => {
-			it.todo("should correctly type send fn without payload");
+			it("should correctly type send fn without payload", () => {
+				expect.assertions(1);
 
-			it.todo("should correctly type send fn with payload");
+				expectTypeOf(ops.sendVoidFromMain).toExtend<
+					(senderApi: {
+						send: (input?: {
+							targetWindows?: BrowserWindow[] | undefined;
+						}) => void;
+					}) => () => void
+				>;
+			});
+
+			it("should correctly type send fn with payload", () => {
+				expect.assertions(1);
+
+				expectTypeOf(ops.sendPayloadFromMain).toExtend<
+					(senderApi: {
+						send: (input: {
+							payload: SendFromMainPayload;
+							targetWindows?: BrowserWindow[] | undefined;
+						}) => void;
+					}) => () => void
+				>;
+			});
 		});
 	});
 

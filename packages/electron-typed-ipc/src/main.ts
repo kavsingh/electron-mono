@@ -1,4 +1,4 @@
-import { BrowserWindow } from "electron";
+import { BrowserWindow, ipcMain } from "electron";
 
 import { scopeChannel } from "./internal";
 import { defaultSerializer } from "./serializer";
@@ -16,11 +16,10 @@ import type {
 } from "./internal";
 import type { Logger } from "./logger";
 import type { Serializer } from "./serializer";
-import type { IpcMain, IpcMainEvent, WebContents } from "electron";
+import type { IpcMainEvent, IpcMainInvokeEvent, WebContents } from "electron";
 
 export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 	schema: TSchema,
-	ipcMain: IpcMain,
 	options: CreateTypedIpcMainOptions = {},
 ) {
 	const serializer = options.serializer ?? defaultSerializer;
@@ -75,26 +74,26 @@ export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 	}
 
 	function sendToChannel(channel: string): SendPayloadToChannel {
-		return function sendPayload({ options: opts, payload } = {}) {
-			logger?.debug("send", channel, payload);
+		return function sendPayload(input) {
+			logger?.debug("send", channel, input?.payload);
 
 			const scopedChannel = scopeChannel(`${channel}/sendFromMain`);
-			const targets = opts?.targetWindows ?? BrowserWindow.getAllWindows();
+			const targets = input?.targetWindows ?? BrowserWindow.getAllWindows();
 
 			for (const target of targets) {
 				if (target.isDestroyed()) continue;
 
-				const serialized = serializer.serialize(payload);
+				const serialized = serializer.serialize(input?.payload);
 
-				if (opts?.frames) {
-					logger?.debug("send to frame", channel, opts.frames, payload);
+				if (input?.frames) {
+					logger?.debug("send to frame", channel, input.frames, input.payload);
 					target.webContents.sendToFrame(
-						opts.frames,
+						input.frames,
 						scopedChannel,
 						serialized,
 					);
 				} else {
-					logger?.debug("send to window", channel, payload);
+					logger?.debug("send to window", channel, input?.payload);
 					target.webContents.send(scopedChannel, serialized);
 				}
 			}
@@ -103,11 +102,11 @@ export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
 
 	function addSender(
 		channel: string,
-		senderFn: (send: SendPayloadToChannel) => DisposeFn,
+		senderFn: (senderApi: { send: SendPayloadToChannel }) => DisposeFn,
 	) {
 		logger?.debug("add sender", channel);
 
-		const dispose = senderFn(sendToChannel(channel));
+		const dispose = senderFn({ send: sendToChannel(channel) });
 
 		return function disposeSender() {
 			logger?.debug("remove sender", channel);
@@ -232,8 +231,8 @@ type HandleOrSendFn<
 > =
 	TSchema[TChannel] extends OperationWithChannel<Query>
 		? (
-				event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
-				...args: keyof TSchema[TChannel]["input"] extends never
+				event: IpcMainInvokeEvent,
+				...args: TSchema[TChannel]["input"] extends undefined
 					? []
 					: [input: TSchema[TChannel]["input"]]
 			) =>
@@ -241,26 +240,25 @@ type HandleOrSendFn<
 				| Promise<Voidable<TSchema[TChannel]["response"]>>
 		: TSchema[TChannel] extends OperationWithChannel<Mutation>
 			? (
-					event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
-					...args: keyof TSchema[TChannel]["input"] extends never
+					event: IpcMainInvokeEvent,
+					...args: TSchema[TChannel]["input"] extends undefined
 						? []
 						: [input: TSchema[TChannel]["input"]]
 				) =>
 					| Voidable<TSchema[TChannel]["response"]>
 					| Voidable<Promise<TSchema[TChannel]["response"]>>
 			: TSchema[TChannel] extends OperationWithChannel<SendFromMain>
-				? (
+				? (senderApi: {
 						send: (
-							...args: keyof TSchema[TChannel]["payload"] extends never
-								? [input?: { options?: SendFromMainOptions | undefined }]
+							...args: TSchema[TChannel]["payload"] extends undefined
+								? [input?: SendFromMainOptions | undefined]
 								: [
 										input: {
 											payload: TSchema[TChannel]["payload"];
-											options?: SendFromMainOptions | undefined;
-										},
+										} & SendFromMainOptions,
 									]
-						) => void,
-					) => DisposeFn
+						) => void;
+					}) => DisposeFn
 				: never;
 
 type Subscribable<
@@ -271,7 +269,7 @@ type Subscribable<
 		? {
 				subscribe: (
 					listener: (
-						...args: keyof TSchema[TChannel]["payload"] extends never
+						...args: TSchema[TChannel]["payload"] extends undefined
 							? [event: IpcMainEvent]
 							: [event: IpcMainEvent, payload: TSchema[TChannel]["payload"]]
 					) => void | Promise<void>,
@@ -299,10 +297,9 @@ type SubscribeOps<TSchema extends Schema<Definition>> = Pick<
 	KeysForOp<TSchema, OperationWithChannel<SendFromRenderer>>
 >;
 
-type SendPayloadToChannel = (input?: {
-	payload?: unknown;
-	options?: SendFromMainOptions | undefined;
-}) => void;
+type SendPayloadToChannel = (
+	input?: { payload?: unknown } & SendFromMainOptions,
+) => void;
 
 type KeysForOp<
 	TSchema extends Schema<Definition>,
