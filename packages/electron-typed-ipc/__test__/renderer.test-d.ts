@@ -122,7 +122,7 @@ describe("renderer types", () => {
 			expect.assertions(2);
 
 			expectTypeOf(tipcRenderer.sendVoidFromRenderer.send).parameters.toExtend<
-				[undefined, SendFromRendererOptions | undefined]
+				[SendFromRendererOptions | undefined]
 			>;
 			expectTypeOf(tipcRenderer.sendVoidFromRenderer.send).returns.toBeVoid();
 		});

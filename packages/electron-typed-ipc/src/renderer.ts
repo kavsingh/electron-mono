@@ -186,10 +186,10 @@ type ElectronTypedIpcRenderer<TDefinitions extends Schema<Definition>> =
 					? {
 							send: (
 								...args: keyof TDefinitions[TName]["payload"] extends never
-									? [payload: undefined, options: SendFromRendererOptions]
+									? [options?: SendFromRendererOptions]
 									: [
 											payload: TDefinitions[TName]["payload"],
-											options: SendFromRendererOptions,
+											options?: SendFromRendererOptions,
 										]
 							) => void;
 						}
