@@ -1,276 +1,233 @@
 import { BrowserWindow } from "electron";
 
-import { exhaustive, scopeChannel } from "./internal";
+import { scopeChannel } from "./internal";
 import { defaultSerializer } from "./serializer";
 
 import type {
-	AnySchema,
+	Definition,
 	IpcResult,
-	KeysOfUnion,
-	RemoveHandlerFn,
-	UnsubscribeFn,
-	Schema,
-	Query,
 	Mutation,
+	Operation,
+	OperationWithChannel,
+	Query,
+	Schema,
 	SendFromMain,
 	SendFromRenderer,
-	Definition,
-	OperationWithChannel,
 } from "./internal";
 import type { Logger } from "./logger";
 import type { Serializer } from "./serializer";
-import type { IpcMain, IpcMainEvent, WebContents } from "electron";
+import type { IpcMain, WebContents } from "electron";
 
 export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(
+	schema: TSchema,
 	ipcMain: IpcMain,
-	options?: {
-		serializer?: Serializer | undefined;
-		logger?: Logger | undefined;
-	},
+	options: CreateTypedIpcMainOptions = {},
 ) {
-	const proxyObj = {};
-	const proxyFn = () => undefined;
-	const serializer = options?.serializer ?? defaultSerializer;
-	const logger = options?.logger;
+	const serializer = options.serializer ?? defaultSerializer;
+	const logger = options.logger;
+	const disposers: DisposeFn[] = [];
 
-	function handleQueryProxy(channel: string) {
-		return new Proxy(proxyFn, {
-			apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
-				const scopedChannel = scopeChannel(`${channel}/query`);
+	function addHandler(
+		operation: "query" | "mutation",
+		channel: string,
+		handler: (...args: unknown[]) => unknown,
+	) {
+		const scopedChannel = scopeChannel(`${channel}/${operation}`);
 
-				logger?.debug("add query handler", { scopedChannel, handler });
+		logger?.debug("add handler", { operation, channel });
 
-				ipcMain.handle(
-					scopedChannel,
-					async (event, arg: unknown): Promise<IpcResult> => {
-						logger?.debug("handle query", { scopedChannel, arg });
+		ipcMain.handle(
+			scopedChannel,
+			async (event, input: unknown): Promise<IpcResult> => {
+				logger?.debug("handle", { operation, channel, input });
 
-						try {
-							const result: IpcResult = {
-								__r: "ok",
-								data: await handler(event, serializer.deserialize(arg)),
-							};
+				try {
+					const result: IpcResult = {
+						__r: "ok",
+						data: await handler(event, serializer.deserialize(input)),
+					};
 
-							logger?.debug("handle query result", { scopedChannel, result });
+					logger?.debug("handle result", { operation, channel, result });
 
-							return result;
-						} catch (reason) {
-							const error =
-								reason instanceof Error ? reason : new Error(String(reason));
-							const result: IpcResult = {
-								__r: "error",
-								error: serializer.serialize(error),
-							};
+					return result;
+				} catch (reason) {
+					const error =
+						reason instanceof Error ? reason : new Error(String(reason));
+					const result: IpcResult = {
+						__r: "error",
+						error: serializer.serialize(error),
+					};
 
-							logger?.debug("handle query result", { scopedChannel, result });
+					logger?.debug("handle result", { operation, channel, result });
 
-							return result;
-						}
-					},
-				);
-
-				return function removeHandler() {
-					ipcMain.removeHandler(scopedChannel);
-				};
+					return result;
+				}
 			},
+		);
+
+		disposers.push(() => {
+			try {
+				ipcMain.removeHandler(scopedChannel);
+			} catch (reason) {
+				logger?.warn(`failed to remove handler for ${channel}`, reason);
+			}
 		});
 	}
 
-	function handleMutationProxy(channel: string) {
-		return new Proxy(proxyFn, {
-			apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
-				const scopedChannel = scopeChannel(`${channel}/mutation`);
+	function sendToChannel(channel: string): SendPayloadToChannel {
+		return function sendPayload({ options: opts, payload } = {}) {
+			const targets = opts?.targetWindows ?? BrowserWindow.getAllWindows();
 
-				logger?.debug("add mutation handler", { scopedChannel, handler });
+			for (const target of targets) {
+				if (target.isDestroyed()) continue;
 
-				ipcMain.handle(
-					scopedChannel,
-					async (event, arg: unknown): Promise<IpcResult> => {
-						logger?.debug("handle mutation", { scopedChannel, arg });
-
-						try {
-							const result: IpcResult = {
-								__r: "ok",
-								data: await handler(event, serializer.deserialize(arg)),
-							};
-
-							logger?.debug("handle mutation result", {
-								scopedChannel,
-								result,
-							});
-
-							return result;
-						} catch (reason) {
-							const error =
-								reason instanceof Error ? reason : new Error(String(reason));
-							const result: IpcResult = {
-								__r: "error",
-								error: serializer.serialize(error),
-							};
-
-							logger?.debug("handle mutation result", {
-								scopedChannel,
-								result,
-							});
-
-							return result;
-						}
-					},
-				);
-
-				return function removeHandler() {
-					ipcMain.removeHandler(scopedChannel);
-				};
-			},
-		});
-	}
-
-	function sendProxy(channel: string) {
-		return new Proxy(proxyFn, {
-			apply: (
-				_,
-				__,
-				[payload, sendOptions]: [unknown, SendFromMainOptions | undefined],
-			) => {
-				const scoped = scopeChannel(`${channel}/sendFromMain`);
 				const serialized = serializer.serialize(payload);
-				const targetWindows =
-					sendOptions?.getTargetWindows?.() ?? BrowserWindow.getAllWindows();
 
-				logger?.debug("send main", { scoped, targetWindows, serialized });
-
-				for (const win of targetWindows) {
-					if (win.isDestroyed()) continue;
-
-					if (sendOptions?.frames !== undefined) {
-						win.webContents.sendToFrame(sendOptions.frames, scoped, serialized);
-					} else {
-						win.webContents.send(scoped, serialized);
-					}
+				if (opts?.frames) {
+					target.webContents.sendToFrame(opts.frames, channel, serialized);
+				} else {
+					target.webContents.send(channel, serialized);
 				}
-			},
-		});
+			}
+		};
 	}
 
-	function subscribeProxy(channel: string) {
-		return new Proxy(proxyFn, {
-			apply: (_, __, [handler]: [(...args: unknown[]) => unknown]) => {
-				const scopedChannel = scopeChannel(`${channel}/sendFromRenderer`);
+	function addSender(
+		channel: string,
+		senderFn: (send: SendPayloadToChannel) => DisposeFn,
+	) {
+		const dispose = senderFn(sendToChannel(channel));
 
-				function eventHandler(event: unknown, payload: unknown) {
-					logger?.debug("subscribe handler", { scopedChannel, payload });
-					void handler(event, serializer.deserialize(payload));
-				}
-
-				logger?.debug("subscribe", { scopedChannel, handler });
-				ipcMain.addListener(scopedChannel, eventHandler);
-
-				return function unsubscribe() {
-					logger?.debug("unsubscribe", { scopedChannel, handler });
-					ipcMain.removeListener(scopedChannel, eventHandler);
-				};
-			},
-		});
+		return function disposeSender() {
+			try {
+				dispose();
+			} catch (reason) {
+				logger?.warn(`failed to remove sender for ${channel}`, reason);
+			}
+		};
 	}
 
-	function operationsProxy(channel: string) {
-		return new Proxy(proxyObj, {
-			get: (_, operation) => {
-				if (typeof operation !== "string") return undefined;
+	function ipcHandleAndSend(
+		operationFns: Partial<
+			Readonly<{
+				[TChannel in keyof HandleOrSendOps<TSchema>]: HandleOrSendFn<
+					HandleOrSendOps<TSchema>,
+					TChannel
+				>;
+			}>
+		>,
+	): DisposeFn {
+		for (const [channel, op] of Object.entries(schema)) {
+			const fn = operationFns[channel as keyof typeof operationFns];
 
-				const op = operation as MainProxyMethod;
+			if (typeof fn !== "function") {
+				logger?.warn(
+					`could not setup ${channel} for ${op.operation}. expected a function, got ${typeof fn}`,
+				);
 
-				switch (op) {
-					case "handleQuery": {
-						return handleQueryProxy(channel);
-					}
+				continue;
+			}
 
-					case "handleMutation": {
-						return handleMutationProxy(channel);
-					}
-
-					case "send":
-						return sendProxy(channel);
-
-					case "subscribe":
-						return subscribeProxy(channel);
-
-					default: {
-						exhaustive(op, logger);
-
-						return undefined;
-					}
+			switch (op.operation) {
+				case "query":
+				case "mutation": {
+					addHandler(
+						op.operation,
+						channel,
+						fn as Parameters<typeof addHandler>[2],
+					);
+					break;
 				}
-			},
-		});
+
+				case "sendFromMain":
+					addSender(channel, fn as Parameters<typeof addSender>[1]);
+					break;
+			}
+		}
+
+		return function dispose() {
+			for (const disposeFn of disposers) disposeFn();
+		};
 	}
 
-	return new Proxy(proxyObj as unknown as ElectronTypedIpcMain<TSchema>, {
-		get: (_, channel) => {
-			if (typeof channel !== "string") return undefined;
-
-			return operationsProxy(channel);
-		},
-	});
+	return { ipcHandleAndSend };
 }
 
-type ElectronTypedIpcMain<TDefinitions extends Schema<Definition>> = Readonly<{
-	[TName in keyof TDefinitions]: TDefinitions[TName] extends OperationWithChannel<Query>
-		? {
-				handleQuery: (
-					handler: (
-						event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
-						...args: keyof TDefinitions[TName]["input"] extends never
-							? []
-							: [input: TDefinitions[TName]["input"]]
-					) =>
-						| TDefinitions[TName]["response"]
-						| Promise<TDefinitions[TName]["response"]>,
-				) => RemoveHandlerFn;
-			}
-		: TDefinitions[TName] extends OperationWithChannel<Mutation>
-			? {
-					handleMutation: (
-						handler: (
-							event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
-							...args: keyof TDefinitions[TName]["input"] extends never
-								? []
-								: [input: TDefinitions[TName]["input"]]
-						) =>
-							| TDefinitions[TName]["response"]
-							| Promise<TDefinitions[TName]["response"]>,
-					) => RemoveHandlerFn;
-				}
-			: TDefinitions[TName] extends OperationWithChannel<SendFromMain>
-				? {
-						send: (
-							payload: keyof TDefinitions[TName]["payload"] extends never
-								? undefined
-								: TDefinitions[TName]["payload"],
-							options?: SendFromMainOptions,
-						) => void;
-					}
-				: TDefinitions[TName] extends OperationWithChannel<SendFromRenderer>
-					? {
-							subscribe: (
-								listener: (
-									...args: keyof TDefinitions[TName]["payload"] extends never
-										? [event: IpcMainEvent]
-										: [
-												event: IpcMainEvent,
-												payload: TDefinitions[TName]["payload"],
-											]
-								) => void | Promise<void>,
-							) => UnsubscribeFn;
-						}
-					: never;
-}>;
+export type CreateTypedIpcMainOptions = {
+	serializer?: Serializer | undefined;
+	logger?: Logger | undefined;
+};
 
 export type SendFromMainOptions = {
 	frames?: Parameters<WebContents["sendToFrame"]>[0] | undefined;
-	getTargetWindows?: (() => BrowserWindow[]) | undefined;
+	targetWindows?: BrowserWindow[] | undefined;
 };
 
-type MainProxyMethod = KeysOfUnion<
-	ElectronTypedIpcMain<AnySchema>[keyof ElectronTypedIpcMain<AnySchema>]
+type HandleOrSendFn<
+	TSchema extends HandleOrSendOps<Schema<Definition>>,
+	TChannel extends keyof TSchema,
+> =
+	TSchema[TChannel] extends OperationWithChannel<Query>
+		? (
+				event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
+				...args: keyof TSchema[TChannel]["input"] extends never
+					? []
+					: [input: TSchema[TChannel]["input"]]
+			) =>
+				| Voidable<TSchema[TChannel]["response"]>
+				| Promise<Voidable<TSchema[TChannel]["response"]>>
+		: TSchema[TChannel] extends OperationWithChannel<Mutation>
+			? (
+					event: Parameters<Parameters<IpcMain["handle"]>[1]>[0],
+					...args: keyof TSchema[TChannel]["input"] extends never
+						? []
+						: [input: TSchema[TChannel]["input"]]
+				) =>
+					| Voidable<TSchema[TChannel]["response"]>
+					| Voidable<Promise<TSchema[TChannel]["response"]>>
+			: TSchema[TChannel] extends OperationWithChannel<SendFromMain>
+				? (
+						send: (
+							...args: keyof TSchema[TChannel]["payload"] extends never
+								? [input?: { options?: SendFromMainOptions | undefined }]
+								: [
+										input: {
+											payload: TSchema[TChannel]["payload"];
+											options?: SendFromMainOptions | undefined;
+										},
+									]
+						) => void,
+					) => DisposeFn
+				: never;
+
+type DisposeFn = () => void;
+
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+type Voidable<TVal> = TVal extends undefined ? void : TVal;
+
+type HandleOrSendOps<TSchema extends Schema<Definition>> = Pick<
+	TSchema,
+	KeysForOp<
+		TSchema,
+		| OperationWithChannel<Query>
+		| OperationWithChannel<Mutation>
+		| OperationWithChannel<SendFromMain>
+	>
 >;
+
+type SubscribeOps<TSchema extends Schema<Definition>> = Pick<
+	TSchema,
+	KeysForOp<TSchema, OperationWithChannel<SendFromRenderer>>
+>;
+
+type SendPayloadToChannel = (input?: {
+	payload?: unknown;
+	options?: SendFromMainOptions | undefined;
+}) => void;
+
+type KeysForOp<
+	TSchema extends Schema<Definition>,
+	TOp extends OperationWithChannel<Operation>,
+> = {
+	[K in keyof TSchema]: TSchema[K] extends TOp ? K : never;
+}[keyof TSchema];
