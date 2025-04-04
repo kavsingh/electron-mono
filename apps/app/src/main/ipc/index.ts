@@ -1,4 +1,4 @@
-import { BrowserWindow, dialog, ipcMain, nativeTheme } from "electron";
+import { BrowserWindow, dialog, nativeTheme } from "electron";
 
 import { createElectronTypedIpcMain } from "@kavsingh/electron-typed-ipc/main";
 
@@ -10,7 +10,7 @@ import { getSystemStats } from "#main/services/system-stats";
 
 import type { AppEvent, AppEventBus } from "#main/services/app-event-bus";
 
-const { ipcHandleAndSend } = createElectronTypedIpcMain(appIpcSchema, ipcMain, {
+const { ipcHandleAndSend } = createElectronTypedIpcMain(appIpcSchema, {
 	serializer,
 });
 
@@ -44,7 +44,7 @@ export function setupIpc(eventBus: AppEventBus) {
 			throw new CustomError("CODE_A", "something happened");
 		},
 
-		systemStatsEvent: (send) => {
+		systemStatsEvent: ({ send }) => {
 			function handleStats(payload: AppEvent<"systemStats">) {
 				send({ payload });
 			}
