@@ -2,7 +2,7 @@ import { builtinModules } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import importsPlugin from "eslint-plugin-import-x";
+import { flatConfigs as importX } from "eslint-plugin-import-x";
 import * as tsEslint from "typescript-eslint";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -31,7 +31,7 @@ const restrictFromNode = {
 };
 
 export default tsEslint.config(
-	importsPlugin.flatConfigs.electron,
+	importX.electron,
 
 	{
 		settings: {

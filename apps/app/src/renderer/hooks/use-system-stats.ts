@@ -1,4 +1,4 @@
-import { createQuery, useQueryClient } from "@tanstack/solid-query";
+import { useQuery, useQueryClient } from "@tanstack/solid-query";
 
 import { trpc } from "#renderer/trpc";
 
@@ -8,7 +8,7 @@ import type { QueryClient } from "@tanstack/solid-query";
 
 export default function useSystemStats() {
 	const queryClient = useQueryClient();
-	const query = createQuery(() => ({
+	const query = useQuery(() => ({
 		queryKey,
 		queryFn: () => trpc.systemStats.query(),
 		reconcile: (oldData, newData) => {

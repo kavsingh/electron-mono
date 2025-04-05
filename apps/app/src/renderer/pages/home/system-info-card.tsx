@@ -1,4 +1,4 @@
-import { createQuery } from "@tanstack/solid-query";
+import { useQuery } from "@tanstack/solid-query";
 import { Show } from "solid-js";
 
 import Card from "#renderer/components/card";
@@ -6,7 +6,7 @@ import InfoList from "#renderer/components/info-list";
 import { trpc } from "#renderer/trpc";
 
 export default function SystemInfoCard() {
-	const infoQuery = createQuery(() => ({
+	const infoQuery = useQuery(() => ({
 		queryKey: ["systemInfo"],
 		queryFn: () => trpc.systemInfo.query(),
 	}));
