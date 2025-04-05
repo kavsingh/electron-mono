@@ -1,11 +1,11 @@
 {
 	"$schema": "https://turbo.build/schema.json",
 	"tasks": {
-		"build:win:x64": {
-			"outputs": ["dist/**"],
-			"dependsOn": ["^build"]
+		"dev": {
+			"cache": false,
+			"persistent": true
 		},
-		"build:win:arm64": {
+		"build": {
 			"outputs": ["dist/**"],
 			"dependsOn": ["^build"]
 		},
@@ -17,29 +17,29 @@
 			"outputs": ["dist/**"],
 			"dependsOn": ["^build"]
 		},
-		"build": {
+		"build:win:x64": {
 			"outputs": ["dist/**"],
 			"dependsOn": ["^build"]
 		},
-		"dev": {
-			"cache": false,
-			"persistent": true
+		"build:win:arm64": {
+			"outputs": ["dist/**"],
+			"dependsOn": ["^build"]
 		},
 		"test": {
 			"cache": false,
-			"persistent": true
+			"dependsOn": ["^build"]
 		},
 		"test:ci": {
 			"cache": false,
-			"persistent": true
+			"dependsOn": ["^build"]
 		},
 		"test:e2e": {
 			"cache": false,
-			"persistent": true
+			"dependsOn": ["^build"]
 		},
 		"lint": {
 			"cache": false,
-			"persistent": true
+			"dependsOn": ["^build"]
 		}
 	}
 }
