@@ -17,9 +17,11 @@
 	},
 	"scripts": {
 		"dev": "turbo dev",
-		"build:win": "turbo build:win",
+		"build": "turbo build",
 		"build:mac": "turbo build:mac",
 		"build:linux": "turbo build:linux",
+		"build:win:x64": "turbo build:win:x64",
+		"build:win:arm64": "turbo build:win:arm64",
 		"test": "turbo test",
 		"test:ci": "turbo test:ci",
 		"test:e2e": "turbo test:e2e",
@@ -48,6 +50,7 @@
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"electron",
+			"electron-winstaller",
 			"esbuild"
 		]
 	}

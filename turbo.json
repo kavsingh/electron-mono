@@ -1,7 +1,11 @@
 {
 	"$schema": "https://turbo.build/schema.json",
 	"tasks": {
-		"build:win": {
+		"build:win:x64": {
+			"outputs": ["dist/**"],
+			"dependsOn": ["^build"]
+		},
+		"build:win:arm64": {
 			"outputs": ["dist/**"],
 			"dependsOn": ["^build"]
 		},

@@ -16,9 +16,10 @@
 		"test": "vitest run",
 		"test:ci": "vitest run --silent --coverage --reporter=dot",
 		"test:e2e": "cross-env E2E=true pnpm run build && playwright test",
-		"build:win": "pnpm run build && electron-builder --win --config electron-builder.config.ts",
 		"build:mac": "pnpm run build && electron-builder --mac --config electron-builder.config.ts",
 		"build:linux": "pnpm run build && electron-builder --linux --config electron-builder.config.ts",
+		"build:win:x64": "pnpm run build && electron-builder --win --x64 --config electron-builder.config.ts",
+		"build:win:arm64": "pnpm run build && electron-builder --win --arm64 --config electron-builder.config.ts",
 		"gen:electron-schema": "node ./scripts/gen-electron-zod.ts"
 	},
 	"keywords": [],
