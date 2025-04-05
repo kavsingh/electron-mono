@@ -193,8 +193,8 @@ importers:
         specifier: 3.1.1
         version: 3.1.1(vitest@3.1.1(@types/debug@4.1.12)(@types/node@22.14.0)(jiti@1.21.7)(jsdom@26.0.0)(yaml@2.7.1))
       electron:
-        specifier: 35.1.2
-        version: 35.1.2
+        specifier: 35.1.4
+        version: 35.1.4
       eslint-plugin-vitest:
         specifier: 0.5.4
         version: 0.5.4(eslint@9.24.0(jiti@1.21.7))(typescript@5.8.3)(vitest@3.1.1(@types/debug@4.1.12)(@types/node@22.14.0)(jiti@1.21.7)(jsdom@26.0.0)(yaml@2.7.1))
@@ -1689,11 +1689,6 @@ packages:
   electron-winstaller@5.4.0:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
-
-  electron@35.1.2:
-    resolution: {integrity: sha512-ipYSDZEV3+PpHfJ8/oWlpMCvxwutX6xLvBz2HRPgEzSFzgLmGO7YXTjEow4DhDtCpGE+b95NTGoJaRAVQi5n7A==}
-    engines: {node: '>= 12.20.55'}
-    hasBin: true
 
   electron@35.1.4:
     resolution: {integrity: sha512-8HjE2wqxY//T09Of8k1eTpK/NeTG2FkTyRD+fyKXmec4wZVscGgZcmWFC0HYN4ktyHAjtplpxdFXjtqRnvzBMg==}
@@ -5374,14 +5369,6 @@ snapshots:
       temp: 0.9.4
     optionalDependencies:
       '@electron/windows-sign': 1.2.1
-    transitivePeerDependencies:
-      - supports-color
-
-  electron@35.1.2:
-    dependencies:
-      '@electron/get': 2.0.3
-      '@types/node': 22.14.0
-      extract-zip: 2.0.1
     transitivePeerDependencies:
       - supports-color
 
