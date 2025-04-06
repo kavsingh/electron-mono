@@ -1,5 +1,5 @@
-import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE, exhaustive } from "./internal";
-import { defaultSerializer } from "./serializer";
+import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE, exhaustive } from "./internal.ts";
+import { defaultSerializer } from "./serializer.ts";
 
 import type {
 	AnySchema,
@@ -13,10 +13,10 @@ import type {
 	SendFromMain,
 	Definition,
 	OperationWithChannel,
-} from "./internal";
-import type { Logger } from "./logger";
-import type { IpcPreloadApi } from "./preload";
-import type { Serializer } from "./serializer";
+} from "./internal.ts";
+import type { Logger } from "./logger.ts";
+import type { IpcPreloadApi } from "./preload.ts";
+import type { Serializer } from "./serializer.ts";
 import type { IpcRendererEvent } from "electron";
 
 export function createElectronTypedIpcRenderer<
@@ -25,12 +25,13 @@ export function createElectronTypedIpcRenderer<
 	serializer?: Serializer | undefined;
 	logger?: Logger | undefined;
 }) {
-	const preloadApi =
-		ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE in globalThis.window
-			? (globalThis.window[
-					ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE
-				] as IpcPreloadApi)
-			: undefined;
+	let preloadApi: IpcPreloadApi | undefined = undefined;
+
+	if (ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE in globalThis.window) {
+		preloadApi = globalThis.window[
+			ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE
+		] as IpcPreloadApi;
+	}
 
 	if (!preloadApi) {
 		throw new Error(

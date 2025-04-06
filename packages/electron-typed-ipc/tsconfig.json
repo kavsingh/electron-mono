@@ -1,12 +1,5 @@
 {
-	"extends": "../../tsconfig.base.json",
-	"compilerOptions": {
-		"allowImportingTsExtensions": true,
-		"lib": ["es2023", "dom"],
-		"module": "esnext",
-		"moduleResolution": "bundler",
-		"target": "es2023"
-	},
-	"exclude": ["**/node_modules"],
-	"include": ["src", "__test__", "./*.ts", "./*.js", "./*.cjs"]
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": ["../../tsconfig.base.json", "@tsconfig/node23/tsconfig.json"],
+	"include": ["./*.ts", "./*.js", "./*.cjs"]
 }

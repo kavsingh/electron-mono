@@ -27,7 +27,10 @@ export default tsEslint.config(
 		settings: {
 			"import-x/resolver": {
 				"eslint-import-resolver-typescript": {
-					project: path.resolve(dirname, "./tsconfig.json"),
+					project: [
+						path.resolve(dirname, "./tsconfig.json"),
+						path.resolve(dirname, "./src/tsconfig.json"),
+					],
 				},
 			},
 		},

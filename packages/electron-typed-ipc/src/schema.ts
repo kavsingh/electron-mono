@@ -5,7 +5,7 @@ import type {
 	Query,
 	SendFromMain,
 	SendFromRenderer,
-} from "./internal";
+} from "./internal.ts";
 
 export function query<TResponse, TInput>(): Query<TResponse, TInput> {
 	return {

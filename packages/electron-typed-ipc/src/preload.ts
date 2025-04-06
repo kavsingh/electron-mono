@@ -1,8 +1,11 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE, scopeChannel } from "./internal";
+import {
+	ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE,
+	scopeChannel,
+} from "./internal.ts";
 
-import type { Logger } from "./logger";
+import type { Logger } from "./logger.ts";
 import type { IpcRendererEvent } from "electron";
 
 function createTypedIpcPreload(options?: { logger?: Logger | undefined }) {

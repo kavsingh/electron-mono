@@ -4,7 +4,7 @@ import {
 	query,
 	sendFromMain,
 	sendFromRenderer,
-} from "../src/schema";
+} from "../schema.ts";
 
 export const typedIpcApi = defineElectronTypedIpcSchema({
 	queryVoidArgVoidReturn: query<undefined, undefined>(),

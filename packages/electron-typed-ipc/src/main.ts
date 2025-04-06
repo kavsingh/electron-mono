@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from "electron";
 
-import { scopeChannel } from "./internal";
-import { defaultSerializer } from "./serializer";
+import { scopeChannel } from "./internal.ts";
+import { defaultSerializer } from "./serializer.ts";
 
 import type {
 	Definition,
@@ -13,9 +13,9 @@ import type {
 	Schema,
 	SendFromMain,
 	SendFromRenderer,
-} from "./internal";
-import type { Logger } from "./logger";
-import type { Serializer } from "./serializer";
+} from "./internal.ts";
+import type { Logger } from "./logger.ts";
+import type { Serializer } from "./serializer.ts";
 import type { IpcMainEvent, IpcMainInvokeEvent, WebContents } from "electron";
 
 export function createElectronTypedIpcMain<TSchema extends Schema<Definition>>(

@@ -1,10 +1,13 @@
 import { describe, it, expectTypeOf, expect } from "vitest";
 
-import { createElectronTypedIpcMain } from "../src/main";
+import { createElectronTypedIpcMain } from "../main.ts";
 
-import { typedIpcApi } from "./fixtures";
+import { typedIpcApi } from "./fixtures.ts";
 
-import type { SendFromMainPayload, SendFromRendererPayload } from "./fixtures";
+import type {
+	SendFromMainPayload,
+	SendFromRendererPayload,
+} from "./fixtures.ts";
 import type { BrowserWindow, IpcMainEvent, IpcMainInvokeEvent } from "electron";
 
 const { ipcHandleAndSend, ipcSubscriptions } =

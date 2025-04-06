@@ -1,6 +1,6 @@
 export const ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE = "__ELECTRON_TYPED_IPC__";
 
-import type { Logger } from "./logger";
+import type { Logger } from "./logger.ts";
 
 export function scopeChannel(channel: `${string}/${Operation["operation"]}`) {
 	return `__tipc__/${channel}` as const;

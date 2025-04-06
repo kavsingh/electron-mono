@@ -1,13 +1,13 @@
 import { describe, it, expectTypeOf, expect } from "vitest";
 
-import { createElectronTypedIpcRenderer } from "../src/renderer";
+import { createElectronTypedIpcRenderer } from "../renderer.ts";
 
 import type {
 	SendFromMainPayload,
 	SendFromRendererPayload,
 	TypedIpcApi,
-} from "./fixtures";
-import type { SendFromRendererOptions } from "../src/renderer";
+} from "./fixtures.ts";
+import type { SendFromRendererOptions } from "../renderer.ts";
 import type { IpcRendererEvent } from "electron";
 
 const tipcRenderer = createElectronTypedIpcRenderer<TypedIpcApi>();

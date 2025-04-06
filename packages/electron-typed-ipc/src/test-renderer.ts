@@ -1,7 +1,7 @@
-import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./internal";
+import { ELECTRON_TYPED_IPC_GLOBAL_NAMESPACE } from "./internal.ts";
 
-import type { IpcResult, Definition, Schema, Operation } from "./internal";
-import type { IpcPreloadApi } from "./preload";
+import type { IpcResult, Definition, Schema, Operation } from "./internal.ts";
+import type { IpcPreloadApi } from "./preload.ts";
 import type { IpcRenderer, IpcRendererEvent } from "electron";
 
 const fnMocks: Record<string, (...args: unknown[]) => unknown> = {};

@@ -4,7 +4,7 @@ import {
 	createMockIpcMain,
 	createMockIpcRenderer,
 	createMockBrowserWindow,
-} from "./__test__/mocks";
+} from "./src/__test__/mocks.ts";
 
 vi.mock("electron", () => ({
 	ipcMain: createMockIpcMain(),
