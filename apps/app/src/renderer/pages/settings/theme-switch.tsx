@@ -1,8 +1,4 @@
-import {
-	createMutation,
-	createQuery,
-	useQueryClient,
-} from "@tanstack/solid-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/solid-query";
 import { For, Match, Switch } from "solid-js";
 
 import { THEME_SOURCES } from "#common/lib/theme";
@@ -13,12 +9,12 @@ import type { ThemeSource } from "#common/lib/theme";
 
 export default function ThemeSwitch() {
 	const queryClient = useQueryClient();
-	const query = createQuery(() => ({
+	const query = useQuery(() => ({
 		queryKey: ["themeSource"],
 		queryFn: ipc.getThemeSource.query,
 	}));
 
-	const { mutate: setThemeSource } = createMutation(() => ({
+	const { mutate: setThemeSource } = useMutation(() => ({
 		mutationFn: ipc.setThemeSource.mutate,
 		onSuccess: () => {
 			void queryClient.invalidateQueries({ queryKey: ["themeSource"] });

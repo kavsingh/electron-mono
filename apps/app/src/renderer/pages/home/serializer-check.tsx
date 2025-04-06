@@ -1,4 +1,4 @@
-import { createMutation } from "@tanstack/solid-query";
+import { useMutation } from "@tanstack/solid-query";
 import { createMemo, Show } from "solid-js";
 
 import CustomError from "#common/errors/custom-error";
@@ -7,7 +7,7 @@ import Card from "#renderer/components/card";
 import { ipc } from "#renderer/ipc";
 
 export default function SerializerCheck() {
-	const mutation = createMutation(() => ({
+	const mutation = useMutation(() => ({
 		mutationFn: ipc.throwCustomError.mutate,
 	}));
 
