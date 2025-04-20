@@ -1,10 +1,10 @@
 import { defineProject, defineWorkspace, mergeConfig } from "vitest/config";
 
-import { nodeConfig, rendererConfig } from "./electron.vite.config.ts";
+import { mainConfig, rendererConfig } from "./electron.vite.config.ts";
 
 export default defineWorkspace([
 	mergeConfig(
-		nodeConfig,
+		await mainConfig({ mode: "test", command: "build" }),
 		defineProject({
 			test: {
 				name: "node",
@@ -15,7 +15,7 @@ export default defineWorkspace([
 		}),
 	),
 	mergeConfig(
-		await rendererConfig({ mode: "production", command: "build" }),
+		await rendererConfig({ mode: "test", command: "build" }),
 		defineProject({
 			resolve: { conditions: ["development", "browser"] },
 			test: {
