@@ -10,8 +10,8 @@ export async function getSystemInfo(): Promise<SystemInfo> {
 	};
 }
 
-export type SystemInfo = {
+export interface SystemInfo {
 	osName: string;
 	osVersion: string;
 	osArch: string;
-};
+}

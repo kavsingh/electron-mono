@@ -45,10 +45,10 @@ export default function useFileDrop() {
 	] as const;
 }
 
-export type DroppedFile = {
+export interface DroppedFile {
 	isDirectory: FileSystemEntry["isDirectory"] | undefined;
 	isFile: FileSystemEntry["isFile"] | undefined;
 	file: File;
-};
+}
 
 type DragEventHandler = JSX.EventHandlerUnion<HTMLElement, DragEvent>;

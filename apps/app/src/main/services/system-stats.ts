@@ -42,9 +42,9 @@ export function startSystemStatsUpdates(eventBus: AppEventBus) {
 	};
 }
 
-export type SystemStats = {
+export interface SystemStats {
 	memTotal: string;
 	memUsed: string;
 	memAvailable: string;
 	sampledAt: string;
-};
+}

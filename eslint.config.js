@@ -1,6 +1,6 @@
 import js from "@eslint/js";
 import filenames from "@kavsingh/eslint-plugin-filenames";
-import importX from "eslint-plugin-import-x";
+import { flatConfigs as importX } from "eslint-plugin-import-x";
 import prettierRecommended from "eslint-plugin-prettier/recommended";
 import globals from "globals";
 import * as tsEslint from "typescript-eslint";
@@ -23,8 +23,8 @@ export default tsEslint.config(
 	js.configs.recommended,
 	...tsEslint.configs.strictTypeChecked,
 	...tsEslint.configs.stylisticTypeChecked,
-	importX.flatConfigs.recommended,
-	importX.flatConfigs.typescript,
+	importX.recommended,
+	importX.typescript,
 	filenames.configs.kebab,
 
 	{
@@ -36,7 +36,7 @@ export default tsEslint.config(
 				{ selector: "TSEnumDeclaration", message: "Avoid using enums" },
 			],
 			"no-unreachable": "error",
-			"@typescript-eslint/consistent-type-definitions": ["warn", "type"],
+			"@typescript-eslint/consistent-type-definitions": ["warn", "interface"],
 			"@typescript-eslint/consistent-type-imports": "error",
 			"@typescript-eslint/member-ordering": ["warn"],
 			"@typescript-eslint/restrict-template-expressions": [

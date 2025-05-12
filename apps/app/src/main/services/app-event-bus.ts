@@ -2,9 +2,9 @@ import { EventEmitter } from "node:events";
 
 import type { SystemStats } from "./system-stats";
 
-type AppEventMap = {
+type AppEventMap = Readonly<{
 	systemStats: [SystemStats];
-};
+}>;
 
 export function createAppEventBus() {
 	return new EventEmitter<AppEventMap>();

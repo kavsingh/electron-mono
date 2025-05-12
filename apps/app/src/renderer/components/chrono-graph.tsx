@@ -73,7 +73,9 @@ export default function ChronoGraph(props: {
 	);
 }
 
-export type Sample = { value: bigint };
+export interface Sample {
+	value: bigint;
+}
 
 function drawGraph(canvas: HTMLCanvasElement, normalized: number[]) {
 	const ctx = canvas.getContext("2d");

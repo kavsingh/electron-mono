@@ -13,6 +13,14 @@ function fromDirname(/** @type {Parameters<typeof path.resolve>} */ ...args) {
 
 const restrictFromBrowser = {
 	paths: [
+		{
+			name: "tailwind-merge",
+			message: "please import helpers from #renderer/lib/style",
+		},
+		{
+			name: "tailwind-variants",
+			message: "please import helpers from #renderer/lib/style",
+		},
 		{ name: "electron", allowTypeImports: true },
 		{ name: "systeminformation", allowTypeImports: true },
 		{ name: "@trpc/server", allowTypeImports: true },
@@ -98,7 +106,7 @@ export default tsEslint.config(
 
 	// node processes should not import browser modules
 	{
-		files: ["*.?([mc])js?(x)"],
+		files: ["*.?(m|c)[tj]s?(x)"],
 		rules: {
 			"@typescript-eslint/no-restricted-imports": ["error", restrictFromNode],
 		},
@@ -106,7 +114,7 @@ export default tsEslint.config(
 
 	// common should not import modules exclusive to either node or browser
 	{
-		files: ["src/common/**/*.?([mc])js?(x)"],
+		files: ["src/common/**/*.?(m|c)[tj]s?(x)"],
 		rules: {
 			"@typescript-eslint/no-restricted-imports": [
 				"error",
@@ -119,14 +127,14 @@ export default tsEslint.config(
 	},
 
 	{
-		files: ["src/main/**/*.?([mc])js?(x)"],
+		files: ["src/main/**/*.?(m|c)[tj]s?(x)"],
 		rules: {
 			"@typescript-eslint/no-restricted-imports": ["error", restrictFromNode],
 		},
 	},
 
 	{
-		files: ["src/renderer/**/*.?([mc])js?(x)"],
+		files: ["src/renderer/**/*.?(m|c)[tj]s?(x)"],
 		rules: {
 			"@typescript-eslint/no-restricted-imports": [
 				"error",
@@ -136,7 +144,7 @@ export default tsEslint.config(
 	},
 
 	{
-		files: ["src/preload/**/*.?([mc])js?(x)"],
+		files: ["src/preload/**/*.?(m|c)[tj]s?(x)"],
 		rules: {
 			"@typescript-eslint/no-restricted-imports": [
 				"error",
