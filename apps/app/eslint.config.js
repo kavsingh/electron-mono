@@ -4,7 +4,8 @@ import tailwindcss from "eslint-plugin-better-tailwindcss";
 import { getDefaultCallees } from "eslint-plugin-better-tailwindcss/api/defaults";
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
-import solid from "eslint-plugin-solid";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
 import testingLibrary from "eslint-plugin-testing-library";
 import globals from "globals";
 
@@ -59,6 +60,7 @@ export default defineConfig(
 			globals: { ...globals.browser },
 		},
 		settings: {
+			"react": { version: "detect" },
 			"better-tailwindcss": {
 				entryPoint: "src/renderer/index.css",
 				callees: [...getDefaultCallees(), "tj", "tm"],
@@ -66,10 +68,16 @@ export default defineConfig(
 		},
 		plugins: { "better-tailwindcss": tailwindcss },
 		extends: [
-			// @ts-expect-error upstream types
-			solid.configs["flat/recommended"],
-		],
+			react.configs.flat["recommended"],
+			react.configs.flat["jsx-runtime"],
+			reactHooks.configs.flat["recommended-latest"],
+		].filter((plugin) => !!plugin),
 		rules: {
+			"react/jsx-filename-extension": [
+				"error",
+				{ extensions: [".tsx", ".jsx"] },
+			],
+			"react/prop-types": "off",
 			...tailwindcss.configs["recommended"]?.rules,
 			"better-tailwindcss/enforce-consistent-line-wrapping": "off",
 			"better-tailwindcss/enforce-shorthand-classes": "warn",
@@ -105,7 +113,7 @@ export default defineConfig(
 			globals: { ...globals.node, ...globals.browser },
 		},
 		extends: [
-			testingLibrary.configs["flat/dom"],
+			testingLibrary.configs["flat/react"],
 			jestDom.configs["flat/recommended"],
 		],
 	},
