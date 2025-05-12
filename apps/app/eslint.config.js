@@ -1,10 +1,6 @@
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
 import solid from "eslint-plugin-solid";
-import tailwindcss from "eslint-plugin-tailwindcss";
 import testingLibrary from "eslint-plugin-testing-library";
 import vitest from "eslint-plugin-vitest";
 import globals from "globals";
@@ -14,8 +10,6 @@ import baseConfig from "../../eslint.config.js";
 import { testFilePatterns } from "../../eslint.helpers.js";
 
 import importsConfig from "./eslint.imports.js";
-
-const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default tsEslint.config(
 	{
@@ -62,17 +56,25 @@ export default tsEslint.config(
 		languageOptions: {
 			globals: { ...globals.browser },
 		},
-		settings: {
-			tailwindcss: {
-				config: path.join(dirname, "tailwind.config.ts"),
-				callees: ["tv", "classList"],
-			},
+		extends: [solid.configs["flat/recommended"]],
+		rules: {
+			"no-restricted-imports": "off",
+			"@typescript-eslint/no-restricted-imports": [
+				"error",
+				{
+					paths: [
+						{
+							name: "tailwind-merge",
+							message: "please import helpers from #lib/style",
+						},
+						{
+							name: "tailwind-variants",
+							message: "please import helpers from #lib/style",
+						},
+					],
+				},
+			],
 		},
-
-		extends: [
-			...tailwindcss.configs["flat/recommended"],
-			solid.configs["flat/recommended"],
-		],
 	},
 
 	{

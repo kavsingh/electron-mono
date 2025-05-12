@@ -43,7 +43,7 @@ export default function ThemeSwitch() {
 											class="peer size-4 cursor-pointer"
 										/>
 										<label
-											class="cursor-pointer text-muted-foreground transition-colors peer-checked:text-foreground"
+											class="text-muted-foreground peer-checked:text-foreground cursor-pointer transition-colors"
 											for={option}
 										>
 											<LabelText themeSource={option} />

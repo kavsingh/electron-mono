@@ -1,58 +1,43 @@
 import { splitProps } from "solid-js";
-import { tv } from "tailwind-variants";
+
+import { tm } from "#renderer/lib/style";
 
 import type { ComponentProps } from "solid-js";
-import type { VariantProps } from "tailwind-variants";
 
-export function InfoListRoot(
-	props: Omit<ComponentProps<"ul">, "classList"> &
-		VariantProps<typeof infoListRootVariants>,
-) {
+export function InfoListRoot(props: Omit<ComponentProps<"ul">, "classList">) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
-		<ul
-			{...passProps}
-			class={infoListRootVariants({ class: localProps.class })}
-		/>
+		<ul {...passProps} class={tm("m-0 list-none p-0", localProps.class)} />
 	);
 }
 
-const infoListRootVariants = tv({ base: "m-0 list-none p-0" });
-
-export function InfoListEntry(
-	props: Omit<ComponentProps<"li">, "classList"> &
-		VariantProps<typeof infoListEntryVariants>,
-) {
+export function InfoListEntry(props: Omit<ComponentProps<"li">, "classList">) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
 		<li
 			{...passProps}
-			class={infoListEntryVariants({ class: localProps.class })}
+			class={tm(
+				"border-b-border flex gap-2 border-b py-2 last:border-b-0",
+				localProps.class,
+			)}
 		/>
 	);
 }
 
-const infoListEntryVariants = tv({
-	base: "flex gap-2 border-b border-b-border py-2 last:border-b-0",
-});
-
 export function InfoListLabel(
-	props: Omit<ComponentProps<"span">, "classList"> &
-		VariantProps<typeof infoListLabelVariants>,
+	props: Omit<ComponentProps<"span">, "classList">,
 ) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
 		<span
 			{...passProps}
-			class={infoListLabelVariants({ class: localProps.class })}
+			class={tm("text-muted-foreground", localProps.class)}
 		/>
 	);
 }
-
-const infoListLabelVariants = tv({ base: "text-muted-foreground" });
 
 export function InfoListValue(
 	props: Omit<ComponentProps<"span">, "classList">,

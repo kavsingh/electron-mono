@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import tailwindcssPlugin from "@tailwindcss/vite";
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import solidPlugin from "vite-plugin-solid";
 import tsconfigPathsPlugin from "vite-tsconfig-paths";
@@ -60,7 +61,7 @@ export const rendererConfig: UserConfigFn = ({ mode }) => {
 		define,
 		build: build(mode),
 		resolve: { conditions: ["browser", mode] },
-		plugins: [tsconfigPathsPlugin(), solidPlugin()],
+		plugins: [tsconfigPathsPlugin(), solidPlugin(), tailwindcssPlugin()],
 	};
 };
 

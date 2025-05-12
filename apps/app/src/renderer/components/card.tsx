@@ -1,122 +1,84 @@
 // https://ui.shadcn.com/docs/components/card
 
 import { splitProps } from "solid-js";
-import { tv } from "tailwind-variants";
+
+import { tm } from "#renderer/lib/style";
 
 import type { ComponentProps } from "solid-js";
-import type { VariantProps } from "tailwind-variants";
 
-export function CardRoot(
-	props: Omit<ComponentProps<"div">, "classList"> &
-		VariantProps<typeof cardRootVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
-	return (
-		<div {...passProps} class={cardRootVariants({ class: localProps.class })} />
-	);
-}
-
-const cardRootVariants = tv({
-	base: "rounded-xl border border-border bg-card text-card-foreground shadow",
-});
-
-//
-
-export function CardHeader(
-	props: Omit<ComponentProps<"div">, "classList"> &
-		VariantProps<typeof cardHeaderVariants>,
-) {
+export function CardRoot(props: Omit<ComponentProps<"div">, "classList">) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
 		<div
 			{...passProps}
-			class={cardHeaderVariants({ class: localProps.class })}
+			class={tm(
+				"border-border bg-card text-card-foreground rounded-xl border shadow",
+				localProps.class,
+			)}
 		/>
 	);
 }
 
-const cardHeaderVariants = tv({
-	base: "flex flex-col space-y-1.5 p-6",
-});
-
 //
 
-export function CardTitle(
-	props: Omit<ComponentProps<"h3">, "classList"> &
-		VariantProps<typeof cardTitleVariants>,
-) {
+export function CardHeader(props: Omit<ComponentProps<"div">, "classList">) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
-		<h3 {...passProps} class={cardTitleVariants({ class: localProps.class })} />
+		<div
+			{...passProps}
+			class={tm("flex flex-col space-y-1.5 p-6", localProps.class)}
+		/>
 	);
 }
 
-const cardTitleVariants = tv({
-	base: "font-semibold leading-none tracking-tight",
-});
+//
+
+export function CardTitle(props: Omit<ComponentProps<"h3">, "classList">) {
+	const [localProps, passProps] = splitProps(props, ["class"]);
+
+	return (
+		<h3
+			{...passProps}
+			class={tm("leading-none font-semibold tracking-tight", localProps.class)}
+		/>
+	);
+}
 
 //
 
-export function CardDescription(
-	props: Omit<ComponentProps<"p">, "classList"> &
-		VariantProps<typeof cardDescriptionVariants>,
-) {
+export function CardDescription(props: Omit<ComponentProps<"p">, "classList">) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
 		<p
 			{...passProps}
-			class={cardDescriptionVariants({ class: localProps.class })}
+			class={tm("text-muted-foreground text-sm", localProps.class)}
 		/>
 	);
 }
 
-const cardDescriptionVariants = tv({
-	base: "text-sm text-muted-foreground",
-});
+//
+
+export function CardContent(props: Omit<ComponentProps<"div">, "classList">) {
+	const [localProps, passProps] = splitProps(props, ["class"]);
+
+	return <div {...passProps} class={tm("p-6 pt-0", localProps.class)} />;
+}
 
 //
 
-export function CardContent(
-	props: Omit<ComponentProps<"div">, "classList"> &
-		VariantProps<typeof cardContentVariants>,
-) {
+export function CardFooter(props: Omit<ComponentProps<"div">, "classList">) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
 		<div
 			{...passProps}
-			class={cardContentVariants({ class: localProps.class })}
+			class={tm("flex items-center p-6 pt-0", localProps.class)}
 		/>
 	);
 }
-
-const cardContentVariants = tv({
-	base: "p-6 pt-0",
-});
-
-//
-
-export function CardFooter(
-	props: Omit<ComponentProps<"div">, "classList"> &
-		VariantProps<typeof cardFooterVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
-	return (
-		<div
-			{...passProps}
-			class={cardFooterVariants({ class: localProps.class })}
-		/>
-	);
-}
-
-const cardFooterVariants = tv({
-	base: "flex items-center p-6 pt-0",
-});
 
 //
 

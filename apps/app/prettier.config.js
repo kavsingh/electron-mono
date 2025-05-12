@@ -1,3 +1,8 @@
 import baseConfig from "../../prettier.config.js";
 
-export default baseConfig;
+/** @type {import("prettier").Config} */
+export default {
+	...baseConfig,
+	plugins: ["prettier-plugin-tailwindcss"],
+	tailwindFunctions: ["tj", "tm", "tv"],
+};
