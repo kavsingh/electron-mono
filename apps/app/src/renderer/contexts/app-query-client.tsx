@@ -1,11 +1,22 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SuperJSON } from "superjson";
+import { ipcLink } from "trpc-electron/renderer";
 
-import type { ParentProps } from "solid-js";
+import { trpc } from "#renderer/trpc";
 
-export function AppQueryClientProvider(props: ParentProps) {
+import type { PropsWithChildren } from "react";
+
+export function AppQueryClientProvider(props: PropsWithChildren) {
+	const queryClient = new QueryClient();
+	const trpcClient = trpc.createClient({
+		links: [ipcLink({ transformer: SuperJSON })],
+	});
+
 	return (
-		<QueryClientProvider client={new QueryClient()}>
-			{props.children}
-		</QueryClientProvider>
+		<trpc.Provider client={trpcClient} queryClient={queryClient}>
+			<QueryClientProvider client={queryClient}>
+				{props.children}
+			</QueryClientProvider>
+		</trpc.Provider>
 	);
 }

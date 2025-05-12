@@ -24,7 +24,6 @@
 
 	"files.associations": { "*.css": "tailwindcss" },
 	"tailwindCSS.validate": true,
-	"tailwindCSS.classAttributes": ["class", "classList"],
 	"tailwindCSS.experimental.classRegex": [
 		["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
 	],
