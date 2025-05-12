@@ -2,8 +2,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import tailwindcssPlugin from "@tailwindcss/vite";
+import reactPlugin from "@vitejs/plugin-react";
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
-import solidPlugin from "vite-plugin-solid";
 import tsconfigPathsPlugin from "vite-tsconfig-paths";
 
 import type { UserConfig, UserConfigFn } from "vite";
@@ -61,7 +61,13 @@ export const rendererConfig: UserConfigFn = ({ mode }) => {
 		define,
 		build: build(mode),
 		resolve: { conditions: ["browser", mode] },
-		plugins: [tsconfigPathsPlugin(), solidPlugin(), tailwindcssPlugin()],
+		plugins: [
+			tsconfigPathsPlugin(),
+			reactPlugin({
+				babel: { plugins: [["babel-plugin-react-compiler", {}]] },
+			}),
+			tailwindcssPlugin(),
+		],
 	};
 };
 
