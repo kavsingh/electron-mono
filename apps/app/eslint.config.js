@@ -1,6 +1,7 @@
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
-import solid from "eslint-plugin-solid";
+import react from "eslint-plugin-react";
+import { configs as reactHooks } from "eslint-plugin-react-hooks";
 import testingLibrary from "eslint-plugin-testing-library";
 import vitest from "eslint-plugin-vitest";
 import globals from "globals";
@@ -56,7 +57,23 @@ export default tsEslint.config(
 		languageOptions: {
 			globals: { ...globals.browser },
 		},
-		extends: [solid.configs["flat/recommended"]],
+		settings: {
+			react: { version: "detect" },
+		},
+		extends: [
+			reactHooks.recommended,
+			// @ts-expect-error upstream types
+			react.configs.flat.recommended,
+			// @ts-expect-error upstream types
+			react.configs.flat["jsx-runtime"],
+		],
+		rules: {
+			"react/jsx-filename-extension": [
+				"error",
+				{ extensions: [".tsx", ".jsx"] },
+			],
+			"react/prop-types": "off",
+		},
 	},
 
 	{
@@ -83,7 +100,7 @@ export default tsEslint.config(
 			globals: { ...globals.node, ...globals.browser },
 		},
 		extends: [
-			testingLibrary.configs["flat/dom"],
+			testingLibrary.configs["flat/react"],
 			jestDom.configs["flat/recommended"],
 		],
 	},

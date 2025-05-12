@@ -5,7 +5,10 @@ import type { SystemStats } from "#main/services/system-stats";
 import type { Mock } from "vitest";
 
 export function publishSystemStatsEvent(payload: SystemStats) {
-	publishTrpcSubscriberEvent(trpc.systemStatsEvent.subscribe as Mock, payload);
+	publishTrpcSubscriberEvent(
+		trpc.systemStatsEvent.useSubscription as Mock,
+		payload,
+	);
 }
 
 function publishTrpcSubscriberEvent(
