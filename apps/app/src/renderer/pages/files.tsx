@@ -28,7 +28,7 @@ export default function Files() {
 						<ul class="flex flex-col gap-1">
 							<For each={selectedFiles()}>
 								{(file) => (
-									<li class="border-border text-muted-foreground flex gap-2 border-b pb-2 text-sm last:border-b-0 last:pb-0">
+									<li class="flex gap-2 border-b border-border pb-2 text-sm text-muted-foreground last:border-b-0 last:pb-0">
 										{file}
 									</li>
 								)}
@@ -74,7 +74,7 @@ function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
 }
 
 const dragFileSelectVariants = tv({
-	base: "border-border text-muted-foreground my-3 grid h-[200px] place-items-center rounded-md border transition-colors",
+	base: "my-3 grid h-[200px] place-items-center rounded-md border border-border text-muted-foreground transition-colors",
 	variants: {
 		isActive: {
 			true: "border-foreground bg-accent/20 text-foreground",

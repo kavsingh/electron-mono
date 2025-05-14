@@ -19,7 +19,7 @@ export function InfoListEntry(props: Omit<ComponentProps<"li">, "classList">) {
 		<li
 			{...passProps}
 			class={tm(
-				"border-b-border flex gap-2 border-b py-2 last:border-b-0",
+				"flex gap-2 border-b border-b-border py-2 last:border-b-0",
 				localProps.class,
 			)}
 		/>

@@ -62,7 +62,7 @@ export default function ChronoGraph(props: {
 	return (
 		<canvas
 			class={tm(
-				"border-muted/60 bg-muted/30 text-accent-foreground size-full",
+				"size-full border-muted/60 bg-muted/30 text-accent-foreground",
 				props.class,
 			)}
 			ref={(el) => {
