@@ -22,6 +22,8 @@ describe("app-protocol", () => {
 
 	describe("appProtocolHandler", () => {
 		it("should handle valid renderer bundle root path request", async () => {
+			expect.hasAssertions();
+
 			const request = new Request(APP_RENDERER_URL);
 
 			await expect(appProtocolHandler(request)).resolves.toStrictEqual(
@@ -34,6 +36,8 @@ describe("app-protocol", () => {
 		});
 
 		it("should handle valid renderer bundle file path request", async () => {
+			expect.hasAssertions();
+
 			const request = new Request(`${APP_RENDERER_URL}some-file.js`);
 
 			await expect(appProtocolHandler(request)).resolves.toStrictEqual(
@@ -46,18 +50,22 @@ describe("app-protocol", () => {
 		});
 
 		it("should return 400 for invalid host", async () => {
+			expect.hasAssertions();
+
 			const request = new Request(
 				`${APP_PROTOCOL_SCHEME}://invalid-host/some-path/`,
 			);
 			const response = await appProtocolHandler(request);
 
 			expect(response.status).toBe(400);
-			expect(await response.text()).toBe("invalid host");
+			await expect(response.text()).resolves.toBe("invalid host");
 			expect(response.headers.get("content-type")).toBe("text/html");
 			expect(net.fetch).not.toHaveBeenCalled();
 		});
 
 		it("should return 500 for fetch errors", async () => {
+			expect.hasAssertions();
+
 			vi.mocked(net.fetch).mockRejectedValueOnce(new Error("Fetch failed"));
 
 			const request = new Request(`${APP_RENDERER_URL}file.js`);
@@ -71,6 +79,8 @@ describe("app-protocol", () => {
 		});
 
 		it("should handle URLs with extra slashes", async () => {
+			expect.hasAssertions();
+
 			const request = new Request(
 				`${APP_PROTOCOL_SCHEME}:///${APP_RENDERER_HOST}///file.js///`,
 			);
@@ -80,6 +90,8 @@ describe("app-protocol", () => {
 		});
 
 		it("should handle nested file paths", async () => {
+			expect.hasAssertions();
+
 			const request = new Request(`${APP_RENDERER_URL}assets/styles/main.css`);
 
 			await expect(appProtocolHandler(request)).resolves.toStrictEqual(
@@ -93,11 +105,13 @@ describe("app-protocol", () => {
 
 		describe("unsafe paths", () => {
 			it("should return 400 for absolute path attempts", async () => {
+				expect.hasAssertions();
+
 				const request = new Request(`${APP_RENDERER_URL}/etc/passwd`);
 				const response = await appProtocolHandler(request);
 
 				expect(response.status).toBe(400);
-				expect(await response.text()).toBe("unsafe path");
+				await expect(response.text()).resolves.toBe("unsafe path");
 				expect(response.headers.get("content-type")).toBe("text/html");
 				expect(net.fetch).not.toHaveBeenCalled();
 			});
@@ -106,6 +120,8 @@ describe("app-protocol", () => {
 			// url.pathname will just be "/foo", with relative segments stripped out
 			// leaving checks in place for safety
 			it("should return 400 when accessing outside renderer dir", async () => {
+				expect.hasAssertions();
+
 				// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 				class MockUrl {
 					constructor(input: string) {

@@ -67,7 +67,7 @@ export default tsEslint.config(
 	},
 
 	{
-		files: [testFilePatterns({ root: "src" })],
+		files: testFilePatterns({ root: "src" }),
 		languageOptions: {
 			globals: { ...globals.node },
 		},
