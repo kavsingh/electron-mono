@@ -19,12 +19,16 @@ export function createMainWindow() {
 		show: false,
 	});
 
+	function loadRenderer(url: string) {
+		return mainWindow.loadURL(url, { userAgent: `App/${app.getVersion()}` });
+	}
+
 	// HMR for renderer based on electron-vite cli.
 	// Load the remote URL for development or the local html file for production.
 	if (app.isPackaged || E2E) {
-		void mainWindow.loadURL(APP_RENDERER_URL);
+		void loadRenderer(APP_RENDERER_URL);
 	} else if (process.env["ELECTRON_RENDERER_URL"]) {
-		void mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
+		void loadRenderer(process.env["ELECTRON_RENDERER_URL"]);
 	} else {
 		log.error("No entry point available", {
 			isPackaged: app.isPackaged,
