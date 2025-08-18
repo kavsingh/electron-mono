@@ -71,10 +71,12 @@ export default tsEslint.config(
 		languageOptions: {
 			globals: { ...globals.node },
 		},
+		settings: {
+			vitest: { typecheck: true },
+		},
 		extends: [vitest.configs.all],
 		rules: {
 			"vitest/no-hooks": "off",
-			"vitest/prefer-describe-function-title": "off",
 			"vitest/require-mock-type-parameters": "off",
 		},
 	},

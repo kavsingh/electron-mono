@@ -20,7 +20,7 @@ describe("app-protocol", () => {
 		vi.clearAllMocks();
 	});
 
-	describe("appProtocolHandler", () => {
+	describe(appProtocolHandler, () => {
 		it("should handle valid renderer bundle root path request", async () => {
 			expect.hasAssertions();
 

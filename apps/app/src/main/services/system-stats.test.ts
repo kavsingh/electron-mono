@@ -6,7 +6,7 @@ import { getSystemStats } from "./system-stats";
 vi.mock("systeminformation");
 
 describe("system-stats", () => {
-	describe("getSystemStats", () => {
+	describe(getSystemStats, () => {
 		it("should provide system stats", async () => {
 			expect.assertions(1);
 
