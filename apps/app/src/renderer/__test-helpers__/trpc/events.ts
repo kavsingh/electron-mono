@@ -1,3 +1,5 @@
+import { vi } from "vitest";
+
 import { trpc } from "#renderer/trpc";
 
 // eslint-disable-next-line import-x/no-restricted-paths
@@ -5,7 +7,10 @@ import type { SystemStats } from "#main/services/system-stats";
 import type { Mock } from "vitest";
 
 export function publishSystemStatsEvent(payload: SystemStats) {
-	publishTrpcSubscriberEvent(trpc.systemStatsEvent.subscribe as Mock, payload);
+	publishTrpcSubscriberEvent(
+		vi.mocked(trpc.systemStatsEvent.subscribe),
+		payload,
+	);
 }
 
 function publishTrpcSubscriberEvent(

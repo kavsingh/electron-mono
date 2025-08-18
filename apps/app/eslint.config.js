@@ -1,8 +1,8 @@
+import vitest from "@vitest/eslint-plugin";
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
 import solid from "eslint-plugin-solid";
 import testingLibrary from "eslint-plugin-testing-library";
-import vitest from "eslint-plugin-vitest";
 import globals from "globals";
 import * as tsEslint from "typescript-eslint";
 
@@ -74,6 +74,8 @@ export default tsEslint.config(
 		extends: [vitest.configs.all],
 		rules: {
 			"vitest/no-hooks": "off",
+			"vitest/prefer-describe-function-title": "off",
+			"vitest/require-mock-type-parameters": "off",
 		},
 	},
 

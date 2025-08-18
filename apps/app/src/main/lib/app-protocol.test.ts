@@ -84,6 +84,7 @@ describe("app-protocol", () => {
 			const request = new Request(
 				`${APP_PROTOCOL_SCHEME}:///${APP_RENDERER_HOST}///file.js///`,
 			);
+
 			await expect(appProtocolHandler(request)).resolves.toStrictEqual(
 				fileContentsResponse,
 			);
