@@ -1,4 +1,6 @@
 import vitest from "@vitest/eslint-plugin";
+import tailwindcss from "eslint-plugin-better-tailwindcss";
+import { getDefaultCallees } from "eslint-plugin-better-tailwindcss/api/defaults";
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
 import solid from "eslint-plugin-solid";
@@ -56,7 +58,20 @@ export default tsEslint.config(
 		languageOptions: {
 			globals: { ...globals.browser },
 		},
+		settings: {
+			"better-tailwindcss": {
+				entryPoint: "src/renderer/index.css",
+				callees: [...getDefaultCallees(), "tj", "tm"],
+			},
+		},
+		plugins: { "better-tailwindcss": tailwindcss },
 		extends: [solid.configs["flat/recommended"]],
+		rules: {
+			...tailwindcss.configs["recommended"]?.rules,
+			"better-tailwindcss/enforce-consistent-line-wrapping": "off",
+			"better-tailwindcss/enforce-shorthand-classes": "warn",
+			"better-tailwindcss/no-conflicting-classes": "error",
+		},
 	},
 
 	{
