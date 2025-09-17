@@ -32,7 +32,10 @@ export default async function genElectronZod(outFile: string) {
 }
 
 function getElectronTypesPath() {
-	return path.resolve(dirname, "../node_modules/electron/electron.d.ts");
+	return path.join(
+		path.dirname(fileURLToPath(import.meta.resolve("electron"))),
+		"electron.d.ts",
+	);
 }
 
 function nameFilter(name: string) {
