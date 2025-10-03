@@ -14,9 +14,8 @@ jobs:
         os: [macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - id: setup
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/setup
 
-      - run: pnpm test:e2e --cache-dir=${{ steps.setup.outputs.turbo_cache_dir }}
+      - run: pnpm test:e2e

@@ -6,33 +6,15 @@ inputs:
     description: pnpm install flags
     default: ""
 
-outputs:
-  turbo_cache_dir:
-    description: Turbo cache directory
-    value: ${{ steps.turbo-cache-dir.outputs.result }}
-
 runs:
   using: composite
   steps:
-    - id: turbo-cache-dir
-      run: echo "result=.turbo" >> $GITHUB_OUTPUT
-      shell: bash
-
-    # https://turbo.build/repo/docs/ci/github-actions
-    - uses: actions/cache@v4
-      with:
-        path: ${{ steps.turbo-cache-dir.outputs.result }}
-        key: ${{ runner.os }}-turbo-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-turbo-
-
     - run: corepack enable pnpm
       shell: bash
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v5
       with:
         node-version-file: .node-version
-        cache: pnpm
 
     - run: pnpm install --frozen-lockfile ${{ inputs.install_flags }}
       shell: bash

@@ -1,0 +1,50 @@
+{
+	"$schema": "./node_modules/nx/schemas/nx-schema.json",
+	"tui": { "enabled": false },
+	"targetDefaults": {
+		"dev": {
+			"cache": false
+		},
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["{projectRoot}/dist/**"],
+			"cache": true
+		},
+		"build:mac": {
+			"dependsOn": ["^build"],
+			"outputs": ["{projectRoot}/dist/**"],
+			"cache": true
+		},
+		"build:linux": {
+			"dependsOn": ["^build"],
+			"outputs": ["{projectRoot}/dist/**"],
+			"cache": true
+		},
+		"build:win:x64": {
+			"dependsOn": ["^build"],
+			"outputs": ["{projectRoot}/dist/**"],
+			"cache": true
+		},
+		"build:win:arm64": {
+			"dependsOn": ["^build"],
+			"outputs": ["{projectRoot}/dist/**"],
+			"cache": true
+		},
+		"test": {
+			"dependsOn": ["^build"],
+			"cache": false
+		},
+		"test:ci": {
+			"dependsOn": ["^build"],
+			"cache": false
+		},
+		"test:e2e": {
+			"dependsOn": ["^build"],
+			"cache": false
+		},
+		"lint": {
+			"dependsOn": ["^build"],
+			"cache": false
+		}
+	}
+}

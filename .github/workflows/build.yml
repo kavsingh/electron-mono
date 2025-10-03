@@ -22,10 +22,9 @@ jobs:
         os: [macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: ./.github/actions/setup
-        id: setup
 
       - uses: ./.github/actions/get-app-properties
         id: get-app-properties
@@ -33,7 +32,7 @@ jobs:
           app_path: apps/app
 
       - name: Build
-        run: pnpm build:${{ matrix.os == 'windows-latest' && 'win' || 'mac' }} --cache-dir=${{ steps.setup.outputs.turbo_cache_dir }}
+        run: pnpm build:${{ matrix.os == 'windows-latest' && 'win' || 'mac' }}
 
       - name: Upload artifact
         if: ${{ success() }}

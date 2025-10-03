@@ -7,4 +7,5 @@ onlyBuiltDependencies:
   - electron
   - electron-winstaller
   - esbuild
+  - nx
   - unrs-resolver

@@ -10,7 +10,7 @@ import { testFileSuffixes, testFilePatterns } from "./eslint.helpers.js";
 
 export default defineConfig(
 	{
-		ignores: [".vscode/*", ".turbo/*", ".temp/*"],
+		ignores: [".vscode/*", ".nx/*", ".temp/*"],
 	},
 
 	{
@@ -135,7 +135,7 @@ export default defineConfig(
 
 	{
 		rules: {
-			"curly": ["warn", "multi-line", "consistent"],
+			curly: ["warn", "multi-line", "consistent"],
 		},
 	},
 );
