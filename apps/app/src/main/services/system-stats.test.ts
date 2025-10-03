@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 
 import { getSystemStats } from "./system-stats";
 
-vi.mock("systeminformation");
+vi.mock(import("systeminformation"));
 
 describe("system-stats", () => {
 	describe(getSystemStats, () => {

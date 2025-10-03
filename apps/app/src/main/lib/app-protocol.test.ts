@@ -11,7 +11,8 @@ import {
 
 const fileContentsResponse = new Response("file contents", { status: 200 });
 
-vi.mock("electron", () => ({
+// @ts-expect-error sparse mock
+vi.mock(import("electron"), () => ({
 	net: { fetch: vi.fn(() => Promise.resolve(fileContentsResponse)) },
 }));
 
@@ -30,7 +31,7 @@ describe("app-protocol", () => {
 				fileContentsResponse,
 			);
 
-			expect(net.fetch).toHaveBeenCalledWith(
+			expect(net.fetch).toHaveBeenCalledExactlyOnceWith(
 				expect.stringMatching(/index\.html$/),
 			);
 		});
@@ -44,7 +45,7 @@ describe("app-protocol", () => {
 				fileContentsResponse,
 			);
 
-			expect(net.fetch).toHaveBeenCalledWith(
+			expect(net.fetch).toHaveBeenCalledExactlyOnceWith(
 				expect.stringMatching(/some-file\.js$/),
 			);
 		});
@@ -99,7 +100,7 @@ describe("app-protocol", () => {
 				fileContentsResponse,
 			);
 
-			expect(net.fetch).toHaveBeenCalledWith(
+			expect(net.fetch).toHaveBeenCalledExactlyOnceWith(
 				expect.stringMatching(/assets\/styles\/main\.css$/),
 			);
 		});
