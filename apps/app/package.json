@@ -1,5 +1,6 @@
 {
 	"name": "app",
+	"productName": "App",
 	"version": "1.0.0-dev.0",
 	"description": "an electron app",
 	"type": "module",
