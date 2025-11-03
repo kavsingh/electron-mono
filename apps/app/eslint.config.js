@@ -64,7 +64,10 @@ export default defineConfig(
 				callees: [...getDefaultCallees(), "tj", "tm"],
 			},
 		},
-		plugins: { "better-tailwindcss": tailwindcss },
+		plugins: {
+			// @ts-expect-error upstream types (exact optional)
+			"better-tailwindcss": tailwindcss,
+		},
 		extends: [
 			// @ts-expect-error upstream types
 			solid.configs["flat/recommended"],
