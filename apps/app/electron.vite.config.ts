@@ -3,10 +3,10 @@ import path from "node:path";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
+import react from "@vitejs/plugin-react";
 import dotenv from "dotenv";
 import { defineConfig } from "electron-vite";
 import bundleObfuscator from "vite-plugin-bundle-obfuscator";
-import solid from "vite-plugin-solid";
 import { ConfigEnv, Plugin } from "vitest/config";
 
 import tsrConfig from "./tsr.config.json" with { type: "json" };
@@ -84,7 +84,9 @@ export default defineConfig(({ mode }) => {
 			plugins: [
 				devtools(),
 				tanstackRouter(getRouterConfig()),
-				solid(),
+				react({
+					babel: { plugins: [["babel-plugin-react-compiler", {}]] },
+				}),
 				tailwindcss(),
 				obfuscator(mode),
 			],
