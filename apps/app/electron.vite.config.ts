@@ -1,12 +1,13 @@
 import path from "node:path";
 
+import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import dotenv from "dotenv";
 import { defineConfig } from "electron-vite";
 import bundleObfuscator from "vite-plugin-bundle-obfuscator";
-import solid from "vite-plugin-solid";
 import { ConfigEnv, Plugin } from "vitest/config";
 
 import tsrConfig from "./tsr.config.json" with { type: "json" };
@@ -49,6 +50,14 @@ function getRouterConfig(): Parameters<typeof tanstackRouter>[0] {
 		generatedRouteTree: path.resolve(dirname, tsrConfig.generatedRouteTree),
 	};
 }
+
+// see:
+// https://github.com/alex8088/electron-vite/issues/902#issuecomment-4578428342
+// https://github.com/rolldown/plugins/issues/10#issuecomment-4051567536
+const babelPlugin = await babel({
+	presets: [reactCompilerPreset()],
+	include: [/\.(ts|tsx|js|jsx)$/],
+});
 
 export default defineConfig(({ mode }) => {
 	const mainProtectedStrings = [process.env["MAIN_VITE_SOME_KEY"]].filter(
@@ -104,7 +113,8 @@ export default defineConfig(({ mode }) => {
 			plugins: [
 				devtools(),
 				tanstackRouter(getRouterConfig()),
-				solid(),
+				react(),
+				babelPlugin,
 				tailwindcss(),
 				obfuscator(mode),
 			],

@@ -1,6 +1,5 @@
-import { useMutation } from "@tanstack/solid-query";
-import { createFileRoute } from "@tanstack/solid-router";
-import { createEffect, createSignal, For } from "solid-js";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 
 import { Button } from "~/renderer/components/button";
 import { Card } from "~/renderer/components/card";
@@ -9,19 +8,24 @@ import { Page } from "~/renderer/layouts/page";
 import { tv } from "~/renderer/lib/style";
 import { trpc } from "~/renderer/trpc";
 
-function DialogFileSelect(props: { onSelect: (selected: string[]) => void }) {
-	const { mutate } = useMutation(() => ({
-		mutationFn: () => {
-			return trpc.showOpenDialog.mutate({
-				properties: ["openFile", "multiSelections"],
-			});
+function DialogFileSelect({
+	onSelect,
+}: {
+	onSelect: (selected: string[]) => void;
+}) {
+	const { mutate } = trpc.showOpenDialog.useMutation({
+		onSuccess(result) {
+			onSelect(result.filePaths);
 		},
-		onSuccess: (selectResult) => {
-			props.onSelect(selectResult.filePaths);
-		},
-	}));
+	});
 
-	return <Button onClick={() => mutate()}>Select files</Button>;
+	return (
+		<Button
+			onClick={() => mutate({ properties: ["openFile", "multiSelections"] })}
+		>
+			Select files
+		</Button>
+	);
 }
 
 const dragFileSelectVariants = tv({
@@ -33,30 +37,31 @@ const dragFileSelectVariants = tv({
 	},
 });
 
-function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
+function DragFileSelect({
+	onSelect,
+}: {
+	onSelect: (selected: string[]) => void;
+}) {
 	const [{ files, isActive }, dragDropHandlers] = useFileDrop();
 
-	createEffect(() => {
-		const filePaths = files()?.map(({ file, isDirectory }) => {
+	useEffect(() => {
+		const filePaths = files?.map(({ file, isDirectory }) => {
 			// @TODO: full file path still available
 			return `${file.webkitRelativePath} (${isDirectory ? "directory" : "file"})`;
 		});
 
-		props.onSelect(filePaths ?? []);
-	});
+		onSelect(filePaths ?? []);
+	}, [files, onSelect]);
 
 	return (
-		<div
-			class={dragFileSelectVariants({ isActive: isActive() })}
-			{...dragDropHandlers}
-		>
+		<div className={dragFileSelectVariants({ isActive })} {...dragDropHandlers}>
 			Drop files
 		</div>
 	);
 }
 
 function Files() {
-	const [selectedFiles, setSelectedFiles] = createSignal<string[]>([]);
+	const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
 	function handleFileSelect(selected: string[]) {
 		setSelectedFiles((current) => current.concat(selected));
@@ -73,14 +78,15 @@ function Files() {
 						<Card.Title>Selected files</Card.Title>
 					</Card.Header>
 					<Card.Content>
-						<ul class="flex flex-col gap-1">
-							<For each={selectedFiles()}>
-								{(file) => (
-									<li class="flex gap-2 border-be border-border pbe-2 text-sm text-muted-foreground last:border-be-0 last:pbe-0">
-										{file}
-									</li>
-								)}
-							</For>
+						<ul className="flex flex-col gap-1">
+							{selectedFiles.map((file) => (
+								<li
+									key={file}
+									className="flex gap-2 border-be border-border pbe-2 text-sm text-muted-foreground last:border-be-0 last:pbe-0"
+								>
+									{file}
+								</li>
+							))}
 						</ul>
 					</Card.Content>
 				</Card.Root>

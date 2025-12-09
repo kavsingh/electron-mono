@@ -1,23 +1,25 @@
-import { createSignal, onCleanup } from "solid-js";
+import { useSyncExternalStore } from "react";
 
-import type { Accessor } from "solid-js";
+const state = (() => {
+	const query = globalThis.matchMedia("(prefers-color-scheme: dark)");
+	let prefersDark = query.matches;
 
-const darkSchemeQuery = globalThis.matchMedia("(prefers-color-scheme: dark)");
-
-export function usePrefersDark(): Accessor<boolean> {
-	const [prefersDarkScheme, setPrefersDarkScheme] = createSignal(
-		darkSchemeQuery.matches,
-	);
-
-	function onChange() {
-		setPrefersDarkScheme(darkSchemeQuery.matches);
-	}
-
-	darkSchemeQuery.addEventListener("change", onChange);
-
-	onCleanup(() => {
-		darkSchemeQuery.removeEventListener("change", onChange);
+	query.addEventListener("change", (event) => {
+		prefersDark = event.matches;
 	});
 
-	return prefersDarkScheme;
+	return {
+		snapshot: () => prefersDark,
+		subscribe: (subscriber: () => void) => {
+			query.addEventListener("change", subscriber);
+
+			return () => {
+				query.removeEventListener("change", subscriber);
+			};
+		},
+	};
+})();
+
+export function usePrefersDark() {
+	return useSyncExternalStore(state.subscribe, state.snapshot);
 }
