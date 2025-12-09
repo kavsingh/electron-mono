@@ -1,8 +1,8 @@
 import path from "node:path";
 
 import tailwindcssPlugin from "@tailwindcss/vite";
+import reactPlugin from "@vitejs/plugin-react";
 import { defineConfig } from "electron-vite";
-import solidPlugin from "vite-plugin-solid";
 import tsconfigPathsPlugin from "vite-tsconfig-paths";
 
 const dirname = import.meta.dirname;
@@ -40,7 +40,13 @@ export default defineConfig(({ mode }) => {
 		renderer: {
 			build,
 			resolve: { conditions: ["browser", mode] },
-			plugins: [tsconfigPathsPlugin(), solidPlugin(), tailwindcssPlugin()],
+			plugins: [
+				tsconfigPathsPlugin(),
+				reactPlugin({
+					babel: { plugins: [["babel-plugin-react-compiler", {}]] },
+				}),
+				tailwindcssPlugin(),
+			],
 		},
 	};
 });

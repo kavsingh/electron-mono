@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/solid-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import { Page } from "#renderer/layouts/page";
 
