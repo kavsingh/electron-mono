@@ -1,24 +1,23 @@
-import { TanStackDevtools } from "@tanstack/solid-devtools";
-import { SolidQueryDevtoolsPanel } from "@tanstack/solid-query-devtools";
-import { createRootRoute, Link, Outlet } from "@tanstack/solid-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/solid-router-devtools";
-import { createEffect, Show, splitProps } from "solid-js";
+import { TanStackDevtools } from "@tanstack/react-devtools";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
+import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { useEffect } from "react";
 
 import { usePrefersDark } from "~/renderer/hooks/theme";
 
-import type { ComponentProps } from "solid-js";
+import type { ComponentProps } from "react";
 
-function NavLink(
-	_props: Omit<ComponentProps<typeof Link>, "class" | "classList">,
-) {
-	const [props, passProps] = splitProps(_props, ["children"]);
-
+function NavLink({
+	children,
+	...props
+}: Omit<ComponentProps<typeof Link>, "className">) {
 	return (
 		<Link
-			{...passProps}
-			class="text-muted-foreground transition-colors hover:underline aria-[current=page]:text-foreground aria-[current=page]:hover:no-underline"
+			{...props}
+			className="text-muted-foreground transition-colors hover:underline aria-[current=page]:text-foreground aria-[current=page]:hover:no-underline"
 		>
-			{props.children}
+			{children}
 		</Link>
 	);
 }
@@ -26,28 +25,28 @@ function NavLink(
 function RootLayout() {
 	const prefersDark = usePrefersDark();
 
-	createEffect(() => {
-		document.documentElement.classList.toggle("dark", prefersDark());
-	});
+	useEffect(() => {
+		document.documentElement.classList.toggle("dark", prefersDark);
+	}, [prefersDark]);
 
 	return (
 		<>
-			<div class="grid size-full grid-cols-[max-content_1fr]">
-				<div class="min-h-full bg-linear-to-l from-background p-4 pe-8 pbs-10 text-sm">
-					<nav class="flex flex-col gap-2">
+			<div className="grid size-full grid-cols-[max-content_1fr]">
+				<div className="min-h-full bg-linear-to-l from-background p-4 pe-8 pbs-10 text-sm">
+					<nav className="flex flex-col gap-2">
 						<NavLink href="/">Home</NavLink>
 						<NavLink href="/files">Files</NavLink>
 						<NavLink href="/settings">Settings</NavLink>
 					</nav>
 				</div>
-				<div class="h-full overflow-x-hidden overflow-y-auto bg-background">
+				<div className="h-full overflow-x-hidden overflow-y-auto bg-background">
 					<Outlet />
-					<Show when={import.meta.env.DEV}>
+					{import.meta.env.DEV ? (
 						<TanStackDevtools
 							plugins={[
 								{
 									name: "TanStack Query",
-									render: <SolidQueryDevtoolsPanel />,
+									render: <ReactQueryDevtoolsPanel />,
 									defaultOpen: true,
 								},
 								{
@@ -57,10 +56,10 @@ function RootLayout() {
 								},
 							]}
 						/>
-					</Show>
+					) : null}
 				</div>
 			</div>
-			<div class="fixed inset-x-0 inset-bs-0 z-10 h-8 [-webkit-app-region:drag]" />
+			<div className="fixed inset-x-0 inset-bs-0 z-10 h-8 [-webkit-app-region:drag]" />
 		</>
 	);
 }

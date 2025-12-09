@@ -9,7 +9,7 @@ import {
 } from "eslint-plugin-better-tailwindcss/types";
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
-import solid from "eslint-plugin-solid";
+import reactHooks from "eslint-plugin-react-hooks";
 import testingLibrary from "eslint-plugin-testing-library";
 import { defineConfig } from "oxlint";
 
@@ -35,6 +35,16 @@ const restrictImportsBrowser = {
 	patterns: [{ group: ["electron-log/main"], allowTypeImports: true }],
 };
 
+const reactHooksName = "react-hooks-js";
+const reactHooksRecommended = Object.fromEntries(
+	Object.entries(reactHooks.configs["recommended-latest"].rules).map(
+		([key, value]) => [
+			key.replace(/^react-hooks\//, `${reactHooksName}/`),
+			value,
+		],
+	),
+);
+
 export default defineConfig({
 	extends: [baseConfig],
 	env: { node: true, browser: false },
@@ -48,10 +58,6 @@ export default defineConfig({
 	],
 	settings: {
 		vitest: { typecheck: true },
-
-		"jsx-a11y": {
-			attributes: { for: ["for"] },
-		},
 
 		"better-tailwindcss": {
 			entryPoint: path.resolve(import.meta.dirname, "./src/renderer/index.css"),
@@ -170,8 +176,11 @@ export default defineConfig({
 		{
 			files: ["./src/renderer/**/*.{ts,tsx}"],
 			env: { node: false, browser: true },
-			plugins: ["jsx-a11y"],
-			jsPlugins: ["eslint-plugin-solid", "eslint-plugin-better-tailwindcss"],
+			plugins: ["react", "jsx-a11y"],
+			jsPlugins: [
+				{ name: reactHooksName, specifier: "eslint-plugin-react-hooks" },
+				"eslint-plugin-better-tailwindcss",
+			],
 			rules: {
 				"eslint/no-restricted-imports": [
 					"error",
@@ -200,7 +209,13 @@ export default defineConfig({
 				"import/no-nodejs-modules": "error",
 				"import/no-unassigned-import": ["error", { allow: ["**/*.css"] }],
 
-				...solid.configs["flat/typescript"].rules,
+				"react/react-in-jsx-scope": "off",
+
+				// leave to eslint-plugin-react-hooks
+				"react/exhaustive-deps": "off",
+				"react/rules-of-hooks": "off",
+
+				...reactHooksRecommended,
 
 				...tailwindcss.configs["recommended-error"].rules,
 				"better-tailwindcss/enforce-consistent-line-wrapping": "off",
@@ -243,7 +258,7 @@ export default defineConfig({
 			// @ts-expect-error type inference weirdness
 			rules: {
 				...jestDom.configs["flat/recommended"].rules,
-				...testingLibrary.configs["flat/dom"].rules,
+				...testingLibrary.configs["flat/react"].rules,
 			},
 		},
 

@@ -29,7 +29,7 @@ function publishTrpcSubscriberEvent(
 
 export function publishSystemStatsEvent(payload: SystemStats) {
 	publishTrpcSubscriberEvent(
-		vi.mocked(trpc.systemStatsEvent.subscribe),
+		vi.mocked(trpc.systemStatsEvent.useSubscription),
 		payload,
 	);
 }
