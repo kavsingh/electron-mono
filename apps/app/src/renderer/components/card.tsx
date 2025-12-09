@@ -1,20 +1,19 @@
 // https://ui.shadcn.com/docs/components/card
 
-import { splitProps } from "solid-js";
-
 import { tm } from "#renderer/lib/style";
 
-import type { ComponentProps } from "solid-js";
+import type { ComponentPropsWithRef } from "react";
 
-export function CardRoot(props: Omit<ComponentProps<"div">, "classList">) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardRoot({
+	className,
+	...props
+}: ComponentPropsWithRef<"div">) {
 	return (
 		<div
-			{...passProps}
-			class={tm(
+			{...props}
+			className={tm(
 				"rounded-xl border border-border bg-card text-card-foreground shadow-sm",
-				localProps.class,
+				className,
 			)}
 		/>
 	);
@@ -22,62 +21,61 @@ export function CardRoot(props: Omit<ComponentProps<"div">, "classList">) {
 
 //
 
-export function CardHeader(props: Omit<ComponentProps<"div">, "classList">) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardHeader({
+	className,
+	...props
+}: ComponentPropsWithRef<"div">) {
 	return (
 		<div
-			{...passProps}
-			class={tm("flex flex-col space-y-1.5 p-6", localProps.class)}
+			{...props}
+			className={tm("flex flex-col space-y-1.5 p-6", className)}
 		/>
 	);
 }
 
 //
 
-export function CardTitle(props: Omit<ComponentProps<"h3">, "classList">) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardTitle({
+	className,
+	...props
+}: ComponentPropsWithRef<"h3">) {
 	return (
 		// oxlint-disable-next-line jsx-a11y/heading-has-content
 		<h3
-			{...passProps}
-			class={tm("leading-none font-semibold tracking-tight", localProps.class)}
+			{...props}
+			className={tm("leading-none font-semibold tracking-tight", className)}
 		/>
 	);
 }
 
 //
 
-export function CardDescription(props: Omit<ComponentProps<"p">, "classList">) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardDescription({
+	className,
+	...props
+}: ComponentPropsWithRef<"p">) {
 	return (
-		<p
-			{...passProps}
-			class={tm("text-sm text-muted-foreground", localProps.class)}
-		/>
+		<p {...props} className={tm("text-sm text-muted-foreground", className)} />
 	);
 }
 
 //
 
-export function CardContent(props: Omit<ComponentProps<"div">, "classList">) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
-	return <div {...passProps} class={tm("p-6 pt-0", localProps.class)} />;
+export function CardContent({
+	className,
+	...props
+}: ComponentPropsWithRef<"div">) {
+	return <div {...props} className={tm("p-6 pt-0", className)} />;
 }
 
 //
 
-export function CardFooter(props: Omit<ComponentProps<"div">, "classList">) {
-	const [localProps, passProps] = splitProps(props, ["class"]);
-
+export function CardFooter({
+	className,
+	...props
+}: ComponentPropsWithRef<"div">) {
 	return (
-		<div
-			{...passProps}
-			class={tm("flex items-center p-6 pt-0", localProps.class)}
-		/>
+		<div {...props} className={tm("flex items-center p-6 pt-0", className)} />
 	);
 }
 

@@ -1,5 +1,5 @@
 {
-	"target": "solid",
+	"target": "react",
 	"autoCodeSplitting": true,
 	"spa": { "enabled": true },
 	"appDirectory": "src/renderer",

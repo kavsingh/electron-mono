@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/solid-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import { Page } from "#renderer/layouts/page";
 
@@ -10,7 +10,7 @@ export function Index() {
 		<>
 			<Page.Header>Home</Page.Header>
 			<Page.Content>
-				<div class="space-y-6">
+				<div className="space-y-6">
 					<SystemInfoCard />
 					<SystemStatsCard />
 				</div>

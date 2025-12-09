@@ -1,10 +1,8 @@
-import { createSignal } from "solid-js";
+import { useState } from "react";
 
 import { trpc } from "#renderer/trpc";
 
-import type { JSX } from "solid-js";
-
-type DragEventHandler = JSX.EventHandlerUnion<HTMLElement, DragEvent>;
+import type { DragEventHandler } from "react";
 
 export interface DroppedFile {
 	isDirectory: FileSystemEntry["isDirectory"] | undefined;
@@ -17,8 +15,8 @@ const onDragOver: DragEventHandler = (event) => {
 };
 
 export function useFileDrop() {
-	const [droppedFiles, setDroppedFiles] = createSignal<DroppedFile[]>();
-	const [isActive, setIsActive] = createSignal(false);
+	const [droppedFiles, setDroppedFiles] = useState<DroppedFile[]>();
+	const [isActive, setIsActive] = useState(false);
 
 	const onDragEnter: DragEventHandler = (event) => {
 		event.preventDefault();
@@ -32,18 +30,14 @@ export function useFileDrop() {
 	const onDrop: DragEventHandler = (event) => {
 		event.preventDefault();
 
-		const { items, files } = event.dataTransfer ?? {};
-		const entries = items
-			? Array.from(items).map((item) => item.webkitGetAsEntry())
-			: [];
-		const dropped = files
-			? Array.from(files).map((file) => {
-					const { isDirectory, isFile } =
-						entries.find((e) => e?.name === file.name) ?? {};
+		const { items, files } = event.dataTransfer;
+		const entries = Array.from(items).map((item) => item.webkitGetAsEntry());
+		const dropped = Array.from(files).map((file) => {
+			const { isDirectory, isFile } =
+				entries.find((e) => e?.name === file.name) ?? {};
 
-					return { file, isDirectory, isFile };
-				})
-			: [];
+			return { file, isDirectory, isFile };
+		});
 
 		setIsActive(false);
 		setDroppedFiles(dropped);
@@ -55,21 +49,13 @@ export function useFileDrop() {
 	] as const;
 }
 
-export type ShowDialogOptions = Parameters<
-	(typeof trpc)["showOpenDialog"]["query"]
->[0];
-
 export function useFileSelectDialog() {
-	const [files, setFiles] = createSignal<string[]>([]);
+	const [files, setFiles] = useState<string[]>([]);
+	const { mutate } = trpc.showOpenDialog.useMutation({
+		onSuccess(result) {
+			setFiles(result.filePaths);
+		},
+	});
 
-	async function showDialog(options?: ShowDialogOptions) {
-		const selectResult = await trpc.showOpenDialog.query({
-			properties: ["openFile", "multiSelections"],
-			...options,
-		});
-
-		setFiles(selectResult.filePaths);
-	}
-
-	return [files, showDialog] as const;
+	return [files, mutate] as const;
 }

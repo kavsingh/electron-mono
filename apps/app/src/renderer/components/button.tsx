@@ -1,11 +1,9 @@
 // https://ui.shadcn.com/docs/components/button
 
-import { splitProps } from "solid-js";
-
 import { tv } from "#renderer/lib/style";
 
 import type { VariantProps } from "#renderer/lib/style";
-import type { ComponentProps } from "solid-js";
+import type { ComponentPropsWithRef } from "react";
 
 const buttonVariants = tv({
 	base: "inline-flex items-center justify-center rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
@@ -35,26 +33,17 @@ const buttonVariants = tv({
 	},
 });
 
-export function Button(
-	props: Omit<ComponentProps<"button">, "classList"> &
-		VariantProps<typeof buttonVariants>,
-) {
-	const [localProps, passProps] = splitProps(props, [
-		"class",
-		"type",
-		"variant",
-		"size",
-	]);
+interface Props
+	extends
+		ComponentPropsWithRef<"button">,
+		VariantProps<typeof buttonVariants> {}
 
+export function Button({ className, type, variant, size, ...props }: Props) {
 	return (
 		<button
-			{...passProps}
-			type={localProps.type ?? "button"}
-			class={buttonVariants({
-				variant: localProps.variant,
-				size: localProps.size,
-				class: localProps.class,
-			})}
+			{...props}
+			type={type ?? "button"}
+			className={buttonVariants({ variant, size, className })}
 		/>
 	);
 }

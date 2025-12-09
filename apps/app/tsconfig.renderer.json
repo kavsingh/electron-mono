@@ -10,8 +10,7 @@
 	"compilerOptions": {
 		"composite": true,
 		"emitDeclarationOnly": true,
-		"jsx": "preserve",
-		"jsxImportSource": "solid-js",
+		"jsx": "react-jsx",
 		"lib": ["es2023", "dom"],
 		"module": "esnext",
 		"moduleResolution": "bundler",
