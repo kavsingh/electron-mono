@@ -39,6 +39,7 @@ export function CardTitle(props: Omit<ComponentProps<"h3">, "classList">) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
 	return (
+		// oxlint-disable-next-line jsx-a11y/heading-has-content
 		<h3
 			{...passProps}
 			class={tm("leading-none font-semibold tracking-tight", localProps.class)}
@@ -82,7 +83,7 @@ export function CardFooter(props: Omit<ComponentProps<"div">, "classList">) {
 
 //
 
-export default {
+export const Card = {
 	Root: CardRoot,
 	Header: CardHeader,
 	Title: CardTitle,

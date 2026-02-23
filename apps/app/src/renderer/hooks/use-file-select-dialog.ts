@@ -2,7 +2,7 @@ import { createSignal } from "solid-js";
 
 import { trpc } from "#renderer/trpc";
 
-export default function useFileSelectDialog() {
+export function useFileSelectDialog() {
 	const [files, setFiles] = createSignal<string[]>([]);
 
 	async function showDialog(options?: Options) {

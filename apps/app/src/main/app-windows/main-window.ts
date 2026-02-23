@@ -1,10 +1,10 @@
-import { app, BrowserWindow } from "electron";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { app, BrowserWindow } from "electron";
 import log from "electron-log";
 
-import { APP_RENDERER_URL } from "#main/lib/app-protocol";
+import { APP_RENDERER_URL } from "#main/lib/app-protocol.ts";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 

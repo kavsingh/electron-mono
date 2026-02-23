@@ -2,17 +2,39 @@ import { Show, createMemo } from "solid-js";
 
 import { tryOr } from "#common/lib/error";
 import { formatMem } from "#common/lib/format";
-import Card from "#renderer/components/card";
-import ChronoGraph from "#renderer/components/chrono-graph";
-import useSystemStats from "#renderer/hooks/use-system-stats";
+import { Card } from "#renderer/components/card";
+import { ChronoGraph } from "#renderer/components/chrono-graph";
+import { useSystemStats } from "#renderer/hooks/use-system-stats";
 
-import InfoList from "../../components/info-list";
+import { InfoList } from "../../components/info-list";
 
-// eslint-disable-next-line import-x/no-restricted-paths
 import type { SystemStats } from "#main/services/system-stats";
 import type { Sample } from "#renderer/components/chrono-graph";
 
-export default function SystemStatsCard() {
+function MemoryGraph(props: { systemStats: SystemStats | undefined }) {
+	const sample = createMemo<Sample | undefined>(() => {
+		const value = props.systemStats?.memUsed;
+
+		return value ? { value: tryOr(() => BigInt(value), 0n) } : undefined;
+	});
+
+	const maxValue = createMemo<bigint>(() => {
+		const value = props.systemStats?.memTotal;
+
+		return value ? tryOr(() => BigInt(value), 0n) : 0n;
+	});
+
+	return (
+		<ChronoGraph
+			sampleSource={sample}
+			minValue={0n}
+			maxValue={maxValue()}
+			class="h-24 w-full rounded-lg"
+		/>
+	);
+}
+
+export function SystemStatsCard() {
 	const statsQuery = useSystemStats();
 
 	return (
@@ -40,28 +62,5 @@ export default function SystemStatsCard() {
 				</div>
 			</Card.Content>
 		</Card.Root>
-	);
-}
-
-function MemoryGraph(props: { systemStats: SystemStats | undefined }) {
-	const sample = createMemo<Sample | undefined>(() => {
-		const value = props.systemStats?.memUsed;
-
-		return value ? { value: tryOr(() => BigInt(value), 0n) } : undefined;
-	});
-
-	const maxValue = createMemo<bigint>(() => {
-		const value = props.systemStats?.memTotal;
-
-		return value ? tryOr(() => BigInt(value), 0n) : 0n;
-	});
-
-	return (
-		<ChronoGraph
-			sampleSource={sample}
-			minValue={0n}
-			maxValue={maxValue()}
-			class="h-24 w-full rounded-lg"
-		/>
 	);
 }

@@ -1,20 +1,16 @@
 {
 	"name": "electron-mono",
 	"version": "0.0.0",
+	"private": true,
 	"description": "electron monorepo setup",
+	"keywords": [],
+	"license": "MIT",
 	"author": "<author>",
 	"repository": {
 		"type": "git",
 		"url": "git@github.com:kavsingh/electron-mono"
 	},
-	"keywords": [],
-	"license": "MIT",
-	"private": true,
 	"type": "module",
-	"packageManager": "pnpm@10.30.1+sha512.3590e550d5384caa39bd5c7c739f72270234b2f6059e13018f975c313b1eb9fefcc09714048765d4d9efe961382c312e624572c0420762bdc5d5940cdf9be73a",
-	"engines": {
-		"node": ">=24"
-	},
 	"scripts": {
 		"dev": "nx dev app",
 		"build": "nx build app",
@@ -30,22 +26,20 @@
 		"clean:modules": "rimraf ./**/node_modules --glob"
 	},
 	"devDependencies": {
-		"@eslint/js": "10.0.1",
 		"@kavsingh/eslint-plugin-filenames": "2.0.0-rc.3",
 		"@tsconfig/node24": "24.0.4",
 		"@tsconfig/strictest": "2.0.8",
-		"@types/eslint": "9.6.1",
 		"@types/node": "24.10.13",
+		"@typescript/native-preview": "7.0.0-dev.20260223.1",
 		"cross-env": "10.1.0",
-		"eslint": "9.39.3",
-		"eslint-config-prettier": "10.1.8",
-		"eslint-import-resolver-typescript": "4.4.4",
-		"eslint-plugin-import-x": "4.16.1",
-		"globals": "17.3.0",
 		"nx": "22.5.2",
-		"prettier": "3.8.1",
-		"rimraf": "6.1.3",
-		"typescript": "5.9.3",
-		"typescript-eslint": "8.56.1"
-	}
+		"oxfmt": "0.35.0",
+		"oxlint": "1.50.0",
+		"oxlint-tsgolint": "0.14.2",
+		"rimraf": "6.1.3"
+	},
+	"engines": {
+		"node": ">=24"
+	},
+	"packageManager": "pnpm@10.30.1+sha512.3590e550d5384caa39bd5c7c739f72270234b2f6059e13018f975c313b1eb9fefcc09714048765d4d9efe961382c312e624572c0420762bdc5d5940cdf9be73a"
 }

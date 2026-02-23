@@ -1,13 +1,14 @@
-import { format } from "prettier";
+import { format } from "oxfmt";
 
-import config from "../prettier.config.js";
+import config from "../../../.oxfmtrc.json" with { type: "json" };
 
-import type { Options } from "prettier";
+export async function formatTypescriptContent(content: string) {
+	const result = await format(
+		"content.ts",
+		content,
+		// @ts-expect-error deep string consts
+		config,
+	);
 
-export const formatTypescriptContent = prettifier("typescript");
-
-function prettifier(parser: NonNullable<Options["parser"]>) {
-	return function prettify(content: string) {
-		return format(content, { ...config, parser });
-	};
+	return result.code;
 }

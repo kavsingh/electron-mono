@@ -1,10 +1,10 @@
 import { BrowserWindow, dialog } from "electron";
 
-import { electronOpenDialogOptionsSchema } from "#common/schema/electron";
+import { electronOpenDialogOptionsSchema } from "#common/schema/electron.ts";
 
-import { publicProcedure } from "./trpc-server";
+import { publicProcedure } from "./trpc-server.ts";
 
-export default function routesFiles() {
+export function routesFiles() {
 	return {
 		showOpenDialog: publicProcedure
 			.input(electronOpenDialogOptionsSchema)

@@ -1,10 +1,17 @@
 import { shell } from "electron";
-
 import log from "electron-log";
 
 import type { WebContents } from "electron";
 
-export default function restrictNavigation(contents: WebContents) {
+const allowedHosts = new Set<string>();
+
+function isAllowedHost(url: string) {
+	const host = URL.parse(url)?.host;
+
+	return host ? allowedHosts.has(host) : false;
+}
+
+export function restrictNavigation(contents: WebContents) {
 	// https://www.electronjs.org/docs/latest/tutorial/security#13-disable-or-limit-navigation
 	contents.on("will-navigate", (event, url) => {
 		log.warn(`Blocked navigation attempt to ${url}`);
@@ -22,10 +29,4 @@ export default function restrictNavigation(contents: WebContents) {
 
 		return { action: "deny" };
 	});
-}
-
-const allowedHosts: string[] = [];
-
-function isAllowedHost(url: string) {
-	return allowedHosts.includes(new URL(url).host);
 }

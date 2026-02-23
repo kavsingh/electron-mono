@@ -2,7 +2,16 @@ import { A } from "@solidjs/router";
 
 import type { ComponentProps, ParentProps } from "solid-js";
 
-export default function App(props: ParentProps) {
+function NavLink(props: Omit<ComponentProps<typeof A>, "class" | "classList">) {
+	return (
+		<A
+			{...props}
+			class="text-muted-foreground transition-colors hover:underline aria-[current=page]:text-foreground aria-[current=page]:hover:no-underline"
+		/>
+	);
+}
+
+export function App(props: ParentProps) {
 	return (
 		<>
 			<div class="grid size-full grid-cols-[max-content_1fr]">
@@ -19,14 +28,5 @@ export default function App(props: ParentProps) {
 			</div>
 			<div class="fixed inset-x-0 top-0 z-10 h-8 [-webkit-app-region:drag]" />
 		</>
-	);
-}
-
-function NavLink(props: Omit<ComponentProps<typeof A>, "class" | "classList">) {
-	return (
-		<A
-			{...props}
-			class="text-muted-foreground transition-colors hover:underline aria-[current=page]:text-foreground aria-[current=page]:hover:no-underline"
-		/>
 	);
 }

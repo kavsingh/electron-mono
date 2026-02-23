@@ -1,15 +1,7 @@
 import chalk from "chalk";
 import log from "electron-log";
 
-export default function initLogging() {
-	log.transports.console.writeFn = consoleWriteFn;
-	log.transports.file.format =
-		"[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{processType}] [{level}] {text}";
-
-	log.initialize();
-}
-
-/* eslint-disable no-console */
+// oxlint-disable eslint/no-console
 const consoleWriteFn: typeof log.transports.console.writeFn = ({ message }) => {
 	const header = message.variables?.processType ?? "-";
 	const content = message.data.join("\n");
@@ -26,4 +18,12 @@ const consoleWriteFn: typeof log.transports.console.writeFn = ({ message }) => {
 			break;
 	}
 };
-/* eslint-enable */
+// oxlint-enable
+
+export function initLogging() {
+	log.transports.console.writeFn = consoleWriteFn;
+	log.transports.file.format =
+		"[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{processType}] [{level}] {text}";
+
+	log.initialize();
+}

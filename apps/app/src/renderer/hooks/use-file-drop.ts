@@ -2,13 +2,13 @@ import { createSignal } from "solid-js";
 
 import type { JSX } from "solid-js";
 
-export default function useFileDrop() {
+const onDragOver: DragEventHandler = (event) => {
+	event.preventDefault();
+};
+
+export function useFileDrop() {
 	const [droppedFiles, setDroppedFiles] = createSignal<DroppedFile[]>();
 	const [isActive, setIsActive] = createSignal(false);
-
-	const onDragOver: DragEventHandler = (event) => {
-		event.preventDefault();
-	};
 
 	const onDragEnter: DragEventHandler = (event) => {
 		event.preventDefault();

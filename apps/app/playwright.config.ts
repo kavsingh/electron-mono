@@ -4,7 +4,7 @@ const config: PlaywrightTestConfig = {
 	testDir: "./e2e",
 	testMatch: /\.test\.ts$/,
 	workers: 1,
-	outputDir: "./e2e/results",
+	outputDir: "./reports/e2e",
 	use: { screenshot: "only-on-failure" },
 };
 

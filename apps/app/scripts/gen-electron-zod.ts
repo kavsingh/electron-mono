@@ -6,15 +6,18 @@ import { generate } from "ts-to-zod";
 
 import { formatTypescriptContent } from "./format.ts";
 
-const dirname = path.dirname(fileURLToPath(import.meta.url));
-
-if (fileURLToPath(import.meta.url) === process.argv[1]) {
-	await genElectronZod(
-		path.resolve(dirname, "../src/common/schema/electron.ts"),
+function getElectronTypesPath() {
+	return path.join(
+		path.dirname(fileURLToPath(import.meta.resolve("electron"))),
+		"electron.d.ts",
 	);
 }
 
-export default async function genElectronZod(outFile: string) {
+function nameFilter(name: string) {
+	return /opendialogoptions/i.test(name) || /filefilter/i.test(name);
+}
+
+export async function genElectronZod(outFile: string) {
 	const typesPath = getElectronTypesPath();
 	const result = generate({
 		nameFilter,
@@ -31,13 +34,8 @@ export default async function genElectronZod(outFile: string) {
 	return writeFile(outFile, output, "utf-8");
 }
 
-function getElectronTypesPath() {
-	return path.join(
-		path.dirname(fileURLToPath(import.meta.resolve("electron"))),
-		"electron.d.ts",
+if (import.meta.filename === process.argv[1]) {
+	await genElectronZod(
+		path.resolve(import.meta.dirname, "../src/common/schema/electron.ts"),
 	);
-}
-
-function nameFilter(name: string) {
-	return /opendialogoptions/i.test(name) || /filefilter/i.test(name);
 }

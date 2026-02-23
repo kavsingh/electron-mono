@@ -12,7 +12,7 @@ export function PageContent(props: ParentProps) {
 	return <main class="p-4">{props.children}</main>;
 }
 
-export default {
+export const Page = {
 	Header: PageHeader,
 	Content: PageContent,
 };

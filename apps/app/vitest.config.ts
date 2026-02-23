@@ -18,9 +18,11 @@ export default defineConfig((configEnv) => {
 					"!**/types.*",
 				],
 				reporter: "lcov",
+				reportsDirectory: "./reports/coverage",
 			},
 			projects: [
 				mergeConfig(
+					// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 					baseConfig.main as Record<string, unknown>,
 					defineProject({
 						test: {
@@ -34,6 +36,7 @@ export default defineConfig((configEnv) => {
 					}),
 				),
 				mergeConfig(
+					// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 					baseConfig.renderer as Record<string, unknown>,
 					defineProject({
 						resolve: { conditions: ["development", "browser"] },

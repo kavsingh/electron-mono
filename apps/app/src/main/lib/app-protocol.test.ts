@@ -1,5 +1,4 @@
 import { net } from "electron";
-
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import {
@@ -7,7 +6,7 @@ import {
 	APP_PROTOCOL_SCHEME,
 	APP_RENDERER_HOST,
 	APP_RENDERER_URL,
-} from "./app-protocol";
+} from "./app-protocol.ts";
 
 const fileContentsResponse = new Response("file contents", { status: 200 });
 
@@ -124,7 +123,7 @@ describe("app-protocol", () => {
 			it("should return 400 when accessing outside renderer dir", async () => {
 				expect.hasAssertions();
 
-				// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+				// oxlint-disable-next-line typescript/no-extraneous-class
 				class MockUrl {
 					constructor(input: string) {
 						return {

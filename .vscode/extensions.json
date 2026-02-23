@@ -1,9 +1,0 @@
-{
-	"recommendations": [
-		"tamasfe.even-better-toml",
-		"dbaeumer.vscode-eslint",
-		"esbenp.prettier-vscode",
-		"bradlc.vscode-tailwindcss",
-		"vscode-icons-team.vscode-icons"
-	]
-}

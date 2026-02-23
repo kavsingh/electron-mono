@@ -2,8 +2,7 @@
 **/node_modules
 **/out
 **/dist
-**/coverage
-**/e2e/results
+**/reports
 **/.env
 **/*.log.*
 **/*.log*

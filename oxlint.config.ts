@@ -1,0 +1,118 @@
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+	ignorePatterns: [".nx/*", ".temp/*", "target/*", "apps/*", "packages/*"],
+	categories: { correctness: "error", suspicious: "error", perf: "error" },
+	plugins: ["oxc", "eslint", "typescript", "import", "promise", "unicorn"],
+	rules: {
+		"eslint/curly": ["error", "multi-line", "consistent"],
+		"eslint/eqeqeq": "error",
+		"eslint/no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
+		"eslint/no-shadow": ["error", { ignoreTypeValueShadow: false }],
+		"eslint/no-unreachable": "error",
+		"eslint/no-unused-vars": [
+			"error",
+			{
+				args: "all",
+				argsIgnorePattern: "^_",
+				caughtErrors: "all",
+				caughtErrorsIgnorePattern: "^_",
+				destructuredArrayIgnorePattern: "^_",
+				varsIgnorePattern: "^_",
+				ignoreRestSiblings: true,
+			},
+		],
+		"eslint/no-use-before-define": "error",
+
+		"import/consistent-type-specifier-style": ["error", "prefer-top-level"],
+		"import/no-cycle": "error",
+		"import/no-default-export": "error",
+
+		"promise/always-return": ["error", { ignoreLastCallback: true }],
+
+		"unicorn/catch-error-name": ["error", { name: "cause" }],
+		"unicorn/filename-case": ["error", { cases: { kebabCase: true } }],
+		"unicorn/prefer-node-protocol": "error",
+		"unicorn/prefer-type-error": "error",
+
+		// enable rules from "pedantic", "style" and "nursery" for typescript
+		// @TODO: refactor using https://github.com/oxc-project/oxc/issues/19486
+		// if-and-when it lands
+		"typescript/adjacent-overload-signatures": "error",
+		"typescript/array-type": ["error", { default: "array-simple" }],
+		"typescript/consistent-generic-constructors": ["error", "constructor"],
+		"typescript/consistent-indexed-object-style": ["error", "record"],
+		"typescript/consistent-return": "error",
+		"typescript/consistent-type-assertions": [
+			"error",
+			{ assertionStyle: "as" },
+		],
+		"typescript/consistent-type-definitions": ["error", "interface"],
+		"typescript/consistent-type-exports": "error",
+		"typescript/no-confusing-void-expression": [
+			"error",
+			{ ignoreVoidOperator: true, ignoreVoidReturningFunctions: true },
+		],
+		"typescript/no-deprecated": "error",
+		"typescript/no-empty-interface": ["error", { allowSingleExtends: true }],
+		"typescript/no-explicit-any": "error",
+		"typescript/no-import-type-side-effects": "error",
+		"typescript/no-inferrable-types": "error",
+		"typescript/no-invalid-void-type": [
+			"error",
+			{ allowInGenericTypeArguments: true },
+		],
+		"typescript/no-namespace": "error",
+		"typescript/no-non-null-asserted-nullish-coalescing": "error",
+		"typescript/no-non-null-assertion": "error",
+		"typescript/no-misused-promises": "error",
+		"typescript/no-unnecessary-condition": "error",
+		"typescript/no-unnecessary-qualifier": "error",
+		"typescript/no-unnecessary-type-parameters": "error",
+		"typescript/no-unsafe-argument": "error",
+		"typescript/no-unsafe-assignment": "error",
+		"typescript/no-unsafe-call": "error",
+		"typescript/no-unsafe-function-type": "error",
+		"typescript/no-unsafe-member-access": "error",
+		"typescript/no-unsafe-return": "error",
+		"typescript/no-useless-default-assignment": "error",
+		"typescript/only-throw-error": "error",
+		"typescript/parameter-properties": ["error", { prefer: "class-property" }],
+		"typescript/prefer-find": "error",
+		"typescript/prefer-for-of": "error",
+		"typescript/prefer-function-type": "error",
+		"typescript/prefer-includes": "error",
+		"typescript/prefer-nullish-coalescing": "error",
+		"typescript/prefer-optional-chain": "error",
+		"typescript/prefer-promise-reject-errors": "error",
+		"typescript/prefer-readonly": "error",
+		"typescript/prefer-reduce-type-parameter": "error",
+		"typescript/prefer-regexp-exec": "error",
+		"typescript/prefer-return-this-type": "error",
+		"typescript/prefer-string-starts-ends-with": "error",
+		"typescript/prefer-ts-expect-error": "error",
+		"typescript/restrict-template-expressions": [
+			"error",
+			{ allowNumber: true },
+		],
+		"typescript/require-await": "error",
+		"typescript/return-await": ["error", "error-handling-correctness-only"],
+		"typescript/strict-void-return": "error",
+		"typescript/switch-exhaustiveness-check": [
+			"error",
+			{
+				allowDefaultCaseForExhaustiveSwitch: true,
+				considerDefaultExhaustiveForUnions: true,
+				requireDefaultForNonUnion: true,
+			},
+		],
+		"typescript/unified-signatures": "error",
+	},
+	overrides: [
+		{
+			files: ["./*.config.{ts,js}"],
+			plugins: ["import"],
+			rules: { "import/no-default-export": "off" },
+		},
+	],
+});

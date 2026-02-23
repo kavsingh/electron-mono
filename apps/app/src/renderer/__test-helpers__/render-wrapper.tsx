@@ -5,18 +5,18 @@ import { AppQueryClientProvider } from "#renderer/contexts/app-query-client";
 
 import type { ParentProps } from "solid-js";
 
+function Wrapper(props: ParentProps) {
+	return (
+		<AppQueryClientProvider>
+			<Router>
+				<Route path="/" component={() => props.children} />
+			</Router>
+		</AppQueryClientProvider>
+	);
+}
+
 export function setupRenderWrapper() {
 	const user = userEvent.setup();
-
-	function Wrapper(props: ParentProps) {
-		return (
-			<AppQueryClientProvider>
-				<Router>
-					<Route path="/" component={() => props.children} />
-				</Router>
-			</AppQueryClientProvider>
-		);
-	}
 
 	return { user, Wrapper } as const;
 }

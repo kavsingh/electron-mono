@@ -1,6 +1,10 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
+	"include": ["../typings", "../vitest.setup.node.ts", "./**/*"],
 	"extends": "../tsconfig.json",
-	"compilerOptions": { "lib": ["es2023"] },
-	"include": ["../typings", "../vitest.setup.node.ts", "./**/*"]
+	"compilerOptions": {
+		"lib": ["es2023"],
+		"module": "nodenext",
+		"moduleResolution": "nodenext"
+	}
 }

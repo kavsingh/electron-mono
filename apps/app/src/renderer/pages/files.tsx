@@ -1,13 +1,54 @@
 import { createEffect, createSignal, For } from "solid-js";
 
-import Button from "#renderer/components/button";
-import Card from "#renderer/components/card";
-import useFileDrop from "#renderer/hooks/use-file-drop";
-import useFileSelectDialog from "#renderer/hooks/use-file-select-dialog";
-import Page from "#renderer/layouts/page";
+import { Button } from "#renderer/components/button";
+import { Card } from "#renderer/components/card";
+import { useFileDrop } from "#renderer/hooks/use-file-drop";
+import { useFileSelectDialog } from "#renderer/hooks/use-file-select-dialog";
+import { Page } from "#renderer/layouts/page";
 import { tv } from "#renderer/lib/style";
 
-export default function Files() {
+function DialogFileSelect(props: { onSelect: (selected: string[]) => void }) {
+	const [files, selectFiles] = useFileSelectDialog();
+
+	createEffect(() => {
+		props.onSelect(files());
+	});
+
+	return <Button onClick={() => void selectFiles()}>Select files</Button>;
+}
+
+const dragFileSelectVariants = tv({
+	base: "my-3 grid h-50 place-items-center rounded-md border border-border text-muted-foreground transition-colors",
+	variants: {
+		isActive: {
+			true: "border-foreground bg-accent/20 text-foreground",
+		},
+	},
+});
+
+function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
+	const [{ files, isActive }, dragDropHandlers] = useFileDrop();
+
+	createEffect(() => {
+		const filePaths = files()?.map(({ file, isDirectory }) => {
+			// @TODO: full file path still available
+			return `${file.webkitRelativePath} (${isDirectory ? "directory" : "file"})`;
+		});
+
+		props.onSelect(filePaths ?? []);
+	});
+
+	return (
+		<div
+			class={dragFileSelectVariants({ isActive: isActive() })}
+			{...dragDropHandlers}
+		>
+			Drop files
+		</div>
+	);
+}
+
+export function Files() {
 	const [selectedFiles, setSelectedFiles] = createSignal<string[]>([]);
 
 	function handleFileSelect(selected: string[]) {
@@ -40,44 +81,3 @@ export default function Files() {
 		</>
 	);
 }
-
-function DialogFileSelect(props: { onSelect: (selected: string[]) => void }) {
-	const [files, selectFiles] = useFileSelectDialog();
-
-	createEffect(() => {
-		props.onSelect(files());
-	});
-
-	return <Button onClick={() => void selectFiles()}>Select files</Button>;
-}
-
-function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
-	const [{ files, isActive }, dragDropHandlers] = useFileDrop();
-
-	createEffect(() => {
-		const filePaths = files()?.map(({ file, isDirectory }) => {
-			// @TODO: full file path still available
-			return `${file.webkitRelativePath} (${isDirectory ? "directory" : "file"})`;
-		});
-
-		props.onSelect(filePaths ?? []);
-	});
-
-	return (
-		<div
-			class={dragFileSelectVariants({ isActive: isActive() })}
-			{...dragDropHandlers}
-		>
-			Drop files
-		</div>
-	);
-}
-
-const dragFileSelectVariants = tv({
-	base: "my-3 grid h-[200px] place-items-center rounded-md border border-border text-muted-foreground transition-colors",
-	variants: {
-		isActive: {
-			true: "border-foreground bg-accent/20 text-foreground",
-		},
-	},
-});

@@ -11,6 +11,7 @@ export function onEmitter<
 	options?: Parameters<typeof on>[2],
 ) {
 	// @ts-expect-error these types aren't very ergonomic
+	// oxlint-disable typescript/no-unsafe-type-assertion
 	return on(emitter, eventName, options) as NodeJS.AsyncIterator<
 		TEventMap[TEventName],
 		undefined,

@@ -45,7 +45,7 @@ export function InfoListValue(
 	return <span {...props} />;
 }
 
-export default {
+export const InfoList = {
 	Root: InfoListRoot,
 	Entry: InfoListEntry,
 	Label: InfoListLabel,

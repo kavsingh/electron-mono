@@ -3,13 +3,13 @@ import log from "electron-log/renderer";
 import { createEffect } from "solid-js";
 
 import { AppQueryClientProvider } from "./contexts/app-query-client";
-import useTheme from "./hooks/use-theme";
-import AppLayout from "./layouts/app";
-import Files from "./pages/files";
-import Home from "./pages/home";
-import Settings from "./pages/settings";
+import { useTheme } from "./hooks/use-theme";
+import { App as AppLayout } from "./layouts/app";
+import { Files } from "./pages/files";
+import { Home } from "./pages/home/index";
+import { Settings } from "./pages/settings/index";
 
-export default function App() {
+export function App() {
 	const theme = useTheme();
 
 	log.info("App mounted");

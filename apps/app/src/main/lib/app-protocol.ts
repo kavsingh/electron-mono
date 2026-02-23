@@ -1,37 +1,14 @@
-import { net } from "electron";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
+import { net } from "electron";
 import log from "electron-log";
 
-import { RENDERER_ROOT } from "./known-paths";
+import { RENDERER_ROOT } from "./known-paths.ts";
 
 export const APP_PROTOCOL_SCHEME = "app";
 export const APP_RENDERER_HOST = "renderer";
 export const APP_RENDERER_URL = `${APP_PROTOCOL_SCHEME}://${APP_RENDERER_HOST}/`;
-
-export async function appProtocolHandler(request: Request): Promise<Response> {
-	const { host, pathname } = new URL(request.url);
-
-	log.debug("handling app protocol", { host, pathname });
-
-	switch (host) {
-		case APP_RENDERER_HOST: {
-			const isRoot = pathname === "" || pathname === "/";
-
-			return serveFile(isRoot ? "index.html" : pathname, RENDERER_ROOT);
-		}
-
-		default: {
-			log.error("invalid host", { host, pathname });
-
-			return new Response("invalid host", {
-				status: 400,
-				headers: { "content-type": "text/html" },
-			});
-		}
-	}
-}
 
 async function serveFile(filepath: string, fileRoot: string) {
 	const resolvedPath = path.resolve(fileRoot, filepath.replace(/^\//, ""));
@@ -63,5 +40,28 @@ async function serveFile(filepath: string, fileRoot: string) {
 			status: 500,
 			headers: { "content-type": "text/html" },
 		});
+	}
+}
+
+export async function appProtocolHandler(request: Request): Promise<Response> {
+	const { host, pathname } = new URL(request.url);
+
+	log.debug("handling app protocol", { host, pathname });
+
+	switch (host) {
+		case APP_RENDERER_HOST: {
+			const isRoot = pathname === "" || pathname === "/";
+
+			return serveFile(isRoot ? "index.html" : pathname, RENDERER_ROOT);
+		}
+
+		default: {
+			log.error("invalid host", { host, pathname });
+
+			return new Response("invalid host", {
+				status: 400,
+				headers: { "content-type": "text/html" },
+			});
+		}
 	}
 }

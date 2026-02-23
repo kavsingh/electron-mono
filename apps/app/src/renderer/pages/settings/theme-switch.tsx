@@ -1,12 +1,28 @@
 import { For, Match, Switch, createResource } from "solid-js";
 
 import { THEME_SOURCES } from "#common/lib/theme";
-import Card from "#renderer/components/card";
+import { Card } from "#renderer/components/card";
 import { trpc } from "#renderer/trpc";
 
 import type { ThemeSource } from "#common/lib/theme";
 
-export default function ThemeSwitch() {
+function LabelText(props: { themeSource: ThemeSource }) {
+	return (
+		<Switch>
+			<Match when={props.themeSource === "system"}>
+				<>System</>
+			</Match>
+			<Match when={props.themeSource === "light"}>
+				<>Light</>
+			</Match>
+			<Match when={props.themeSource === "dark"}>
+				<>Dark</>
+			</Match>
+		</Switch>
+	);
+}
+
+export function ThemeSwitch() {
 	const [themeSource, { mutate }] = createResource(() => {
 		return trpc.themeSource.query();
 	});
@@ -56,21 +72,5 @@ export default function ThemeSwitch() {
 				</fieldset>
 			</form>
 		</Card.Root>
-	);
-}
-
-function LabelText(props: { themeSource: ThemeSource }) {
-	return (
-		<Switch>
-			<Match when={props.themeSource === "system"}>
-				<>System</>
-			</Match>
-			<Match when={props.themeSource === "light"}>
-				<>Light</>
-			</Match>
-			<Match when={props.themeSource === "dark"}>
-				<>Dark</>
-			</Match>
-		</Switch>
 	);
 }

@@ -1,9 +1,9 @@
-import Page from "#renderer/layouts/page";
+import { Page } from "#renderer/layouts/page";
 
-import SystemInfoCard from "./system-info-card";
-import SystemStatsCard from "./system-stats-card";
+import { SystemInfoCard } from "./system-info-card";
+import { SystemStatsCard } from "./system-stats-card";
 
-export default function Home() {
+export function Home() {
 	return (
 		<>
 			<Page.Header>Home</Page.Header>

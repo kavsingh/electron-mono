@@ -1,9 +1,7 @@
-import mockCreator from "./mock-creator";
+import { mockCreator } from "./mock-creator";
 
-// eslint-disable-next-line import-x/no-restricted-paths
-import type { SystemInfo } from "#main/services/system-info";
-// eslint-disable-next-line import-x/no-restricted-paths
-import type { SystemStats } from "#main/services/system-stats";
+import type { SystemInfo } from "#main/services/system-info.ts";
+import type { SystemStats } from "#main/services/system-stats.ts";
 
 export const createMockSystemInfo = mockCreator<SystemInfo>({
 	osName: "OS Name",

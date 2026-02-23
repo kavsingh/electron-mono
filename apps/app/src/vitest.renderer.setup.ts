@@ -1,6 +1,7 @@
+// oxlint-disable import/no-unassigned-import
+
 import "@testing-library/jest-dom/vitest";
 import "vitest-canvas-mock";
-
 import { cleanup } from "@solidjs/testing-library";
 import { vi, afterEach } from "vitest";
 

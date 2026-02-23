@@ -5,7 +5,7 @@ import { createMockSystemStats } from "#common/__test-helpers__/mock-data-creato
 import { setupRenderWrapper } from "#renderer/__test-helpers__/render-wrapper";
 import { publishSystemStatsEvent } from "#renderer/__test-helpers__/trpc/events";
 
-import Home from "./index";
+import { Home } from "./index";
 
 describe("<Home />", () => {
 	afterEach(() => {

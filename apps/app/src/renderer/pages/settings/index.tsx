@@ -1,8 +1,8 @@
-import Page from "#renderer/layouts/page";
+import { Page } from "#renderer/layouts/page";
 
-import ThemeSwitch from "./theme-switch";
+import { ThemeSwitch } from "./theme-switch";
 
-export default function Settings() {
+export function Settings() {
 	return (
 		<>
 			<Page.Header>Settings</Page.Header>

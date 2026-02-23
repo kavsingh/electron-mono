@@ -1,4 +1,4 @@
-export default function mockCreator<TData>(defaults: TData) {
+export function mockCreator<TData>(defaults: TData) {
 	return function createMockData(
 		custom?: Partial<TData> | ((defaults: TData) => TData),
 	): TData {

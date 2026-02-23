@@ -1,7 +1,7 @@
 import log from "electron-log";
 import { mem } from "systeminformation";
 
-import type { AppEventBus } from "./app-event-bus";
+import type { AppEventBus } from "./app-event-bus.ts";
 
 export async function getSystemStats(): Promise<SystemStats> {
 	const sysMem = await mem();
@@ -23,8 +23,8 @@ export function startSystemStatsUpdates(eventBus: AppEventBus) {
 
 		try {
 			eventBus.emit("systemStats", await getSystemStats());
-		} catch (reason) {
-			log.error(reason);
+		} catch (cause) {
+			log.error(cause);
 		} finally {
 			timeout = setTimeout(() => void tick(), 1000);
 		}
