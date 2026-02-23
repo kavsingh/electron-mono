@@ -26,7 +26,6 @@
 		"clean:modules": "rimraf ./**/node_modules --glob"
 	},
 	"devDependencies": {
-		"@kavsingh/eslint-plugin-filenames": "2.0.0-rc.3",
 		"@tsconfig/node24": "24.0.4",
 		"@tsconfig/strictest": "2.0.8",
 		"@types/node": "24.10.13",
