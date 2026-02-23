@@ -13,7 +13,7 @@ export function CardRoot(props: Omit<ComponentProps<"div">, "classList">) {
 		<div
 			{...passProps}
 			class={tm(
-				"rounded-xl border border-border bg-card text-card-foreground shadow",
+				"rounded-xl border border-border bg-card text-card-foreground shadow-sm",
 				localProps.class,
 			)}
 		/>

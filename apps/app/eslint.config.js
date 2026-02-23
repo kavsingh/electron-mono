@@ -1,7 +1,13 @@
+import path from "node:path";
+
 import vitest from "@vitest/eslint-plugin";
 import { defineConfig } from "eslint/config";
 import tailwindcss from "eslint-plugin-better-tailwindcss";
-import { getDefaultCallees } from "eslint-plugin-better-tailwindcss/api/defaults";
+import { getDefaultSelectors } from "eslint-plugin-better-tailwindcss/defaults";
+import {
+	MatcherType,
+	SelectorKind,
+} from "eslint-plugin-better-tailwindcss/types";
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
 import solid from "eslint-plugin-solid";
@@ -58,22 +64,30 @@ export default defineConfig(
 		languageOptions: {
 			globals: { ...globals.browser },
 		},
-		settings: {
-			"better-tailwindcss": {
-				entryPoint: "src/renderer/index.css",
-				callees: [...getDefaultCallees(), "tj", "tm"],
-			},
-		},
-		plugins: { "better-tailwindcss": tailwindcss },
 		extends: [
 			// @ts-expect-error upstream types
-			solid.configs["flat/recommended"],
+			solid.configs["flat/typescript"],
+			tailwindcss.configs["recommended-error"],
 		],
+		settings: {
+			"better-tailwindcss": {
+				entryPoint: path.resolve(
+					import.meta.dirname,
+					"./src/renderer/index.css",
+				),
+				selectors: [
+					...getDefaultSelectors(),
+					...["tj", "tm"].map((name) => ({
+						name,
+						kind: SelectorKind.Callee,
+						match: [{ type: MatcherType.String }],
+					})),
+				],
+			},
+		},
 		rules: {
-			...tailwindcss.configs["recommended"]?.rules,
 			"better-tailwindcss/enforce-consistent-line-wrapping": "off",
-			"better-tailwindcss/enforce-shorthand-classes": "warn",
-			"better-tailwindcss/no-conflicting-classes": "error",
+			"better-tailwindcss/enforce-shorthand-classes": "error",
 		},
 	},
 

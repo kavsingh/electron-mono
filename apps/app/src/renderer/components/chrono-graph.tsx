@@ -67,7 +67,7 @@ export default function ChronoGraph(props: {
 			)}
 			ref={(el) => {
 				canvasEl = el;
-				observeResize(canvasEl, redraw);
+				unobserveResize = observeResize(canvasEl, redraw);
 			}}
 		/>
 	);
