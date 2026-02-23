@@ -1,7 +1,7 @@
 import log from "electron-log";
 import { mem } from "systeminformation";
 
-import type { AppEventBus } from "./app-event-bus.ts";
+import type { AppEventBus } from "./app-event-bus";
 
 export async function getSystemStats(): Promise<SystemStats> {
 	const sysMem = await mem();

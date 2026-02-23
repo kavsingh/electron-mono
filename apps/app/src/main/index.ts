@@ -2,13 +2,13 @@ import { app, BrowserWindow, protocol } from "electron";
 import log from "electron-log";
 import { createIPCHandler } from "trpc-electron/main";
 
-import { createMainWindow } from "./app-windows/main-window.ts";
-import { APP_PROTOCOL_SCHEME, appProtocolHandler } from "./lib/app-protocol.ts";
-import { initLogging } from "./lib/init-logging.ts";
-import { restrictNavigation } from "./lib/restrict-navigation.ts";
-import { createAppEventBus } from "./services/app-event-bus.ts";
-import { startSystemStatsUpdates } from "./services/system-stats.ts";
-import { createAppRouter } from "./trpc/router.ts";
+import { createMainWindow } from "./app-windows/main-window";
+import { APP_PROTOCOL_SCHEME, appProtocolHandler } from "./lib/app-protocol";
+import { initLogging } from "./lib/init-logging";
+import { restrictNavigation } from "./lib/restrict-navigation";
+import { createAppEventBus } from "./services/app-event-bus";
+import { startSystemStatsUpdates } from "./services/system-stats";
+import { createAppRouter } from "./trpc/router";
 
 app.enableSandbox();
 protocol.registerSchemesAsPrivileged([{ scheme: APP_PROTOCOL_SCHEME }]);

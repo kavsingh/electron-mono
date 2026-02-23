@@ -6,7 +6,7 @@ import {
 	APP_PROTOCOL_SCHEME,
 	APP_RENDERER_HOST,
 	APP_RENDERER_URL,
-} from "./app-protocol.ts";
+} from "./app-protocol";
 
 const fileContentsResponse = new Response("file contents", { status: 200 });
 

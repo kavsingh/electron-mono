@@ -87,6 +87,11 @@ export default defineConfig({
 	},
 	overrides: [
 		{
+			files: ["./build/**/*.{ts,js}"],
+			rules: { "import/no-default-export": "off" },
+		},
+
+		{
 			files: ["./src/**/*.{ts,tsx}"],
 			rules: { "eslint/no-console": "error" },
 		},

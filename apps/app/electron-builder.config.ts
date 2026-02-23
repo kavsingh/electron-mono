@@ -2,6 +2,7 @@ import type { Configuration } from "electron-builder";
 
 const config: Configuration = {
 	appId: "com.app.dev",
+	afterPack: "build/after-pack.ts",
 	directories: {
 		buildResources: "build",
 	},
@@ -14,18 +15,9 @@ const config: Configuration = {
 	},
 	mac: {
 		target: { target: "default", arch: ["universal"] },
+		hardenedRuntime: true,
 		entitlements: "build/entitlements.mac.plist",
 		entitlementsInherit: "build/entitlements.mac.plist",
-		extendInfo: {
-			NSCameraUsageDescription:
-				"Application requests access to the device's camera.",
-			NSMicrophoneUsageDescription:
-				"Application requests access to the device's microphone.",
-			NSDocumentsFolderUsageDescription:
-				"Application requests access to the user's Documents folder.",
-			NSDownloadsFolderUsageDescription:
-				"Application requests access to the user's Downloads folder.",
-		},
 	},
 	dmg: {
 		artifactName: "${name}-${version}-${arch}.${ext}",
