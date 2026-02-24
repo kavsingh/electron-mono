@@ -2,10 +2,8 @@ packages:
   - apps/*
   - packages/*
 
-onlyBuiltDependencies:
-  - "@tailwindcss/oxide"
-  - electron
-  - electron-winstaller
-  - esbuild
-  - nx
-  - unrs-resolver
+allowBuilds:
+  electron: true
+  electron-winstaller: true
+  esbuild: true
+  nx: true

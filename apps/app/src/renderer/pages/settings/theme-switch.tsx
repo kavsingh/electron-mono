@@ -8,16 +8,10 @@ import type { ThemeSource } from "#common/lib/theme";
 
 function LabelText(props: { themeSource: ThemeSource }) {
 	return (
-		<Switch>
-			<Match when={props.themeSource === "system"}>
-				<>System</>
-			</Match>
-			<Match when={props.themeSource === "light"}>
-				<>Light</>
-			</Match>
-			<Match when={props.themeSource === "dark"}>
-				<>Dark</>
-			</Match>
+		<Switch fallback={props.themeSource}>
+			<Match when={props.themeSource === "system"}>System</Match>
+			<Match when={props.themeSource === "light"}>Light</Match>
+			<Match when={props.themeSource === "dark"}>Dark</Match>
 		</Switch>
 	);
 }
@@ -27,8 +21,8 @@ export function ThemeSwitch() {
 		return trpc.themeSource.query();
 	});
 
-	async function saveThemeSource(theme: ThemeSource) {
-		mutate(await trpc.setThemeSource.mutate(theme));
+	function saveThemeSource(theme: ThemeSource) {
+		void trpc.setThemeSource.mutate(theme).then(mutate);
 	}
 
 	return (

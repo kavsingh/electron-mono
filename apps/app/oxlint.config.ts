@@ -205,11 +205,6 @@ export default defineConfig({
 		},
 
 		{
-			files: ["./src/renderer/**/*.tsx"],
-			rules: { "typescript/strict-void-return": "off" },
-		},
-
-		{
 			files: [
 				"./src/**/__test-helpers__/**/*.{ts,tsx}",
 				"./src/**/*.test.{ts,tsx}",
