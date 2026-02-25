@@ -4,7 +4,7 @@ import { pathToFileURL } from "node:url";
 import { net } from "electron";
 import log from "electron-log";
 
-import { RENDERER_ROOT } from "./known-paths";
+import { RENDERER_ROOT } from "./known-paths.ts";
 
 export const APP_PROTOCOL_SCHEME = "app";
 export const APP_RENDERER_HOST = "renderer";

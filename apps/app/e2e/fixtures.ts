@@ -8,11 +8,11 @@ interface Fixtures {
 	app: ElectronApplication;
 }
 
-const appPath = path.resolve(import.meta.dirname, "../../out/main/index.js");
+const appPath = path.resolve(import.meta.dirname, "../out/main/index.js");
 
 export const test = baseTest.extend<Fixtures>({
 	async app({ launchOptions: _ }, use) {
-		const app = await _electron.launch({ args: [path.join(appPath)] });
+		const app = await _electron.launch({ args: [appPath, "--e2e"] });
 
 		await use(app);
 		await app.close();

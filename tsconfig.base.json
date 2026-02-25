@@ -6,6 +6,7 @@
 		"allowJs": true,
 		"checkJs": true,
 		"noEmit": true,
+
 		// leave the following to eslint
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,

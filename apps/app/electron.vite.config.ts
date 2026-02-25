@@ -1,18 +1,11 @@
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import tailwindcssPlugin from "@tailwindcss/vite";
 import { defineConfig } from "electron-vite";
 import solidPlugin from "vite-plugin-solid";
 import tsconfigPathsPlugin from "vite-tsconfig-paths";
 
-import type { UserConfig } from "vite";
-
-const dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const define = {
-	E2E: JSON.stringify(process.env["E2E"] === "true"),
-} satisfies NonNullable<UserConfig["define"]>;
+const dirname = import.meta.dirname;
 
 export default defineConfig(({ mode }) => {
 	const build =
@@ -22,13 +15,11 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		main: {
-			define,
 			build: { ...build, externalizeDeps: { exclude: ["trpc-electron"] } },
 			resolve: { conditions: ["node"] },
 			plugins: [tsconfigPathsPlugin()],
 		},
 		preload: {
-			define,
 			build: {
 				...build,
 				externalizeDeps: { exclude: ["trpc-electron"] },
@@ -47,7 +38,6 @@ export default defineConfig(({ mode }) => {
 			plugins: [tsconfigPathsPlugin()],
 		},
 		renderer: {
-			define,
 			build,
 			resolve: { conditions: ["browser", mode] },
 			plugins: [tsconfigPathsPlugin(), solidPlugin(), tailwindcssPlugin()],

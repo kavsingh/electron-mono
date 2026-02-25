@@ -1,0 +1,15 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"include": [
+		"./src/common",
+		"./src/main",
+		"./src/preload",
+		"./src/vitest.node.setup.ts"
+	],
+	"extends": ["../../tsconfig.base.json", "@tsconfig/node24/tsconfig.json"],
+	"compilerOptions": {
+		"composite": true,
+		"emitDeclarationOnly": true,
+		"paths": { "#*": ["./src/*"] }
+	}
+}

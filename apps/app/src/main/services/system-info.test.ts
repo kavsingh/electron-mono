@@ -1,7 +1,7 @@
 import * as systeminformation from "systeminformation";
 import { describe, it, expect, vi } from "vitest";
 
-import { getSystemInfo } from "./system-info";
+import { getSystemInfo } from "./system-info.ts";
 
 vi.mock(import("systeminformation"));
 

@@ -1,0 +1,11 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"include": ["./src/common"],
+	"extends": ["../../tsconfig.base.json", "@tsconfig/node24/tsconfig.json"],
+	"compilerOptions": {
+		"composite": true,
+		"emitDeclarationOnly": true,
+		"paths": { "#common/*": ["./src/common/*"] },
+		"types": []
+	}
+}

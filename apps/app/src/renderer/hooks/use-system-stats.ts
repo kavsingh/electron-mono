@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/solid-query";
 
+import { SystemStats } from "#common/schema/system";
 import { trpc } from "#renderer/trpc";
 
-import type { SystemStats } from "#main/services/system-stats";
 import type { QueryClient } from "@tanstack/solid-query";
 
 const queryKey = ["systemStats"];

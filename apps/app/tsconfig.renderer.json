@@ -1,0 +1,20 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"include": [
+		"./src/common",
+		"./src/renderer",
+		"./src/vitest.renderer.setup.ts",
+		"./src/main/trpc"
+	],
+	"extends": ["../../tsconfig.base.json"],
+	"compilerOptions": {
+		"composite": true,
+		"emitDeclarationOnly": true,
+		"jsx": "preserve",
+		"jsxImportSource": "solid-js",
+		"lib": ["es2023", "dom"],
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"paths": { "#*": ["./src/*"] }
+	}
+}

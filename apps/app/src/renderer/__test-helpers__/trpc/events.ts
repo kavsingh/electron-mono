@@ -1,8 +1,8 @@
 import { vi } from "vitest";
 
+import { SystemStats } from "#common/schema/system";
 import { trpc } from "#renderer/trpc";
 
-import type { SystemStats } from "#main/services/system-stats";
 import type { Mock } from "vitest";
 
 function publishTrpcSubscriberEvent(

@@ -1,10 +1,10 @@
 import { nativeTheme } from "electron";
 
-import { themeSourceSchema } from "#common/lib/theme";
+import { themeSourceSchema } from "#common/lib/theme.ts";
 
-import { publicProcedure } from "./trpc-server";
+import { publicProcedure } from "./trpc-server.ts";
 
-import type { ThemeSource } from "#common/lib/theme";
+import type { ThemeSource } from "#common/lib/theme.ts";
 
 export function routesTheme() {
 	return {

@@ -1,10 +1,10 @@
-import { onEmitter } from "#main/lib/node-events";
-import { getSystemInfo } from "#main/services/system-info";
-import { getSystemStats } from "#main/services/system-stats";
+import { onEmitter } from "#main/lib/node-events.ts";
+import { getSystemInfo } from "#main/services/system-info.ts";
+import { getSystemStats } from "#main/services/system-stats.ts";
 
-import { publicProcedure } from "./trpc-server";
+import { publicProcedure } from "./trpc-server.ts";
 
-import type { AppEventBus } from "#main/services/app-event-bus";
+import type { AppEventBus } from "#main/services/app-event-bus.ts";
 
 export function routesSystem(eventBus: AppEventBus) {
 	return {

@@ -1,7 +1,9 @@
 import log from "electron-log";
 import { mem } from "systeminformation";
 
-import type { AppEventBus } from "./app-event-bus";
+import { SystemStats } from "#common/schema/system.ts";
+
+import type { AppEventBus } from "./app-event-bus.ts";
 
 export async function getSystemStats(): Promise<SystemStats> {
 	const sysMem = await mem();
@@ -40,11 +42,4 @@ export function startSystemStatsUpdates(eventBus: AppEventBus) {
 			timeout = undefined;
 		}
 	};
-}
-
-export interface SystemStats {
-	memTotal: string;
-	memUsed: string;
-	memAvailable: string;
-	sampledAt: string;
 }

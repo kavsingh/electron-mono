@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events";
 
-import type { SystemStats } from "./system-stats";
+import { SystemStats } from "#common/schema/system.ts";
 
 type AppEventMap = Readonly<{
 	systemStats: [SystemStats];

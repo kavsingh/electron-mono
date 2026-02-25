@@ -1,5 +1,5 @@
-import { tryOr } from "./error";
-import { divBigint } from "./number";
+import { tryOr } from "./error.ts";
+import { divBigint } from "./number.ts";
 
 const memoryThresholds = [
 	[BigInt(1024 * 1024 * 1024), "GB"],
