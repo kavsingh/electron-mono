@@ -26,7 +26,7 @@ export default defineConfig((configEnv) => {
 					baseConfig.main as Record<string, unknown>,
 					defineProject({
 						test: {
-							name: "node",
+							name: "main",
 							environment: "node",
 							include: [
 								"src/{main,common,preload}/**/*.{test,spec}.?(m|c)[tj]s?(x)",
