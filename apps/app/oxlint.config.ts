@@ -9,6 +9,7 @@ import {
 } from "eslint-plugin-better-tailwindcss/types";
 import jestDom from "eslint-plugin-jest-dom";
 import playwright from "eslint-plugin-playwright";
+import solid from "eslint-plugin-solid";
 import testingLibrary from "eslint-plugin-testing-library";
 import { defineConfig } from "oxlint";
 
@@ -169,7 +170,7 @@ export default defineConfig({
 			files: ["./src/renderer/**/*.{ts,tsx}"],
 			env: { node: false, browser: true },
 			plugins: ["import", "jsx-a11y"],
-			jsPlugins: ["eslint-plugin-better-tailwindcss"],
+			jsPlugins: ["eslint-plugin-solid", "eslint-plugin-better-tailwindcss"],
 			rules: {
 				"eslint/no-restricted-imports": [
 					"error",
@@ -197,6 +198,11 @@ export default defineConfig({
 
 				"import/no-nodejs-modules": "error",
 				"import/no-unassigned-import": ["error", { allow: ["**/*.css"] }],
+
+				...solid.configs["flat/typescript"].rules,
+				// @TODO: rule uses unimplemented markVariableAsUsed. remove this
+				// override when possible
+				"solid/jsx-uses-vars": "off",
 
 				...tailwindcss.configs["recommended-error"].rules,
 				"better-tailwindcss/enforce-consistent-line-wrapping": "off",

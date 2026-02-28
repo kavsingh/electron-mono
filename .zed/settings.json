@@ -13,13 +13,6 @@
 			"initialization_options": { "settings": { "run": "onSave" } }
 		},
 
-		"eslint": {
-			"settings": {
-				"workingDirectories": [{ "mode": "auto" }],
-				"onIgnoredFiles": "off"
-			}
-		},
-
 		"tailwindcss-language-server": {
 			"settings": {
 				"validate": true,
@@ -45,39 +38,28 @@
 			"language_servers": [
 				"tsgo",
 				"oxlint",
-				"eslint",
 				"tailwindcss-language-server",
 				"oxfmt"
 			],
 			"formatter": [{ "language_server": { "name": "oxfmt" } }],
-			"code_actions_on_format": {
-				"source.fixAll.oxc": true,
-				"source.fixAll.eslint": true
-			}
+			"code_actions_on_format": { "source.fixAll.oxc": true }
 		},
 
 		"TSX": {
 			"language_servers": [
 				"tsgo",
 				"oxlint",
-				"eslint",
 				"tailwindcss-language-server",
 				"oxfmt"
 			],
 			"formatter": [{ "language_server": { "name": "oxfmt" } }],
-			"code_actions_on_format": {
-				"source.fixAll.oxc": true,
-				"source.fixAll.eslint": true
-			}
+			"code_actions_on_format": { "source.fixAll.oxc": true }
 		},
 
 		"JavaScript": {
 			"language_servers": ["tsgo", "oxlint", "oxfmt"],
 			"formatter": [{ "language_server": { "name": "oxfmt" } }],
-			"code_actions_on_format": {
-				"source.fixAll.oxc": true,
-				"source.fixAll.eslint": true
-			}
+			"code_actions_on_format": { "source.fixAll.oxc": true }
 		},
 
 		"CSS": {

@@ -3,6 +3,3 @@ pre-commit:
     - run: pnpm oxlint --type-aware --type-check --max-warnings=0 {staged_files}
       root: "apps/app"
       glob: "**/*.{js,ts,jsx,tsx}"
-    - run: pnpm eslint --no-warn-ignored --max-warnings=0 {staged_files}
-      root: "apps/app"
-      glob: "**/*.{js,ts,jsx,tsx}"
