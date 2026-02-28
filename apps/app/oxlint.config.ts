@@ -169,7 +169,7 @@ export default defineConfig({
 		{
 			files: ["./src/renderer/**/*.{ts,tsx}"],
 			env: { node: false, browser: true },
-			plugins: ["import", "jsx-a11y"],
+			plugins: ["jsx-a11y"],
 			jsPlugins: ["eslint-plugin-solid", "eslint-plugin-better-tailwindcss"],
 			rules: {
 				"eslint/no-restricted-imports": [
@@ -215,7 +215,6 @@ export default defineConfig({
 				"./src/**/__test-helpers__/**/*.{ts,tsx}",
 				"./src/**/*.test.{ts,tsx}",
 			],
-			plugins: ["typescript"],
 			rules: {
 				"typescript/unbound-method": "off",
 				"typescript/no-non-null-assertion": "off",
@@ -240,7 +239,6 @@ export default defineConfig({
 				"./src/renderer/**/*.test.{ts,tsx}",
 				"./src/renderer/**/*.test-d.{ts,tsx}",
 			],
-			plugins: ["vitest"],
 			jsPlugins: ["eslint-plugin-jest-dom", "eslint-plugin-testing-library"],
 			// @ts-expect-error type inference weirdness
 			rules: {
