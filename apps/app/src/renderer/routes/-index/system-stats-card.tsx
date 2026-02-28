@@ -5,7 +5,7 @@ import { formatMem } from "#common/lib/format";
 import { SystemStats } from "#common/schema/system";
 import { Card } from "#renderer/components/card";
 import { ChronoGraph } from "#renderer/components/chrono-graph";
-import { useSystemStats } from "#renderer/hooks/use-system-stats";
+import { useSystemStats } from "#renderer/hooks/system-stats";
 
 import { InfoList } from "../../components/info-list";
 

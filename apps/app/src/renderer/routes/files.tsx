@@ -1,9 +1,9 @@
+import { createFileRoute } from "@tanstack/solid-router";
 import { createEffect, createSignal, For } from "solid-js";
 
 import { Button } from "#renderer/components/button";
 import { Card } from "#renderer/components/card";
-import { useFileDrop } from "#renderer/hooks/use-file-drop";
-import { useFileSelectDialog } from "#renderer/hooks/use-file-select-dialog";
+import { useFileDrop, useFileSelectDialog } from "#renderer/hooks/files";
 import { Page } from "#renderer/layouts/page";
 import { tv } from "#renderer/lib/style";
 
@@ -48,7 +48,7 @@ function DragFileSelect(props: { onSelect: (selected: string[]) => void }) {
 	);
 }
 
-export function Files() {
+function Files() {
 	const [selectedFiles, setSelectedFiles] = createSignal<string[]>([]);
 
 	function handleFileSelect(selected: string[]) {
@@ -81,3 +81,5 @@ export function Files() {
 		</>
 	);
 }
+
+export const Route = createFileRoute("/files")({ component: Files });

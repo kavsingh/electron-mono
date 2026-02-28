@@ -2,7 +2,7 @@ import { createEffect, createMemo, createSignal, onCleanup } from "solid-js";
 
 import { tryOr } from "#common/lib/error";
 import { normalizeBigint } from "#common/lib/number";
-import { useResizeObserver } from "#renderer/hooks/use-resize-observer";
+import { useResizeObserver } from "#renderer/hooks/dom";
 import { tm } from "#renderer/lib/style";
 
 import type { Accessor } from "solid-js";

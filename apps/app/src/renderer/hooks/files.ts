@@ -1,6 +1,16 @@
 import { createSignal } from "solid-js";
 
+import { trpc } from "#renderer/trpc";
+
 import type { JSX } from "solid-js";
+
+type DragEventHandler = JSX.EventHandlerUnion<HTMLElement, DragEvent>;
+
+export interface DroppedFile {
+	isDirectory: FileSystemEntry["isDirectory"] | undefined;
+	isFile: FileSystemEntry["isFile"] | undefined;
+	file: File;
+}
 
 const onDragOver: DragEventHandler = (event) => {
 	event.preventDefault();
@@ -45,10 +55,21 @@ export function useFileDrop() {
 	] as const;
 }
 
-export interface DroppedFile {
-	isDirectory: FileSystemEntry["isDirectory"] | undefined;
-	isFile: FileSystemEntry["isFile"] | undefined;
-	file: File;
-}
+export type ShowDialogOptions = Parameters<
+	(typeof trpc)["showOpenDialog"]["query"]
+>[0];
 
-type DragEventHandler = JSX.EventHandlerUnion<HTMLElement, DragEvent>;
+export function useFileSelectDialog() {
+	const [files, setFiles] = createSignal<string[]>([]);
+
+	async function showDialog(options?: ShowDialogOptions) {
+		const selectResult = await trpc.showOpenDialog.query({
+			properties: ["openFile", "multiSelections"],
+			...options,
+		});
+
+		setFiles(selectResult.filePaths);
+	}
+
+	return [files, showDialog] as const;
+}
