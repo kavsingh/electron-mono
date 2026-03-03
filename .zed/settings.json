@@ -9,10 +9,6 @@
 			"initialization_options": { "settings": { "typeAware": true } }
 		},
 
-		"oxfmt": {
-			"initialization_options": { "settings": { "run": "onSave" } }
-		},
-
 		"tailwindcss-language-server": {
 			"settings": {
 				"validate": true,
