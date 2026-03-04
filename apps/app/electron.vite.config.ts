@@ -1,9 +1,11 @@
 import path from "node:path";
 
-import tailwindcssPlugin from "@tailwindcss/vite";
+import tailwindcss from "@tailwindcss/vite";
+import { devtools } from "@tanstack/devtools-vite";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import { defineConfig } from "electron-vite";
-import solidPlugin from "vite-plugin-solid";
-import tsconfigPathsPlugin from "vite-tsconfig-paths";
+import solid from "vite-plugin-solid";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 const dirname = import.meta.dirname;
 
@@ -17,7 +19,7 @@ export default defineConfig(({ mode }) => {
 		main: {
 			build: { ...build, externalizeDeps: { exclude: ["trpc-electron"] } },
 			resolve: { conditions: ["node"] },
-			plugins: [tsconfigPathsPlugin()],
+			plugins: [tsconfigPaths()],
 		},
 		preload: {
 			build: {
@@ -35,12 +37,18 @@ export default defineConfig(({ mode }) => {
 					},
 				},
 			},
-			plugins: [tsconfigPathsPlugin()],
+			plugins: [tsconfigPaths()],
 		},
 		renderer: {
 			build,
 			resolve: { conditions: ["browser", mode] },
-			plugins: [tsconfigPathsPlugin(), solidPlugin(), tailwindcssPlugin()],
+			plugins: [
+				devtools(),
+				tsconfigPaths(),
+				tanstackRouter(),
+				solid(),
+				tailwindcss(),
+			],
 		},
 	};
 });

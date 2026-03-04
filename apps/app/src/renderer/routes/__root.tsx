@@ -1,6 +1,7 @@
-import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
+import { TanStackDevtools } from "@tanstack/solid-devtools";
+import { SolidQueryDevtoolsPanel } from "@tanstack/solid-query-devtools";
 import { createRootRoute, Link, Outlet } from "@tanstack/solid-router";
-import { TanStackRouterDevtools } from "@tanstack/solid-router-devtools";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/solid-router-devtools";
 import { createEffect, Show, splitProps } from "solid-js";
 
 import { usePrefersDark } from "#renderer/hooks/theme";
@@ -42,8 +43,20 @@ function RootLayout() {
 				<div class="h-full overflow-x-hidden overflow-y-auto bg-background">
 					<Outlet />
 					<Show when={import.meta.env.DEV}>
-						<TanStackRouterDevtools />
-						<SolidQueryDevtools />
+						<TanStackDevtools
+							plugins={[
+								{
+									name: "TanStack Query",
+									render: <SolidQueryDevtoolsPanel />,
+									defaultOpen: true,
+								},
+								{
+									name: "TanStack Router",
+									render: <TanStackRouterDevtoolsPanel />,
+									defaultOpen: false,
+								},
+							]}
+						/>
 					</Show>
 				</div>
 			</div>
