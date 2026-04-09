@@ -10,20 +10,14 @@ import tsconfigPaths from "vite-tsconfig-paths";
 const dirname = import.meta.dirname;
 
 export default defineConfig(({ mode }) => {
-	const build =
-		mode === "production"
-			? { minify: "esbuild" as const, sourcemap: true }
-			: { minify: false, sourcemap: false };
-
 	return {
 		main: {
-			build: { ...build, externalizeDeps: { exclude: ["trpc-electron"] } },
-			resolve: { conditions: ["node"] },
+			build: { externalizeDeps: { exclude: ["trpc-electron"] } },
+			resolve: { conditions: ["node", mode] },
 			plugins: [tsconfigPaths()],
 		},
 		preload: {
 			build: {
-				...build,
 				externalizeDeps: { exclude: ["trpc-electron"] },
 				rollupOptions: {
 					input: {
@@ -40,12 +34,16 @@ export default defineConfig(({ mode }) => {
 			plugins: [tsconfigPaths()],
 		},
 		renderer: {
-			build,
 			resolve: { conditions: ["browser", mode] },
 			plugins: [
 				devtools(),
 				tsconfigPaths(),
-				tanstackRouter(),
+				tanstackRouter({
+					target: "solid",
+					autoCodeSplitting: true,
+					routesDirectory: "routes",
+					generatedRouteTree: "route-tree.gen.ts",
+				}),
 				solid(),
 				tailwindcss(),
 			],

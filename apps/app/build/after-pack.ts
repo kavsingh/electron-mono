@@ -7,7 +7,11 @@ import type { AfterPackContext } from "electron-builder";
 function applyFuses(context: AfterPackContext): Promise<number> {
 	return context.packager.addElectronFuses(context, {
 		version: FuseVersion.V1,
-		strictlyRequireAllFuses: true,
+
+		// @TODO: re-enable when
+		// https://github.com/electron-userland/electron-builder/issues/9662
+		// is resolved
+		// strictlyRequireAllFuses: true,
 
 		// https://github.com/electron/fuses?tab=readme-ov-file#apple-silicon
 		resetAdHocDarwinSignature:

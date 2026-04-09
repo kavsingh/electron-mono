@@ -1,9 +1,0 @@
-{
-	"target": "solid",
-	"autoCodeSplitting": true,
-	"spa": { "enabled": true },
-	"appDirectory": "src/renderer",
-	"rootDirectory": ".",
-	"routesDirectory": "./src/renderer/routes",
-	"generatedRouteTree": "./src/renderer/route-tree.gen.ts"
-}
