@@ -2,11 +2,11 @@ import { BrowserWindow, dialog } from "electron";
 
 import { electronOpenDialogOptionsSchema } from "~/common/schema/electron.ts";
 
-import { publicProcedure } from "./trpc-server.ts";
+import { t } from "./trpc-server.ts";
 
 export function routesFiles() {
 	return {
-		showOpenDialog: publicProcedure
+		showOpenDialog: t.procedure
 			.input(electronOpenDialogOptionsSchema)
 			.query(({ input }) => {
 				// TODO: determine requesting window somehow?

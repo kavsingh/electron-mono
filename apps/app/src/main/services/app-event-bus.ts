@@ -1,17 +1,17 @@
-import { EventEmitter } from "node:events";
-
 import { SystemStats } from "~/common/schema/system.ts";
+import { IterableEventEmitter } from "~/main/lib/node-events.ts";
 
-type AppEventMap = Readonly<{
-	systemStats: [SystemStats];
-}>;
+type AppEventMap = Readonly<{ systemStats: [SystemStats] }>;
 
-export function createAppEventBus() {
-	return new EventEmitter<AppEventMap>();
+type AppEventName = keyof AppEventMap;
+
+type AppEvent<K extends AppEventName> = AppEventMap[K][0];
+
+function createAppEventBus() {
+	return new IterableEventEmitter<AppEventMap>();
 }
 
-export type AppEventBus = ReturnType<typeof createAppEventBus>;
+type AppEventBus = ReturnType<typeof createAppEventBus>;
 
-export type AppEventName = keyof AppEventMap;
-
-export type AppEvent<K extends AppEventName> = AppEventMap[K][0];
+export { createAppEventBus };
+export type { AppEventBus, AppEvent, AppEventName };
