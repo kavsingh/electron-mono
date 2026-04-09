@@ -4,7 +4,7 @@ import { createRootRoute, Link, Outlet } from "@tanstack/solid-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/solid-router-devtools";
 import { createEffect, Show, splitProps } from "solid-js";
 
-import { usePrefersDark } from "#renderer/hooks/theme";
+import { usePrefersDark } from "~/renderer/hooks/theme";
 
 import type { ComponentProps } from "solid-js";
 
@@ -33,7 +33,7 @@ function RootLayout() {
 	return (
 		<>
 			<div class="grid size-full grid-cols-[max-content_1fr]">
-				<div class="min-h-full bg-linear-to-l from-background p-4 pe-8 pt-10 text-sm">
+				<div class="min-h-full bg-linear-to-l from-background p-4 pe-8 pbs-10 text-sm">
 					<nav class="flex flex-col gap-2">
 						<NavLink href="/">Home</NavLink>
 						<NavLink href="/files">Files</NavLink>
@@ -60,7 +60,7 @@ function RootLayout() {
 					</Show>
 				</div>
 			</div>
-			<div class="fixed inset-x-0 top-0 z-10 h-8 [-webkit-app-region:drag]" />
+			<div class="fixed inset-x-0 inset-bs-0 z-10 h-8 [-webkit-app-region:drag]" />
 		</>
 	);
 }

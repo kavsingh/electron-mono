@@ -2,10 +2,10 @@
 
 import { splitProps } from "solid-js";
 
-import { tv } from "#renderer/lib/style";
+import { tv } from "~/renderer/lib/style";
 
-import type { VariantProps } from "#renderer/lib/style";
 import type { ComponentProps } from "solid-js";
+import type { VariantProps } from "~/renderer/lib/style";
 
 const buttonVariants = tv({
 	base: "inline-flex items-center justify-center rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",

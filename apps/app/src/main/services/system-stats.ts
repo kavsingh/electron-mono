@@ -1,7 +1,7 @@
 import log from "electron-log";
 import { mem } from "systeminformation";
 
-import { SystemStats } from "#common/schema/system.ts";
+import { SystemStats } from "~/common/schema/system.ts";
 
 import type { AppEventBus } from "./app-event-bus.ts";
 

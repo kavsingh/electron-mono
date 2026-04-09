@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/solid-router";
 
-import { Page } from "#renderer/layouts/page";
+import { Page } from "~/renderer/layouts/page";
 
 import { ThemeSwitch } from "./-settings/theme-switch";
 

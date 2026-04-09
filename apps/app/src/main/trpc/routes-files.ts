@@ -1,6 +1,6 @@
 import { BrowserWindow, dialog } from "electron";
 
-import { electronOpenDialogOptionsSchema } from "#common/schema/electron.ts";
+import { electronOpenDialogOptionsSchema } from "~/common/schema/electron.ts";
 
 import { publicProcedure } from "./trpc-server.ts";
 

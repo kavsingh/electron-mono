@@ -3,9 +3,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { ParentProps } from "solid-js";
 import { describe, it, expect, vi, afterEach } from "vitest";
 
-import { createMockSystemStats } from "#common/__test-helpers__/mock-data-creators/system";
-import { publishSystemStatsEvent } from "#renderer/__test-helpers__/trpc/events";
-import { Index } from "#renderer/routes/index";
+import { createMockSystemStats } from "~/common/__test-helpers__/mock-data-creators/system";
+import { publishSystemStatsEvent } from "~/renderer/__test-helpers__/trpc/events";
+import { Index } from "~/renderer/routes/index";
 
 function setup() {
 	const client = new QueryClient();
@@ -56,9 +56,11 @@ describe("<Index />", () => {
 		expect(screen.queryByText("500.00 MB")).not.toBeInTheDocument();
 
 		publishSystemStatsEvent(
+			// @TODO: why is this complaning? everything seems to be typed correctly
+			// oxlint-disable-next-line typescript/no-unsafe-argument
 			createMockSystemStats({
-				memUsed: String(1024 * 1024 * 500),
-				sampledAt: "1",
+				memUsed: String(1024 * 1024 * 600),
+				sampledAt: "0",
 			}),
 		);
 

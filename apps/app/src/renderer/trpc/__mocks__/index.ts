@@ -1,11 +1,11 @@
 import { vi } from "vitest";
 
-import { createMockOpenDialogReturnValue } from "#common/__test-helpers__/mock-data-creators/electron";
+import { createMockOpenDialogReturnValue } from "~/common/__test-helpers__/mock-data-creators/electron";
 import {
 	createMockSystemInfo,
 	createMockSystemStats,
-} from "#common/__test-helpers__/mock-data-creators/system";
-import { themeSourceSchema } from "#common/lib/theme";
+} from "~/common/__test-helpers__/mock-data-creators/system";
+import { themeSourceSchema } from "~/common/lib/theme";
 
 import type { trpc as trpcActual } from "../index";
 

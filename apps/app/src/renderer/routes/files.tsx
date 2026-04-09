@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/solid-router";
 import { createEffect, createSignal, For } from "solid-js";
 
-import { Button } from "#renderer/components/button";
-import { Card } from "#renderer/components/card";
-import { useFileDrop, useFileSelectDialog } from "#renderer/hooks/files";
-import { Page } from "#renderer/layouts/page";
-import { tv } from "#renderer/lib/style";
+import { Button } from "~/renderer/components/button";
+import { Card } from "~/renderer/components/card";
+import { useFileDrop, useFileSelectDialog } from "~/renderer/hooks/files";
+import { Page } from "~/renderer/layouts/page";
+import { tv } from "~/renderer/lib/style";
 
 function DialogFileSelect(props: { onSelect: (selected: string[]) => void }) {
 	const [files, selectFiles] = useFileSelectDialog();
@@ -69,7 +69,7 @@ function Files() {
 						<ul class="flex flex-col gap-1">
 							<For each={selectedFiles()}>
 								{(file) => (
-									<li class="flex gap-2 border-b border-border pb-2 text-sm text-muted-foreground last:border-b-0 last:pb-0">
+									<li class="flex gap-2 border-be border-border pbe-2 text-sm text-muted-foreground last:border-be-0 last:pbe-0">
 										{file}
 									</li>
 								)}

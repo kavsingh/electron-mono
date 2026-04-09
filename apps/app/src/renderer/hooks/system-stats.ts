@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/solid-query";
 
-import { SystemStats } from "#common/schema/system";
-import { trpc } from "#renderer/trpc";
+import { SystemStats } from "~/common/schema/system";
+import { trpc } from "~/renderer/trpc";
 
 import type { QueryClient } from "@tanstack/solid-query";
 

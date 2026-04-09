@@ -3,7 +3,7 @@ import path from "node:path";
 import { app, BrowserWindow } from "electron";
 import log from "electron-log";
 
-import { APP_RENDERER_URL } from "#main/lib/app-protocol.ts";
+import { APP_RENDERER_URL } from "~/main/lib/app-protocol.ts";
 
 export function createMainWindow(isE2E: boolean) {
 	const mainWindow = new BrowserWindow({

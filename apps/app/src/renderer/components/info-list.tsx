@@ -1,6 +1,6 @@
 import { splitProps } from "solid-js";
 
-import { tm } from "#renderer/lib/style";
+import { tm } from "~/renderer/lib/style";
 
 import type { ComponentProps } from "solid-js";
 
@@ -19,7 +19,7 @@ export function InfoListEntry(props: Omit<ComponentProps<"li">, "classList">) {
 		<li
 			{...passProps}
 			class={tm(
-				"flex gap-2 border-b border-b-border py-2 last:border-b-0",
+				"flex gap-2 border-be border-be-border py-2 last:border-be-0",
 				localProps.class,
 			)}
 		/>

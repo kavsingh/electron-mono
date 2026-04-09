@@ -1,10 +1,10 @@
 import { For, Match, Switch, createResource } from "solid-js";
 
-import { THEME_SOURCES } from "#common/lib/theme";
-import { Card } from "#renderer/components/card";
-import { trpc } from "#renderer/trpc";
+import { THEME_SOURCES } from "~/common/lib/theme";
+import { Card } from "~/renderer/components/card";
+import { trpc } from "~/renderer/trpc";
 
-import type { ThemeSource } from "#common/lib/theme";
+import type { ThemeSource } from "~/common/lib/theme";
 
 function LabelText(props: { themeSource: ThemeSource }) {
 	return (

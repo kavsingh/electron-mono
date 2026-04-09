@@ -205,7 +205,10 @@ export default defineConfig({
 				"solid/jsx-uses-vars": "off",
 
 				...tailwindcss.configs["recommended-error"].rules,
+				"better-tailwindcss/enforce-consistent-important-position": "error",
 				"better-tailwindcss/enforce-consistent-line-wrapping": "off",
+				"better-tailwindcss/enforce-consistent-variant-order": "error",
+				"better-tailwindcss/enforce-logical-properties": "error",
 				"better-tailwindcss/enforce-shorthand-classes": "error",
 			},
 		},

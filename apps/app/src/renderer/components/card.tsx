@@ -2,7 +2,7 @@
 
 import { splitProps } from "solid-js";
 
-import { tm } from "#renderer/lib/style";
+import { tm } from "~/renderer/lib/style";
 
 import type { ComponentProps } from "solid-js";
 
@@ -65,7 +65,7 @@ export function CardDescription(props: Omit<ComponentProps<"p">, "classList">) {
 export function CardContent(props: Omit<ComponentProps<"div">, "classList">) {
 	const [localProps, passProps] = splitProps(props, ["class"]);
 
-	return <div {...passProps} class={tm("p-6 pt-0", localProps.class)} />;
+	return <div {...passProps} class={tm("p-6 pbs-0", localProps.class)} />;
 }
 
 //
@@ -76,7 +76,7 @@ export function CardFooter(props: Omit<ComponentProps<"div">, "classList">) {
 	return (
 		<div
 			{...passProps}
-			class={tm("flex items-center p-6 pt-0", localProps.class)}
+			class={tm("flex items-center p-6 pbs-0", localProps.class)}
 		/>
 	);
 }

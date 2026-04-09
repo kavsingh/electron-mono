@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 
-import { SystemStats } from "#common/schema/system";
-import { trpc } from "#renderer/trpc";
+import { SystemStats } from "~/common/schema/system";
+import { trpc } from "~/renderer/trpc";
 
 import type { Mock } from "vitest";
 

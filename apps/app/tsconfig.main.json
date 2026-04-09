@@ -10,6 +10,9 @@
 	"compilerOptions": {
 		"composite": true,
 		"emitDeclarationOnly": true,
-		"paths": { "#*": ["./src/*"] }
+		"paths": {
+			"~/main/*": ["./src/main/*"],
+			"~/common/*": ["./src/common/*"]
+		}
 	}
 }

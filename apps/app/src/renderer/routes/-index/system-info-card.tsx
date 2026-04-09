@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/solid-query";
 import { Show } from "solid-js";
 
-import { Card } from "#renderer/components/card";
-import { InfoList } from "#renderer/components/info-list";
-import { trpc } from "#renderer/trpc";
+import { Card } from "~/renderer/components/card";
+import { InfoList } from "~/renderer/components/info-list";
+import { trpc } from "~/renderer/trpc";
 
 export function SystemInfoCard() {
 	const infoQuery = useQuery(() => ({

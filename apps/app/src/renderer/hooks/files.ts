@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 
-import { trpc } from "#renderer/trpc";
+import { trpc } from "~/renderer/trpc";
 
 import type { JSX } from "solid-js";
 
