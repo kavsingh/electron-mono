@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  trpc-electron@0.1.2:
+    hash: deb5fee6d81939a190e62499a3d886dd06c76b0bcd1caefc82ab0e562005ef11
+    path: patches/trpc-electron@0.1.2.patch
+
 importers:
 
   .:
@@ -58,7 +63,7 @@ importers:
         version: 5.31.5
       trpc-electron:
         specifier: 0.1.2
-        version: 0.1.2(@trpc/client@11.16.0(@trpc/server@11.16.0(typescript@5.9.3))(typescript@5.9.3))(@trpc/server@11.16.0(typescript@5.9.3))(electron@41.2.0)
+        version: 0.1.2(patch_hash=deb5fee6d81939a190e62499a3d886dd06c76b0bcd1caefc82ab0e562005ef11)(@trpc/client@11.16.0(@trpc/server@11.16.0(typescript@5.9.3))(typescript@5.9.3))(@trpc/server@11.16.0(typescript@5.9.3))(electron@41.2.0)
       zod:
         specifier: 4.3.6
         version: 4.3.6
@@ -8788,7 +8793,7 @@ snapshots:
 
   tree-kill@1.2.2: {}
 
-  trpc-electron@0.1.2(@trpc/client@11.16.0(@trpc/server@11.16.0(typescript@5.9.3))(typescript@5.9.3))(@trpc/server@11.16.0(typescript@5.9.3))(electron@41.2.0):
+  trpc-electron@0.1.2(patch_hash=deb5fee6d81939a190e62499a3d886dd06c76b0bcd1caefc82ab0e562005ef11)(@trpc/client@11.16.0(@trpc/server@11.16.0(typescript@5.9.3))(typescript@5.9.3))(@trpc/server@11.16.0(typescript@5.9.3))(electron@41.2.0):
     dependencies:
       '@trpc/client': 11.16.0(@trpc/server@11.16.0(typescript@5.9.3))(typescript@5.9.3)
       '@trpc/server': 11.16.0(typescript@5.9.3)

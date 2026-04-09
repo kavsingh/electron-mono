@@ -5,7 +5,7 @@
 	"compilerOptions": {
 		"composite": true,
 		"emitDeclarationOnly": true,
-		"paths": { "#common/*": ["./src/common/*"] },
+		"paths": { "~/common/*": ["./src/common/*"] },
 		"types": []
 	}
 }

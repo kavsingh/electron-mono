@@ -2,7 +2,7 @@
 
 import { mockCreator } from "./mock-creator.ts";
 
-import type { SystemInfo, SystemStats } from "#common/schema/system.ts";
+import type { SystemInfo, SystemStats } from "~/common/schema/system.ts";
 
 export const createMockSystemInfo = mockCreator<SystemInfo>({
 	osName: "OS Name",

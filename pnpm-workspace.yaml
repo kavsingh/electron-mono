@@ -1,10 +1,11 @@
 packages:
   - apps/*
   - packages/*
-
 allowBuilds:
   electron: true
   electron-winstaller: true
   esbuild: true
   lefthook: true
   nx: true
+patchedDependencies:
+  trpc-electron@0.1.2: patches/trpc-electron@0.1.2.patch

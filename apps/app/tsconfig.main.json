@@ -11,8 +11,9 @@
 		"composite": true,
 		"emitDeclarationOnly": true,
 		"paths": {
-			"~/main/*": ["./src/main/*"],
-			"~/common/*": ["./src/common/*"]
-		}
+			"~/common/*": ["./src/common/*"],
+			"~/main/*": ["./src/main/*"]
+		},
+		"types": ["node", "electron-vite/node"]
 	}
 }

@@ -119,6 +119,7 @@ export default defineConfig({
 						],
 					},
 				],
+				"import/no-nodejs-modules": "error",
 			},
 		},
 

@@ -1,5 +1,6 @@
 import { queryOptions, useQuery, useQueryClient } from "@tanstack/solid-query";
 import { Unsubscribable } from "@trpc/server/observable";
+import { scope } from "electron-log/renderer";
 
 import { SystemStats } from "~/common/schema/system";
 import { trpc } from "~/renderer/trpc";
@@ -19,6 +20,7 @@ function systemStatsQuery() {
 }
 
 const startSubscription = (() => {
+	const logger = scope("system stats subscription");
 	const queryKey = systemStatsQuery().queryKey;
 	let cachedClient: QueryClient;
 	let unsubscribable: Unsubscribable | undefined = undefined;
@@ -39,6 +41,9 @@ const startSubscription = (() => {
 				if (shouldUpdate) {
 					cachedClient.setQueryData(queryKey, () => event);
 				}
+			},
+			onError(err) {
+				logger.error("systemStatsEvent subscription error:", err);
 			},
 		});
 	};
