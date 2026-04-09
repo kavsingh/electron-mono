@@ -113,7 +113,7 @@ export default defineConfig({
 							...restrictImportsBrowser.patterns,
 							...restrictImportsNode.patterns,
 							{
-								group: ["#main/*", "#preload/*", "#renderer/*"],
+								group: ["~/main/*", "~/preload/*", "~/renderer/*"],
 								allowTypeImports: true,
 							},
 						],
@@ -134,7 +134,7 @@ export default defineConfig({
 						patterns: [
 							...restrictImportsNode.patterns,
 							{
-								group: ["#common/*", "#preload/*", "#renderer/*"],
+								group: ["~/common/*", "~/preload/*", "~/renderer/*"],
 								allowTypeImports: true,
 							},
 						],
@@ -158,7 +158,7 @@ export default defineConfig({
 							...restrictImportsBrowser.patterns,
 							...restrictImportsNode.patterns,
 							{
-								group: ["#common/*", "#main/*", "#renderer/*"],
+								group: ["~/common/*", "~/main/*", "~/renderer/*"],
 								allowTypeImports: true,
 							},
 						],
@@ -180,17 +180,17 @@ export default defineConfig({
 							...restrictImportsBrowser.paths,
 							{
 								name: "tailwind-merge",
-								message: "please import helpers from #src/style",
+								message: "please import helpers from ~/renderer/style",
 							},
 							{
 								name: "tailwind-variants",
-								message: "please import helpers from #src/style",
+								message: "please import helpers from ~/renderer/style",
 							},
 						],
 						patterns: [
 							...restrictImportsBrowser.patterns,
 							{
-								group: ["#common/*", "#main/*", "#preload/*"],
+								group: ["~/common/*", "~/main/*", "~/preload/*"],
 								allowTypeImports: true,
 							},
 						],
@@ -201,9 +201,6 @@ export default defineConfig({
 				"import/no-unassigned-import": ["error", { allow: ["**/*.css"] }],
 
 				...solid.configs["flat/typescript"].rules,
-				// @TODO: rule uses unimplemented markVariableAsUsed. remove this
-				// override when possible
-				"solid/jsx-uses-vars": "off",
 
 				...tailwindcss.configs["recommended-error"].rules,
 				"better-tailwindcss/enforce-consistent-important-position": "error",

@@ -27,6 +27,8 @@ export default defineConfig({
 		"import/consistent-type-specifier-style": ["error", "prefer-top-level"],
 		"import/no-cycle": "error",
 		"import/no-default-export": "error",
+		"import/no-duplicates": ["error", { considerQueryString: true }],
+		"import/no-mutable-exports": "error",
 
 		"promise/always-return": ["error", { ignoreLastCallback: true }],
 
