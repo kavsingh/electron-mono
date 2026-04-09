@@ -1,4 +1,5 @@
-import chalk from "chalk";
+import { styleText } from "node:util";
+
 import log from "electron-log";
 
 // oxlint-disable eslint/no-console
@@ -8,13 +9,13 @@ const consoleWriteFn: typeof log.transports.console.writeFn = ({ message }) => {
 
 	switch (message.level) {
 		case "error":
-			console.error(chalk.bgRed(` ${header} `), content);
+			console.error(styleText(["bgRed"], ` ${header} `), content);
 			break;
 		case "warn":
-			console.warn(chalk.bgYellow(` ${header} `), content);
+			console.warn(styleText(["bgYellow"], ` ${header} `), content);
 			break;
 		default:
-			console.log(chalk.dim(header), content);
+			console.log(styleText(["dim"], header), content);
 			break;
 	}
 };
