@@ -1,0 +1,40 @@
+{
+	"editor.formatOnSave": true,
+	"editor.rulers": [80],
+	"editor.codeActionsOnSave": { "source.fixAll.oxc": "always" },
+	"editor.quickSuggestions": { "strings": true },
+
+	"files.watcherExclude": {
+		"**/node_modules": true,
+		"**/dist/": true,
+		"**/out/": true,
+		"**/reports/": true
+	},
+	"search.exclude": {
+		"**/node_modules": true,
+		"**/dist/": true,
+		"**/out/": true,
+		"**/reports/": true
+	},
+
+	"js/ts.experimental.useTsgo": true,
+
+	"oxc.enable": true,
+	"oxc.typeAware": true,
+
+	"files.associations": { "*.css": "tailwindcss" },
+	"tailwindCSS.validate": true,
+	"tailwindCSS.classAttributes": [
+		"class",
+		"classList",
+		"className",
+		".+ClassName",
+		".+ClassNames"
+	],
+	"tailwindCSS.classFunctions": ["tj", "tm", "tv"],
+	"tailwindCSS.experimental.configFile": {
+		"apps/app/src/renderer/index.css": "apps/app/src/renderer/**"
+	},
+
+	"editor.defaultFormatter": "oxc.oxc-vscode"
+}
