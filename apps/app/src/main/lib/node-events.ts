@@ -15,6 +15,6 @@ export function onEmitter<
 	return on(emitter, eventName, options) as NodeJS.AsyncIterator<
 		TEventMap[TEventName],
 		undefined,
-		undefined
+		unknown
 	>;
 }

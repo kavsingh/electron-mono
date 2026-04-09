@@ -1,17 +1,27 @@
-import { useQuery, useQueryClient } from "@tanstack/solid-query";
+import { queryOptions, useQuery, useQueryClient } from "@tanstack/solid-query";
+import { Unsubscribable } from "@trpc/server/observable";
 
 import { SystemStats } from "~/common/schema/system";
 import { trpc } from "~/renderer/trpc";
 
 import type { QueryClient } from "@tanstack/solid-query";
 
-const queryKey = ["systemStats"];
+function systemStatsQuery() {
+	return queryOptions({
+		queryKey: ["systemStats"],
+		queryFn: () => trpc.systemStats.query(),
+		reconcile: (oldData, newData) => {
+			return oldData && BigInt(oldData.sampledAt) >= BigInt(newData.sampledAt)
+				? oldData
+				: newData;
+		},
+	});
+}
 
 const startSubscription = (() => {
+	const queryKey = systemStatsQuery().queryKey;
 	let cachedClient: QueryClient;
-	let unsubscribable:
-		| Awaited<ReturnType<typeof trpc.systemStatsEvent.subscribe>>
-		| undefined = undefined;
+	let unsubscribable: Unsubscribable | undefined = undefined;
 
 	return function start(queryClient: QueryClient) {
 		if (cachedClient === queryClient) return;
@@ -23,7 +33,7 @@ const startSubscription = (() => {
 			onData(event) {
 				const current = cachedClient.getQueryData<SystemStats>(queryKey);
 				const shouldUpdate = current
-					? BigInt(event.sampledAt) > BigInt(current.sampledAt)
+					? BigInt(event.sampledAt) >= BigInt(current.sampledAt)
 					: true;
 
 				if (shouldUpdate) {
@@ -36,15 +46,7 @@ const startSubscription = (() => {
 
 export function useSystemStats() {
 	const queryClient = useQueryClient();
-	const query = useQuery(() => ({
-		queryKey,
-		queryFn: () => trpc.systemStats.query(),
-		reconcile: (oldData, newData) => {
-			return oldData && BigInt(oldData.sampledAt) >= BigInt(newData.sampledAt)
-				? oldData
-				: newData;
-		},
-	}));
+	const query = useQuery(systemStatsQuery);
 
 	startSubscription(queryClient);
 
