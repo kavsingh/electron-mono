@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-unnecessary-type-arguments
+
 import { mockCreator } from "./mock-creator.ts";
 
 import type { SystemInfo, SystemStats } from "#common/schema/system.ts";

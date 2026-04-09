@@ -231,6 +231,7 @@ export default defineConfig({
 				"vitest/no-disabled-tests": "error",
 				"vitest/no-focused-tests": "error",
 				"vitest/no-import-node-test": "error",
+				"vitest/require-mock-type-parameters": "off",
 			},
 		},
 
