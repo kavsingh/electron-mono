@@ -25,7 +25,7 @@ export const trpc: MockTrpc = {
 		query: vi.fn(() => Promise.resolve(createMockSystemStats())),
 	},
 	showOpenDialog: {
-		query: vi.fn(() => Promise.resolve(createMockOpenDialogReturnValue())),
+		mutate: vi.fn(() => Promise.resolve(createMockOpenDialogReturnValue())),
 	},
 	systemStatsEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
 };

@@ -1,20 +1,27 @@
+import { useMutation } from "@tanstack/solid-query";
 import { createFileRoute } from "@tanstack/solid-router";
 import { createEffect, createSignal, For } from "solid-js";
 
 import { Button } from "~/renderer/components/button";
 import { Card } from "~/renderer/components/card";
-import { useFileDrop, useFileSelectDialog } from "~/renderer/hooks/files";
+import { useFileDrop } from "~/renderer/hooks/files";
 import { Page } from "~/renderer/layouts/page";
 import { tv } from "~/renderer/lib/style";
+import { trpc } from "~/renderer/trpc";
 
 function DialogFileSelect(props: { onSelect: (selected: string[]) => void }) {
-	const [files, selectFiles] = useFileSelectDialog();
+	const { mutate } = useMutation(() => ({
+		mutationFn: () => {
+			return trpc.showOpenDialog.mutate({
+				properties: ["openFile", "multiSelections"],
+			});
+		},
+		onSuccess: (selectResult) => {
+			props.onSelect(selectResult.filePaths);
+		},
+	}));
 
-	createEffect(() => {
-		props.onSelect(files());
-	});
-
-	return <Button onClick={() => void selectFiles()}>Select files</Button>;
+	return <Button onClick={() => mutate()}>Select files</Button>;
 }
 
 const dragFileSelectVariants = tv({

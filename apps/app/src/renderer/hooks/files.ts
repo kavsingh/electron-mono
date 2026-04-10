@@ -1,7 +1,5 @@
 import { createSignal } from "solid-js";
 
-import { trpc } from "~/renderer/trpc";
-
 import type { JSX } from "solid-js";
 
 type DragEventHandler = JSX.EventHandlerUnion<HTMLElement, DragEvent>;
@@ -53,23 +51,4 @@ export function useFileDrop() {
 		{ isActive, files: droppedFiles },
 		{ onDragOver, onDragEnter, onDragLeave, onDrop },
 	] as const;
-}
-
-export type ShowDialogOptions = Parameters<
-	(typeof trpc)["showOpenDialog"]["query"]
->[0];
-
-export function useFileSelectDialog() {
-	const [files, setFiles] = createSignal<string[]>([]);
-
-	async function showDialog(options?: ShowDialogOptions) {
-		const selectResult = await trpc.showOpenDialog.query({
-			properties: ["openFile", "multiSelections"],
-			...options,
-		});
-
-		setFiles(selectResult.filePaths);
-	}
-
-	return [files, showDialog] as const;
 }
