@@ -3,16 +3,38 @@ import path from "node:path";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
+import dotenv from "dotenv";
 import { defineConfig } from "electron-vite";
 import solid from "vite-plugin-solid";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 const dirname = import.meta.dirname;
 
+dotenv.config({ path: path.resolve(dirname, "./.env") });
+
+function isDefinedNotNull<T>(value: T): value is NonNullable<T> {
+	return value !== null && typeof value !== "undefined";
+}
+
 export default defineConfig(({ mode }) => {
 	return {
 		main: {
-			build: { externalizeDeps: { exclude: ["trpc-electron"] } },
+			build: {
+				externalizeDeps: { exclude: ["trpc-electron"] },
+				rollupOptions: {
+					output: {
+						format: "cjs",
+						entryFileNames: "[name].cjs",
+						chunkFileNames: "[name].cjs",
+						assetFileNames: "[name].[ext]",
+					},
+				},
+				bytecode: {
+					protectedStrings: [process.env["MAIN_VITE_SOME_KEY"]].filter(
+						isDefinedNotNull,
+					),
+				},
+			},
 			resolve: { conditions: ["node", mode] },
 			plugins: [tsconfigPaths()],
 		},

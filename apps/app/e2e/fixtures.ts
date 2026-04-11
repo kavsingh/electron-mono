@@ -8,7 +8,7 @@ interface Fixtures {
 	app: ElectronApplication;
 }
 
-const appPath = path.resolve(import.meta.dirname, "../out/main/index.js");
+const appPath = path.resolve(import.meta.dirname, "../out/main/index.cjs");
 
 export const test = baseTest.extend<Fixtures>({
 	async app({ launchOptions: _ }, use) {

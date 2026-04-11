@@ -60,7 +60,10 @@ app.on("quit", () => {
 });
 
 void app.whenReady().then(() => {
-	log.info("App ready");
+	log.info(
+		"App ready",
+		`${import.meta.env.MAIN_VITE_SOME_KEY.substring(0, 4)}***`,
+	);
 	protocol.handle(APP_PROTOCOL_SCHEME, appProtocolHandler);
 	trpcIpcHandler = createIPCHandler({ router: createAppRouter(appEventBus) });
 	stopSystemStatsUpdates = startSystemStatsUpdates(appEventBus);
