@@ -203,11 +203,9 @@ export default defineConfig({
 				...solid.configs["flat/typescript"].rules,
 
 				...tailwindcss.configs["recommended-error"].rules,
-				"better-tailwindcss/enforce-consistent-important-position": "error",
 				"better-tailwindcss/enforce-consistent-line-wrapping": "off",
 				"better-tailwindcss/enforce-consistent-variant-order": "error",
 				"better-tailwindcss/enforce-logical-properties": "error",
-				"better-tailwindcss/enforce-shorthand-classes": "error",
 			},
 		},
 

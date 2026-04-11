@@ -32,6 +32,7 @@ function obfuscator(mode: ConfigEnv["mode"]): Plugin {
 export default defineConfig(({ mode }) => {
 	return {
 		main: {
+			resolve: { conditions: ["node", mode] },
 			build: {
 				externalizeDeps: { exclude: ["trpc-electron"] },
 				rollupOptions: {
@@ -48,7 +49,6 @@ export default defineConfig(({ mode }) => {
 					),
 				},
 			},
-			resolve: { conditions: ["node", mode] },
 			plugins: [tsconfigPaths()],
 		},
 		preload: {

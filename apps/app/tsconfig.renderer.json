@@ -15,7 +15,12 @@
 		"lib": ["es2023", "dom", "dom.asynciterable"],
 		"module": "esnext",
 		"moduleResolution": "bundler",
-		"paths": { "~/*": ["./src/*"] },
+		"paths": {
+			"~/common/*": ["./src/common/*"],
+			"~/renderer/*": ["./src/renderer/*"],
+			// needed for trpc type resolution
+			"~/main/*": ["./src/main/*"]
+		},
 		"types": ["vite/client"]
 	}
 }
