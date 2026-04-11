@@ -5,8 +5,10 @@ import { devtools } from "@tanstack/devtools-vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import dotenv from "dotenv";
 import { defineConfig } from "electron-vite";
+import bundleObfuscator from "vite-plugin-bundle-obfuscator";
 import solid from "vite-plugin-solid";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { ConfigEnv, Plugin } from "vitest/config";
 
 const dirname = import.meta.dirname;
 
@@ -14,6 +16,17 @@ dotenv.config({ path: path.resolve(dirname, "./.env") });
 
 function isDefinedNotNull<T>(value: T): value is NonNullable<T> {
 	return value !== null && typeof value !== "undefined";
+}
+
+function obfuscator(mode: ConfigEnv["mode"]): Plugin {
+	// @ts-expect-error errant type exports upstream
+	// oxlint-disable-next-line typescript/no-unsafe-return
+	return bundleObfuscator({
+		enable: mode === "production",
+		apply: "build",
+		excludes: [/node_modules/],
+		options: { compact: true, sourceMap: true },
+	});
 }
 
 export default defineConfig(({ mode }) => {
@@ -53,7 +66,7 @@ export default defineConfig(({ mode }) => {
 					},
 				},
 			},
-			plugins: [tsconfigPaths()],
+			plugins: [tsconfigPaths(), obfuscator(mode)],
 		},
 		renderer: {
 			resolve: { conditions: ["browser", mode] },
@@ -68,6 +81,7 @@ export default defineConfig(({ mode }) => {
 				}),
 				solid(),
 				tailwindcss(),
+				obfuscator(mode),
 			],
 		},
 	};
