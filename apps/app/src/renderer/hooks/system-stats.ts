@@ -12,7 +12,7 @@ function systemStatsQuery() {
 		queryKey: ["systemStats"],
 		queryFn: () => trpc.systemStats.query(),
 		reconcile: (oldData, newData) => {
-			return oldData && BigInt(oldData.sampledAt) >= BigInt(newData.sampledAt)
+			return oldData && BigInt(oldData.sampledAt) > BigInt(newData.sampledAt)
 				? oldData
 				: newData;
 		},

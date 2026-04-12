@@ -10,7 +10,7 @@ export default defineConfig((configEnv) => {
 			clearMocks: true,
 			coverage: {
 				include: [
-					"src",
+					"src/**/*.{ts,tsx}",
 					"!**/__generated__",
 					"!**/__mocks__",
 					"!**/__{test,spec}*__",

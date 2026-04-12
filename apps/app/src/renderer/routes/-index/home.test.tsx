@@ -56,11 +56,9 @@ describe("<Index />", () => {
 		expect(screen.queryByText("500.00 MB")).not.toBeInTheDocument();
 
 		publishSystemStatsEvent(
-			// @TODO: why is this complaning? everything seems to be typed correctly
-			// oxlint-disable-next-line typescript/no-unsafe-argument
 			createMockSystemStats({
-				memUsed: String(1024 * 1024 * 600),
-				sampledAt: "0",
+				memUsed: String(1024 * 1024 * 500),
+				sampledAt: "1",
 			}),
 		);
 

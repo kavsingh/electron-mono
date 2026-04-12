@@ -19,6 +19,19 @@ vi.stubGlobal(
 	vi.fn(() => ({ addEventListener: vi.fn(), removeEventListener: vi.fn() })),
 );
 
+vi.mock("electron-log/renderer", () => {
+	const logger = {
+		silly: vi.fn(),
+		debug: vi.fn(),
+		verbose: vi.fn(),
+		info: vi.fn(),
+		warn: vi.fn(),
+		error: vi.fn(),
+	};
+
+	return { ...logger, scope: () => logger };
+});
+
 vi.mock("./renderer/trpc");
 
 afterEach(() => {
