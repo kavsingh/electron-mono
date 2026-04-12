@@ -6,10 +6,6 @@ import log from "electron-log";
 
 import { RENDERER_ROOT } from "./known-paths.ts";
 
-export const APP_PROTOCOL_SCHEME = "app";
-export const APP_RENDERER_HOST = "renderer";
-export const APP_RENDERER_URL = `${APP_PROTOCOL_SCHEME}://${APP_RENDERER_HOST}/`;
-
 async function serveFile(filepath: string, fileRoot: string) {
 	const resolvedPath = path.resolve(fileRoot, filepath.replace(/^\//, ""));
 	const relativePath = path.relative(fileRoot, resolvedPath);
@@ -42,6 +38,10 @@ async function serveFile(filepath: string, fileRoot: string) {
 		});
 	}
 }
+
+export const APP_PROTOCOL_SCHEME = "app";
+export const APP_RENDERER_HOST = "renderer";
+export const APP_RENDERER_URL = `${APP_PROTOCOL_SCHEME}://${APP_RENDERER_HOST}/`;
 
 export async function appProtocolHandler(request: Request): Promise<Response> {
 	const { host, pathname } = new URL(request.url);

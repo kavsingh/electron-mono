@@ -4,15 +4,15 @@ import type { JSX } from "solid-js";
 
 type DragEventHandler = JSX.EventHandlerUnion<HTMLElement, DragEvent>;
 
+const onDragOver: DragEventHandler = (event) => {
+	event.preventDefault();
+};
+
 export interface DroppedFile {
 	isDirectory: FileSystemEntry["isDirectory"] | undefined;
 	isFile: FileSystemEntry["isFile"] | undefined;
 	file: File;
 }
-
-const onDragOver: DragEventHandler = (event) => {
-	event.preventDefault();
-};
 
 export function useFileDrop() {
 	const [droppedFiles, setDroppedFiles] = createSignal<DroppedFile[]>();

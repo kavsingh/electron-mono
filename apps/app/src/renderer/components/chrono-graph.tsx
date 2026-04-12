@@ -7,10 +7,6 @@ import { tm } from "~/renderer/lib/style";
 
 import type { Accessor } from "solid-js";
 
-export interface Sample {
-	value: bigint;
-}
-
 function normalizeValues(
 	samples: Sample[],
 	min: bigint,
@@ -59,6 +55,10 @@ function drawGraph(canvas: HTMLCanvasElement, normalized: number[]) {
 
 	ctx.stroke();
 	ctx.fill();
+}
+
+export interface Sample {
+	value: bigint;
 }
 
 export function ChronoGraph(props: {

@@ -25,6 +25,7 @@ export default defineConfig({
 		"eslint/no-use-before-define": "error",
 
 		"import/consistent-type-specifier-style": ["error", "prefer-top-level"],
+		"import/exports-last": "error",
 		"import/no-cycle": "error",
 		"import/no-default-export": "error",
 		"import/no-duplicates": ["error", { considerQueryString: true }],

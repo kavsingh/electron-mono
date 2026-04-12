@@ -9,6 +9,10 @@ import { themeSourceSchema } from "~/common/lib/theme";
 
 import type { trpc as trpcActual } from "../index";
 
+type MockTrpc = {
+	[K in Exclude<keyof typeof trpcActual, symbol>]: (typeof trpcActual)[K];
+};
+
 const defaultThemeSource = themeSourceSchema.parse("dark");
 
 export const trpc: MockTrpc = {
@@ -28,8 +32,4 @@ export const trpc: MockTrpc = {
 		mutate: vi.fn(() => Promise.resolve(createMockOpenDialogReturnValue())),
 	},
 	systemStatsEvent: { subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) },
-};
-
-type MockTrpc = {
-	[K in Exclude<keyof typeof trpcActual, symbol>]: (typeof trpcActual)[K];
 };

@@ -17,7 +17,7 @@ function nameFilter(name: string) {
 	return /opendialogoptions/i.test(name) || /filefilter/i.test(name);
 }
 
-export async function genElectronZod(outFile: string) {
+async function genElectronZod(outFile: string) {
 	const typesPath = getElectronTypesPath();
 	const result = generate({
 		nameFilter,
@@ -39,3 +39,5 @@ if (import.meta.filename === process.argv[1]) {
 		path.resolve(import.meta.dirname, "../src/common/schema/electron.ts"),
 	);
 }
+
+export { genElectronZod };
