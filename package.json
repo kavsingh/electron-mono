@@ -20,7 +20,7 @@
 		"build:win:arm64": "nx build:win:arm64 app",
 		"test": "nx run-many -t test",
 		"test:ci": "nx run-many -t test:ci --output-style=stream",
-		"test:e2e": "nx run-many -t test:e2e",
+		"test:e2e": "nx run-many -t test:e2e --output-style=stream",
 		"lint": "nx run-many -t lint",
 		"clean:nx": "rimraf ./**/.nx --glob",
 		"clean:modules": "rimraf ./**/node_modules --glob"
