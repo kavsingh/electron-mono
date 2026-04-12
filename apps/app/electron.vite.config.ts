@@ -32,17 +32,11 @@ function obfuscator(mode: ConfigEnv["mode"]): Plugin {
 }
 
 function getRouterConfig() {
-	const rendererDir = path.resolve(dirname, "src/renderer");
-
-	function fromRenderer(dir: string) {
-		return path.relative(rendererDir, path.resolve(dirname, dir));
-	}
-
 	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 	return {
 		...tsrConfig,
-		routesDirectory: fromRenderer(tsrConfig.routesDirectory),
-		generatedRouteTree: fromRenderer(tsrConfig.generatedRouteTree),
+		routesDirectory: path.resolve(dirname, tsrConfig.routesDirectory),
+		generatedRouteTree: path.resolve(dirname, tsrConfig.generatedRouteTree),
 	} as Parameters<typeof tanstackRouter>[0];
 }
 
