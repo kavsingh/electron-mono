@@ -10,6 +10,8 @@ import solid from "vite-plugin-solid";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { ConfigEnv, Plugin } from "vitest/config";
 
+import tsrConfig from "./tsr.config.json" with { type: "json" };
+
 const dirname = import.meta.dirname;
 
 dotenv.config({ path: path.resolve(dirname, "./.env") });
@@ -27,6 +29,21 @@ function obfuscator(mode: ConfigEnv["mode"]): Plugin {
 		excludes: [/node_modules/],
 		options: { compact: true, sourceMap: true },
 	});
+}
+
+function getRouterConfig() {
+	const rendererDir = path.resolve(dirname, "src/renderer");
+
+	function fromRenderer(dir: string) {
+		return path.relative(rendererDir, path.resolve(dirname, dir));
+	}
+
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
+	return {
+		...tsrConfig,
+		routesDirectory: fromRenderer(tsrConfig.routesDirectory),
+		generatedRouteTree: fromRenderer(tsrConfig.generatedRouteTree),
+	} as Parameters<typeof tanstackRouter>[0];
 }
 
 export default defineConfig(({ mode }) => {
@@ -73,12 +90,7 @@ export default defineConfig(({ mode }) => {
 			plugins: [
 				devtools(),
 				tsconfigPaths(),
-				tanstackRouter({
-					target: "solid",
-					autoCodeSplitting: true,
-					routesDirectory: "routes",
-					generatedRouteTree: "route-tree.gen.ts",
-				}),
+				tanstackRouter(getRouterConfig()),
 				solid(),
 				tailwindcss(),
 				obfuscator(mode),

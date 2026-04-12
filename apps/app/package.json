@@ -11,7 +11,7 @@
 		"dev": "electron-vite dev",
 		"build": "electron-vite build",
 		"start": "electron-vite preview",
-		"lint": "oxlint --type-aware --type-check --max-warnings=0 && oxfmt --check",
+		"lint": "tsr generate && oxlint --type-aware --type-check --max-warnings=0 && oxfmt --check",
 		"tdd": "vitest --reporter=verbose",
 		"test": "vitest run",
 		"test:ci": "vitest run --silent --coverage --reporter=dot",
