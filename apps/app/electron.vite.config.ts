@@ -27,7 +27,7 @@ function obfuscator(mode: ConfigEnv["mode"]): Plugin {
 		enable: mode === "production",
 		apply: "build",
 		excludes: [/node_modules/],
-		options: { compact: true, sourceMap: true },
+		options: { optionsPreset: "default", selfDefending: true, sourceMap: true },
 	});
 }
 
@@ -64,6 +64,7 @@ export default defineConfig(({ mode }) => {
 		},
 		preload: {
 			build: {
+				minify: false,
 				externalizeDeps: { exclude: ["trpc-electron"] },
 				rollupOptions: {
 					input: {
@@ -81,6 +82,7 @@ export default defineConfig(({ mode }) => {
 		},
 		renderer: {
 			resolve: { conditions: ["browser", mode] },
+			build: { minify: false, cssMinify: mode === "production" },
 			plugins: [
 				devtools(),
 				tsconfigPaths(),
