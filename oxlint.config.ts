@@ -5,6 +5,7 @@ export default defineConfig({
 	options: {
 		typeAware: true,
 		typeCheck: true,
+		maxWarnings: 0,
 		reportUnusedDisableDirectives: "error",
 	},
 	categories: { correctness: "error", suspicious: "error", perf: "error" },

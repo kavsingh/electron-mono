@@ -1,5 +1,5 @@
 pre-commit:
   jobs:
-    - run: pnpm oxlint --type-aware --type-check --max-warnings=0 {staged_files}
+    - run: pnpm oxlint {staged_files}
       root: "apps/app"
       glob: "**/*.{js,ts,jsx,tsx}"
