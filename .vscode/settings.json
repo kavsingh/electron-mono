@@ -20,7 +20,6 @@
 	"js/ts.experimental.useTsgo": true,
 
 	"oxc.enable": true,
-	"oxc.typeAware": true,
 
 	"files.associations": { "*.css": "tailwindcss" },
 	"tailwindCSS.validate": true,
@@ -36,5 +35,6 @@
 		"apps/app/src/renderer/index.css": "apps/app/src/renderer/**"
 	},
 
-	"editor.defaultFormatter": "oxc.oxc-vscode"
+	"editor.defaultFormatter": "oxc.oxc-vscode",
+	"[css]": { "tailwindCSS.validate": true }
 }
