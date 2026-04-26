@@ -31,13 +31,12 @@ function obfuscator(mode: ConfigEnv["mode"]): Plugin {
 	});
 }
 
-function getRouterConfig() {
-	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
+function getRouterConfig(): Parameters<typeof tanstackRouter>[0] {
 	return {
 		...tsrConfig,
 		routesDirectory: path.resolve(dirname, tsrConfig.routesDirectory),
 		generatedRouteTree: path.resolve(dirname, tsrConfig.generatedRouteTree),
-	} as Parameters<typeof tanstackRouter>[0];
+	};
 }
 
 export default defineConfig(({ mode }) => {

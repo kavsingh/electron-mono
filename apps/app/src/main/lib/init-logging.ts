@@ -19,7 +19,7 @@ const consoleWriteFn: typeof log.transports.console.writeFn = ({ message }) => {
 			break;
 	}
 };
-// oxlint-enable
+// oxlint-enable eslint/no-console
 
 export function initLogging() {
 	log.transports.console.writeFn = consoleWriteFn;
