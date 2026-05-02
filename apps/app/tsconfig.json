@@ -6,5 +6,8 @@
 		{ "path": "./tsconfig.common.json" },
 		{ "path": "./tsconfig.main.json" },
 		{ "path": "./tsconfig.renderer.json" }
-	]
+	],
+	// @TODO: temp workaround until https://github.com/vitejs/vite/issues/21889
+	// is resolved
+	"compilerOptions": { "paths": { "~/*": ["./src/*"] } }
 }

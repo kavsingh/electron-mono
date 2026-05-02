@@ -7,7 +7,6 @@ import dotenv from "dotenv";
 import { defineConfig } from "electron-vite";
 import bundleObfuscator from "vite-plugin-bundle-obfuscator";
 import solid from "vite-plugin-solid";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { ConfigEnv, Plugin } from "vitest/config";
 
 import tsrConfig from "./tsr.config.json" with { type: "json" };
@@ -42,7 +41,7 @@ function getRouterConfig(): Parameters<typeof tanstackRouter>[0] {
 export default defineConfig(({ mode }) => {
 	return {
 		main: {
-			resolve: { conditions: ["node", mode] },
+			resolve: { conditions: ["node", mode], tsconfigPaths: true },
 			build: {
 				externalizeDeps: { exclude: ["trpc-electron"] },
 				rollupOptions: {
@@ -59,9 +58,9 @@ export default defineConfig(({ mode }) => {
 					),
 				},
 			},
-			plugins: [tsconfigPaths()],
 		},
 		preload: {
+			resolve: { conditions: [mode], tsconfigPaths: true },
 			build: {
 				minify: "terser",
 				externalizeDeps: { exclude: ["trpc-electron"] },
@@ -77,14 +76,13 @@ export default defineConfig(({ mode }) => {
 					},
 				},
 			},
-			plugins: [tsconfigPaths(), obfuscator(mode)],
+			plugins: [obfuscator(mode)],
 		},
 		renderer: {
-			resolve: { conditions: ["browser", mode] },
+			resolve: { conditions: ["browser", mode], tsconfigPaths: true },
 			build: { minify: false, cssMinify: mode === "production" },
 			plugins: [
 				devtools(),
-				tsconfigPaths(),
 				tanstackRouter(getRouterConfig()),
 				solid(),
 				tailwindcss(),
