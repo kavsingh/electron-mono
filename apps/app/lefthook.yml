@@ -1,5 +1,0 @@
-pre-commit:
-  jobs:
-    - run: pnpm oxlint {staged_files}
-      root: "apps/app"
-      glob: "**/*.{js,ts,jsx,tsx}"
