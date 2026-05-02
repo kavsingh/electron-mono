@@ -32,15 +32,15 @@ function RootLayout() {
 
 	return (
 		<>
-			<div class="grid size-full grid-cols-[max-content_1fr]">
-				<div class="min-h-full bg-linear-to-l from-background p-4 pe-8 pbs-10 text-sm">
+			<div class="grid grid-cols-[max-content_1fr] block-full inline-full">
+				<div class="bg-linear-to-l from-background p-4 pe-8 pbs-10 text-sm min-block-full">
 					<nav class="flex flex-col gap-2">
 						<NavLink href="/">Home</NavLink>
 						<NavLink href="/files">Files</NavLink>
 						<NavLink href="/settings">Settings</NavLink>
 					</nav>
 				</div>
-				<div class="h-full overflow-x-hidden overflow-y-auto bg-background">
+				<div class="overflow-x-hidden overflow-y-auto bg-background block-full">
 					<Outlet />
 					<Show when={import.meta.env.DEV}>
 						<TanStackDevtools
@@ -60,7 +60,7 @@ function RootLayout() {
 					</Show>
 				</div>
 			</div>
-			<div class="fixed inset-x-0 inset-bs-0 z-10 h-8 [-webkit-app-region:drag]" />
+			<div class="fixed inset-x-0 inset-bs-0 z-10 [-webkit-app-region:drag] block-8" />
 		</>
 	);
 }

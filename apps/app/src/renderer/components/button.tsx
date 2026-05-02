@@ -23,10 +23,10 @@ const buttonVariants = tv({
 			link: "text-primary underline-offset-4 hover:underline",
 		},
 		size: {
-			default: "h-9 px-4 py-2",
-			sm: "h-8 rounded-md px-3 text-xs",
-			lg: "h-10 rounded-md px-8",
-			icon: "size-9",
+			default: "px-4 py-2 block-9",
+			sm: "rounded-md px-3 text-xs block-8",
+			lg: "rounded-md px-8 block-10",
+			icon: "block-9 inline-9",
 		},
 	},
 	defaultVariants: {

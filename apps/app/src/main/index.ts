@@ -3,7 +3,7 @@ import log from "electron-log";
 import { createIPCHandler } from "trpc-electron/main";
 
 import { createMainWindow } from "./app-windows/main-window.ts";
-import { APP_PROTOCOL_SCHEME, appProtocolHandler } from "./lib/app-protocol.ts";
+import { appProtocolHandler, appProtocol } from "./lib/app-protocol.ts";
 import { initLogging } from "./lib/init-logging.ts";
 import { restrictNavigation } from "./lib/restrict-navigation.ts";
 import { createAppEventBus } from "./services/app-event-bus.ts";
@@ -13,7 +13,7 @@ import { createAppRouter } from "./trpc/router.ts";
 const isE2E = process.argv.slice(2).includes("--e2e");
 
 app.enableSandbox();
-protocol.registerSchemesAsPrivileged([{ scheme: APP_PROTOCOL_SCHEME }]);
+protocol.registerSchemesAsPrivileged([appProtocol]);
 initLogging();
 
 const appEventBus = createAppEventBus();
@@ -64,7 +64,7 @@ void app.whenReady().then(() => {
 		"App ready",
 		`${import.meta.env.MAIN_VITE_SOME_KEY.substring(0, 4)}***`,
 	);
-	protocol.handle(APP_PROTOCOL_SCHEME, appProtocolHandler);
+	protocol.handle(appProtocol.scheme, appProtocolHandler);
 	trpcIpcHandler = createIPCHandler({ router: createAppRouter(appEventBus) });
 	stopSystemStatsUpdates = startSystemStatsUpdates(appEventBus);
 	showMainWindow();

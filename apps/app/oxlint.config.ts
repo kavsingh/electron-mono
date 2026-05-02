@@ -54,6 +54,7 @@ export default defineConfig({
 		},
 
 		"better-tailwindcss": {
+			cwd: import.meta.dirname,
 			entryPoint: path.resolve(import.meta.dirname, "./src/renderer/index.css"),
 			selectors: [
 				...getDefaultSelectors(),

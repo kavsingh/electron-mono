@@ -50,7 +50,7 @@ export function ThemeSwitch() {
 											value={option}
 											checked={themeSource() === option}
 											onChange={[saveThemeSource, option]}
-											class="peer size-4 cursor-pointer"
+											class="peer cursor-pointer block-4 inline-4"
 										/>
 										<label
 											class="cursor-pointer text-muted-foreground transition-colors peer-checked:text-foreground"

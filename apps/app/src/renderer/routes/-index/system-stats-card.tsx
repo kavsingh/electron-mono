@@ -29,7 +29,7 @@ function MemoryGraph(props: { systemStats: SystemStats | undefined }) {
 			sampleSource={sample}
 			minValue={0n}
 			maxValue={maxValue()}
-			class="h-24 w-full rounded-lg"
+			class="rounded-lg block-24 inline-full"
 		/>
 	);
 }
