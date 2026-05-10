@@ -5,7 +5,7 @@
 			{
 				"root": "apps/app",
 				"glob": "*.{ts,tsx,js,jsx}",
-				"run": "bun oxlint {staged_files}"
+				"run": "pnpm oxlint --no-error-on-unmatched-pattern {staged_files}"
 			}
 		]
 	}
