@@ -1,11 +1,20 @@
 packages:
   - apps/*
   - packages/*
+
+savePrefix: ""
+
 allowBuilds:
-  electron: true
   electron-winstaller: true
   esbuild: true
   lefthook: true
   nx: true
+
+minimumReleaseAge: 4320 # 3 days in minutes
+strictDepBuilds: true
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 10080
+verifyDepsBeforeRun: prompt
+
 patchedDependencies:
   trpc-electron@0.1.2: patches/trpc-electron@0.1.2.patch

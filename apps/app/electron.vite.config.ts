@@ -19,14 +19,26 @@ function isDefinedNotNull<T>(value: T): value is NonNullable<T> {
 	return value !== null && typeof value !== "undefined";
 }
 
-function obfuscator(mode: ConfigEnv["mode"]): Plugin {
+function obfuscator(
+	mode: ConfigEnv["mode"],
+	protectedStrings?: string[],
+): Plugin {
 	// @ts-expect-error errant type exports upstream
 	// oxlint-disable-next-line typescript/no-unsafe-return
 	return bundleObfuscator({
 		enable: mode === "production",
 		apply: "build",
 		excludes: [/node_modules/],
-		options: { optionsPreset: "default", sourceMap: true },
+		options: {
+			optionsPreset: "default",
+			sourceMap: true,
+			...(protectedStrings?.length
+				? {
+						forceTransformStrings: protectedStrings,
+						stringArrayEncoding: ["base64"],
+					}
+				: {}),
+		},
 	});
 }
 
@@ -39,6 +51,10 @@ function getRouterConfig(): Parameters<typeof tanstackRouter>[0] {
 }
 
 export default defineConfig(({ mode }) => {
+	const mainProtectedStrings = [process.env["MAIN_VITE_SOME_KEY"]].filter(
+		isDefinedNotNull,
+	);
+
 	return {
 		main: {
 			resolve: { conditions: ["node", mode], tsconfigPaths: true },
@@ -52,17 +68,19 @@ export default defineConfig(({ mode }) => {
 						assetFileNames: "[name].[ext]",
 					},
 				},
-				bytecode: {
-					protectedStrings: [process.env["MAIN_VITE_SOME_KEY"]].filter(
-						isDefinedNotNull,
-					),
-				},
+				// TODO: remove when bytecode support is re-enabled
+				minify: mode === "production" ? "terser" : false,
+				// @TODO: re-enable this when fixed in electron-vite for electron 42
+				// https://github.com/alex8088/electron-vite/issues/911
+				// bytecode: { protectedStrings: mainProtectedStrings },
 			},
+			// TODO: remove when bytecode support is re-enabled
+			plugins: [obfuscator(mode, mainProtectedStrings)],
 		},
 		preload: {
 			resolve: { conditions: [mode], tsconfigPaths: true },
 			build: {
-				minify: "terser",
+				minify: mode === "production" ? "terser" : false,
 				externalizeDeps: { exclude: ["trpc-electron"] },
 				rollupOptions: {
 					input: {
@@ -80,7 +98,7 @@ export default defineConfig(({ mode }) => {
 		},
 		renderer: {
 			resolve: { conditions: ["browser", mode], tsconfigPaths: true },
-			build: { minify: false, cssMinify: mode === "production" },
+			build: { cssMinify: mode === "production" },
 			plugins: [
 				devtools(),
 				tanstackRouter(getRouterConfig()),

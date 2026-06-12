@@ -15,6 +15,10 @@ import { defineConfig } from "oxlint";
 
 import baseConfig from "../../oxlint.config.ts";
 
+// needed for `defineConfig` type inference when using ts project references
+// @TODO: remove when possible
+import type { RuleConfig as _ } from "@eslint/core";
+
 const restrictImportsNode = {
 	paths: [{ name: "solid-js" }, { name: "@trpc/client" }],
 	patterns: [
@@ -203,6 +207,8 @@ export default defineConfig({
 
 				...solid.configs["flat/typescript"].rules,
 
+				"jsx-a11y/control-has-associated-label": "off",
+
 				...tailwindcss.configs["recommended-error"].rules,
 				"better-tailwindcss/enforce-consistent-line-wrapping": "off",
 				"better-tailwindcss/enforce-consistent-variant-order": "error",
@@ -241,7 +247,6 @@ export default defineConfig({
 				"./src/renderer/**/*.test-d.{ts,tsx}",
 			],
 			jsPlugins: ["eslint-plugin-jest-dom", "eslint-plugin-testing-library"],
-			// @ts-expect-error type inference weirdness
 			rules: {
 				...jestDom.configs["flat/recommended"].rules,
 				...testingLibrary.configs["flat/dom"].rules,
@@ -251,7 +256,6 @@ export default defineConfig({
 		{
 			files: ["./e2e/**/*.test.ts"],
 			jsPlugins: ["eslint-plugin-playwright"],
-			// @ts-expect-error type inference weirdness
 			rules: { ...playwright.configs["flat/recommended"].rules },
 		},
 	],
