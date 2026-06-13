@@ -68,13 +68,15 @@ export default defineConfig(({ mode }) => {
 						assetFileNames: "[name].[ext]",
 					},
 				},
-				// TODO: remove when bytecode support is re-enabled
-				minify: mode === "production" ? "terser" : false,
+
 				// @TODO: re-enable this when fixed in electron-vite for electron 42
 				// https://github.com/alex8088/electron-vite/issues/911
 				// bytecode: { protectedStrings: mainProtectedStrings },
+
+				// @TODO: remove when bytecode support is re-enabled
+				minify: mode === "production" ? "terser" : false,
 			},
-			// TODO: remove when bytecode support is re-enabled
+			// @TODO: remove when bytecode support is re-enabled
 			plugins: [obfuscator(mode, mainProtectedStrings)],
 		},
 		preload: {
