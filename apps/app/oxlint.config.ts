@@ -15,9 +15,7 @@ import { defineConfig } from "oxlint";
 
 import baseConfig from "../../oxlint.config.ts";
 
-// needed for `defineConfig` type inference when using ts project references
-// @TODO: remove when possible
-import type { RuleConfig as _ } from "@eslint/core";
+import type { OxlintConfig } from "oxlint";
 
 const restrictImportsNode = {
 	paths: [{ name: "solid-js" }, { name: "@trpc/client" }],
@@ -39,7 +37,7 @@ const restrictImportsBrowser = {
 	patterns: [{ group: ["electron-log/main"], allowTypeImports: true }],
 };
 
-export default defineConfig({
+const config: OxlintConfig = defineConfig({
 	extends: [baseConfig],
 	env: { node: true, browser: false },
 	ignorePatterns: [
@@ -260,3 +258,5 @@ export default defineConfig({
 		},
 	],
 });
+
+export default config;

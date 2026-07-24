@@ -30,7 +30,7 @@
 	"languages": {
 		"TypeScript": {
 			"language_servers": [
-				"tsgo",
+				"typescript-ls",
 				"oxlint",
 				"tailwindcss-language-server",
 				"oxfmt"
@@ -39,14 +39,14 @@
 
 		"TSX": {
 			"language_servers": [
-				"tsgo",
+				"typescript-ls",
 				"oxlint",
 				"tailwindcss-language-server",
 				"oxfmt"
 			]
 		},
 
-		"JavaScript": { "language_servers": ["tsgo", "oxlint", "oxfmt"] },
+		"JavaScript": { "language_servers": ["typescript-ls", "oxlint", "oxfmt"] },
 
 		"CSS": {
 			"language_servers": [
